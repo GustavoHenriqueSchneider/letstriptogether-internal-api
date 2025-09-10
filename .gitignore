@@ -1,1 +1,5 @@
+.github/
 .vs/
+src/WebApi/bin
+src/WebApi/obj
+src/WebApi/WebApi.csproj.user
