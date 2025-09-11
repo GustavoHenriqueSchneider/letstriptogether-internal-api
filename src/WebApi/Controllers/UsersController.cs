@@ -51,9 +51,9 @@ public class UsersController(AppDbContext context) : ControllerBase
             return BadRequest();
         }
 
-        var userWithEmail = context.Users.SingleOrDefault(x => x.Email == user.Email);
+        var existsUserWithEmail = context.Users.Any(x => x.Email == user.Email);
 
-        if (userWithEmail is not null)
+        if (existsUserWithEmail)
         {
             return Conflict("There is already an user using this email.");
         }
@@ -80,8 +80,7 @@ public class UsersController(AppDbContext context) : ControllerBase
             return NotFound("User not found.");
         }
 
-        user.SetName(userData.Name);
-        user.SetUpdateAt(DateTime.UtcNow);
+        user.Update(userData);
         context.SaveChanges();
 
         // trocar pra createdaction com um getMe
@@ -97,9 +96,9 @@ public class UsersController(AppDbContext context) : ControllerBase
             return BadRequest();
         }
 
-        var userWithEmail = context.Users.SingleOrDefault(x => x.Email == user.Email);
+        var existsUserWithEmail = context.Users.Any(x => x.Email == user.Email);
 
-        if (userWithEmail is not null)
+        if (existsUserWithEmail)
         {
             return Conflict("There is already an user using this email.");
         }
