@@ -12,6 +12,6 @@ public class UserPreference : TrackableEntity
     public void Update(UserPreference preferences)
     {
         Categories = preferences.Categories;
-        this.SetUpdateAt(DateTime.UtcNow);
+        SetUpdateAt(DateTime.UtcNow);
     }
 }
