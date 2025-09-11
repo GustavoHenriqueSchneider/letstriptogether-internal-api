@@ -21,9 +21,15 @@ public class User : TrackableEntity
         _name = name;
     }
 
+    public void Update(User user)
+    {
+        SetName(user.Name);
+        SetUpdateAt(DateTime.UtcNow);
+    }
+
     public void SetPreferences(UserPreference preferences)
     {
         Preferences.Update(preferences);
-        this.SetUpdateAt(DateTime.UtcNow);
+        SetUpdateAt(DateTime.UtcNow);
     }
 }
