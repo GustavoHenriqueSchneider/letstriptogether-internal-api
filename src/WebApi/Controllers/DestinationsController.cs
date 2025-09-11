@@ -24,14 +24,14 @@ public class DestinationsController(AppDbContext context) : ControllerBase
         // TODO: paginacao deve funcionar via parametros de query, por enquanto pega os mesmos 10 valores, precisa de offset
         const int pageSize = 10;
 
-        var destinations = context.Destinations.Take(pageSize).OrderBy(x => x.CreatedAt).ToList();
+        var destinations = context.Destinations.OrderBy(x => x.CreatedAt).Take(pageSize).ToList();
         if (destinations.Count > 0)
         {
             return Ok(destinations.Select(x => new { x.Id, x.CreatedAt }).ToList());
         }
         
-        using var client = new HttpClient();
-        var url = $"{GeoapifyApiBaseUrl}&limit={pageSize}";
+        var client = new HttpClient();
+        var url = $"{GeoapifyApiBaseUrl}&limit={pageSize + 1}";
         
         var response = client.GetAsync(url).GetAwaiter().GetResult();
         if (!response.IsSuccessStatusCode)
