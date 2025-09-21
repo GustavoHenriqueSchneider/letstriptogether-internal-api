@@ -1,14 +1,22 @@
 using WebApi.Context;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-string postgresConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(postgresConnection));
+string? postgresConnection = builder.Configuration
+                            .GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(postgresConnection))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+}
+builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(postgresConnection));
 
 var app = builder.Build();
 

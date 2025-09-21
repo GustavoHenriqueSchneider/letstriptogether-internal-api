@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
-using WebApi.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T: class
+
+namespace WebApi.Repositories;
+
+public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     protected readonly AppDbContext _context;
     protected readonly DbSet<T> _dbSet;
-    public GenericRepository(AppDbContext context)
+    public BaseRepository(AppDbContext context)
     {
         _context = context;
         _dbSet = _context.Set<T>();
@@ -14,11 +16,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T: class
 
     public async Task<IEnumerable<T>> GetAllAsync(int pageNumber, int pageSize)
     {
-        return await _dbSet.Skip((pageNumber - 1)* pageSize).Take(pageSize).ToListAsync();
+        return await _dbSet.AsNoTracking()//para não rastrear as entidades, melhora performance
+                           .Skip((pageNumber - 1) * pageSize)
+                           .Take(pageSize)
+                           .ToListAsync();//
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.AsNoTracking()
+                           .FirstOrDefaultAsync(e => EF
+                           .Property<Guid>(e, "Id") == id);
     }
     public async Task AddAsync(T entity)
     {
