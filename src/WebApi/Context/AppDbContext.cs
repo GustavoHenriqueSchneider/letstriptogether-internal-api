@@ -7,17 +7,12 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<User> Users { get; init; }
-    public DbSet<UserPreference> UserPreferences { get; init; }
-    public DbSet<Group> Groups { get; init; }
-    public DbSet<GroupMember> GroupMembers { get; init; }
-    public DbSet<GroupMemberDestinationVote> GroupMemberDestinationVotes { get; init; }
-    public DbSet<GroupInvitation> GroupInvitations { get; init; }
-    public DbSet<UserGroupInvitation> UserGroupInvitations { get; init; }
     public DbSet<Destination> Destinations { get; init; }
-    public DbSet<GroupMatch> GroupMatches { get; init; }
+    public DbSet<Role> Roles { get; init; }
+    public DbSet<User> Users { get; init; }
+    public DbSet<UserRole> UserRoles { get; init; }
 
-    // configurações precisam ir para configurations de cada model
+    // TODO: configurações precisam ir para configurations de cada model
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -51,6 +46,21 @@ public class AppDbContext : DbContext
             .HasOne(gmdv => gmdv.Destination)
             .WithMany(d => d.GroupMemberVotes)
             .HasForeignKey(gmdv => gmdv.DestinationId);
+
+        modelBuilder.Entity<UserRole>()
+            .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany(u => u.UserRoles)
+            .HasForeignKey(ur => ur.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.Role)
+            .WithMany(r => r.UserRoles)
+            .HasForeignKey(ur => ur.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<User>()
             .HasOne(u => u.Preferences)
