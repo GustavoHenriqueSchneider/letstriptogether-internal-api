@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
+using WebApi.Models;
 
 
 namespace WebApi.Repositories;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class
+public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
     protected readonly AppDbContext _context;
     protected readonly DbSet<T> _dbSet;
@@ -23,9 +24,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.AsNoTracking()
-                           .FirstOrDefaultAsync(e => EF
-                           .Property<Guid>(e, "Id") == id);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
     }
     public async Task AddAsync(T entity)
     {

@@ -1,6 +1,7 @@
 using WebApi.Context;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Repositories;
+using Mapster;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,8 @@ if (string.IsNullOrEmpty(postgresConnection))
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 }
 builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(postgresConnection));
+                options.UseNpgsql(postgresConnection,
+                ServerVersion.AutoDetect(postgresConnection)));
 
 var app = builder.Build();
 
