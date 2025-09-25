@@ -17,8 +17,8 @@ namespace WebApi.Controllers;
 // TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
 [ApiController]
 [Route("api/v1/auth")]
-public class AuthController(AppDbContext context, IAuthService tokenService,
-    IApplicationUserContext currentUser) : ControllerBase
+public class AuthController(AppDbContext context, ITokenService tokenService,
+    IPasswordHashService passwordHashService, IApplicationUserContext currentUser) : ControllerBase
 {
     [HttpPost("email/send")]
     [AllowAnonymous]
@@ -106,8 +106,8 @@ public class AuthController(AppDbContext context, IAuthService tokenService,
             });
         }
 
-        // TODO: aplicar criptografia na senha
-        var user = new User(currentUser.GetName(), email, request.Password, defaultRole);
+        var passwordHash = passwordHashService.HashPassword(request.Password);
+        var user = new User(currentUser.GetName(), email, passwordHash, defaultRole);
 
         await context.Users.AddAsync(user);
         await context.SaveChangesAsync();
@@ -139,8 +139,9 @@ public class AuthController(AppDbContext context, IAuthService tokenService,
             });
         }
 
-        // TODO: aplicar criptografia na senha
-        if (user.PasswordHash != request.Password)
+        var isCorrectPassword = passwordHashService.VerifyPassword(request.Password, user.PasswordHash);
+
+        if (!isCorrectPassword)
         {
             return Unauthorized(new BaseResponse
             {
@@ -225,5 +226,60 @@ public class AuthController(AppDbContext context, IAuthService tokenService,
                 RefreshToken = refreshToken
             }
         });
+    }
+
+    [HttpPost("reset-password/request")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordRequest request) 
+    {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Email == request.Email);
+
+        if (user is null)
+        {
+            return Accepted(new BaseResponse
+            {
+                Status = "Success",
+                Message = "If the informed email exists, an message will be sent."
+            });
+        }
+
+        var token = tokenService.GenerateResetPasswordToken(user.Id);
+        
+        // TODO: criar service para envio de email e outra para armazenar token no redis
+
+        return Accepted(new BaseResponse
+        {
+            Status = "Success",
+            Message = "If the informed email exists, an message will be sent.",
+            // TODO: remover token do response após criar service de enviar email
+            Data = token
+        });
+    }
+
+    [HttpPost("reset-password")]
+    [Authorize(Policy = Policies.ResetPassword)]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request) 
+    {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        // TODO: validar se o token de reset é o ultimo armazenado pra esse user no redis
+
+        var passwordHash = passwordHashService.HashPassword(request.Password);
+
+        user.SetPassword(passwordHash);
+        await context.SaveChangesAsync();
+
+        // TODO: remover token do redis
+
+        return NoContent();
     }
 }

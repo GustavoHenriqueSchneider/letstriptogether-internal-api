@@ -51,6 +51,13 @@ public class User : TrackableEntity
         SetUpdateAt(DateTime.UtcNow);
     }
 
+    public void SetPassword(string passwordHash)
+    {
+        PasswordHash = passwordHash;
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
+        SetUpdateAt(DateTime.UtcNow);
+    }
+
     public void AddRole(Role role)
     {
         if (_userRoles.Any(ur => ur.RoleId == role.Id))

@@ -7,6 +7,7 @@ using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
 using WebApi.Security;
+using WebApi.Services;
 
 namespace WebApi.Controllers;
 
@@ -16,7 +17,8 @@ namespace WebApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/users")]
-public class UsersController(AppDbContext context, IApplicationUserContext currentUser)
+public class UsersController(AppDbContext context, IPasswordHashService passwordHashService,
+    IApplicationUserContext currentUser)
     : ControllerBase
 {
     [HttpGet]
@@ -100,8 +102,8 @@ public class UsersController(AppDbContext context, IApplicationUserContext curre
             });
         }
 
-        // TODO: aplicar criptografia na senha
-        var user = new User(request.Name, email, request.Password, defaultRole);
+        var passwordHash = passwordHashService.HashPassword(request.Password);
+        var user = new User(request.Name, email, passwordHash, defaultRole);
 
         await context.Users.AddAsync(user);
         await context.SaveChangesAsync();

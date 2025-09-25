@@ -9,7 +9,7 @@ using WebApi.Security;
 
 namespace WebApi.Services;
 
-public class AuthService(IConfiguration configuration) : IAuthService
+public class TokenService(IConfiguration configuration) : ITokenService
 {
     public string GenerateRegisterTokenForStep(string step, List<Claim> claims)
     {
@@ -20,10 +20,28 @@ public class AuthService(IConfiguration configuration) : IAuthService
             throw new InvalidOperationException("Invalid step");
         }
 
-        claims.Add(new(Claims.Step, step));
+        claims.AddRange([
+            new(Claims.TokenType, TokenTypes.Step),
+            new(Claims.Step, step)
+        ]);
 
         var expiresIn = DateTime.UtcNow.AddMinutes(configuration.GetSection("JsonWebTokenSettings")
                 .GetValue<int>("AccessTokenValidityInMinutes"));
+
+        var token = CreateJwtToken(claims, expiresIn);
+        return token;
+    }
+
+    public string GenerateResetPasswordToken(Guid userId)
+    {
+        var claims = new List<Claim>
+        {
+            new (Claims.Id, userId.ToString()),
+            new (Claims.TokenType, TokenTypes.ResetPassword)
+        };
+
+        var expiresIn = DateTime.UtcNow.AddMinutes(configuration.GetSection("JsonWebTokenSettings")
+                .GetValue<int>("ResetPasswordTokenValidityInMinutes"));
 
         var token = CreateJwtToken(claims, expiresIn);
         return token;

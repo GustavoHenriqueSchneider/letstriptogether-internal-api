@@ -45,10 +45,13 @@ builder.Services.AddAuthorization(options =>
         .Build();
     
     options.AddPolicy(Policies.RegisterValidateEmail, policy =>
-        policy.RequireClaim(Claims.Step, Steps.ValidateEmail));
+        policy.RequireClaim(Claims.TokenType, TokenTypes.Step).RequireClaim(Claims.Step, Steps.ValidateEmail));
 
     options.AddPolicy(Policies.RegisterSetPassword, policy => 
-        policy.RequireClaim(Claims.Step, Steps.SetPassword));
+        policy.RequireClaim(Claims.TokenType, TokenTypes.Step).RequireClaim(Claims.Step, Steps.SetPassword));
+
+    options.AddPolicy(Policies.ResetPassword, policy =>
+        policy.RequireClaim(Claims.TokenType, TokenTypes.ResetPassword));
 
     options.AddPolicy(Policies.Admin, policy => 
         policy.RequireRole(Roles.Admin).RequireClaim(Claims.TokenType, TokenTypes.Access));
@@ -57,7 +60,8 @@ builder.Services.AddAuthorization(options =>
 string postgresConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(postgresConnection));
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApplicationUserContext>(sp =>

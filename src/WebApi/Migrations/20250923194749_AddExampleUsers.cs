@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using WebApi.Security;
+using WebApi.Services;
 
 #nullable disable
 
@@ -11,6 +12,7 @@ namespace WebApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            var passwordHashService = new PasswordHashService();
             var defaultRoleId = Guid.NewGuid();
             var adminRoleId = Guid.NewGuid();
 
@@ -26,13 +28,16 @@ namespace WebApi.Migrations
             var userId = Guid.NewGuid();
             var adminId = Guid.NewGuid();
 
+            var userPassword = passwordHashService.HashPassword("user@123");
+            var adminPassword = passwordHashService.HashPassword("admin@123");
+
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Name", "Email", "PasswordHash", "IsAnonymous", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { userId, "Example User", $"{Roles.User}@letstriptogether.com", "user@123", false, DateTime.UtcNow, DateTime.UtcNow },
-                    { adminId, "Admin", $"{Roles.Admin}@letstriptogether.com", "admin@123", false, DateTime.UtcNow, DateTime.UtcNow }
+                    { userId, "Example User", $"{Roles.User}@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { adminId, "Admin", $"{Roles.Admin}@letstriptogether.com", adminPassword, false, DateTime.UtcNow, DateTime.UtcNow }
                 });
 
             migrationBuilder.InsertData(
