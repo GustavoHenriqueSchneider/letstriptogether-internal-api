@@ -4,32 +4,83 @@ namespace WebApi.Models;
 
 public class User : TrackableEntity
 {
-    private string _name = null!;
-    public string Name 
-    { 
-        get => _name; 
-        init => _name = value; 
-    }
-    public string Email { get; init; } = null!;
-    public string PasswordHash { get; init; } = null!;
-    [JsonIgnore] public List<GroupMember> GroupMemberships { get; init; } = [];
-    [JsonIgnore] public List<UserGroupInvitation> AcceptedInvitations { get; init; } = [];
-    [JsonIgnore] public UserPreference Preferences { get; init; } = new();
+    public string Name { get; private set; } = null!;
+    public string Email { get; private set; } = null!;
+    public string PasswordHash { get; private set; } = null!;
+    public bool IsAnonymous { get; private set; }
 
-    public void SetName(string name)
+    // TODO: expor listas como readonly e criar metodos para incluir dados
+    public List<GroupMember> GroupMemberships { get; private set; } = [];
+    public List<UserGroupInvitation> AcceptedInvitations { get; private set; } = [];
+    public UserPreference Preferences { get; private set; } = new();
+
+    private readonly List<UserRole> _userRoles = [];
+    public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
+
+    private User() { }
+
+    public User(string name, string email, string passwordHash, Role role)
     {
-        _name = name;
+        Name = name;
+        Email = email;
+        PasswordHash = passwordHash;
+        AddRole(role);
     }
 
-    public void Update(User user)
+    public void Update(string? name)
     {
-        SetName(user.Name);
+        Name = name ?? Name;
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
         SetUpdateAt(DateTime.UtcNow);
     }
 
     public void SetPreferences(UserPreference preferences)
     {
         Preferences.Update(preferences);
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
+        SetUpdateAt(DateTime.UtcNow);
+    }
+
+    public void Anonymize()
+    {
+        // TODO: melhorar logica de anonimização
+        Name = "AnonymousUser";
+        Email = $"{DateTime.UtcNow.ToString("o")}@anonymous.letstriptogether.com";
+        IsAnonymous = true;
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
+        SetUpdateAt(DateTime.UtcNow);
+    }
+
+    public void SetPassword(string passwordHash)
+    {
+        PasswordHash = passwordHash;
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
+        SetUpdateAt(DateTime.UtcNow);
+    }
+
+    public void AddRole(Role role)
+    {
+        if (_userRoles.Any(ur => ur.RoleId == role.Id))
+        {
+            return;
+        }
+
+        _userRoles.Add(new UserRole(Id, role.Id));
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
+        SetUpdateAt(DateTime.UtcNow);
+    }
+
+    public void RemoveRole(Guid roleId)
+    {
+        var userRole = _userRoles.FirstOrDefault(ur => ur.RoleId == roleId);
+
+        if (userRole is null)
+        {
+            return;
+        }
+
+        _userRoles.Remove(userRole);
+        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
         SetUpdateAt(DateTime.UtcNow);
     }
 }

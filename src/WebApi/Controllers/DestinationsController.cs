@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using WebApi.Context;
 using WebApi.Models;
@@ -7,9 +8,9 @@ namespace WebApi.Controllers;
 
 // TODO: usar Tasks (await/async)
 // TODO: aplicar CQRS com usecases, mediator com mediatr, repository, DI e clean arc
-
-// TODO: colocar tag de versionamento, autenticações e para swagger
-// TODO: autenticação
+// TODO: colocar tag de versionamento e descricoes para swagger
+// TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
+[Authorize]
 [ApiController]
 [Route("api/v1/destinations")]
 public class DestinationsController(AppDbContext context) : ControllerBase

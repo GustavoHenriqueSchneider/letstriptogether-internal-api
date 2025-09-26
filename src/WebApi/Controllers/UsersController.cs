@@ -1,135 +1,336 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
+using WebApi.DTOs.Requests.User;
+using WebApi.DTOs.Responses;
+using WebApi.DTOs.Responses.User;
 using WebApi.Models;
+using WebApi.Security;
+using WebApi.Services;
 
 namespace WebApi.Controllers;
 
-// TODO: usar Tasks (await/async)
 // TODO: aplicar CQRS com usecases, mediator com mediatr, repository, DI e clean arc
-
-// TODO: colocar tag de versionamento, autenticações e para swagger
+// TODO: colocar tag de versionamento e descricoes para swagger
+// TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
+[Authorize]
 [ApiController]
 [Route("api/v1/users")]
-public class UsersController(AppDbContext context) : ControllerBase
+public class UsersController(AppDbContext context, IPasswordHashService passwordHashService,
+    IApplicationUserContext currentUser)
+    : ControllerBase
 {
-    // TODO: autenticação admin
     [HttpGet]
-    public ActionResult<IEnumerable<object>> GetAll()
+    [Authorize(Policy = Policies.Admin)]
+    // TODO: obter paginaçao de query params
+    public async Task<IActionResult> GetAll()
     {
-        var users = context.Users.Select(x => new { x.Id, x.CreatedAt }).ToList();
-        return Ok(users);
-    }
-
-    // TODO: autenticação admin
-    [HttpGet("{id}")]
-    public ActionResult<object> GetById(Guid id)
-    {
-        var user = context.Users.SingleOrDefault(x => x.Id == id);
-
-        if (user is null)
+        var users = await context.Users.AsNoTracking().ToListAsync();
+        return Ok(new BaseResponse
         {
-            return NotFound("User not found.");
-        }
-
-        return Ok(new
-        {
-            user.Name,
-            user.Email,
-            user.Preferences,
-            user.CreatedAt,
-            user.UpdatedAt
+            Status = "Success",
+            Message = "List of users returned.",
+            Data = new GetAllResponse
+            {
+                Users = users.Select(x => new GetAllUsersResponse { Id = x.Id, CreatedAt = x.CreatedAt }),
+                Hits = users.Count
+            }
         });
     }
 
-    // TODO: autenticação admin
-    [HttpPost]
-    public ActionResult Create(User user)
+    [HttpGet("{id:guid}")]
+    [Authorize(Policy = Policies.Admin)]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
+        var user = await context.Users
+            .Include(x => x.Preferences)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id);
+
         if (user is null)
         {
-            return BadRequest();
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
         }
 
-        var existsUserWithEmail = context.Users.Any(x => x.Email == user.Email);
+        return Ok(new BaseResponse
+        {
+            Status = "Success",
+            Message = "User found.",
+            Data = new GetByIdResponse
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Preferences = new GetByIdUserPreferenceResponse
+                {
+                    Categories = user.Preferences.Categories
+                },
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt
+            }
+        });
+    }
+
+    [HttpPost]
+    [Authorize(Policy = Policies.Admin)]
+    public async Task<IActionResult> Create([FromBody] CreateRequest request)
+    {
+        var email = request.Email;
+        var existsUserWithEmail = await context.Users.AsNoTracking().AnyAsync(x => x.Email == email);
 
         if (existsUserWithEmail)
         {
-            return Conflict("There is already an user using this email.");
+            return Conflict(new BaseResponse
+            {
+                Status = "Error",
+                Message = "There is already an user using this email."
+            });
         }
 
-        context.Users.Add(user);
-        context.SaveChanges();
+        var defaultRole = await context.Roles.SingleOrDefaultAsync(x => x.Name == Roles.User);
 
-        return CreatedAtAction(nameof(GetById), new { id = user.Id }, new { user.Id });
+        if (defaultRole is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "Role not found."
+            });
+        }
+
+        var passwordHash = passwordHashService.HashPassword(request.Password);
+        var user = new User(request.Name, email, passwordHash, defaultRole);
+
+        await context.Users.AddAsync(user);
+        await context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(Create), new BaseResponse
+        {
+            Status = "Success",
+            Message = "User was created.",
+            Data = new CreateResponse { Id = user.Id }
+        });
     }
 
-    // TODO: autenticação admin
-    [HttpPut("{id}")]
-    public ActionResult Update(Guid id, User userData)
+    [HttpPut("{id:guid}")]
+    [Authorize(Policy = Policies.Admin)]
+    public async Task<IActionResult> UpdateById([FromRoute] Guid id, [FromBody] UpdateRequest request)
     {
-        if (userData is null)
-        {
-            return BadRequest();
-        }
-
-        var user = context.Users.SingleOrDefault(x => x.Id == id);
+        // TODO: converter updaterequest em record pra adicionar id nele
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == id);
 
         if (user is null)
         {
-            return NotFound("User not found.");
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
         }
 
-        user.Update(userData);
-        context.SaveChanges();
+        user.Update(request.Name);
+        await context.SaveChangesAsync();
 
-        // trocar pra createdaction com um getMe
         return NoContent();
     }
 
-    // TODO: autenticação com step register 
-    [HttpPost("register")]
-    public ActionResult Register(User user)
+    [HttpDelete("{id:guid}")]
+    [Authorize(Policy = Policies.Admin)]
+    public async Task<IActionResult> DeleteById([FromRoute] Guid id)
     {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == id);
+
         if (user is null)
         {
-            return BadRequest();
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
         }
 
-        var existsUserWithEmail = context.Users.Any(x => x.Email == user.Email);
+        context.Users.Remove(user);
+        await context.SaveChangesAsync();
 
-        if (existsUserWithEmail)
-        {
-            return Conflict("There is already an user using this email.");
-        }
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
-        context.Users.Add(user);
-        context.SaveChanges();
-
-        return Created();
+        return NoContent();
     }
 
-    // TODO: autenticação usuario
-    [HttpPut("me/preferences")]
-    public ActionResult SetPreferences(UserPreference preferences)
+    [HttpPatch("{id:guid}/anonymize")]
+    [Authorize(Policy = Policies.Admin)]
+    public async Task<IActionResult> AnonymizeById([FromRoute] Guid id)
     {
-        if (preferences is null)
-        {
-            return BadRequest();
-        }
-
-        // TODO: id mockado deve ser pego com base no token jwt de autenticação
-        var id = Guid.Empty;
-        var user = context.Users.Include(x => x.Preferences).SingleOrDefault(x => x.Id == id);
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == id);
 
         if (user is null)
         {
-            return NotFound("User not found.");
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
         }
 
-        user.SetPreferences(preferences);
-        context.SaveChanges();
+        user.Anonymize();
+        // TODO: remover vinculos de usuario com grupos...
+        await context.SaveChangesAsync();
 
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}/preferences")]
+    [Authorize(Policy = Policies.Admin)]
+    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id,
+        [FromBody] SetPreferencesRequest request)
+    {
+        var user = await context.Users
+            .Include(x => x.Preferences)
+            .SingleOrDefaultAsync(x => x.Id == id);
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        var preferences = new UserPreference { Categories = request.Categories };
+        user.SetPreferences(preferences);
+
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var user = await context.Users
+            .Include(x => x.Preferences)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        return Ok(new BaseResponse
+        {
+            Status = "Success",
+            Message = "User found.",
+            Data = new GetByIdResponse
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Preferences = new GetByIdUserPreferenceResponse
+                {
+                    Categories = user.Preferences.Categories
+                },
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt
+            }
+        });
+    }
+
+    [HttpPut("me")]
+    public async Task<IActionResult> UpdateCurrentUser([FromBody] UpdateForCurrentUserRequest request)
+    {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        user.Update(request.Name);
+        await context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpDelete("me")]
+    public async Task<IActionResult> DeleteCurrentUser()
+    {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        context.Users.Remove(user);
+        await context.SaveChangesAsync();
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+
+        return NoContent();
+    }
+
+    [HttpPatch("me/anonymize")]
+    public async Task<IActionResult> AnonymizeCurrentUser()
+    {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        user.Anonymize();
+        // TODO: remover vinculos de usuario com grupos...
+        await context.SaveChangesAsync();
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+
+        return NoContent();
+    }
+
+    [HttpPut("me/preferences")]
+    public async Task<IActionResult> SetPreferencesForCurrentUser(
+        [FromBody] SetPreferencesForCurrentUserRequest request)
+    {
+        var user = await context.Users
+            .Include(x => x.Preferences)
+            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        if (user is null)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        var preferences = new UserPreference { Categories = request.Categories };
+        user.SetPreferences(preferences);
+
+        await context.SaveChangesAsync();
         return NoContent();
     }
 }
