@@ -75,6 +75,19 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<UserGroupInvitation>()
             .HasOne(ugi => ugi.User)
             .WithMany(u => u.AcceptedInvitations)
-            .HasForeignKey(ugi => ugi.UserId);
+            .HasForeignKey(ugi => ugi.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<GroupMember>()
+            .HasOne(gm => gm.User)
+            .WithMany(u => u.GroupMemberships)
+            .HasForeignKey(gm => gm.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserPreference>()
+            .HasOne(up => up.User)
+            .WithOne(u => u.Preferences)
+            .HasForeignKey<UserPreference>(up => up.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

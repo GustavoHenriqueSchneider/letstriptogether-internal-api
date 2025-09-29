@@ -165,7 +165,12 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> AnonymizeById([FromRoute] Guid id)
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        var user = await context.Users
+            .Include(u => u.GroupMemberships)
+            .Include(u => u.AcceptedInvitations)
+            .Include(u => u.Preferences)
+            .Include(u => u.UserRoles)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (user is null)
         {
@@ -176,11 +181,16 @@ public class UsersController(AppDbContext context, IPasswordHashService password
             });
         }
 
+        context.GroupMembers.RemoveRange(user.GroupMemberships);
+        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
+        context.UserRoles.RemoveRange(user.UserRoles);
+
         user.Anonymize();
-        // TODO: remover vinculos de usuario com grupos...
         await context.SaveChangesAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        // TODO: registrar log de auditoria da anonimização do usuário
+        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
 
         return NoContent();
     }
@@ -290,7 +300,12 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [HttpPatch("me/anonymize")]
     public async Task<IActionResult> AnonymizeCurrentUser()
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await context.Users
+            .Include(u => u.GroupMemberships)
+            .Include(u => u.AcceptedInvitations)
+            .Include(u => u.Preferences)
+            .Include(u => u.UserRoles)
+            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
 
         if (user is null)
         {
@@ -301,11 +316,16 @@ public class UsersController(AppDbContext context, IPasswordHashService password
             });
         }
 
+        context.GroupMembers.RemoveRange(user.GroupMemberships);
+        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
+        context.UserRoles.RemoveRange(user.UserRoles);
+
         user.Anonymize();
-        // TODO: remover vinculos de usuario com grupos...
         await context.SaveChangesAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        // TODO: registrar log de auditoria da anonimização do usuário
+        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
 
         return NoContent();
     }
