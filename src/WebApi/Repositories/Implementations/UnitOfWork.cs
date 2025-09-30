@@ -1,8 +1,8 @@
-﻿
-using WebApi.Context;
+﻿using WebApi.Context;
 using WebApi.Models;
+using WebApi.Repositories.Interfaces;
 
-namespace WebApi.Repositories;
+namespace WebApi.Repositories.Implementations;
 
 public class UnitOfWork : IUnitOfWork
 {

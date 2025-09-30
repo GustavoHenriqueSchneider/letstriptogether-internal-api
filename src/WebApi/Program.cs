@@ -1,3 +1,5 @@
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
+using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -7,15 +9,15 @@ using System.Text;
 using WebApi.Context;
 using WebApi.Security;
 using WebApi.Services;
-using WebApi.Repositories;
-using Mapster;
+using WebApi.Repositories.Interfaces;
+using WebApi.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 // TODO: JsonWebTokenSettings pode ser uma classe para facilitar import o appsettings
 var secretKey = builder.Configuration["JsonWebTokenSettings:SecretKey"] ?? 
@@ -67,11 +69,13 @@ if (string.IsNullOrEmpty(postgresConnection))
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 }
 builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(postgresConnection,
-                ServerVersion.AutoDetect(postgresConnection)));
+    options.UseNpgsql(postgresConnection, builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(postgresConnection,
+        ServerVersion.AutoDetect(postgresConnection)))));
 
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApplicationUserContext>(sp =>

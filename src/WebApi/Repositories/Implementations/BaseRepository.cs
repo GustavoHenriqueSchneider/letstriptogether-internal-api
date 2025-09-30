@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
 using WebApi.Models;
+using WebApi.Repositories.Interfaces;
 
 
-namespace WebApi.Repositories;
+namespace WebApi.Repositories.Implementations;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
@@ -17,7 +18,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public async Task<IEnumerable<T>> GetAllAsync(int pageNumber, int pageSize)
     {
-        return await _dbSet.AsNoTracking()//para não rastrear as entidades, melhora performance
+        return await _dbSet.AsNoTracking()//melhora performance, evita que o EF Core gaste tempo e memória para monitorá-las
                            .Skip((pageNumber - 1) * pageSize)
                            .Take(pageSize)
                            .ToListAsync();//

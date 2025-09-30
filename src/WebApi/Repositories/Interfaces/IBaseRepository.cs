@@ -1,6 +1,6 @@
 ﻿using WebApi.Models;
 
-namespace WebApi.Repositories;
+namespace WebApi.Repositories.Interfaces;
 public interface IBaseRepository<T> where T : TrackableEntity
 {
     Task<IEnumerable<T>> GetAllAsync( int pageNumber, int pageSize);
