@@ -1,15 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
-namespace WebApi.Context;
+namespace WebApi.Context.Implementations;
 
 // TODO: aplicar clean arc
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
     public DbSet<Destination> Destinations { get; init; }
+    public DbSet<Group> Groups { get; init; }
+    public DbSet<GroupInvitation> GroupInvitations { get; init; }
+    public DbSet<GroupMatch> GroupMatches { get; init; }
+    public DbSet<GroupMember> GroupMembers { get; init; }
+    public DbSet<GroupMemberDestinationVote> GroupMemberDestinationVotes { get; init; }
     public DbSet<Role> Roles { get; init; }
     public DbSet<User> Users { get; init; }
+    public DbSet<UserGroupInvitation> UserGroupInvitations { get; init; }
+    public DbSet<UserPreference> UserPreferences { get; init; }
     public DbSet<UserRole> UserRoles { get; init; }
 
     // TODO: configurações precisam ir para configurations de cada model

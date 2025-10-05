@@ -2,21 +2,30 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
-using WebApi.Context;
+using WebApi.Clients.Implementations;
+using WebApi.Clients.Interfaces;
+using WebApi.Configurations;
+using WebApi.Context.Implementations;
+using WebApi.Context.Interfaces;
 using WebApi.Security;
-using WebApi.Services;
+using WebApi.Services.Implementations;
+using WebApi.Services.Interfaces;
 
+// TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
+// e metodos por separação: registerRepositories, registerServices...
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// TODO: JsonWebTokenSettings pode ser uma classe para facilitar import o appsettings
-var secretKey = builder.Configuration["JsonWebTokenSettings:SecretKey"] ?? 
-    throw new InvalidOperationException("Invalid secret key");
+var jwtSection = builder.Configuration.GetRequiredSection(nameof(JsonWebTokenSettings));
+builder.Services.Configure<JsonWebTokenSettings>(jwtSection);
+var jwtSettings = jwtSection.Get<JsonWebTokenSettings>()!;
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -31,9 +40,9 @@ builder.Services
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero,
-            ValidIssuer = builder.Configuration["JsonWebTokenSettings:Issuer"],
+            ValidIssuer = jwtSettings.Issuer,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(secretKey))
+                Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
         };
     }); 
 
@@ -45,10 +54,12 @@ builder.Services.AddAuthorization(options =>
         .Build();
     
     options.AddPolicy(Policies.RegisterValidateEmail, policy =>
-        policy.RequireClaim(Claims.TokenType, TokenTypes.Step).RequireClaim(Claims.Step, Steps.ValidateEmail));
+        policy.RequireClaim(Claims.TokenType, TokenTypes.Step)
+            .RequireClaim(Claims.Step, Steps.ValidateEmail));
 
     options.AddPolicy(Policies.RegisterSetPassword, policy => 
-        policy.RequireClaim(Claims.TokenType, TokenTypes.Step).RequireClaim(Claims.Step, Steps.SetPassword));
+        policy.RequireClaim(Claims.TokenType, TokenTypes.Step)
+            .RequireClaim(Claims.Step, Steps.SetPassword));
 
     options.AddPolicy(Policies.ResetPassword, policy =>
         policy.RequireClaim(Claims.TokenType, TokenTypes.ResetPassword));
@@ -57,17 +68,49 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(Roles.Admin).RequireClaim(Claims.TokenType, TokenTypes.Access));
 });
 
-string postgresConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(postgresConnection));
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    string postgresConnection = builder.Configuration.GetConnectionString("Postgres")
+        ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is missing.");
 
-builder.Services.AddSingleton<ITokenService, TokenService>();
+    options.UseNpgsql(postgresConnection);
+});
+
+builder.Services.AddSingleton<IRedisClient>(_ => 
+{
+    string redisConnection = builder.Configuration.GetConnectionString("Redis") 
+        ?? throw new InvalidOperationException("Connection string 'Redis' is missing.");
+
+    return new RedisClient(redisConnection);
+});
+
 builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
+builder.Services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
+
+builder.Services.AddTransient(_ =>
+{
+    var emailSettings = builder.Configuration
+        .GetRequiredSection(nameof(EmailSettings))
+        .Get<EmailSettings>()!;
+
+    return new SmtpClient
+    {
+        Host = emailSettings.SmtpServer,
+        Port = emailSettings.Port,
+        Credentials = new NetworkCredential(emailSettings.Username, emailSettings.Password),
+        EnableSsl = emailSettings.EnableSsl
+    };
+});
+
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IRedisService, RedisService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApplicationUserContext>(sp =>
 {
-    var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext;
-    return new ApplicationUserContext(httpContext?.User ?? new ClaimsPrincipal());
+    var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext?.User;
+    return new ApplicationUserContext(httpContext ?? new ClaimsPrincipal());
 });
 
 var app = builder.Build();
@@ -82,4 +125,4 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+app.Run(); 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using WebApi.Security;
-using WebApi.Services;
+using WebApi.Services.Implementations;
 
 #nullable disable
 

@@ -1,4 +1,4 @@
-﻿namespace WebApi.Context;
+﻿namespace WebApi.Context.Interfaces;
 
 public interface IApplicationUserContext
 {
