@@ -3,7 +3,7 @@
 namespace WebApi.Repositories.Interfaces;
 public interface IBaseRepository<T> where T : TrackableEntity
 {
-    Task<IEnumerable<T>> GetAllAsync( int pageNumber, int pageSize);
+    Task<IEnumerable<T>> GetAllAsync( int pageNumber = 1, int pageSize = 10);
     Task<T?> GetByIdAsync(Guid id);
     Task AddAsync(T entity);
     void Update(T entity);

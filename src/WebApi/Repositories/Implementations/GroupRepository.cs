@@ -6,6 +6,6 @@ namespace WebApi.Repositories.Implementations
 {
     public class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
-        public GroupRepository(AppDbContext _dbSet) : base(_dbSet) { }
+        public GroupRepository(AppDbContext context) : base(context) { }
     }
 }

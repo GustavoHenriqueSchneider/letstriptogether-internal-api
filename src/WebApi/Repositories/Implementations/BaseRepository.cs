@@ -33,7 +33,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
     }
     public void Update(T entity)
     {
-        _dbSet.Update(entity);
+        _dbSet.Attach(entity);
     }
     public void Remove(T entity)
     {

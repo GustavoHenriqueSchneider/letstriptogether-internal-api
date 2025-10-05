@@ -8,7 +8,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    public IBaseRepository<User> Users { get; private set; }//ára evitar mudanças externas
+    public IBaseRepository<User> Users { get; private set; }
     public IBaseRepository<Destination> Destinations { get; private set; }
     public IBaseRepository<Group> Groups { get; private set; }
 
@@ -20,13 +20,12 @@ public class UnitOfWork : IUnitOfWork
         Destinations = new BaseRepository<Destination>(_context);
         Groups = new BaseRepository<Group>(_context);
     }
-    public async Task<int> SaveAsync()//faz a persistencia
+    public async Task<int> SaveAsync()
     {
         return await _context.SaveChangesAsync();
     }
     public void Dispose()
     {
-        //libera recursos
         _context.Dispose();
     }
 }

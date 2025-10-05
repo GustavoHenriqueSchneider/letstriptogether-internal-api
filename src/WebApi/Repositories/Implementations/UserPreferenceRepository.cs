@@ -5,5 +5,5 @@ using WebApi.Repositories.Interfaces;
 namespace WebApi.Repositories.Implementations;
 public class UserPreferenceRepository : BaseRepository<UserPreference>, IUserPreferenceRepository
 {
-    public UserPreferenceRepository(AppDbContext _dbSet) : base(_dbSet) { }
+    public UserPreferenceRepository(AppDbContext context) : base(context) { }
 }

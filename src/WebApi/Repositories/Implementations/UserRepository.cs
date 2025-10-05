@@ -1,6 +1,4 @@
-﻿// WebApi.Repositories.Implementations/UserRepository.cs (IMPLEMENTAÇÃO)
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;

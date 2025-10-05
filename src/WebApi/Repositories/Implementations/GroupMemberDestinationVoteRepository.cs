@@ -6,6 +6,6 @@ namespace WebApi.Repositories.Implementations
 {
     public class GroupMemberDestinationVoteRepository : BaseRepository<GroupMemberDestinationVote> , IGroupMemberDestinationVoteRepository
     {
-        public GroupMemberDestinationVoteRepository(AppDbContext _dbSet) : base(_dbSet) { }
+        public GroupMemberDestinationVoteRepository(AppDbContext context) : base(context) { }
     }
 }
