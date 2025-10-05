@@ -6,9 +6,9 @@ using WebApi.Context;
 
 namespace WebApi.Repositories.Implementations
 {
-    public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroupInvitation
+    public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroupInvitationRepository
     {
-        public GroupInvitationRepository(AppDbContext context) : base(context) { }
+        public GroupInvitationRepository(AppDbContext _dbSet) : base(_dbSet) { }
         
         public async Task<GroupInvitation?> GetByTokenAsync(string token)
         {

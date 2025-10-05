@@ -1,8 +1,7 @@
 ﻿using WebApi.Models;
 
 namespace WebApi.Repositories.Interfaces;
-
-public interface IGroup : IBaseRepository<Group>
+public interface IGroupRepository : IBaseRepository<Group>
 {
    
 }

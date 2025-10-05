@@ -4,8 +4,8 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Repositories.Implementations
 {
-    public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMember
+    public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMemberRepository
     {
-        public GroupMemberRepository(AppDbContext context) : base(context) { }
+        public GroupMemberRepository(AppDbContext _dbSet) : base(_dbSet) { }
     }
 }

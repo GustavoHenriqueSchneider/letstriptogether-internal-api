@@ -15,7 +15,7 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
-        //Cria instancias dos repositórios
+
         Users = new BaseRepository<User>(_context);
         Destinations = new BaseRepository<Destination>(_context);
         Groups = new BaseRepository<Group>(_context);

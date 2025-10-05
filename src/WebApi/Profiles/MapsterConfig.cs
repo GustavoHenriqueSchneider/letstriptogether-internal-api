@@ -7,10 +7,6 @@ namespace WebApi.Profiles;
 public static class MapsterConfig
 {
     public static void ConfigureMApping()
-    {
-        TypeAdapterConfig<User, UserDto>
-            .NewConfig()
-            .Map(dest => dest.Preferences, src => src.Preferences.Adapt<UserPreferenceDto>());
-            
+    {     
     }
 }

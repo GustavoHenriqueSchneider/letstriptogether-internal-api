@@ -8,7 +8,7 @@ namespace WebApi.Repositories.Implementations;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
-    protected readonly AppDbContext _context;
+    private readonly AppDbContext _context;
     protected readonly DbSet<T> _dbSet;
     public BaseRepository(AppDbContext context)
     {
@@ -18,10 +18,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public async Task<IEnumerable<T>> GetAllAsync(int pageNumber, int pageSize)
     {
-        return await _dbSet.AsNoTracking()//melhora performance, evita que o EF Core gaste tempo e memória para monitorá-las
+        return await _dbSet.AsNoTracking()
                            .Skip((pageNumber - 1) * pageSize)
                            .Take(pageSize)
-                           .ToListAsync();//
+                           .ToListAsync();
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {

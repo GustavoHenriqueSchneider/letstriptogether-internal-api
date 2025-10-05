@@ -4,8 +4,8 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Repositories.Implementations
 {
-    public class GroupMemberDestinationVoteRepository : BaseRepository<GroupMemberDestinationVote> , IGroupMemberDestinationVote
+    public class GroupMemberDestinationVoteRepository : BaseRepository<GroupMemberDestinationVote> , IGroupMemberDestinationVoteRepository
     {
-        public GroupMemberDestinationVoteRepository(AppDbContext context) : base(context) { }
+        public GroupMemberDestinationVoteRepository(AppDbContext _dbSet) : base(_dbSet) { }
     }
 }

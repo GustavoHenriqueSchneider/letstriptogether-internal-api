@@ -1,5 +1,3 @@
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
-using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using WebApi.Context;
+using WebApi.Models;
+using WebApi.Repositories.Implementations;
+using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services;
-using WebApi.Repositories.Interfaces;
-using WebApi.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,10 +70,19 @@ if (string.IsNullOrEmpty(postgresConnection))
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(postgresConnection, builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(postgresConnection,
-        ServerVersion.AutoDetect(postgresConnection)))));
+        (postgresConnection)))));
 
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
+builder.Services.AddScoped<IGroupInvitationRepository, GroupInvitationRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
+builder.Services.AddScoped<IGroupMemberDestinationVoteRepository, GroupMemberDestinationVoteRepository>();
+builder.Services.AddScoped<IUserGroupInvitationRepository, UserGroupInvitationRepository>();
+builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHttpContextAccessor();
