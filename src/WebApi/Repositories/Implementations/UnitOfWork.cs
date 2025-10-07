@@ -8,7 +8,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    public IBaseRepository<User> Users { get; private set; }
+    public IUserRepository Users { get; private set; }
     public IBaseRepository<Destination> Destinations { get; private set; }
     public IBaseRepository<Group> Groups { get; private set; }
 
@@ -16,9 +16,9 @@ public class UnitOfWork : IUnitOfWork
     {
         _context = context;
 
-        Users = new BaseRepository<User>(_context);
-        Destinations = new BaseRepository<Destination>(_context);
-        Groups = new BaseRepository<Group>(_context);
+        this.Users = new UserRepository(context);
+        this.Destinations = new BaseRepository<Destination>(context);
+        this.Groups = new BaseRepository<Group>(context);
     }
     public async Task<int> SaveAsync()
     {

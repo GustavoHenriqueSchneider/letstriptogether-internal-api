@@ -9,11 +9,7 @@ namespace WebApi.Repositories.Implementations;
 
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    private readonly AppDbContext _context;
-    public UserRepository(AppDbContext context) : base(context) 
-    {
-    _context = context;
-    }
+    public UserRepository(AppDbContext context) : base(context) { }
 
     public async Task<bool> ExistsByEmailAsync(string email)
     {
@@ -26,11 +22,6 @@ public class UserRepository : BaseRepository<User>, IUserRepository
             .Include(x => x.Preferences) 
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
-    }
-
-    public async Task<Role?> GetDefaultUserRoleAsync()
-    {
-        return await _context.Roles.SingleOrDefaultAsync(x => x.Name == Roles.User);
     }
 
     public async Task<User?> GetByEmailAsync(string email)

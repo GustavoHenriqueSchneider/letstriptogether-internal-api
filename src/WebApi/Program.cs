@@ -84,6 +84,7 @@ builder.Services.AddScoped<IGroupMemberDestinationVoteRepository, GroupMemberDes
 builder.Services.AddScoped<IUserGroupInvitationRepository, UserGroupInvitationRepository>();
 builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApplicationUserContext>(sp =>

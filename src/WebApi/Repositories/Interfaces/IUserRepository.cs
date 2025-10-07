@@ -10,7 +10,5 @@ public interface IUserRepository : IBaseRepository<User>
     Task<User?> GetByIdWithPreferencesAsync(Guid id);
 
     Task<User?> GetByEmailAsync( string email);
-
-    Task<Role?> GetDefaultUserRoleAsync();
     
 }
