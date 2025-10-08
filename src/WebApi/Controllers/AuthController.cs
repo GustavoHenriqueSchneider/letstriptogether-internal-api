@@ -83,6 +83,15 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     [Authorize(Policy = Policies.RegisterSetPassword)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
+        if (!request.HasAcceptedTermsOfUse)
+        {
+            return BadRequest(new BaseResponse
+            {
+                Status = "Error",
+                Message = "Terms of use must be accepted for user registration."
+            });
+        }
+
         var email = currentUser.GetEmail();
         var existsUserWithEmail = await context.Users.AnyAsync(x => x.Email == email);
 
