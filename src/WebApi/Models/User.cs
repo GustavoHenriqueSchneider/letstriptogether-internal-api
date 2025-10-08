@@ -37,8 +37,6 @@ public class User : TrackableEntity
     public void SetPreferences(UserPreference preferences)
     {
         Preferences.Update(preferences);
-<<<<<<< Updated upstream
-=======
         // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
         SetUpdateAt(DateTime.UtcNow);
     }
@@ -85,7 +83,6 @@ public class User : TrackableEntity
 
         _userRoles.Remove(userRole);
         // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
->>>>>>> Stashed changes
         SetUpdateAt(DateTime.UtcNow);
     }
 }

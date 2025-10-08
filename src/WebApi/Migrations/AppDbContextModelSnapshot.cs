@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using WebApi.Context;
+using WebApi.Context.Implementations;
 
 #nullable disable
 
@@ -69,7 +69,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Group");
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("WebApi.Models.GroupInvitation", b =>
@@ -94,7 +94,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupInvitation");
+                    b.ToTable("GroupInvitations");
                 });
 
             modelBuilder.Entity("WebApi.Models.GroupMatch", b =>
@@ -121,7 +121,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupMatch");
+                    b.ToTable("GroupMatches");
                 });
 
             modelBuilder.Entity("WebApi.Models.GroupMember", b =>
@@ -148,7 +148,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupMember");
+                    b.ToTable("GroupMembers");
                 });
 
             modelBuilder.Entity("WebApi.Models.GroupMemberDestinationVote", b =>
@@ -178,7 +178,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("GroupMemberId");
 
-                    b.ToTable("GroupMemberDestinationVote");
+                    b.ToTable("GroupMemberDestinationVotes");
                 });
 
             modelBuilder.Entity("WebApi.Models.Role", b =>
@@ -261,7 +261,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGroupInvitation");
+                    b.ToTable("UserGroupInvitations");
                 });
 
             modelBuilder.Entity("WebApi.Models.UserPreference", b =>
@@ -288,7 +288,7 @@ namespace WebApi.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserPreference");
+                    b.ToTable("UserPreferences");
                 });
 
             modelBuilder.Entity("WebApi.Models.UserRole", b =>
