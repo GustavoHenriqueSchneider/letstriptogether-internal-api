@@ -9,4 +9,7 @@ public class RegisterRequest
     [MinLength(8)]
     [MaxLength(30)]
     public string Password { get; init; } = null!;
+
+    [Required(ErrorMessage = "HasAcceptedTermsOfUse is required")]
+    public bool HasAcceptedTermsOfUse { get; init; }
 }
