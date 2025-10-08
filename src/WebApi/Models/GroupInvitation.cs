@@ -7,9 +7,4 @@ public class GroupInvitation : TrackableEntity
     public DateTime ExpirationDate { get; init; }
     public List<UserGroupInvitation> AnsweredBy { get; init; } = [];
     private GroupInvitation() { }
-    public GroupInvitation(Guid groupId, string token, DateTime expirationDate)
-    {
-        GroupId = groupId;
-        ExpirationDate = expirationDate;
-    }
 }

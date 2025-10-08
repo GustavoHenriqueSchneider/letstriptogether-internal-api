@@ -8,17 +8,9 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    public IUserRepository Users { get; private set; }
-    public IBaseRepository<Destination> Destinations { get; private set; }
-    public IBaseRepository<Group> Groups { get; private set; }
-
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
-
-        this.Users = new UserRepository(context);
-        this.Destinations = new BaseRepository<Destination>(context);
-        this.Groups = new BaseRepository<Group>(context);
     }
     public async Task<int> SaveAsync()
     {

@@ -2,10 +2,9 @@
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
 
-namespace WebApi.Repositories.Implementations
+namespace WebApi.Repositories.Implementations;
+
+public class GroupRepository : BaseRepository<Group>, IGroupRepository
 {
-    public class GroupRepository : BaseRepository<Group>, IGroupRepository
-    {
-        public GroupRepository(AppDbContext context) : base(context) { }
-    }
+    public GroupRepository(AppDbContext context) : base(context) { }
 }

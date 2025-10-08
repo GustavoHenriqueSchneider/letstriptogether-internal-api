@@ -16,16 +16,17 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
         _dbSet = _context.Set<T>();
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<T>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
     {
         return await _dbSet.AsNoTracking()
+                           .OrderByDescending(e => e.CreatedAt)
                            .Skip((pageNumber - 1) * pageSize)
                            .Take(pageSize)
                            .ToListAsync();
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(e => e.Id == id);
     }
     public async Task AddAsync(T entity)
     {

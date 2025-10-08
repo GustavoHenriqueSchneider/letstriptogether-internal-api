@@ -24,7 +24,7 @@ public class UsersController(
     IPasswordHashService passwordHashService,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
-    IBaseRepository<Role> roleRepository
+    IRoleRepository roleRepository
     )
     : ControllerBase
 {
@@ -78,20 +78,17 @@ public class UsersController(
     public async Task<IActionResult> Create([FromBody] CreateRequest request)
     {
         var email = request.Email;
-       var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
 
         if (existsUserWithEmail)
         {
             return Conflict(new BaseResponse { Status = "Error", Message = "There is already an user using this email." });
         }
-
-        var defaultRole = await userRepository.GetDefaultUserRoleAsync();
-
+        var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
         if (defaultRole is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "Role not found." });
         }
-
         var passwordHash = passwordHashService.HashPassword(request.Password);
         var user = new User(request.Name, email, passwordHash, defaultRole);
 
