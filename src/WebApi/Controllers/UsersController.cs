@@ -132,6 +132,9 @@ public class UsersController(
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
 
@@ -152,6 +155,8 @@ public class UsersController(
         user.Anonymize();
 
         await unitOfWork.SaveAsync();
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
         return NoContent();
     }
