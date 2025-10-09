@@ -20,5 +20,9 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
 	  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Profiles\" />
+  </ItemGroup>
 	
 </Project>
