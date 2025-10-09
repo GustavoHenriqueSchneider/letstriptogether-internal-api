@@ -1,32 +1,32 @@
-﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
+using WebApi.Configurations;
 using WebApi.Models;
 using WebApi.Security;
+using WebApi.Services.Interfaces;
 
-namespace WebApi.Services;
+namespace WebApi.Services.Implementations;
 
-public class TokenService(IConfiguration configuration) : ITokenService
+public class TokenService : ITokenService
 {
+    private readonly JsonWebTokenSettings _jwtSettings;
+
+    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings)
+    {
+        _jwtSettings = jwtSettings.Value;
+    }
+
     public string GenerateRegisterTokenForStep(string step, List<Claim> claims)
     {
-        var validSteps = new List<string> { Steps.ValidateEmail, Steps.SetPassword };
-
-        if (!validSteps.Contains(step))
-        {
-            throw new InvalidOperationException("Invalid step");
-        }
-
         claims.AddRange([
             new(Claims.TokenType, TokenTypes.Step),
-            new(Claims.Step, step)
+            new(Claims.Step, new Steps(step))
         ]);
 
-        var expiresIn = DateTime.UtcNow.AddMinutes(configuration.GetSection("JsonWebTokenSettings")
-                .GetValue<int>("AccessTokenValidityInMinutes"));
+        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenValidityInMinutes);
 
         var token = CreateJwtToken(claims, expiresIn);
         return token;
@@ -40,8 +40,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
             new (Claims.TokenType, TokenTypes.ResetPassword)
         };
 
-        var expiresIn = DateTime.UtcNow.AddMinutes(configuration.GetSection("JsonWebTokenSettings")
-                .GetValue<int>("ResetPasswordTokenValidityInMinutes"));
+        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.ResetPasswordTokenValidityInMinutes);
 
         var token = CreateJwtToken(claims, expiresIn);
         return token;
@@ -57,8 +56,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
 
     private string CreateJwtToken(List<Claim> claims, DateTime expiresIn)
     {
-        var key = configuration.GetSection("JsonWebTokenSettings").GetValue<string>("SecretKey") ??
-                  throw new InvalidOperationException("Invalid secret key");
+        var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
         var privateKey = Encoding.UTF8.GetBytes(key);
 
         var signingCredentials = new SigningCredentials(
@@ -70,7 +68,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
         {
             SigningCredentials = signingCredentials,
             Subject = new ClaimsIdentity(claims),
-            Issuer = configuration.GetSection("JsonWebTokenSettings").GetValue<string>("Issuer"),
+            Issuer = _jwtSettings.Issuer,
             Expires = expiresIn
         };
 
@@ -92,8 +90,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
             claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
         }
 
-        var expiresIn = DateTime.UtcNow.AddMinutes(configuration.GetSection("JsonWebTokenSettings")
-                        .GetValue<int>("AccessTokenValidityInMinutes"));
+        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenValidityInMinutes);
 
         var accessToken = CreateJwtToken(claims, expiresIn);
         return accessToken;
@@ -107,8 +104,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
             new (Claims.TokenType, TokenTypes.Refresh)
         };
 
-        var expiresIn = DateTime.UtcNow.AddMinutes(configuration.GetSection("JsonWebTokenSettings")
-                        .GetValue<int>("RefreshTokenValidityInMinutes"));
+        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
 
         var refreshToken = CreateJwtToken(claims, expiresIn);
         return refreshToken;

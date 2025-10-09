@@ -1,7 +1,8 @@
 ﻿using System.Security.Claims;
+using WebApi.Context.Interfaces;
 using WebApi.Security;
 
-namespace WebApi.Context;
+namespace WebApi.Context.Implementations;
 
 public class ApplicationUserContext(ClaimsPrincipal principal) : IApplicationUserContext
 {

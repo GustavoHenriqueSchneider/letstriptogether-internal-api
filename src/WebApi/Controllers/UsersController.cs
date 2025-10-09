@@ -1,14 +1,24 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+<<<<<<< HEAD
 using WebApi.Context;
+=======
+using Microsoft.EntityFrameworkCore;
+using WebApi.Context.Implementations;
+using WebApi.Context.Interfaces;
+>>>>>>> master
 using WebApi.DTOs.Requests.User;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
+<<<<<<< HEAD
 using WebApi.Services;
 using System.Linq;
+=======
+using WebApi.Services.Interfaces;
+>>>>>>> master
 
 namespace WebApi.Controllers;
 
@@ -145,18 +155,37 @@ public class UsersController(
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> AnonymizeById([FromRoute] Guid id)
     {
+<<<<<<< HEAD
         var user = await userRepository.GetByIdAsync(id);
+=======
+        var user = await context.Users
+            .Include(u => u.GroupMemberships)
+            .Include(u => u.AcceptedInvitations)
+            .Include(u => u.Preferences)
+            .Include(u => u.UserRoles)
+            .SingleOrDefaultAsync(x => x.Id == id);
+>>>>>>> master
 
         if (user is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
+        context.GroupMembers.RemoveRange(user.GroupMemberships);
+        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
+        context.UserRoles.RemoveRange(user.UserRoles);
+
         user.Anonymize();
+<<<<<<< HEAD
 
         await unitOfWork.SaveAsync();
+=======
+        await context.SaveChangesAsync();
+>>>>>>> master
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        // TODO: registrar log de auditoria da anonimização do usuário
+        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
 
         return NoContent();
     }
@@ -243,18 +272,40 @@ public class UsersController(
     [HttpPatch("me/anonymize")]
     public async Task<IActionResult> AnonymizeCurrentUser()
     {
+<<<<<<< HEAD
         var user = await userRepository.GetByIdAsync(currentUser.GetId());
+=======
+        var user = await context.Users
+            .Include(u => u.GroupMemberships)
+            .Include(u => u.AcceptedInvitations)
+            .Include(u => u.Preferences)
+            .Include(u => u.UserRoles)
+            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+>>>>>>> master
 
         if (user is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
+        context.GroupMembers.RemoveRange(user.GroupMemberships);
+        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
+        context.UserRoles.RemoveRange(user.UserRoles);
+
         user.Anonymize();
+<<<<<<< HEAD
         // TODO: remover vinculos de usuario com grupos...
         await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+=======
+        await context.SaveChangesAsync();
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        // TODO: registrar log de auditoria da anonimização do usuário
+        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
+
+>>>>>>> master
         return NoContent();
     }
 

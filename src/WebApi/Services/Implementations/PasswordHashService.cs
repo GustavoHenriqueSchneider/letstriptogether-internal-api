@@ -1,8 +1,9 @@
-﻿using Crypt = BCrypt.Net.BCrypt;
+﻿using WebApi.Services.Interfaces;
+using Crypt = BCrypt.Net.BCrypt;
 
-namespace WebApi.Services;
+namespace WebApi.Services.Implementations;
 
-public class PasswordHashService() : IPasswordHashService
+public class PasswordHashService : IPasswordHashService
 {
     public string HashPassword(string password)
     {
