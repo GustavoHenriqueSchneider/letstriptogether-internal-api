@@ -20,7 +20,7 @@ using WebApi.Services.Implementations;
 using WebApi.Services.Interfaces;
 
 // TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
-// e metodos por separa��o: registerRepositories, registerServices...
+// e metodos por separacao: registerRepositories, registerServices...
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

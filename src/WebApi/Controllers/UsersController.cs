@@ -243,7 +243,8 @@ public class UsersController(
 
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}git a
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
         return NoContent();
     }
