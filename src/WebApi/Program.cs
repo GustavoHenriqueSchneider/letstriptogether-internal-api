@@ -6,40 +6,26 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
-<<<<<<< HEAD
-using WebApi.Context;
-using WebApi.Models;
-using WebApi.Repositories.Implementations;
-using WebApi.Repositories.Interfaces;
-=======
 using WebApi.Clients.Implementations;
 using WebApi.Clients.Interfaces;
 using WebApi.Configurations;
 using WebApi.Context.Implementations;
 using WebApi.Context.Interfaces;
->>>>>>> master
 using WebApi.Security;
 using WebApi.Services.Implementations;
 using WebApi.Services.Interfaces;
 
 // TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
-// e metodos por separação: registerRepositories, registerServices...
+// e metodos por separaï¿½ï¿½o: registerRepositories, registerServices...
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-<<<<<<< HEAD
-
-// TODO: JsonWebTokenSettings pode ser uma classe para facilitar import o appsettings
-var secretKey = builder.Configuration["JsonWebTokenSettings:SecretKey"] ?? 
-    throw new InvalidOperationException("Invalid secret key");
-=======
 var jwtSection = builder.Configuration.GetRequiredSection(nameof(JsonWebTokenSettings));
 builder.Services.Configure<JsonWebTokenSettings>(jwtSection);
 var jwtSettings = jwtSection.Get<JsonWebTokenSettings>()!;
->>>>>>> master
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -82,18 +68,6 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(Roles.Admin).RequireClaim(Claims.TokenType, TokenTypes.Access));
 });
 
-<<<<<<< HEAD
-string? postgresConnection = builder.Configuration
-                            .GetConnectionString("DefaultConnection");
-if (string.IsNullOrEmpty(postgresConnection))
-{
-    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-}
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(postgresConnection, builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(postgresConnection,
-        (postgresConnection)))));
-=======
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     string postgresConnection = builder.Configuration.GetConnectionString("Postgres")
@@ -109,7 +83,6 @@ builder.Services.AddSingleton<IRedisClient>(_ =>
 
     return new RedisClient(redisConnection);
 });
->>>>>>> master
 
 builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
 builder.Services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
