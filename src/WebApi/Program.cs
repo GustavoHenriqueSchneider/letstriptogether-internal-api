@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
@@ -16,7 +17,7 @@ using WebApi.Services.Implementations;
 using WebApi.Services.Interfaces;
 
 // TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
-// e metodos por separação: registerRepositories, registerServices...
+// e metodos por separaï¿½ï¿½o: registerRepositories, registerServices...
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -88,6 +89,7 @@ builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
 builder.Services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
+builder.Services.AddTransient<JwtSecurityTokenHandler>();
 builder.Services.AddTransient(_ =>
 {
     var emailSettings = builder.Configuration
