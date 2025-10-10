@@ -1,5 +1,4 @@
 ﻿using WebApi.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
 using WebApi.Context.Implementations;
 

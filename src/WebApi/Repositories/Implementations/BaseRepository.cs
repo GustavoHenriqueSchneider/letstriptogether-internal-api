@@ -33,6 +33,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
         await _dbSet.AddAsync(entity);
     }
 
+    public async Task AddRangeAsync(IEnumerable<T> entityList)
+    {
+        await _dbSet.AddRangeAsync(entityList);
+    }
+
     public void Update(T entity)
     {
         _dbSet.Attach(entity);

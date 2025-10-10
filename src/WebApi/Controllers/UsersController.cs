@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.User;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
-using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
@@ -34,7 +32,8 @@ public class UsersController(
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
 
-    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10)
     {
         var users = await userRepository.GetAllAsync(pageNumber, pageSize);
 
@@ -108,7 +107,8 @@ public class UsersController(
 
     [HttpPut("{id:guid}")]
     [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> UpdateById([FromRoute] Guid id, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> UpdateById([FromRoute] Guid id, 
+        [FromBody] UpdateRequest request)
     {
         // TODO: converter updaterequest em record pra adicionar
         var user = await userRepository.GetByIdAsync(id);
@@ -119,7 +119,6 @@ public class UsersController(
         }
 
         user.Update(request.Name);
-
         await unitOfWork.SaveAsync();
 
         return NoContent();
@@ -160,6 +159,8 @@ public class UsersController(
         userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
+
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
@@ -171,7 +172,8 @@ public class UsersController(
 
     [HttpPut("{id:guid}/preferences")]
     [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id, [FromBody] SetPreferencesRequest request)
+    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id, 
+        [FromBody] SetPreferencesRequest request)
     {
         var user = await userRepository.GetByIdWithPreferencesAsync(id);
 
@@ -183,6 +185,7 @@ public class UsersController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
@@ -214,7 +217,8 @@ public class UsersController(
     }
 
     [HttpPut("me")]
-    public async Task<IActionResult> UpdateCurrentUser([FromBody] UpdateForCurrentUserRequest request)
+    public async Task<IActionResult> UpdateCurrentUser(
+        [FromBody] UpdateForCurrentUserRequest request)
     {
         var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
@@ -225,6 +229,7 @@ public class UsersController(
 
         user.Update(request.Name);
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
@@ -264,6 +269,8 @@ public class UsersController(
         userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
+
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
@@ -287,6 +294,7 @@ public class UsersController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
