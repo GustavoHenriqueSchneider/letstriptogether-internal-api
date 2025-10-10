@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using WebApi.Context.Implementations;
 using WebApi.Models;
+using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
@@ -13,34 +14,36 @@ namespace WebApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/destinations")]
-public class DestinationsController(AppDbContext context) : ControllerBase
+public class DestinationsController(
+    IDestinationRepository destinationRepository,
+    IUnitOfWork unitOfWork) : ControllerBase
 {
     // TODO: remover esses dados da controller
     private const string GeoapifyApiKey = "7cfabde88e4341909197f829746da3f3";
     private const string GeoapifyApiBaseUrl = $"https://api.geoapify.com/v2/places?categories=tourism&&filter=rect:-73.99,-33.75,-34.79,5.27&lang=pt&apiKey={GeoapifyApiKey}";
 
     [HttpGet]
-    public ActionResult<IEnumerable<object>> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        // TODO: paginacao deve funcionar via parametros de query, por enquanto pega os mesmos 10 valores, precisa de offset
-        const int pageSize = 10;
+        var destinations = await destinationRepository.GetAllAsync(pageNumber, pageSize); 
 
-        var destinations = context.Destinations.OrderBy(x => x.CreatedAt).Take(pageSize).ToList();
-        if (destinations.Count > 0)
+        if (destinations.Any())
         {
             return Ok(destinations.Select(x => new { x.Id, x.CreatedAt }).ToList());
         }
         
+        // TODO: httpclient deve ser criado via DI
         var client = new HttpClient();
         var url = $"{GeoapifyApiBaseUrl}&limit={pageSize + 1}";
         
-        var response = client.GetAsync(url).GetAwaiter().GetResult();
+        var response = await client.GetAsync(url);
         if (!response.IsSuccessStatusCode)
         {
             return StatusCode((int)response.StatusCode, "Erro ao buscar dados na Geoapify API");
         }
         
-        var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var json = await response.Content.ReadAsStringAsync();
         var doc = JsonDocument.Parse(json);
         var features = doc.RootElement.GetProperty("features");
 
@@ -61,16 +64,16 @@ public class DestinationsController(AppDbContext context) : ControllerBase
             };
         }));
 
-        context.Destinations.AddRange(newDestinations);
-        context.SaveChanges();
+        await destinationRepository.AddRangeAsync(newDestinations);
+        await unitOfWork.SaveAsync();
 
         return Ok(newDestinations.Select(x => new { x.Id, x.CreatedAt }).ToList());
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<object> GetById(Guid id)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var destination = context.Destinations.SingleOrDefault(x => x.Id == id);
+        var destination = await destinationRepository.GetByIdAsync(id);
 
         if (destination is null)
         {

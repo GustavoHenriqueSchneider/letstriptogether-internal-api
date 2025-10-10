@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApi.Context.Implementations;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.User;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
+using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
 
@@ -15,19 +15,28 @@ namespace WebApi.Controllers;
 // TODO: aplicar CQRS com usecases, mediator com mediatr, repository, DI e clean arc
 // TODO: colocar tag de versionamento e descricoes para swagger
 // TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
+
 [Authorize]
 [ApiController]
 [Route("api/v1/users")]
-public class UsersController(AppDbContext context, IPasswordHashService passwordHashService,
-    IApplicationUserContext currentUser)
-    : ControllerBase
+public class UsersController(
+    IUnitOfWork unitOfWork,
+    IPasswordHashService passwordHashService,
+    IApplicationUserContext currentUser,
+    IUserRepository userRepository,
+    IRoleRepository roleRepository,
+    IGroupMemberRepository groupMemberRepository,
+    IUserGroupInvitationRepository userGroupInvitationRepository,
+    IUserRoleRepository userRoleRepository): ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
-    // TODO: obter paginaçao de query params
-    public async Task<IActionResult> GetAll()
+
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10)
     {
-        var users = await context.Users.AsNoTracking().ToListAsync();
+        var users = await userRepository.GetAllAsync(pageNumber, pageSize);
+
         return Ok(new BaseResponse
         {
             Status = "Success",
@@ -35,7 +44,7 @@ public class UsersController(AppDbContext context, IPasswordHashService password
             Data = new GetAllResponse
             {
                 Users = users.Select(x => new GetAllUsersResponse { Id = x.Id, CreatedAt = x.CreatedAt }),
-                Hits = users.Count
+                Hits = users.Count()
             }
         });
     }
@@ -44,18 +53,11 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var user = await context.Users
-            .Include(x => x.Preferences)
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetByIdWithPreferencesAsync(id);
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
         return Ok(new BaseResponse
@@ -66,10 +68,7 @@ public class UsersController(AppDbContext context, IPasswordHashService password
             {
                 Name = user.Name,
                 Email = user.Email,
-                Preferences = new GetByIdUserPreferenceResponse
-                {
-                    Categories = user.Preferences.Categories
-                },
+                Preferences = new GetByIdUserPreferenceResponse { Categories = user.Preferences.Categories },
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt
             }
@@ -81,33 +80,22 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     public async Task<IActionResult> Create([FromBody] CreateRequest request)
     {
         var email = request.Email;
-        var existsUserWithEmail = await context.Users.AsNoTracking().AnyAsync(x => x.Email == email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
 
         if (existsUserWithEmail)
         {
-            return Conflict(new BaseResponse
-            {
-                Status = "Error",
-                Message = "There is already an user using this email."
-            });
+            return Conflict(new BaseResponse { Status = "Error", Message = "There is already an user using this email." });
         }
-
-        var defaultRole = await context.Roles.SingleOrDefaultAsync(x => x.Name == Roles.User);
-
+        var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
         if (defaultRole is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Role not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "Role not found." });
         }
-
         var passwordHash = passwordHashService.HashPassword(request.Password);
         var user = new User(request.Name, email, passwordHash, defaultRole);
 
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
+        await userRepository.AddAsync(user);
+        await unitOfWork.SaveAsync();
 
         return CreatedAtAction(nameof(Create), new BaseResponse
         {
@@ -119,22 +107,19 @@ public class UsersController(AppDbContext context, IPasswordHashService password
 
     [HttpPut("{id:guid}")]
     [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> UpdateById([FromRoute] Guid id, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> UpdateById([FromRoute] Guid id, 
+        [FromBody] UpdateRequest request)
     {
-        // TODO: converter updaterequest em record pra adicionar id nele
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        // TODO: converter updaterequest em record pra adicionar
+        var user = await userRepository.GetByIdAsync(id);
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
         user.Update(request.Name);
-        await context.SaveChangesAsync();
+        await unitOfWork.SaveAsync();
 
         return NoContent();
     }
@@ -143,21 +128,17 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> DeleteById([FromRoute] Guid id)
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetByIdAsync(id);
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
-
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+
+        userRepository.Remove(user);
+        await unitOfWork.SaveAsync();
 
         return NoContent();
     }
@@ -166,28 +147,21 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> AnonymizeById([FromRoute] Guid id)
     {
-        var user = await context.Users
-            .Include(u => u.GroupMemberships)
-            .Include(u => u.AcceptedInvitations)
-            .Include(u => u.Preferences)
-            .Include(u => u.UserRoles)
-            .SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(id);
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
-        context.GroupMembers.RemoveRange(user.GroupMemberships);
-        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
-        context.UserRoles.RemoveRange(user.UserRoles);
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
-        await context.SaveChangesAsync();
+
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
         // TODO: registrar log de auditoria da anonimização do usuário
@@ -198,44 +172,33 @@ public class UsersController(AppDbContext context, IPasswordHashService password
 
     [HttpPut("{id:guid}/preferences")]
     [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id,
+    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id, 
         [FromBody] SetPreferencesRequest request)
     {
-        var user = await context.Users
-            .Include(x => x.Preferences)
-            .SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetByIdWithPreferencesAsync(id);
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
-        await context.SaveChangesAsync();
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync();
+
         return NoContent();
     }
 
     [HttpGet("me")]
     public async Task<IActionResult> GetCurrentUser()
     {
-        var user = await context.Users
-            .Include(x => x.Preferences)
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId());
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
         return Ok(new BaseResponse
@@ -246,10 +209,7 @@ public class UsersController(AppDbContext context, IPasswordHashService password
             {
                 Name = user.Name,
                 Email = user.Email,
-                Preferences = new GetByIdUserPreferenceResponse
-                {
-                    Categories = user.Preferences.Categories
-                },
+                Preferences = new GetByIdUserPreferenceResponse { Categories = user.Preferences.Categories },
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt
             }
@@ -257,21 +217,20 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     }
 
     [HttpPut("me")]
-    public async Task<IActionResult> UpdateCurrentUser([FromBody] UpdateForCurrentUserRequest request)
+    public async Task<IActionResult> UpdateCurrentUser(
+        [FromBody] UpdateForCurrentUserRequest request)
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
         user.Update(request.Name);
-        await context.SaveChangesAsync();
+
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync();
 
         return NoContent();
     }
@@ -279,19 +238,16 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [HttpDelete("me")]
     public async Task<IActionResult> DeleteCurrentUser()
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+
+        var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
+        userRepository.Remove(user);
+        await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
@@ -301,28 +257,21 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     [HttpPatch("me/anonymize")]
     public async Task<IActionResult> AnonymizeCurrentUser()
     {
-        var user = await context.Users
-            .Include(u => u.GroupMemberships)
-            .Include(u => u.AcceptedInvitations)
-            .Include(u => u.Preferences)
-            .Include(u => u.UserRoles)
-            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
-        context.GroupMembers.RemoveRange(user.GroupMemberships);
-        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
-        context.UserRoles.RemoveRange(user.UserRoles);
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
-        await context.SaveChangesAsync();
+
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
         // TODO: registrar log de auditoria da anonimização do usuário
@@ -335,23 +284,19 @@ public class UsersController(AppDbContext context, IPasswordHashService password
     public async Task<IActionResult> SetPreferencesForCurrentUser(
         [FromBody] SetPreferencesForCurrentUserRequest request)
     {
-        var user = await context.Users
-            .Include(x => x.Preferences)
-            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId());
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
-        await context.SaveChangesAsync();
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync();
+
         return NoContent();
     }
 }
