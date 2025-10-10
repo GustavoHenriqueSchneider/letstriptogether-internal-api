@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using WebApi.Context.Implementations;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Auth;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Auth;
 using WebApi.Models;
+using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
 
@@ -19,12 +19,14 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("api/v1/auth")]
 public class AuthController(
-    AppDbContext context, 
     IEmailSenderService emailSenderService, 
     IPasswordHashService passwordHashService, 
     IRandomCodeGeneratorService randomCodeGeneratorService,
     IRedisService redisService,
     ITokenService tokenService,
+    IUserRepository userRepository,
+    IRoleRepository roleRepository,
+    IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser) : ControllerBase
 {
     [HttpPost("email/send")]
@@ -33,7 +35,7 @@ public class AuthController(
         [FromBody] SendRegisterConfirmationEmailRequest request)
     {
         var email = request.Email;
-        var existsUserWithEmail = await context.Users.AnyAsync(x => x.Email == email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
 
         if (existsUserWithEmail)
         {
@@ -110,7 +112,7 @@ public class AuthController(
         }
 
         var email = currentUser.GetEmail();
-        var existsUserWithEmail = await context.Users.AnyAsync(x => x.Email == email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
 
         if (existsUserWithEmail)
         {
@@ -121,7 +123,7 @@ public class AuthController(
             });
         }
 
-        var defaultRole = await context.Roles.SingleOrDefaultAsync(x => x.Name == Roles.User);
+        var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
 
         if (defaultRole is null)
         {
@@ -135,8 +137,8 @@ public class AuthController(
         var passwordHash = passwordHashService.HashPassword(request.Password);
         var user = new User(currentUser.GetName(), email, passwordHash, defaultRole);
 
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
+        await userRepository.AddAsync(user);
+        await unitOfWork.SaveAsync();
 
         return CreatedAtAction(nameof(Register), new BaseResponse
         {
@@ -150,11 +152,7 @@ public class AuthController(
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var user = await context.Users
-            .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Email == request.Email);
+        var user = await userRepository.GetUserWithRolesByEmailAsync(request.Email);
 
         if (user is null)
         {
@@ -196,7 +194,7 @@ public class AuthController(
     [Authorize]
     public async Task<IActionResult> Logout()
     {
-        var userExists = await context.Users.AnyAsync(x => x.Id == currentUser.GetId());
+        var userExists = await userRepository.ExistsByIdAsync(currentUser.GetId());
 
         if (!userExists)
         {
@@ -224,11 +222,7 @@ public class AuthController(
 
         // TODO: usar id do usuario com base no refreshtoken no redis
         var id = Guid.Empty;
-        var user = await context.Users
-            .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetUserWithRolesByIdAsync(id);
 
         if (user is null)
         {
@@ -259,7 +253,7 @@ public class AuthController(
     [AllowAnonymous]
     public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordRequest request) 
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Email == request.Email);
+        var user = await userRepository.GetByEmailAsync(request.Email);
 
         if (user is null)
         {
@@ -287,7 +281,7 @@ public class AuthController(
     [Authorize(Policy = Policies.ResetPassword)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request) 
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
@@ -303,7 +297,9 @@ public class AuthController(
         var passwordHash = passwordHashService.HashPassword(request.Password);
 
         user.SetPassword(passwordHash);
-        await context.SaveChangesAsync();
+        userRepository.Update(user);
+
+        await unitOfWork.SaveAsync();
 
         // TODO: remover token do redis
 

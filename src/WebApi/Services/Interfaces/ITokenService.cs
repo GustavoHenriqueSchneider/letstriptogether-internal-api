@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.BearerToken;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using WebApi.Models;
 
 namespace WebApi.Services.Interfaces;
