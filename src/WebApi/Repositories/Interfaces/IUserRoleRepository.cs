@@ -2,6 +2,6 @@
 
 namespace WebApi.Repositories.Interfaces;
 
-public interface IGroupMemberRepository : IBaseRepository<GroupMember>
+public interface IUserRoleRepository : IBaseRepository<UserRole>
 {
 }

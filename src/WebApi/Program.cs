@@ -11,6 +11,10 @@ using WebApi.Clients.Interfaces;
 using WebApi.Configurations;
 using WebApi.Context.Implementations;
 using WebApi.Context.Interfaces;
+using WebApi.Persistence.Implementations;
+using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
+using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Implementations;
 using WebApi.Services.Interfaces;
@@ -106,16 +110,19 @@ builder.Services.AddTransient(_ =>
 builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
 builder.Services.AddScoped<IRedisService, RedisService>();
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
 builder.Services.AddScoped<IGroupInvitationRepository, GroupInvitationRepository>();
-builder.Services.AddScoped<IGroupRepository, GroupRepository>();
-builder.Services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
+builder.Services.AddScoped<IGroupMatchRepository, GroupMatchRepository>();
 builder.Services.AddScoped<IGroupMemberDestinationVoteRepository, GroupMemberDestinationVoteRepository>();
+builder.Services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserGroupInvitationRepository, UserGroupInvitationRepository>();
 builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApplicationUserContext>(sp =>

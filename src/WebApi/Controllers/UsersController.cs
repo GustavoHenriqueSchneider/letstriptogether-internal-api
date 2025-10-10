@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Context.Implementations;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.User;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
+using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
@@ -25,9 +26,10 @@ public class UsersController(
     IPasswordHashService passwordHashService,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
-    IRoleRepository roleRepository
-    )
-    : ControllerBase
+    IRoleRepository roleRepository,
+    IGroupMemberRepository groupMemberRepository,
+    IUserGroupInvitationRepository userGroupInvitationRepository,
+    IUserRoleRepository userRoleRepository): ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
@@ -146,21 +148,16 @@ public class UsersController(
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> AnonymizeById([FromRoute] Guid id)
     {
-        var user = await context.Users
-            .Include(u => u.GroupMemberships)
-            .Include(u => u.AcceptedInvitations)
-            .Include(u => u.Preferences)
-            .Include(u => u.UserRoles)
-            .SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(id);
 
         if (user is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
-        context.GroupMembers.RemoveRange(user.GroupMemberships);
-        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
-        context.UserRoles.RemoveRange(user.UserRoles);
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
         await unitOfWork.SaveAsync();
@@ -254,21 +251,16 @@ public class UsersController(
     [HttpPatch("me/anonymize")]
     public async Task<IActionResult> AnonymizeCurrentUser()
     {
-        var user = await context.Users
-            .Include(u => u.GroupMemberships)
-            .Include(u => u.AcceptedInvitations)
-            .Include(u => u.Preferences)
-            .Include(u => u.UserRoles)
-            .SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
-        context.GroupMembers.RemoveRange(user.GroupMemberships);
-        context.UserGroupInvitations.RemoveRange(user.AcceptedInvitations);
-        context.UserRoles.RemoveRange(user.UserRoles);
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
         await unitOfWork.SaveAsync();

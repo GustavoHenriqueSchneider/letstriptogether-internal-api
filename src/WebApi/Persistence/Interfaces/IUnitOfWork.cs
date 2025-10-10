@@ -1,6 +1,4 @@
-﻿using WebApi.Models;
-
-namespace WebApi.Repositories.Interfaces;
+namespace WebApi.Persistence.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {

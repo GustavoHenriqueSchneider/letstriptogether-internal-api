@@ -5,7 +5,7 @@ using WebApi.Context.Implementations;
 
 namespace WebApi.Repositories.Implementations;
 
-public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroupInvitationRepository
+public class GroupMatchRepository : BaseRepository<GroupMatch>, IGroupMatchRepository
 {
-    public GroupInvitationRepository(AppDbContext context) : base(context) { }
+    public GroupMatchRepository(AppDbContext context) : base(context) { }
 }

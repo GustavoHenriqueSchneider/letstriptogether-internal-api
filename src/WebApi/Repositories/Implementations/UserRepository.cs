@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApi.Context;
+using WebApi.Context.Implementations;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
-using WebApi.Security;
-
 
 namespace WebApi.Repositories.Implementations;
 
@@ -13,6 +11,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<bool> ExistsByEmailAsync(string email)
     {
+
         return await _dbSet.AsNoTracking().AnyAsync(u => u.Email == email);
     }
 
@@ -29,5 +28,15 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         return await _dbSet
             .AsNoTracking()
             .SingleOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<User?> GetUserWithRelationshipsByIdAsync(Guid id)
+    {
+        return await _dbSet
+            .Include(u => u.GroupMemberships)
+            .Include(u => u.AcceptedInvitations)
+            .Include(u => u.Preferences)
+            .Include(u => u.UserRoles)
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 }
