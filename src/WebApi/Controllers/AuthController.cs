@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using WebApi.Context;
+using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Auth;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Auth;
 using WebApi.Models;
+using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Interfaces;
 using WebApi.Security;
-using WebApi.Services;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers;
 
@@ -17,15 +18,24 @@ namespace WebApi.Controllers;
 // TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
 [ApiController]
 [Route("api/v1/auth")]
-public class AuthController(AppDbContext context, ITokenService tokenService,
-    IPasswordHashService passwordHashService, IApplicationUserContext currentUser) : ControllerBase
+public class AuthController(
+    IEmailSenderService emailSenderService, 
+    IPasswordHashService passwordHashService, 
+    IRandomCodeGeneratorService randomCodeGeneratorService,
+    IRedisService redisService,
+    ITokenService tokenService,
+    IUserRepository userRepository,
+    IRoleRepository roleRepository,
+    IUnitOfWork unitOfWork,
+    IApplicationUserContext currentUser) : ControllerBase
 {
     [HttpPost("email/send")]
     [AllowAnonymous]
     public async Task<IActionResult> SendRegisterConfirmationEmail(
         [FromBody] SendRegisterConfirmationEmailRequest request)
     {
-        var existsUserWithEmail = await context.Users.AnyAsync(x => x.Email == request.Email);
+        var email = request.Email;
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
 
         if (existsUserWithEmail)
         {
@@ -36,12 +46,17 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
             });
         }
 
-        // TODO: criar service para envio de email e outra para armazenar codigo no redis
+        var code = randomCodeGeneratorService.Generate();
+        var key = RedisKeys.EmailConfirmation.Replace("{email}", email);
+
+        await redisService.SetAsync(key, code, 900);
+        // TODO: tirar valor hard coded e criar templates de email
+        await emailSenderService.SendAsync(request.Email, "Email Confirmation", code);
 
         var claims = new List<Claim>
         {
             new (Claims.Name, request.Name),
-            new (ClaimTypes.Email, request.Email)
+            new (ClaimTypes.Email, email)
         };
 
         var token = tokenService.GenerateRegisterTokenForStep(Steps.ValidateEmail, claims);
@@ -58,8 +73,10 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     public async Task<IActionResult> ValidateRegisterConfirmationCode(
         [FromBody] ValidateRegisterConfirmationCodeRequest request)
     {
-        // TODO: verificar se codigo armazenado para email atual no redis confere
-        if (request.Code != 123456)
+        var key = RedisKeys.EmailConfirmation.Replace("{email}", currentUser.GetEmail());
+        var code = await redisService.GetAsync(key);
+
+        if (code is null || code != request.Code)
         {
             return BadRequest(new BaseResponse { Status = "Error", Message = "Invalid code." });
         }
@@ -71,6 +88,8 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
         };
 
         var token = tokenService.GenerateRegisterTokenForStep(Steps.SetPassword, claims);
+        await redisService.DeleteAsync(key);
+
         return Ok(new BaseResponse
         {
             Status = "Success",
@@ -83,8 +102,17 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     [Authorize(Policy = Policies.RegisterSetPassword)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
+        if (!request.HasAcceptedTermsOfUse)
+        {
+            return BadRequest(new BaseResponse
+            {
+                Status = "Error",
+                Message = "Terms of use must be accepted for user registration."
+            });
+        }
+
         var email = currentUser.GetEmail();
-        var existsUserWithEmail = await context.Users.AnyAsync(x => x.Email == email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
 
         if (existsUserWithEmail)
         {
@@ -95,7 +123,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
             });
         }
 
-        var defaultRole = await context.Roles.SingleOrDefaultAsync(x => x.Name == Roles.User);
+        var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
 
         if (defaultRole is null)
         {
@@ -109,8 +137,8 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
         var passwordHash = passwordHashService.HashPassword(request.Password);
         var user = new User(currentUser.GetName(), email, passwordHash, defaultRole);
 
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
+        await userRepository.AddAsync(user);
+        await unitOfWork.SaveAsync();
 
         return CreatedAtAction(nameof(Register), new BaseResponse
         {
@@ -124,11 +152,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var user = await context.Users
-            .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Email == request.Email);
+        var user = await userRepository.GetUserWithRolesByEmailAsync(request.Email);
 
         if (user is null)
         {
@@ -170,7 +194,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     [Authorize]
     public async Task<IActionResult> Logout()
     {
-        var userExists = await context.Users.AnyAsync(x => x.Id == currentUser.GetId());
+        var userExists = await userRepository.ExistsByIdAsync(currentUser.GetId());
 
         if (!userExists)
         {
@@ -181,6 +205,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
             });
         }
 
+        // TODO: fazer logica pra travar accesstoken usado no logout enquanto ainda nao expirar
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
         return NoContent();
@@ -197,11 +222,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
 
         // TODO: usar id do usuario com base no refreshtoken no redis
         var id = Guid.Empty;
-        var user = await context.Users
-            .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetUserWithRolesByIdAsync(id);
 
         if (user is null)
         {
@@ -232,7 +253,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     [AllowAnonymous]
     public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordRequest request) 
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Email == request.Email);
+        var user = await userRepository.GetByEmailAsync(request.Email);
 
         if (user is null)
         {
@@ -260,7 +281,7 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
     [Authorize(Policy = Policies.ResetPassword)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request) 
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Id == currentUser.GetId());
+        var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
@@ -276,7 +297,9 @@ public class AuthController(AppDbContext context, ITokenService tokenService,
         var passwordHash = passwordHashService.HashPassword(request.Password);
 
         user.SetPassword(passwordHash);
-        await context.SaveChangesAsync();
+        userRepository.Update(user);
+
+        await unitOfWork.SaveAsync();
 
         // TODO: remover token do redis
 

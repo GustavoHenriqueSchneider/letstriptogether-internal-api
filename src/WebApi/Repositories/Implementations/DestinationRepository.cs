@@ -1,11 +1,11 @@
-﻿using WebApi.Context;
+﻿using WebApi.Context.Implementations;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
 
-namespace WebApi.Repositories.Implementations
+namespace WebApi.Repositories.Implementations;
+
+public class DestinationRepository : BaseRepository<Destination>, IDestinationRepository
 {
-    public class DestinationRepository : BaseRepository<Destination>, IDestinationRepository
-    {
-        public DestinationRepository(AppDbContext context) : base(context) { }
-    }
+    public DestinationRepository(AppDbContext context) : base(context) { }
+}
 }

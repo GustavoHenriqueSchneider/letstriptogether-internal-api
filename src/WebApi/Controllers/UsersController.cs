@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Context;
+using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.User;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
+using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
-using WebApi.Services;
-using System.Linq;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers;
 
@@ -24,14 +24,16 @@ public class UsersController(
     IPasswordHashService passwordHashService,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
-    IRoleRepository roleRepository
-    )
-    : ControllerBase
+    IRoleRepository roleRepository,
+    IGroupMemberRepository groupMemberRepository,
+    IUserGroupInvitationRepository userGroupInvitationRepository,
+    IUserRoleRepository userRoleRepository): ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
 
-    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10)
     {
         var users = await userRepository.GetAllAsync(pageNumber, pageSize);
 
@@ -105,7 +107,8 @@ public class UsersController(
 
     [HttpPut("{id:guid}")]
     [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> UpdateById([FromRoute] Guid id, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> UpdateById([FromRoute] Guid id, 
+        [FromBody] UpdateRequest request)
     {
         // TODO: converter updaterequest em record pra adicionar
         var user = await userRepository.GetByIdAsync(id);
@@ -116,6 +119,7 @@ public class UsersController(
         }
 
         user.Update(request.Name);
+        await unitOfWork.SaveAsync();
 
         await unitOfWork.SaveAsync();
 
@@ -145,25 +149,33 @@ public class UsersController(
     [Authorize(Policy = Policies.Admin)]
     public async Task<IActionResult> AnonymizeById([FromRoute] Guid id)
     {
-        var user = await userRepository.GetByIdAsync(id);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(id);
 
         if (user is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
+
         user.Anonymize();
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        // TODO: registrar log de auditoria da anonimização do usuário
+        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
 
         return NoContent();
     }
 
     [HttpPut("{id:guid}/preferences")]
     [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id, [FromBody] SetPreferencesRequest request)
+    public async Task<IActionResult> SetPreferencesById([FromRoute] Guid id, 
+        [FromBody] SetPreferencesRequest request)
     {
         var user = await userRepository.GetByIdWithPreferencesAsync(id);
 
@@ -175,6 +187,7 @@ public class UsersController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
@@ -206,7 +219,8 @@ public class UsersController(
     }
 
     [HttpPut("me")]
-    public async Task<IActionResult> UpdateCurrentUser([FromBody] UpdateForCurrentUserRequest request)
+    public async Task<IActionResult> UpdateCurrentUser(
+        [FromBody] UpdateForCurrentUserRequest request)
     {
         var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
@@ -217,6 +231,7 @@ public class UsersController(
 
         user.Update(request.Name);
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
@@ -235,7 +250,8 @@ public class UsersController(
 
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}git a
+
+        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
         return NoContent();
     }
@@ -243,18 +259,26 @@ public class UsersController(
     [HttpPatch("me/anonymize")]
     public async Task<IActionResult> AnonymizeCurrentUser()
     {
-        var user = await userRepository.GetByIdAsync(currentUser.GetId());
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(currentUser.GetId());
 
         if (user is null)
         {
             return NotFound(new BaseResponse { Status = "Error", Message = "User not found." });
         }
 
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
+
         user.Anonymize();
-        // TODO: remover vinculos de usuario com grupos...
+
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        // TODO: registrar log de auditoria da anonimização do usuário
+        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
+
         return NoContent();
     }
 
@@ -272,6 +296,7 @@ public class UsersController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();

@@ -10,5 +10,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  redis:
+    image: redis/redis-stack-server:7.2.0-v19
+    environment:
+      REDIS_ARGS: "--requirepass admin"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
 volumes:
   postgres_data:
+  redis_data:

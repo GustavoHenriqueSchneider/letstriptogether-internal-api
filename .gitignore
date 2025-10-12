@@ -3,6 +3,4 @@
 src/WebApi/bin
 src/WebApi/obj
 src/WebApi/WebApi.csproj.user
-*.etag
-*.vstemplates.local.etag
-*.vstemplates.global.etag
+TemplateEngineHost
