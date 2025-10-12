@@ -109,4 +109,49 @@ public class TokenService : ITokenService
         var refreshToken = CreateJwtToken(claims, expiresIn);
         return refreshToken;
     }
+    public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+    {
+        var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey
+                               (Encoding.UTF8.GetBytes(_jwtSettings.SecretKey ?? 
+                               throw new InvalidOperationException("Invalid secret key"))),
+            ValidateLifetime = false ,
+            ClockSkew = TimeSpan.Zero           
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        try
+        {
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            var tokenType = principal.Claims.FirstOrDefault(c => c.Type == Claims.TokenType)?.Value;
+            if (tokenType != TokenTypes.Refresh)
+            {
+                return null;
+            }
+
+            return principal;
+        }
+        catch (SecurityTokenException)
+        {
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
+        
+
+    }
 }

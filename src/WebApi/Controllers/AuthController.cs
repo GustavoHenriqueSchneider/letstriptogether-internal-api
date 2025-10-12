@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Auth;
@@ -26,9 +27,13 @@ public class AuthController(
     ITokenService tokenService,
     IUserRepository userRepository,
     IRoleRepository roleRepository,
-    IUnitOfWork unitOfWork,
+    WebApi.Persistence.Interfaces.IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser) : ControllerBase
 {
+    private const int RefreshTokenExpirationInSeconds = 2592000;
+    private const string RefreshTokenRedisKey = "auth:refresh_token:{0}";
+    private const string ResetPasswordRedisKey = "auth:reset-password:{0}";
+
     [HttpPost("email/send")]
     [AllowAnonymous]
     public async Task<IActionResult> SendRegisterConfirmationEmail(
@@ -176,7 +181,8 @@ public class AuthController(
 
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
 
-        // TODO: armazenar refreshtoken no redis em auth:refresh_token:{userId}
+        var key = string.Format(RefreshTokenRedisKey, user.Id);
+        await redisService.SetAsync(key, refreshToken, RefreshTokenExpirationInSeconds);
 
         return Ok(new BaseResponse
         {
@@ -194,7 +200,8 @@ public class AuthController(
     [Authorize]
     public async Task<IActionResult> Logout()
     {
-        var userExists = await userRepository.ExistsByIdAsync(currentUser.GetId());
+        var userId = currentUser.GetId();
+        var userExists = await userRepository.ExistsByIdAsync(userId);
 
         if (!userExists)
         {
@@ -205,8 +212,10 @@ public class AuthController(
             });
         }
 
+        var key = string.Format(RefreshTokenRedisKey, userId);
+        await redisService.DeleteAsync(key);
+
         // TODO: fazer logica pra travar accesstoken usado no logout enquanto ainda nao expirar
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
 
         return NoContent();
     }
@@ -223,6 +232,7 @@ public class AuthController(
         // TODO: usar id do usuario com base no refreshtoken no redis
         var id = Guid.Empty;
         var user = await userRepository.GetUserWithRolesByIdAsync(id);
+        var principal = tokenService.GetPrincipalFromExpiredToken(request.RefreshToken);
 
         if (user is null)
         {

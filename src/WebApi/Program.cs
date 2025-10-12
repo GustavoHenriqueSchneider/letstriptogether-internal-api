@@ -1,3 +1,4 @@
+using WebApi.Repositories.Implementations.WebApi.Repositories.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +12,13 @@ using WebApi.Clients.Interfaces;
 using WebApi.Configurations;
 using WebApi.Context.Implementations;
 using WebApi.Context.Interfaces;
-using WebApi.Persistence.Implementations;
-using WebApi.Persistence.Interfaces;
+//using WebApi.Persistence.Implementations;
+//using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Implementations;
 using WebApi.Services.Interfaces;
-using WebApi.Models;
 
 // TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
 // e metodos por separacao: registerRepositories, registerServices...
@@ -123,8 +123,8 @@ builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<WebApi.Persistence.Interfaces.IUnitOfWork,
+WebApi.Persistence.Implementations.UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
 builder.Services.AddScoped<IGroupInvitationRepository, GroupInvitationRepository>();
@@ -133,7 +133,6 @@ builder.Services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
 builder.Services.AddScoped<IGroupMemberDestinationVoteRepository, GroupMemberDestinationVoteRepository>();
 builder.Services.AddScoped<IUserGroupInvitationRepository, UserGroupInvitationRepository>();
 builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddHttpContextAccessor();
