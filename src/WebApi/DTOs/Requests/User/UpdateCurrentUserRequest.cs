@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.DTOs.Requests.User;
 
-public class UpdateRequest
+public class UpdateCurrentUserRequest
 {
     // TODO: nao pode ser string vazia quando informado no body
     [MaxLength(150)]

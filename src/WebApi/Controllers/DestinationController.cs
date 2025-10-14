@@ -7,14 +7,14 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-// TODO: usar Tasks (await/async)
-// TODO: aplicar CQRS com usecases, mediator com mediatr, repository, DI e clean arc
+// TODO: aplicar CQRS com usecases, mediator com mediatr e clean arc
 // TODO: colocar tag de versionamento e descricoes para swagger
 // TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
+
 [Authorize]
 [ApiController]
 [Route("api/v1/destinations")]
-public class DestinationsController(
+public class DestinationController(
     IDestinationRepository destinationRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
@@ -26,7 +26,7 @@ public class DestinationsController(
     public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var destinations = await destinationRepository.GetAllAsync(pageNumber, pageSize); 
+        var (destinations, hits) = await destinationRepository.GetAllAsync(pageNumber, pageSize); 
 
         if (destinations.Any())
         {
