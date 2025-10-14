@@ -233,7 +233,7 @@ public class AuthController(
             });
         }
 
-        var (isExpired, expiresIn) = tokenService.IsTokenExpired(request.RefreshToken);
+        var (isExpired, _) = tokenService.IsTokenExpired(request.RefreshToken);
 
         if (isExpired)
         {
@@ -279,8 +279,8 @@ public class AuthController(
         }
 
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
-        var (_, newTokenExpiresIn) = tokenService.IsTokenExpired(refreshToken);
-        var ttlInSeconds = (int)(newTokenExpiresIn! - DateTime.UtcNow).Value.TotalSeconds;
+        var (_, expiresIn) = tokenService.IsTokenExpired(refreshToken);
+        var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 

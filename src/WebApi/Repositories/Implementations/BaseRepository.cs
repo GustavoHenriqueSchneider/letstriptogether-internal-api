@@ -40,6 +40,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public void Update(T entity)
     {
+        // TODO: fazer atualizar o status das entidades filhas se houver modificação
         _dbSet.Attach(entity);
     }
 
