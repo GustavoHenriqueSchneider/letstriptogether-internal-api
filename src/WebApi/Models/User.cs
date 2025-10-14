@@ -7,9 +7,12 @@ public class User : TrackableEntity
     public string PasswordHash { get; private set; } = null!;
     public bool IsAnonymous { get; private set; }
 
-    // TODO: expor listas como readonly e criar metodos para incluir dados
-    public List<GroupMember> GroupMemberships { get; private set; } = [];
-    public List<UserGroupInvitation> AcceptedInvitations { get; private set; } = [];
+    private readonly List<GroupMember> _groupMemberships = [];
+    public IReadOnlyCollection<GroupMember> GroupMemberships => _groupMemberships.AsReadOnly();
+    
+    private readonly List<UserGroupInvitation> _acceptedInvitations = [];
+    public IReadOnlyCollection<UserGroupInvitation> AcceptedInvitations => _acceptedInvitations.AsReadOnly();
+    
     public UserPreference Preferences { get; private set; } = new();
 
     private readonly List<UserRole> _userRoles = [];
@@ -41,12 +44,9 @@ public class User : TrackableEntity
 
     public void Anonymize()
     {
-        // TODO: melhorar logica de anonimização
         Name = "AnonymousUser";
         Email = $"anon_{Guid.NewGuid():N}@deleted.local";
         IsAnonymous = true;
-        
-        Preferences.Categories = new List<string>();
         // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
         SetUpdateAt(DateTime.UtcNow);
     }

@@ -46,13 +46,6 @@ public class AuthController(
             });
         }
 
-        var code = randomCodeGeneratorService.Generate();
-        var key = RedisKeys.EmailConfirmation.Replace("{email}", email);
-
-        await redisService.SetAsync(key, code, 900);
-        // TODO: tirar valor hard coded e criar templates de email
-        await emailSenderService.SendAsync(request.Email, "Email Confirmation", code);
-
         var claims = new List<Claim>
         {
             new (Claims.Name, request.Name),
@@ -60,6 +53,16 @@ public class AuthController(
         };
 
         var token = tokenService.GenerateRegisterTokenForStep(Steps.ValidateEmail, claims);
+        var (_, expiresIn) = tokenService.IsTokenExpired(token);
+
+        var key = RedisKeys.RegisterEmailConfirmation.Replace("{email}", email);
+        var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
+
+        var code = randomCodeGeneratorService.Generate();
+        await redisService.SetAsync(key, code, ttlInSeconds);
+        // TODO: tirar valor hard coded e criar templates de email
+        await emailSenderService.SendAsync(request.Email, "Email Confirmation", code);
+
         return Ok(new BaseResponse
         {
             Status = "Success",
@@ -73,7 +76,7 @@ public class AuthController(
     public async Task<IActionResult> ValidateRegisterConfirmationCode(
         [FromBody] ValidateRegisterConfirmationCodeRequest request)
     {
-        var key = RedisKeys.EmailConfirmation.Replace("{email}", currentUser.GetEmail());
+        var key = RedisKeys.RegisterEmailConfirmation.Replace("{email}", currentUser.GetEmail());
         var code = await redisService.GetAsync(key);
 
         if (code is null || code != request.Code)
@@ -175,8 +178,12 @@ public class AuthController(
         }
 
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
+        var (_, expiresIn) = tokenService.IsTokenExpired(refreshToken);
 
-        // TODO: armazenar refreshtoken no redis em auth:refresh_token:{userId}
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
+
+        await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 
         return Ok(new BaseResponse
         {
@@ -215,14 +222,52 @@ public class AuthController(
     [AllowAnonymous]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
-        // TODO: verificar no redis se existe o request.RefreshToken pelo id do usuario do token
+        var (isValid, claims) = tokenService.ValidateRefreshToken(request.RefreshToken);
 
-        // TODO: se token estiver expirado retornar unauthorized
-        // TODO: se token for invalido retornar unauthorized
+        if (!isValid)
+        {
+            return Unauthorized(new BaseResponse
+            {
+                Status = "Error",
+                Message = "Invalid refresh token."
+            });
+        }
 
-        // TODO: usar id do usuario com base no refreshtoken no redis
-        var id = Guid.Empty;
-        var user = await userRepository.GetUserWithRolesByIdAsync(id);
+        var (isExpired, _) = tokenService.IsTokenExpired(request.RefreshToken);
+
+        if (isExpired)
+        {
+            return Unauthorized(new BaseResponse
+            {
+                Status = "Error",
+                Message = "Refresh token has expired."
+            });
+        }
+
+        var id = claims!.FindFirstValue(Claims.Id);
+
+        if (!Guid.TryParse(id, out var userId) || userId == Guid.Empty)
+        {
+            return NotFound(new BaseResponse
+            {
+                Status = "Error",
+                Message = "User not found."
+            });
+        }
+
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", userId.ToString());
+        var storedRefreshToken = await redisService.GetAsync(key);
+
+        if (storedRefreshToken is null || storedRefreshToken != request.RefreshToken)
+        {
+            return Unauthorized(new BaseResponse
+            {
+                Status = "Error",
+                Message = "Invalid refresh token."
+            });
+        }
+
+        var user = await userRepository.GetUserWithRolesByIdAsync(userId);
 
         if (user is null)
         {
@@ -234,8 +279,10 @@ public class AuthController(
         }
 
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
+        var (_, expiresIn) = tokenService.IsTokenExpired(refreshToken);
+        var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
-        // TODO: armazenar refreshtoken no redis em auth:refresh_token:{userId}
+        await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 
         return Ok(new BaseResponse
         {
