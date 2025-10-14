@@ -13,9 +13,10 @@ using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers;
 
-// TODO: aplicar CQRS com usecases, mediator com mediatr, repository, DI e clean arc
+// TODO: aplicar CQRS com usecases, mediator com mediatr e clean arc
 // TODO: colocar tag de versionamento e descricoes para swagger
-// TODO: definir retorno das rotas com classes de response e converter returns de erro em exception
+// TODO: converter returns de erro em exception
+
 [ApiController]
 [Route("api/v1/auth")]
 public class AuthController(
@@ -39,11 +40,7 @@ public class AuthController(
 
         if (existsUserWithEmail)
         {
-            return Conflict(new BaseResponse
-            {
-                Status = "Error",
-                Message = "There is already an user using this email."
-            });
+            return Conflict(new ErrorResponse("There is already an user using this email."));
         }
 
         var claims = new List<Claim>
@@ -63,12 +60,7 @@ public class AuthController(
         // TODO: tirar valor hard coded e criar templates de email
         await emailSenderService.SendAsync(request.Email, "Email Confirmation", code);
 
-        return Ok(new BaseResponse
-        {
-            Status = "Success",
-            Message = "Confirmation email sent.",
-            Data = new SendRegisterConfirmationEmailResponse { Token = token }
-        });
+        return Ok(new SendRegisterConfirmationEmailResponse { Token = token });
     }
 
     [HttpPost("email/validate")]
@@ -81,7 +73,7 @@ public class AuthController(
 
         if (code is null || code != request.Code)
         {
-            return BadRequest(new BaseResponse { Status = "Error", Message = "Invalid code." });
+            return BadRequest(new ErrorResponse("Invalid code."));
         }
 
         var claims = new List<Claim>
@@ -93,12 +85,7 @@ public class AuthController(
         var token = tokenService.GenerateRegisterTokenForStep(Steps.SetPassword, claims);
         await redisService.DeleteAsync(key);
 
-        return Ok(new BaseResponse
-        {
-            Status = "Success",
-            Message = "Email confirmed.",
-            Data = new ValidateRegisterConfirmationCodeResponse { Token = token }
-        });
+        return Ok(new ValidateRegisterConfirmationCodeResponse { Token = token });
     }
 
     [HttpPost("register")]
@@ -107,11 +94,7 @@ public class AuthController(
     {
         if (!request.HasAcceptedTermsOfUse)
         {
-            return BadRequest(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Terms of use must be accepted for user registration."
-            });
+            return BadRequest(new ErrorResponse("Terms of use must be accepted for user registration."));
         }
 
         var email = currentUser.GetEmail();
@@ -119,22 +102,14 @@ public class AuthController(
 
         if (existsUserWithEmail)
         {
-            return Conflict(new BaseResponse
-            {
-                Status = "Error",
-                Message = "There is already an user using this email."
-            });
+            return Conflict(new ErrorResponse("There is already an user using this email."));
         }
 
         var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
 
         if (defaultRole is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Role not found."
-            });
+            return NotFound(new ErrorResponse("Default role not found."));
         }
 
         var passwordHash = passwordHashService.HashPassword(request.Password);
@@ -143,12 +118,7 @@ public class AuthController(
         await userRepository.AddAsync(user);
         await unitOfWork.SaveAsync();
 
-        return CreatedAtAction(nameof(Register), new BaseResponse
-        {
-            Status = "Success",
-            Message = "User was registered.",
-            Data = new RegisterResponse { Id = user.Id }
-        });
+        return CreatedAtAction(nameof(Register), new RegisterResponse { Id = user.Id });
     }
 
     [HttpPost("login")]
@@ -159,22 +129,14 @@ public class AuthController(
 
         if (user is null)
         {
-            return Unauthorized(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Invalid credentials."
-            });
+            return Unauthorized(new ErrorResponse("Invalid credentials."));
         }
 
         var isCorrectPassword = passwordHashService.VerifyPassword(request.Password, user.PasswordHash);
 
         if (!isCorrectPassword)
         {
-            return Unauthorized(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Invalid credentials."
-            });
+            return Unauthorized(new ErrorResponse("Invalid credentials."));
         }
 
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
@@ -185,16 +147,7 @@ public class AuthController(
 
         await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 
-        return Ok(new BaseResponse
-        {
-            Status = "Success",
-            Message = "User was logged in.",
-            Data = new LoginResponse
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
-            }
-        });
+        return Ok(new LoginResponse{ AccessToken = accessToken, RefreshToken = refreshToken });
     }
 
     [HttpPost("logout")]
@@ -205,11 +158,7 @@ public class AuthController(
 
         if (!userExists)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new ErrorResponse("User not found."));
         }
 
         // TODO: fazer logica pra travar accesstoken usado no logout enquanto ainda nao expirar
@@ -226,33 +175,21 @@ public class AuthController(
 
         if (!isValid)
         {
-            return Unauthorized(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Invalid refresh token."
-            });
+            return Unauthorized(new ErrorResponse("Invalid refresh token."));
         }
 
         var (isExpired, _) = tokenService.IsTokenExpired(request.RefreshToken);
 
         if (isExpired)
         {
-            return Unauthorized(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Refresh token has expired."
-            });
+            return Unauthorized(new ErrorResponse("Refresh token has expired."));
         }
 
         var id = claims!.FindFirstValue(Claims.Id);
 
         if (!Guid.TryParse(id, out var userId) || userId == Guid.Empty)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new ErrorResponse("User not found."));
         }
 
         var key = RedisKeys.UserRefreshToken.Replace("{userId}", userId.ToString());
@@ -260,22 +197,14 @@ public class AuthController(
 
         if (storedRefreshToken is null || storedRefreshToken != request.RefreshToken)
         {
-            return Unauthorized(new BaseResponse
-            {
-                Status = "Error",
-                Message = "Invalid refresh token."
-            });
+            return Unauthorized(new ErrorResponse("Invalid refresh token."));
         }
 
         var user = await userRepository.GetUserWithRolesByIdAsync(userId);
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new ErrorResponse("User not found."));
         }
 
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
@@ -284,16 +213,7 @@ public class AuthController(
 
         await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 
-        return Ok(new BaseResponse
-        {
-            Status = "Success",
-            Message = "Tokens were refreshed.",
-            Data = new RefreshTokenResponse
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
-            }
-        });
+        return Ok(new RefreshTokenResponse { AccessToken = accessToken, RefreshToken = refreshToken });
     }
 
     [HttpPost("reset-password/request")]
@@ -304,24 +224,14 @@ public class AuthController(
 
         if (user is null)
         {
-            return Accepted(new BaseResponse
-            {
-                Status = "Success",
-                Message = "If the informed email exists, an message will be sent."
-            });
+            return Accepted(new BaseResponse("If the informed email exists, an message will be sent."));
         }
 
         var token = tokenService.GenerateResetPasswordToken(user.Id);
         
         // TODO: criar service para envio de email e outra para armazenar token no redis
 
-        return Accepted(new BaseResponse
-        {
-            Status = "Success",
-            Message = "If the informed email exists, an message will be sent.",
-            // TODO: remover token do response após criar service de enviar email
-            Data = token
-        });
+        return Accepted(new BaseResponse("If the informed email exists, an message will be sent."));
     }
 
     [HttpPost("reset-password")]
@@ -332,11 +242,7 @@ public class AuthController(
 
         if (user is null)
         {
-            return NotFound(new BaseResponse
-            {
-                Status = "Error",
-                Message = "User not found."
-            });
+            return NotFound(new ErrorResponse("User not found."));
         }
 
         // TODO: validar se o token de reset é o ultimo armazenado pra esse user no redis

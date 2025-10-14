@@ -1,8 +1,6 @@
 ﻿namespace WebApi.DTOs.Responses;
 
-public class BaseResponse
+public class BaseResponse(string message)
 {
-    public string Status { get; init; } = null!;
-    public string? Message { get; init; }
-    public object? Data { get; init; }
+    public string Message { get; private set; } = message;
 }
