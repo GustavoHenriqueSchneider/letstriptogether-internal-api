@@ -6,5 +6,6 @@ public class GroupMember : TrackableEntity
     public Group Group { get; init; } = null!;
     public Guid UserId { get; init; }
     public User User { get; init; } = null!;
+    public bool IsOwner { get; set; }
     public List<GroupMemberDestinationVote> Votes { get; init; } = [];
 }
