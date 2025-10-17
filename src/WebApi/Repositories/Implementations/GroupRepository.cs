@@ -13,7 +13,7 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
         return await _dbSet
             .Include(g => g.Members)
-                .ThenInclude(m => m.User)
+            .AsNoTracking()
             .SingleOrDefaultAsync(g => g.Id == groupId);
     }
 }

@@ -11,7 +11,7 @@ namespace WebApi.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/v1/groups")]
+[Route("api/v1/groups/{groupId:guid}/members")]
 public class GroupMemberController(
     IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser,
@@ -19,47 +19,36 @@ public class GroupMemberController(
     IGroupRepository groupRepository,
     IGroupMemberRepository groupMemberRepository) : ControllerBase
 {
-    [HttpDelete("{groupId:guid}/members")]
+    [HttpDelete]
     public async Task<IActionResult> RemoveUserFromGroup(
         [FromRoute] Guid groupId, 
         [FromBody] RemoveUserFromGroupRequest request)
     {
-        // Validar se usuario informado no accesstoken existe
         var currentUserId = currentUser.GetId();
         var currentUserEntity = await userRepository.GetByIdAsync(currentUserId);
         if (currentUserEntity is null)
         {
-            return NotFound(new ErrorResponse("Current user not found."));
+            return NotFound(new ErrorResponse("Usuário não encontrado."));
         }
-
-        // Validar se grupo informado na request existe
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
         if (group is null)
         {
-            return NotFound(new ErrorResponse("Group not found."));
+            return NotFound(new ErrorResponse("Grupo não encontrado."));
         }
-
-        // Validar se usuario informado no accesstoken Ã© membro do grupo
-        var currentUserMember = group.Members.FirstOrDefault(m => m.UserId == currentUserId);
+        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
         if (currentUserMember is null)
         {
-            return BadRequest(new ErrorResponse("You are not a member of this group."));
+            return BadRequest(new ErrorResponse("Você não é membro desse grupo."));
         }
-
-        // Validar se usuario informado no accesstoken Ã© dono do grupo
         if (!currentUserMember.IsOwner)
         {
-            return BadRequest(new ErrorResponse("Only group owner can remove members."));
+            return BadRequest(new ErrorResponse("Só o dono do grupo pode remover membros."));
         }
-
-        // Validar se usuario informado na request Ã© membro do grupo
-        var userToRemove = group.Members.FirstOrDefault(m => m.UserId == request.UserId);
+        var userToRemove = group.Members.SingleOrDefault(m => m.UserId == request.UserId);
         if (userToRemove is null)
         {
-            return NotFound(new ErrorResponse("User is not a member of this group."));
+            return NotFound(new ErrorResponse("O usuário não é membro desse grupo."));
         }
-
-        // Remover usuario informado na request do grupo
         groupMemberRepository.Remove(userToRemove);
         await unitOfWork.SaveAsync();
 
