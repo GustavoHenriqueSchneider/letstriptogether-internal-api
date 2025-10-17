@@ -13,8 +13,8 @@ using WebApi.Context.Implementations;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251016233545_AddIsOwnerToGroupMembers")]
-    partial class AddIsOwnerToGroupMembers
+    [Migration("20251017151307_AddIsOwnerToGroupMembersFix")]
+    partial class AddIsOwnerToGroupMembersFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -12,4 +12,5 @@ public interface IBaseRepository<T> where T : TrackableEntity
     void Update(T entity);
     void Remove(T entity);
     void RemoveRange(IEnumerable<T> entityList);
+    Task DeleteAsync(T entity);
 }

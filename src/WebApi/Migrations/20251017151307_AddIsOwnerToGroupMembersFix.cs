@@ -5,12 +5,17 @@
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIsOwnerToGroupMembers : Migration
+    public partial class AddIsOwnerToGroupMembersFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Column already exists in database
+            migrationBuilder.AddColumn<bool>(
+                name: "IsOwner",
+                table: "GroupMembers",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
         }
 
         /// <inheritdoc />

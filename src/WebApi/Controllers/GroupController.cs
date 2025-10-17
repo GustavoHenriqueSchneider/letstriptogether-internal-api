@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Group;
-using WebApi.Models;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -15,7 +14,7 @@ namespace WebApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/groups")]
-public class GroupController(IGroupRepository groupRepository) : ControllerBase
+public class GroupController(IGroupRepository groupRepository, IGroupMemberRepository groupMemberRepository) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
@@ -54,4 +53,23 @@ public class GroupController(IGroupRepository groupRepository) : ControllerBase
             UpdatedAt = group.UpdatedAt
         });
     }
+    [HttpDelete("{groupId:guid}/members/{userId:guid}")]
+    public async Task<IActionResult> DeleteMember([FromRoute] Guid groupId, [FromRoute] Guid userId)
+    {
+        // 1. Encontra a entidade que liga o grupo ao usuário
+        var memberToRemove = await groupMemberRepository.FindMemberAsync(groupId, userId);
+
+        // 2. Se a ligação não existe, retorna erro 404
+        if (memberToRemove is null)
+        {
+            return NotFound(new ErrorResponse("Member not found in this group."));
+        }
+
+        // 3. Deleta a ligação e salva no banco de dados
+        await groupMemberRepository.DeleteAsync(memberToRemove);
+
+        // 4. Retorna sucesso (204 No Content é o padrão para DELETE)
+        return NoContent();
+    }
 }
+

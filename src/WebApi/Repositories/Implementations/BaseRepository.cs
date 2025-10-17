@@ -7,10 +7,12 @@ namespace WebApi.Repositories.Implementations;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
+    protected readonly AppDbContext _context;
     protected readonly DbSet<T> _dbSet;
 
     public BaseRepository(AppDbContext context)
     {
+        _context = context;
         _dbSet = context.Set<T>();
     }
 
@@ -57,7 +59,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
     {
         _dbSet.Remove(entity);
     }
-
+    public async Task DeleteAsync(T entity)
+    {
+        _dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
     public void RemoveRange(IEnumerable<T> entityList)
     {
         _dbSet.RemoveRange(entityList);
