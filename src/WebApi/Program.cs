@@ -28,6 +28,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// authentication
 var jwtSection = builder.Configuration.GetRequiredSection(nameof(JsonWebTokenSettings));
 builder.Services.Configure<JsonWebTokenSettings>(jwtSection);
 var jwtSettings = jwtSection.Get<JsonWebTokenSettings>()!;
@@ -51,6 +52,7 @@ builder.Services
         };
     }); 
 
+// authorization
 builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
@@ -73,27 +75,39 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(Roles.Admin).RequireClaim(Claims.TokenType, TokenTypes.Access));
 });
 
+// context
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IApplicationUserContext>(sp =>
+{
+    var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext?.User;
+    return new ApplicationUserContext(httpContext ?? new ClaimsPrincipal());
+});
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     string postgresConnection = builder.Configuration.GetConnectionString("Postgres")
-        ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is missing.");
+        ?? throw new InvalidOperationException("Connection string 'Postgres' is missing.");
 
     options.UseNpgsql(postgresConnection);
 });
 
-builder.Services.AddSingleton<IRedisClient>(_ => 
+// services
+builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
+builder.Services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
+
+// redis
+builder.Services.AddSingleton<IRedisClient>(_ =>
 {
-    string redisConnection = builder.Configuration.GetConnectionString("Redis") 
+    string redisConnection = builder.Configuration.GetConnectionString("Redis")
         ?? throw new InvalidOperationException("Connection string 'Redis' is missing.");
 
     return new RedisClient(redisConnection);
 });
 
-builder.Services.AddSingleton<IPasswordHashService, PasswordHashService>();
-builder.Services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
-builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddScoped<IRedisService, RedisService>();
 
-builder.Services.AddTransient<JwtSecurityTokenHandler>();
+// email sender
 builder.Services.AddTransient(_ =>
 {
     var emailSettings = builder.Configuration
@@ -110,8 +124,28 @@ builder.Services.AddTransient(_ =>
 });
 
 builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
-builder.Services.AddScoped<IRedisService, RedisService>();
 
+// handlers
+builder.Services.AddTransient<JwtSecurityTokenHandler>();
+
+// geoapify api
+var geoapifyApiSettings = builder.Configuration
+    .GetRequiredSection(nameof(GeoapifyApiSettings))
+    .Get<GeoapifyApiSettings>();
+
+builder.Services.AddHttpClient<IGeoapifyClient, GeoapifyClient>((_, client) =>
+{
+    client.BaseAddress = new Uri(geoapifyApiSettings!.BaseUrl);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddScoped<IGeoapifyService, GeoapifyService>(sp =>
+{
+    var httpClient = sp.GetRequiredService<IGeoapifyClient>();
+    return new GeoapifyService(httpClient, geoapifyApiSettings!);
+});
+
+// repositories
 builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
 builder.Services.AddScoped<IGroupInvitationRepository, GroupInvitationRepository>();
 builder.Services.AddScoped<IGroupMatchRepository, GroupMatchRepository>();
@@ -124,15 +158,10 @@ builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
+//persistence
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IApplicationUserContext>(sp =>
-{
-    var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext?.User;
-    return new ApplicationUserContext(httpContext ?? new ClaimsPrincipal());
-});
-
+// build
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
