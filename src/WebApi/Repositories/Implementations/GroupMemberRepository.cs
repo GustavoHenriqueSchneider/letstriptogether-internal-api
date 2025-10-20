@@ -1,4 +1,5 @@
-﻿using WebApi.Context.Implementations;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApi.Context.Implementations;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
 
@@ -8,3 +9,4 @@ public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMemberRe
 {
     public GroupMemberRepository(AppDbContext context) : base(context) { }
 }
+
