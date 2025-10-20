@@ -10,13 +10,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
     protected readonly DbSet<T> _dbSet;
 
-    public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
-    {
-        return await _dbSet.FirstOrDefaultAsync(predicate);
-    }
     public BaseRepository(AppDbContext context)
     {
         _dbSet = context.Set<T>();
+    }
+
+    public async Task<bool> ExistsByIdAsync(Guid id)
+    {
+        return await _dbSet.AnyAsync(e => e.Id == id);
     }
 
     public async Task<(IEnumerable<T> data, int hits)> GetAllAsync(int pageNumber = 1, int pageSize = 10)

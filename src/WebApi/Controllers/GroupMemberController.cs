@@ -25,30 +25,35 @@ public class GroupMemberController(
         [FromBody] RemoveUserFromGroupRequest request)
     {
         var currentUserId = currentUser.GetId();
-        var currentUserEntity = await userRepository.GetByIdAsync(currentUserId);
-        if (currentUserEntity is null)
+
+        if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
-            return NotFound(new ErrorResponse("Usuário não encontrado."));
+            return NotFound(new ErrorResponse("User not found."));
         }
+
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
         if (group is null)
         {
-            return NotFound(new ErrorResponse("Grupo não encontrado."));
+            return NotFound(new ErrorResponse("Group not found."));
         }
+
         var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
         if (currentUserMember is null)
         {
-            return BadRequest(new ErrorResponse("Você não é membro desse grupo."));
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
+
         if (!currentUserMember.IsOwner)
         {
-            return BadRequest(new ErrorResponse("Só o dono do grupo pode remover membros."));
+            return BadRequest(new ErrorResponse("Only the group owner can remove members."));
         }
+
         var userToRemove = group.Members.SingleOrDefault(m => m.UserId == request.UserId);
         if (userToRemove is null)
         {
-            return NotFound(new ErrorResponse("O usuário não é membro desse grupo."));
+            return NotFound(new ErrorResponse("The user is not a member of this group."));
         }
+
         groupMemberRepository.Remove(userToRemove);
         await unitOfWork.SaveAsync();
 

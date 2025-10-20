@@ -16,10 +16,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("api/v1/groups")]
 public class GroupController(
-    IGroupRepository groupRepository, 
-    IGroupMemberRepository groupMemberRepository,
-    
-    IUnitOfWork unitOfWork) : ControllerBase
+    IGroupRepository groupRepository) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
