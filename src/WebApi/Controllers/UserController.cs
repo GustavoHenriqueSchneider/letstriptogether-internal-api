@@ -27,7 +27,8 @@ public class UserController(
     IRoleRepository roleRepository,
     IGroupMemberRepository groupMemberRepository,
     IUserGroupInvitationRepository userGroupInvitationRepository,
-    IUserRoleRepository userRoleRepository): ControllerBase
+    IUserRoleRepository userRoleRepository,
+    IRedisService redisService): ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
