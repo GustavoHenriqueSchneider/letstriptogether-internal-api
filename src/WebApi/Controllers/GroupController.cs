@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Group;
-using WebApi.Models;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -15,7 +14,8 @@ namespace WebApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/groups")]
-public class GroupController(IGroupRepository groupRepository) : ControllerBase
+public class GroupController(
+    IGroupRepository groupRepository) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = Policies.Admin)]
@@ -55,3 +55,4 @@ public class GroupController(IGroupRepository groupRepository) : ControllerBase
         });
     }
 }
+

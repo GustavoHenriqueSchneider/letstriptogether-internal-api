@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using WebApi.Context.Implementations;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
@@ -12,6 +13,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
     public BaseRepository(AppDbContext context)
     {
         _dbSet = context.Set<T>();
+    }
+
+    public async Task<bool> ExistsByIdAsync(Guid id)
+    {
+        return await _dbSet.AnyAsync(e => e.Id == id);
     }
 
     public async Task<(IEnumerable<T> data, int hits)> GetAllAsync(int pageNumber = 1, int pageSize = 10)
@@ -57,7 +63,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
     {
         _dbSet.Remove(entity);
     }
-
     public void RemoveRange(IEnumerable<T> entityList)
     {
         _dbSet.RemoveRange(entityList);

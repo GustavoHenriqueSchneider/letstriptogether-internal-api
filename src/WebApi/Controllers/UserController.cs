@@ -167,7 +167,7 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var preferences = new UserPreference { Categories = request.Categories };
+        var preferences = new UserPreference(request.Categories);
         user.SetPreferences(preferences);
 
         userRepository.Update(user);
@@ -271,7 +271,7 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var preferences = new UserPreference { Categories = request.Categories };
+        var preferences = new UserPreference(request.Categories);
         user.SetPreferences(preferences);
 
         userRepository.Update(user);

@@ -13,7 +13,7 @@ public class User : TrackableEntity
     private readonly List<UserGroupInvitation> _acceptedInvitations = [];
     public IReadOnlyCollection<UserGroupInvitation> AcceptedInvitations => _acceptedInvitations.AsReadOnly();
     
-    public UserPreference Preferences { get; private set; } = new();
+    public UserPreference Preferences { get; private set; } = new([]);
 
     private readonly List<UserRole> _userRoles = [];
     public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
