@@ -8,4 +8,3 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
 {
     public DestinationRepository(AppDbContext context) : base(context) { }
 }
-}

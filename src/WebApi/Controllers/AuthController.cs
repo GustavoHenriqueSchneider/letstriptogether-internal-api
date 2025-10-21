@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Auth;
@@ -28,13 +27,9 @@ public class AuthController(
     ITokenService tokenService,
     IUserRepository userRepository,
     IRoleRepository roleRepository,
-    WebApi.Persistence.Interfaces.IUnitOfWork unitOfWork,
+    IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser) : ControllerBase
 {
-    private const int RefreshTokenExpirationInSeconds = 2592000;
-    private const string RefreshTokenRedisKey = "auth:refresh_token:{0}";
-    private const string ResetPasswordRedisKey = "auth:reset-password:{0}";
-
     [HttpPost("email/send")]
     [AllowAnonymous]
     public async Task<IActionResult> SendRegisterConfirmationEmail(
@@ -167,7 +162,7 @@ public class AuthController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var key = string.Format(RefreshTokenRedisKey, userId);
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", userId.ToString());
         await redisService.DeleteAsync(key);
 
         // TODO: fazer logica pra travar accesstoken usado no logout enquanto ainda nao expirar

@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Context.Implementations;
-using WebApi.Context;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
-using WebApi.Security;
-
 
 namespace WebApi.Repositories.Implementations;
 
@@ -27,7 +24,6 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         return await _dbSet
             .AsNoTracking()
             .Include(x => x.Preferences) 
-            .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 

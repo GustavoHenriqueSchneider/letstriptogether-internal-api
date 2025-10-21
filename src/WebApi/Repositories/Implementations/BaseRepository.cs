@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebApi.Context.Implementations;
-using WebApi.Context;
 using WebApi.Models;
 using WebApi.Repositories.Interfaces;
-
 
 namespace WebApi.Repositories.Implementations;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
-    private readonly AppDbContext _context;
     protected readonly DbSet<T> _dbSet;
 
     public BaseRepository(AppDbContext context)
