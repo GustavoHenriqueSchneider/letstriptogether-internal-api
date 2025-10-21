@@ -104,8 +104,8 @@ public class UserController(
         }
 
         user.Update(request.Name);
-        await unitOfWork.SaveAsync();
 
+        userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
