@@ -95,7 +95,6 @@ public class UserController(
     public async Task<IActionResult> UpdateById([FromRoute] Guid id, 
         [FromBody] UpdateUserRequest request)
     {
-        // TODO: converter updaterequest em record pra adicionar
         var user = await userRepository.GetByIdAsync(id);
 
         if (user is null)
@@ -122,7 +121,8 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        await redisService.DeleteAsync(key);
 
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
@@ -150,7 +150,9 @@ public class UserController(
         userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        await redisService.DeleteAsync(key);
+
         // TODO: registrar log de auditoria da anonimização do usuário
         // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
 
@@ -231,7 +233,8 @@ public class UserController(
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
 
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        await redisService.DeleteAsync(key);
 
         return NoContent();
     }
@@ -255,7 +258,9 @@ public class UserController(
         userRepository.Update(user);
         await unitOfWork.SaveAsync();
 
-        // TODO: remover refreshtoken no redis em auth:refresh_token:{userId}
+        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        await redisService.DeleteAsync(key);
+
         // TODO: registrar log de auditoria da anonimização do usuário
         // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
 
