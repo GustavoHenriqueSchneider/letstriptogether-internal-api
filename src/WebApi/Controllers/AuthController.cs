@@ -5,6 +5,7 @@ using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Auth;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Auth;
+using WebApi.Extensions;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
@@ -230,9 +231,15 @@ public class AuthController(
             return Accepted(new BaseResponse("If the informed email exists, an message will be sent."));
         }
 
-        var token = tokenService.GenerateResetPasswordToken(user.Id);
-        
-        // TODO: criar service para envio de email e outra para armazenar token no redis
+        var resetPasswordToken = tokenService.GenerateResetPasswordToken(user.Id);
+        var (_, expiresIn) = tokenService.IsTokenExpired(resetPasswordToken);
+
+        var key = RedisKeys.UserResetPassword.Replace("{userId}", user.Id.ToString());
+        var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
+
+        await redisService.SetAsync(key, resetPasswordToken, ttlInSeconds);
+        // TODO: tirar valor hard coded e criar templates de email
+        await emailSenderService.SendAsync(request.Email, "Reset Password", resetPasswordToken);
 
         return Accepted(new BaseResponse("If the informed email exists, an message will be sent."));
     }
@@ -248,16 +255,21 @@ public class AuthController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        // TODO: validar se o token de reset é o ultimo armazenado pra esse user no redis
+        var key = RedisKeys.UserResetPassword.Replace("{userId}", user.Id.ToString());
+        var storedResetPasswordToken = await redisService.GetAsync(key);
+
+        if (storedResetPasswordToken is null || storedResetPasswordToken != HttpContext.GetBearerToken())
+        {
+            return Unauthorized(new ErrorResponse("Invalid reset password token."));
+        }
 
         var passwordHash = passwordHashService.HashPassword(request.Password);
 
-        user.SetPassword(passwordHash);
+        user.SetPasswordHash(passwordHash);
         userRepository.Update(user);
 
         await unitOfWork.SaveAsync();
-
-        // TODO: remover token do redis
+        await redisService.DeleteAsync(key);
 
         return NoContent();
     }
