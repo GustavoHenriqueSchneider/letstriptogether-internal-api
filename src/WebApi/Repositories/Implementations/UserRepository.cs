@@ -9,11 +9,6 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(AppDbContext context) : base(context) { }
 
-    public async Task<bool> ExistsByIdAsync(Guid id)
-    {
-        return await _dbSet.AnyAsync(u => u.Id == id);
-    }
-
     public async Task<bool> ExistsByEmailAsync(string email)
     {
         return await _dbSet.AnyAsync(u => u.Email == email);
