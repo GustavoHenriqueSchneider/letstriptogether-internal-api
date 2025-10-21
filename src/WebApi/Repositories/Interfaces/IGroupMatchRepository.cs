@@ -4,5 +4,4 @@ namespace WebApi.Repositories.Interfaces;
 
 public interface IGroupMatchRepository : IBaseRepository<GroupMatch>
 {
-
 }
