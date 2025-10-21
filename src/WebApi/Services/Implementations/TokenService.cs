@@ -13,10 +13,16 @@ namespace WebApi.Services.Implementations;
 public class TokenService : ITokenService
 {
     private readonly JsonWebTokenSettings _jwtSettings;
+    private readonly JwtSecurityTokenHandler _tokenHandler;
+    private readonly byte[] _key;
 
-    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings)
+    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings, JwtSecurityTokenHandler tokenHandler)
     {
         _jwtSettings = jwtSettings.Value;
+        _tokenHandler = tokenHandler;
+
+        var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
+        _key = Encoding.UTF8.GetBytes(key);
     }
 
     public string GenerateRegisterTokenForStep(string step, List<Claim> claims)
@@ -56,11 +62,8 @@ public class TokenService : ITokenService
 
     private string CreateJwtToken(List<Claim> claims, DateTime expiresIn)
     {
-        var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
-        var privateKey = Encoding.UTF8.GetBytes(key);
-
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(privateKey),
+            new SymmetricSecurityKey(_key),
             SecurityAlgorithms.HmacSha256Signature
         );
 
@@ -72,7 +75,7 @@ public class TokenService : ITokenService
             Expires = expiresIn
         };
 
-        return new JwtSecurityTokenHandler().CreateJwtSecurityToken(tokenDescriptor).RawData;
+        return _tokenHandler.CreateJwtSecurityToken(tokenDescriptor).RawData;
     }
 
     private string GenerateAccessToken(User user)
@@ -109,49 +112,51 @@ public class TokenService : ITokenService
         var refreshToken = CreateJwtToken(claims, expiresIn);
         return refreshToken;
     }
-    public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
-    {
-        var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
 
-        var tokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false,
-            ValidateIssuer = false,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey
-                               (Encoding.UTF8.GetBytes(_jwtSettings.SecretKey ?? 
-                               throw new InvalidOperationException("Invalid secret key"))),
-            ValidateLifetime = false ,
-            ClockSkew = TimeSpan.Zero           
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
+    public (bool isValid, ClaimsPrincipal? claims) ValidateRefreshToken(string refreshToken)
+    {
         try
         {
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-
-            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            var validationParameters = new TokenValidationParameters
             {
-                return null;
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = _jwtSettings.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(_key)
+            };
+
+            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out var _);
+            var tokenType = claims.FindFirstValue(Claims.TokenType);
+
+            if (tokenType is null || tokenType != TokenTypes.Refresh)
+            {
+                return (false, null);
             }
 
-            var tokenType = principal.Claims.FirstOrDefault(c => c.Type == Claims.TokenType)?.Value;
-            if (tokenType != TokenTypes.Refresh)
-            {
-                return null;
-            }
-
-            return principal;
-        }
-        catch (SecurityTokenException)
-        {
-            return null;
+            return (true, claims);
         }
         catch
         {
-            return null;
+            return (false, null);
         }
-        
+    }
 
+    public (bool isExpired, DateTime? expiresIn) IsTokenExpired(string token)
+    {
+        try
+        {
+            var jwtToken = _tokenHandler.ReadJwtToken(token);
+            var expiresIn = jwtToken.ValidTo;
+            var isExpired = expiresIn < DateTime.UtcNow;
+
+            return (isExpired, expiresIn);
+        }
+        catch
+        {
+            return (true, null);
+        }
     }
 }

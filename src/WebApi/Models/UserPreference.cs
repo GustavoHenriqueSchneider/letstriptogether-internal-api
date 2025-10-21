@@ -4,7 +4,10 @@ public class UserPreference : TrackableEntity
 {
     public Guid UserId { get; init; }
     public User User { get; init; } = null!;
-    public List<string> Categories { get; set; } = [];
+    // TODO: fazer listas readonly
+    public List<string> Categories { get; init; } = [];
+
+    private UserPreference() { }
 
     public void Update(UserPreference preferences)
     {
