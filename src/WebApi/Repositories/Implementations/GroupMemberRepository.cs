@@ -9,14 +9,6 @@ public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMemberRe
 {
     public GroupMemberRepository(AppDbContext context) : base(context) { }
 
-    public async Task<GroupMember?> GetByIdWithRelationsAsync(Guid id)
-    {
-        return await _dbSet
-            .Include(x => x.User)
-            .Include(x => x.Group)
-            .SingleOrDefaultAsync(x => x.Id == id);
-    }
-
     public async Task<(IEnumerable<GroupMember> data, int hits)> GetAllByGroupIdAsync(
         Guid groupId, int pageNumber = 1, int pageSize = 10)
     {
