@@ -22,7 +22,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public async Task<(IEnumerable<T> data, int hits)> GetAllAsync(int pageNumber = 1, int pageSize = 10)
     {
-        var data = await _dbSet.AsNoTracking()
+        var data = await _dbSet
+            .AsNoTracking()
             .OrderByDescending(e => e.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -35,7 +36,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(e => e.Id == id);
+        return await _dbSet
+            .AsNoTracking()
+            .SingleOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task<int> GetHitsAsync()

@@ -7,11 +7,12 @@ using WebApi.Services.Implementations;
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddExampleUsers : Migration
+    public partial class AddExampleData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // setting roles data
             var passwordHashService = new PasswordHashService();
             var defaultRoleId = Guid.NewGuid();
             var adminRoleId = Guid.NewGuid();
@@ -25,6 +26,7 @@ namespace WebApi.Migrations
                     { adminRoleId, Roles.Admin, DateTime.UtcNow, DateTime.UtcNow }
                 });
 
+            // settings users data
             var userId = Guid.NewGuid();
             var adminId = Guid.NewGuid();
 
@@ -47,6 +49,26 @@ namespace WebApi.Migrations
                 {
                     { Guid.NewGuid(), userId, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow },
                     { Guid.NewGuid(), adminId, adminRoleId, DateTime.UtcNow, DateTime.UtcNow }
+                });
+
+            // setting group data
+            var testGroupId = Guid.NewGuid();
+
+            migrationBuilder.InsertData(
+                table: "Groups",
+                columns: new[] { "Id", "Name", "TripExpectedDate", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { testGroupId, "Test Group", DateTime.UtcNow.AddYears(3), DateTime.UtcNow, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GroupMembers",
+                columns: new[] { "Id", "GroupId", "UserId", "IsOwner", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { Guid.NewGuid(), testGroupId, adminId, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), testGroupId, userId, false, DateTime.UtcNow, null }
                 });
         }
 

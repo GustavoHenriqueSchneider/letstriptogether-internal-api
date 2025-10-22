@@ -9,6 +9,4 @@ public class GroupMember : TrackableEntity
     public bool IsOwner { get; init; }
     // TODO: fazer lista readonly
     public List<GroupMemberDestinationVote> Votes { get; init; } = [];
-
-    private GroupMember() { }
 }
