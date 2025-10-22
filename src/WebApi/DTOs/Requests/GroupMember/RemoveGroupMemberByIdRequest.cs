@@ -1,6 +1,6 @@
 namespace WebApi.DTOs.Requests;
 
-public class RemoveUserFromGroupRequest
+public class RemoveGroupMemberByIdRequest
 {
     public Guid UserId { get; init; }
 }

@@ -17,7 +17,8 @@ public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMemberRe
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<(IEnumerable<GroupMember> data, int hits)> GetByGroupIdAsync(Guid groupId, int pageNumber = 1, int pageSize = 10)
+    public async Task<(IEnumerable<GroupMember> data, int hits)> GetAllByGroupIdAsync(
+        Guid groupId, int pageNumber = 1, int pageSize = 10)
     {
         var data = await _dbSet
             .AsNoTracking()
@@ -27,16 +28,9 @@ public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMemberRe
             .Take(pageSize)
             .ToListAsync();
 
-        var hits = await _dbSet
-            .CountAsync(x => x.GroupId == groupId);
+        var hits = await _dbSet.CountAsync(x => x.GroupId == groupId);
 
         return (data, hits);
-    }
-
-    public async Task<bool> ExistsByGroupAndUserAsync(Guid groupId, Guid userId)
-    {
-        return await _dbSet
-            .AnyAsync(x => x.GroupId == groupId && x.UserId == userId);
     }
 }
 
