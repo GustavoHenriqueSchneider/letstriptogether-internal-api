@@ -6,7 +6,6 @@ using WebApi.DTOs.Responses;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
-using WebApi.Security;
 
 namespace WebApi.Controllers;
 

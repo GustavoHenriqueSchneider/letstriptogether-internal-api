@@ -51,7 +51,7 @@ public class User : TrackableEntity
         SetUpdateAt(DateTime.UtcNow);
     }
 
-    public void SetPassword(string passwordHash)
+    public void SetPasswordHash(string passwordHash)
     {
         PasswordHash = passwordHash;
         // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
