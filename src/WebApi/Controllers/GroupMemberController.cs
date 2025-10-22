@@ -50,7 +50,7 @@ public class GroupMemberController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var groupMember = group.Members.SingleOrDefault(x => x.UserId == id);
+        var groupMember = group.Members.SingleOrDefault(x => x.Id == id);
 
         if (groupMember is null)
         {
@@ -96,11 +96,16 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("Only the group owner can remove members."));
         }
 
-        var userToRemove = group.Members.SingleOrDefault(m => m.UserId == request.UserId);
+        var userToRemove = group.Members.SingleOrDefault(m => m.Id == request.MemberId);
 
         if (userToRemove is null)
         {
             return NotFound(new ErrorResponse("The user is not a member of this group."));
+        }
+
+        if (currentUser.GetId() == userToRemove.UserId)
+        {
+            return BadRequest(new ErrorResponse("User can not remove itself."));
         }
 
         groupMemberRepository.Remove(userToRemove);

@@ -4,6 +4,6 @@ namespace WebApi.DTOs.Requests.GroupMember;
 
 public class RemoveGroupMemberByIdRequest
 {
-    [Required(ErrorMessage = "UserId is required")]
-    public Guid UserId { get; init; }
+    [Required(ErrorMessage = "MemberId is required")]
+    public Guid MemberId { get; init; }
 }
