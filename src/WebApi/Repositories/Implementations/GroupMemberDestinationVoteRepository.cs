@@ -57,4 +57,10 @@ public class GroupMemberDestinationVoteRepository
 
         return (data, hits);
     }
+
+    public async Task<GroupMemberDestinationVote?> GetByGroupMemberAndDestinationAsync(Guid groupMemberId, Guid destinationId)
+    {
+        return await _dbSet
+            .SingleOrDefaultAsync(x => x.GroupMemberId == groupMemberId && x.DestinationId == destinationId);
+    }
 }

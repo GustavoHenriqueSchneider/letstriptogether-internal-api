@@ -53,16 +53,13 @@ public class GeoapifyService : IGeoapifyService
         destinations.AddRange(features.EnumerateArray().Select(x =>
         {
             var properties = x.GetProperty("properties");
-            return new Destination
-            {
-                Id = Guid.NewGuid(),
-                Address = properties.GetProperty("formatted").GetString() ?? "Sem endereço",
-                Categories = properties.GetProperty("categories").EnumerateArray()
-                    .Select(c => c.GetString() ?? string.Empty)
-                    .Where(s => !string.IsNullOrEmpty(s))
-                    .ToList() ?? [],
-                CreatedAt = DateTime.UtcNow
-            };
+            var address = properties.GetProperty("formatted").GetString() ?? "Sem endereço";
+            var categories = properties.GetProperty("categories").EnumerateArray()
+                .Select(c => c.GetString() ?? string.Empty)
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToList() ?? [];
+            
+            return new Destination(address, categories);
         }));
 
         return destinations;

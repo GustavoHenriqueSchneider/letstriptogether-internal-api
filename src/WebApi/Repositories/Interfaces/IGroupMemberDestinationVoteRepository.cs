@@ -7,4 +7,5 @@ public interface IGroupMemberDestinationVoteRepository : IBaseRepository<GroupMe
     Task<GroupMemberDestinationVote?> GetByIdWithRelationsAsync(Guid id);
     Task<(IEnumerable<GroupMemberDestinationVote> data, int hits)> GetAllWithRelationsAsync(int pageNumber = 1, int pageSize = 10);
     Task<(IEnumerable<GroupMemberDestinationVote> data, int hits)> GetByGroupIdAsync(Guid groupId, int pageNumber = 1, int pageSize = 10);
+    Task<GroupMemberDestinationVote?> GetByGroupMemberAndDestinationAsync(Guid groupMemberId, Guid destinationId);
 }
