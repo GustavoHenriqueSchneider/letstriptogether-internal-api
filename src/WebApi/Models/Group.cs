@@ -10,4 +10,10 @@ public class Group : TrackableEntity
     public List<GroupMember> Members { get; init; } = [];
 
     private Group() { }
+
+    public Group(string name, DateTime tripExpectedDate)
+    {
+        Name = name;
+        TripExpectedDate = tripExpectedDate;
+    }
 }
