@@ -40,6 +40,14 @@ public class UserRepository : BaseRepository<User>, IUserRepository
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
+    public async Task<User?> GetUserWithGroupMembershipsAsync(Guid id)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(u => u.GroupMemberships)
+            .SingleOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<User?> GetUserWithRolesByIdAsync(Guid id)
     {
         return await _dbSet
