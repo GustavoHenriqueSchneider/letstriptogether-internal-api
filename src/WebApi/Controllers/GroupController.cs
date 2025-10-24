@@ -79,5 +79,43 @@ public class GroupController(
             UpdatedAt = group.UpdatedAt
         });
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateGroupRequest request)
+    {
+        var group = await GetGroupWithOwnerValidation(id);
+        if (group is null) return NotFound(new ErrorResponse("Group not found."));
+
+        group.Update(request.Name, request.TripExpectedDate);
+        groupRepository.Update(group);
+        await unitOfWork.SaveAsync();
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        var group = await GetGroupWithOwnerValidation(id);
+        if (group is null) return NotFound(new ErrorResponse("Group not found."));
+
+        groupRepository.Remove(group);
+        await unitOfWork.SaveAsync();
+
+        return NoContent();
+    }
+
+    private async Task<Group?> GetGroupWithOwnerValidation(Guid groupId)
+    {
+        var currentUserId = currentUser.GetId();
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        
+        if (group is null) return null;
+
+        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
+        if (currentUserMember is null || !currentUserMember.IsOwner) return null;
+
+        return group;
+    }
 }
 
