@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.GroupDestinationVote;
+using WebApi.DTOs.Requests.GroupMember;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.GroupMemberDestinationVote;
 using WebApi.Models;
@@ -114,6 +115,46 @@ public class GroupDestinationVoteController(
         await unitOfWork.SaveAsync();
 
         return NoContent();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupMemberAllDestinationVotesById([FromRoute] Guid groupId,
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var currentUserId = currentUser.GetId();
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+
+        if (user is null)
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
+
+        if (groupMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var (votes, hits) = await groupMemberDestinationVoteRepository.GetByMemberIdAsync(groupMember.Id,
+            pageNumber, pageSize);
+
+        return Ok(new GetGroupMemberAllDestinationVotesByIdResponse
+        {
+            Data = votes.Select(x => new GetGroupMemberAllDestinationVotesByIdResponseData
+            {
+                Id = x.Id,
+                CreatedAt = x.CreatedAt
+            }),
+            Hits = hits
+        });
     }
 }
 

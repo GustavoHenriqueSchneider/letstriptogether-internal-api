@@ -1,7 +1,9 @@
-namespace WebApi.DTOs.Responses.GroupMemberDestinationVote;
+using WebApi.DTOs.Responses.GroupMemberDestinationVote;
+
+namespace WebApi.DTOs.Responses.Admin.GroupMember;
 
 public class AdminGetGroupMemberAllDestinationVotesByIdResponse
-    : PaginatedResponse<AdminGetAllGroupDestinationVotesByIdResponseData>
+    : PaginatedResponse<AdminGetGroupMemberAllDestinationVotesByIdResponseData>
 {
 }
 

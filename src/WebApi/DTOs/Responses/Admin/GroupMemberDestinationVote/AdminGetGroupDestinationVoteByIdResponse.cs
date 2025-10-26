@@ -1,4 +1,4 @@
-namespace WebApi.DTOs.Responses.GroupMemberDestinationVote;
+namespace WebApi.DTOs.Responses.Admin.GroupMemberDestinationVote;
 
 public class AdminGetGroupDestinationVoteByIdResponse
 {
