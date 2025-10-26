@@ -9,14 +9,12 @@ namespace WebApi.Controllers.Admin;
 
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
-[Route("api/v1/admin/groups/{groupId:guid}/members/{memberId:guid}/destination-votes")]
-public class AdminGroupMemberDestinationVoteController(
+[Route("api/v1/admin/groups/{groupId:guid}/destination-votes")]
+public class AdminGroupDestinationVoteController(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository) : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> AdminGetAllGroupMemberDestinationVotesById(
-        [FromRoute] Guid groupId, [FromRoute] Guid memberId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> AdminGetAllGroupDestinationVotesById(
+        [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var (votes, hits) = await groupMemberDestinationVoteRepository.GetAllWithRelationsAsync(pageNumber, pageSize);
 
@@ -28,8 +26,8 @@ public class AdminGroupMemberDestinationVoteController(
     }
 
     [HttpGet("{destinationVoteId:guid}")]
-    public async Task<IActionResult> GetGroupMemberDestinationVoteById(
-        [FromRoute] Guid groupId, [FromRoute] Guid memberId, [FromRoute] Guid destinationVoteId)
+    public async Task<IActionResult> AdminGetGroupDestinationVoteById(
+        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId)
     {
         var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(destinationVoteId);
 

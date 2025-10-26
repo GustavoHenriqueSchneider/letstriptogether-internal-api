@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMember;
+using WebApi.DTOs.Responses.GroupMemberDestinationVote;
 using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -68,9 +70,9 @@ public class AdminGroupMemberController(
         });
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{memberId:guid}")]
     public async Task<IActionResult> AdminRemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid id)
+        [FromRoute] Guid memberId)
     {
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
 
@@ -79,7 +81,7 @@ public class AdminGroupMemberController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var userToRemove = group.Members.SingleOrDefault(m => m.Id == id);
+        var userToRemove = group.Members.SingleOrDefault(m => m.Id == memberId);
 
         if (userToRemove is null)
         {
@@ -90,5 +92,18 @@ public class AdminGroupMemberController(
         await unitOfWork.SaveAsync();
 
         return NoContent();
+    }
+
+    [HttpGet("{memberId:guid}/destination-votes")]
+    public async Task<IActionResult> AdminGetGroupMemberAllDestinationVotesById(
+        [FromRoute] Guid memberId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var (votes, hits) = await groupMemberDestinationVoteRepository.GetAllWithRelationsAsync(pageNumber, pageSize);
+
+        return Ok(new GetAllGroupMemberDestinationVotesResponse
+        {
+            Data = votes.Select(MapToResponseData),
+            Hits = hits
+        });
     }
 }

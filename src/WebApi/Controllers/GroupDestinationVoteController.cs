@@ -9,13 +9,13 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api/v1/groups/{groupId:guid}/members/{memberId:guid}/destination-votes")]
-public class GroupMemberDestinationVoteController(
+[Route("api/v1/groups/{groupId:guid}/destination-votes")]
+public class GroupDestinationVoteController(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateVoteRequest request)
+    public async Task<IActionResult> VoteAtDestinationForGroupId([FromBody] CreateVoteRequest request)
     {
         var existingVote = await groupMemberDestinationVoteRepository.GetByGroupMemberAndDestinationAsync(
             request.GroupMemberId, request.DestinationId);
@@ -36,10 +36,11 @@ public class GroupMemberDestinationVoteController(
         return Ok(new { id = vote.Id });
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateVoteRequest request)
+    [HttpPut("{destinationVoteId:guid}")]
+    public async Task<IActionResult> UpdateDestinationVoteById([FromRoute] Guid destinationVoteId, 
+        [FromBody] UpdateVoteRequest request)
     {
-        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(id);
+        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(destinationVoteId);
         if (vote is null)
         {
             return NotFound(new ErrorResponse("Vote not found."));
