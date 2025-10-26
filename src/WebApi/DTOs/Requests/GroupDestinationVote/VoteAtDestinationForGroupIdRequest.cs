@@ -2,6 +2,6 @@
 
 public class VoteAtDestinationForGroupIdRequest
 {
-    public Guid DestinationId { get; set; }
-    public bool IsApproved { get; set; }
+    public Guid DestinationId { get; init; }
+    public bool IsApproved { get; init; }
 }
