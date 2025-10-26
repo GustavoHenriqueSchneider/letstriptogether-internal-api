@@ -36,7 +36,7 @@ public class GroupController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = new Group(request.Name, request.TripExpectedDate);
+        var group = new Group(request.Name, request.TripExpectedDate.ToUniversalTime());
 
         var groupMember = new GroupMember
         {

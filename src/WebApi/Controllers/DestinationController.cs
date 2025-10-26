@@ -77,7 +77,7 @@ public class DestinationController(
         return Ok(new GetDestinationByIdResponse
         {
             Address = destination.Address,
-            Categories = destination.Categories,
+            Categories = destination.Categories.ToList(),
             CreatedAt = destination.CreatedAt,
             UpdatedAt = destination.UpdatedAt
         });

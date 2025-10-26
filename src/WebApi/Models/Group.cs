@@ -3,7 +3,13 @@
 public class Group : TrackableEntity
 {
     public string Name { get; private set; } = null!;
-    public DateTime TripExpectedDate { get; private set; }
+
+    private DateTime _tripExpectedDate;
+    public DateTime TripExpectedDate
+    {
+        get => _tripExpectedDate.ToUniversalTime();
+        private set => _tripExpectedDate = value;
+    }
 
     private readonly List<GroupInvitation> _invitations = [];
     public IReadOnlyCollection<GroupInvitation> Invitations => _invitations.AsReadOnly();
