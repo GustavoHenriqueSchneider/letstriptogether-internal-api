@@ -5,6 +5,7 @@ using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.User;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
@@ -26,6 +27,7 @@ public class AdminUserController(
     IGroupMemberRepository groupMemberRepository,
     IUserGroupInvitationRepository userGroupInvitationRepository,
     IUserRoleRepository userRoleRepository,
+    IUserPreferenceRepository userPreferenceRepository,
     IRedisService redisService): ControllerBase
 {
     [HttpGet]
@@ -42,10 +44,10 @@ public class AdminUserController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid id)
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid userId)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(id);
+        var user = await userRepository.GetByIdWithPreferencesAsync(userId);
 
         if (user is null)
         {
@@ -86,11 +88,11 @@ public class AdminUserController(
         return CreatedAtAction(nameof(AdminCreateUser), new AdminCreateUserResponse { Id = user.Id });
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid id, 
+    [HttpPut("{userId:guid}")]
+    public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid userId, 
         [FromBody] AdminUpdateUserRequest request)
     {
-        var user = await userRepository.GetByIdAsync(id);
+        var user = await userRepository.GetByIdAsync(userId);
 
         if (user is null)
         {
@@ -105,10 +107,10 @@ public class AdminUserController(
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid id)
+    [HttpDelete("{userId:guid}")]
+    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(id);
+        var user = await userRepository.GetByIdAsync(userId);
 
         if (user is null)
         {
@@ -118,16 +120,17 @@ public class AdminUserController(
         var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
         await redisService.DeleteAsync(key);
 
+        // TODO: parou de funcionar
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
 
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}/anonymize")]
-    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid id)
+    [HttpPatch("{userId:guid}/anonymize")]
+    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid userId)
     {
-        var user = await userRepository.GetUserWithRelationshipsByIdAsync(id);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(userId);
 
         if (user is null)
         {
@@ -152,11 +155,11 @@ public class AdminUserController(
         return NoContent();
     }
 
-    [HttpPut("{id:guid}/preferences")]
-    public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid id, 
+    [HttpPut("{userId:guid}/preferences")]
+    public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid userId, 
         [FromBody] AdminSetUserPreferencesByUserIdRequest request)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(id);
+        var user = await userRepository.GetByIdWithPreferencesAsync(userId);
 
         if (user is null)
         {
@@ -166,7 +169,9 @@ public class AdminUserController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        // TODO: ajustar logica do update para atualizar entidades filhas/relacionadas
         userRepository.Update(user);
+        userPreferenceRepository.Update(user.Preferences);
         await unitOfWork.SaveAsync();
 
         return NoContent();

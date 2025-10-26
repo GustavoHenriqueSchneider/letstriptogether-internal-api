@@ -8,8 +8,8 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-[ApiController]
 [Authorize]
+[ApiController]
 [Route("api/v1/groups/{groupId:guid}/members")]
 public class GroupMemberController(
     IUnitOfWork unitOfWork,
@@ -47,19 +47,22 @@ public class GroupMemberController(
         var (groupMembers, hits) = 
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new AdminGetAllGroupMembersResponse
+        return Ok(new GetAllGroupMembersResponse
         {
-            Data = groupMembers.Select(x => new GetAllGroupMembersResponseData
-            {
-                Id = x.Id,
-                CreatedAt = x.CreatedAt
-            }),
-            Hits = hits
+            Data = groupMembers
+                .Where(x => x.UserId != currentUserId)
+                .Select(x => new GetAllGroupMembersResponseData
+                {
+                    Id = x.Id,
+                    CreatedAt = x.CreatedAt
+                }),
+            Hits = hits > 0 ? hits - 1 : hits
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, [FromRoute] Guid id)
+    [HttpGet("{memberId:guid}")]
+    public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, 
+        [FromRoute] Guid memberId)
     {
         var currentUserId = currentUser.GetId();
         var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
@@ -83,25 +86,25 @@ public class GroupMemberController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var groupMember = group.Members.SingleOrDefault(x => x.Id == id);
+        var groupMember = group.Members.SingleOrDefault(x => x.Id == memberId);
 
         if (groupMember is null)
         {
             return NotFound(new ErrorResponse("Group member not found."));
         }
 
-        return Ok(new AdminGetGroupMemberByIdResponse
+        return Ok(new GetGroupMemberByIdResponse
         {
-            UserId = groupMember.UserId,
+            Name = groupMember.User.Name,
             IsOwner = groupMember.IsOwner,
             CreatedAt = groupMember.CreatedAt,
             UpdatedAt = groupMember.UpdatedAt
         });
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{memberId:guid}")]
     public async Task<IActionResult> RemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid id)
+        [FromRoute] Guid memberId)
     {
         var currentUserId = currentUser.GetId();
 
@@ -129,7 +132,7 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("Only the group owner can remove members."));
         }
 
-        var userToRemove = group.Members.SingleOrDefault(m => m.Id == id);
+        var userToRemove = group.Members.SingleOrDefault(m => m.Id == memberId);
 
         if (userToRemove is null)
         {

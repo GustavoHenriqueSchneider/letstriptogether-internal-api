@@ -36,10 +36,10 @@ public class GroupController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroupById([FromRoute] Guid id)
+    [HttpGet("{groupId:guid}")]
+    public async Task<IActionResult> GetGroupById([FromRoute] Guid groupId)
     {
-        var group = await groupRepository.GetGroupWithMembersAsync(id);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
 
         if (group is null)
         {
