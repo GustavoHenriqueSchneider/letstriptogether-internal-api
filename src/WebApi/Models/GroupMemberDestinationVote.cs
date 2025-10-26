@@ -17,7 +17,7 @@ public class GroupMemberDestinationVote : TrackableEntity
         IsApproved = isApproved;
     }
 
-    public void Update(bool isApproved)
+    public void SetApproved(bool isApproved)
     {
         IsApproved = isApproved;
         SetUpdateAt(DateTime.UtcNow);

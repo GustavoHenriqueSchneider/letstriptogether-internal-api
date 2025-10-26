@@ -12,8 +12,8 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
     public async Task<Group?> GetGroupWithMembersAsync(Guid groupId)
     {
         return await _dbSet
-            .Include(g => g.Members)
             .AsNoTracking()
+            .Include(g => g.Members)
             .SingleOrDefaultAsync(g => g.Id == groupId);
     }
 

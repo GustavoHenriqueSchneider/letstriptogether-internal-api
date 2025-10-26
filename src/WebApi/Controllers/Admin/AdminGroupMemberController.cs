@@ -16,6 +16,7 @@ namespace WebApi.Controllers.Admin;
 public class AdminGroupMemberController(
     IUnitOfWork unitOfWork,
     IGroupRepository groupRepository,
+    IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IGroupMemberRepository groupMemberRepository) : ControllerBase
 {
     [HttpGet]
@@ -95,14 +96,33 @@ public class AdminGroupMemberController(
     }
 
     [HttpGet("{memberId:guid}/destination-votes")]
-    public async Task<IActionResult> AdminGetGroupMemberAllDestinationVotesById(
+    public async Task<IActionResult> AdminGetGroupMemberAllDestinationVotesById([FromRoute] Guid groupId,
         [FromRoute] Guid memberId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var (votes, hits) = await groupMemberDestinationVoteRepository.GetAllWithRelationsAsync(pageNumber, pageSize);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
 
-        return Ok(new GetAllGroupMemberDestinationVotesResponse
+        if (group is null)
         {
-            Data = votes.Select(MapToResponseData),
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var isGroupMember = group.Members.Any(m => m.Id == memberId);
+
+        if (!isGroupMember)
+        {
+            return NotFound(new ErrorResponse("The user is not a member of this group."));
+        }
+
+        var (votes, hits) = await groupMemberDestinationVoteRepository.GetByMemberIdAsync(memberId,
+            pageNumber, pageSize);
+
+        return Ok(new AdminGetGroupMemberAllDestinationVotesByIdResponse
+        {
+            Data = votes.Select(x => new AdminGetAllGroupDestinationVotesByIdResponseData
+            {
+                Id = x.Id,
+                CreatedAt = x.CreatedAt
+            }),
             Hits = hits
         });
     }

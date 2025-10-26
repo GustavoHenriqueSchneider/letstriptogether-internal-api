@@ -16,11 +16,17 @@ public class AdminGroupDestinationVoteController(
     public async Task<IActionResult> AdminGetAllGroupDestinationVotesById(
         [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var (votes, hits) = await groupMemberDestinationVoteRepository.GetAllWithRelationsAsync(pageNumber, pageSize);
+        var (votes, hits) = 
+            await groupMemberDestinationVoteRepository.GetByGroupIdAsync(groupId, 
+                pageNumber, pageSize);
 
-        return Ok(new GetAllGroupMemberDestinationVotesResponse
+        return Ok(new AdminGetAllGroupDestinationVotesByIdResponse
         {
-            Data = votes.Select(MapToResponseData),
+            Data = votes.Select(x => new AdminGetAllGroupDestinationVotesByIdResponseData
+            {
+                Id = x.Id,
+                CreatedAt = x.CreatedAt
+            }),
             Hits = hits
         });
     }
@@ -29,24 +35,19 @@ public class AdminGroupDestinationVoteController(
     public async Task<IActionResult> AdminGetGroupDestinationVoteById(
         [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId)
     {
-        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(destinationVoteId);
+        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(groupId, 
+            destinationVoteId);
 
         if (vote is null)
         {
             return NotFound(new ErrorResponse("Group member destination vote not found."));
         }
 
-        return Ok(new GetGroupMemberDestinationVoteByIdResponse
+        return Ok(new AdminGetGroupDestinationVoteByIdResponse
         {
-            Id = vote.Id,
-            GroupMemberId = vote.GroupMemberId,
-            GroupMemberName = vote.GroupMember.User.Name,
-            GroupMemberEmail = vote.GroupMember.User.Email,
             GroupId = vote.GroupMember.GroupId,
-            GroupName = vote.GroupMember.Group.Name,
+            MemberId = vote.GroupMemberId,
             DestinationId = vote.DestinationId,
-            DestinationAddress = vote.Destination.Address,
-            DestinationCategories = vote.Destination.Categories,
             IsApproved = vote.IsApproved,
             CreatedAt = vote.CreatedAt,
             UpdatedAt = vote.UpdatedAt

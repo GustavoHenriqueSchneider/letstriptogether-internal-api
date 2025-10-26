@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Context.Interfaces;
+using WebApi.DTOs.Requests.GroupDestinationVote;
 using WebApi.DTOs.Responses;
+using WebApi.DTOs.Responses.GroupMemberDestinationVote;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
@@ -11,42 +14,102 @@ namespace WebApi.Controllers;
 [Authorize]
 [Route("api/v1/groups/{groupId:guid}/destination-votes")]
 public class GroupDestinationVoteController(
+    IApplicationUserContext currentUser,
+    IGroupRepository groupRepository,
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
+    IUserRepository userRepository,
+    IDestinationRepository destinationRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> VoteAtDestinationForGroupId([FromBody] CreateVoteRequest request)
+    public async Task<IActionResult> VoteAtDestinationForGroupId([FromRoute] Guid groupId,
+        [FromBody] VoteAtDestinationForGroupIdRequest request)
     {
-        var existingVote = await groupMemberDestinationVoteRepository.GetByGroupMemberAndDestinationAsync(
-            request.GroupMemberId, request.DestinationId);
-        
-        if (existingVote is not null)
+        var currentUserId = currentUser.GetId();
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+
+        if (user is null)
         {
-            return Conflict(new ErrorResponse("Vote already exists."));
+            return NotFound(new ErrorResponse("User not found."));
         }
 
-        var vote = new GroupMemberDestinationVote(
-            request.GroupMemberId, 
-            request.DestinationId, 
-            request.IsApproved);
+        var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
+
+        if (groupMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var destinationExists = await destinationRepository.ExistsByIdAsync(request.DestinationId);
+
+        if (!destinationExists)
+        {
+            return NotFound(new ErrorResponse("Destination not found."));
+        }
+
+        var existsVote = 
+            await groupMemberDestinationVoteRepository.ExistsByGroupMemberDestinationVoteByIdsAsync(
+                groupMember.Id, request.DestinationId);
+        
+        if (existsVote)
+        {
+            return Conflict(new ErrorResponse("Vote already exists for the informed group and destination ids."));
+        }
+
+        var vote = new GroupMemberDestinationVote(groupMember.Id, request.DestinationId, request.IsApproved);
 
         await groupMemberDestinationVoteRepository.AddAsync(vote);
         await unitOfWork.SaveAsync();
 
-        return Ok(new { id = vote.Id });
+        return Ok(new VoteAtDestinationForGroupIdResponse { Id = vote.Id });
     }
 
     [HttpPut("{destinationVoteId:guid}")]
-    public async Task<IActionResult> UpdateDestinationVoteById([FromRoute] Guid destinationVoteId, 
-        [FromBody] UpdateVoteRequest request)
+    public async Task<IActionResult> UpdateDestinationVoteById([FromRoute] Guid groupId, 
+        [FromRoute] Guid destinationVoteId, [FromBody] UpdateDestinationVoteByIdRequest request)
     {
-        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(destinationVoteId);
+        var currentUserId = currentUser.GetId();
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+
+        if (user is null)
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
+
+        if (groupMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var vote = await groupMemberDestinationVoteRepository.GetByIdAsync(destinationVoteId);
+
         if (vote is null)
         {
             return NotFound(new ErrorResponse("Vote not found."));
         }
 
-        vote.Update(request.IsApproved);
+        if (vote.GroupMemberId != groupMember.Id)
+        {
+            return BadRequest(new ErrorResponse("You are not a owner of this vote."));
+        }
+
+        vote.SetApproved(request.IsApproved);
         groupMemberDestinationVoteRepository.Update(vote);
         await unitOfWork.SaveAsync();
 
@@ -54,14 +117,3 @@ public class GroupDestinationVoteController(
     }
 }
 
-public class CreateVoteRequest
-{
-    public Guid GroupMemberId { get; set; }
-    public Guid DestinationId { get; set; }
-    public bool IsApproved { get; set; }
-}
-
-public class UpdateVoteRequest
-{
-    public bool IsApproved { get; set; }
-}
