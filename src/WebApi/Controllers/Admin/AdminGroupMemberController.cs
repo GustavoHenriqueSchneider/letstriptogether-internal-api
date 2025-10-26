@@ -41,8 +41,9 @@ public class AdminGroupMemberController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> AdminGetGroupMemberById([FromRoute] Guid groupId, [FromRoute] Guid id)
+    [HttpGet("{memberId:guid}")]
+    public async Task<IActionResult> AdminGetGroupMemberById([FromRoute] Guid groupId, 
+        [FromRoute] Guid memberId)
     {
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
 
@@ -51,7 +52,7 @@ public class AdminGroupMemberController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var groupMember = group.Members.SingleOrDefault(x => x.Id == id);
+        var groupMember = group.Members.SingleOrDefault(x => x.Id == memberId);
 
         if (groupMember is null)
         {

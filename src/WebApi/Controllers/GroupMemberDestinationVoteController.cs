@@ -7,9 +7,9 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-[Authorize]
 [ApiController]
-[Route("api/v1/group-member-destination-votes")]
+[Authorize]
+[Route("api/v1/groups/{groupId:guid}/members/{memberId:guid}/destination-votes")]
 public class GroupMemberDestinationVoteController(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IUnitOfWork unitOfWork) : ControllerBase

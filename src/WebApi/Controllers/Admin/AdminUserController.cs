@@ -42,10 +42,10 @@ public class AdminUserController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid id)
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid userId)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(id);
+        var user = await userRepository.GetByIdWithPreferencesAsync(userId);
 
         if (user is null)
         {
@@ -86,11 +86,11 @@ public class AdminUserController(
         return CreatedAtAction(nameof(AdminCreateUser), new AdminCreateUserResponse { Id = user.Id });
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid id, 
+    [HttpPut("{userId:guid}")]
+    public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid userId, 
         [FromBody] AdminUpdateUserRequest request)
     {
-        var user = await userRepository.GetByIdAsync(id);
+        var user = await userRepository.GetByIdAsync(userId);
 
         if (user is null)
         {
@@ -105,10 +105,10 @@ public class AdminUserController(
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid id)
+    [HttpDelete("{userId:guid}")]
+    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(id);
+        var user = await userRepository.GetByIdAsync(userId);
 
         if (user is null)
         {
@@ -124,10 +124,10 @@ public class AdminUserController(
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}/anonymize")]
-    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid id)
+    [HttpPatch("{userId:guid}/anonymize")]
+    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid userId)
     {
-        var user = await userRepository.GetUserWithRelationshipsByIdAsync(id);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(userId);
 
         if (user is null)
         {
@@ -152,11 +152,11 @@ public class AdminUserController(
         return NoContent();
     }
 
-    [HttpPut("{id:guid}/preferences")]
-    public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid id, 
+    [HttpPut("{userId:guid}/preferences")]
+    public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid userId, 
         [FromBody] AdminSetUserPreferencesByUserIdRequest request)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(id);
+        var user = await userRepository.GetByIdWithPreferencesAsync(userId);
 
         if (user is null)
         {

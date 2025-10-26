@@ -34,10 +34,10 @@ public class AdminGroupController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid id)
+    [HttpGet("{groupId:guid}")]
+    public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid groupId)
     {
-        var group = await groupRepository.GetByIdAsync(id);
+        var group = await groupRepository.GetByIdAsync(groupId);
 
         if (group is null)
         {

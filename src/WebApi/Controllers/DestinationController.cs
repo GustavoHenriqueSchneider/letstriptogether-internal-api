@@ -64,10 +64,10 @@ public class DestinationController(
         }
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    [HttpGet("{destinationId:guid}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid destinationId)
     {
-        var destination = await destinationRepository.GetByIdAsync(id);
+        var destination = await destinationRepository.GetByIdAsync(destinationId);
 
         if (destination is null)
         {

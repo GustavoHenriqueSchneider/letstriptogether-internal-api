@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
-using WebApi.DTOs.Requests;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.GroupMember;
 using WebApi.Persistence.Interfaces;
@@ -9,7 +8,6 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-[ApiController]
 [Authorize]
 [ApiController]
 [Route("api/v1/groups/{groupId:guid}/members")]
@@ -60,8 +58,9 @@ public class GroupMemberController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, [FromRoute] Guid id)
+    [HttpGet("{memberId:guid}")]
+    public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, 
+        [FromRoute] Guid memberId)
     {
         var currentUserId = currentUser.GetId();
         var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
@@ -85,7 +84,7 @@ public class GroupMemberController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var groupMember = group.Members.SingleOrDefault(x => x.Id == id);
+        var groupMember = group.Members.SingleOrDefault(x => x.Id == memberId);
 
         if (groupMember is null)
         {
@@ -101,9 +100,9 @@ public class GroupMemberController(
         });
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{memberId:guid}")]
     public async Task<IActionResult> RemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid id)
+        [FromRoute] Guid memberId)
     {
         var currentUserId = currentUser.GetId();
 
@@ -131,7 +130,7 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("Only the group owner can remove members."));
         }
 
-        var userToRemove = group.Members.SingleOrDefault(m => m.Id == id);
+        var userToRemove = group.Members.SingleOrDefault(m => m.Id == memberId);
 
         if (userToRemove is null)
         {
