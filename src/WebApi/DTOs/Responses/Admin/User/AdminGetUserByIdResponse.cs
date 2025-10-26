@@ -1,15 +1,15 @@
-namespace WebApi.DTOs.Responses.User;
+namespace WebApi.DTOs.Responses.Admin.User;
 
-public class GetUserByIdResponse
+public class AdminGetUserByIdResponse
 {
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public GetUserByIdPreferenceResponse Preferences { get; init; } = new();
+    public AdminGetUserByIdPreferenceResponse Preferences { get; init; } = new();
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }
 }
 
-public class GetUserByIdPreferenceResponse
+public class AdminGetUserByIdPreferenceResponse
 {
     public List<string> Categories { get; set; } = [];
 }

@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.GroupMember;
+using WebApi.DTOs.Responses.Admin.GroupMember;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.Admin;
 
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
@@ -17,7 +17,7 @@ public class AdminGroupMemberController(
     IGroupMemberRepository groupMemberRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllGroupMembersById([FromRoute] Guid groupId,
+    public async Task<IActionResult> AdminGetAllGroupMembersById([FromRoute] Guid groupId,
         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var groupExists = await groupRepository.ExistsByIdAsync(groupId);
@@ -30,9 +30,9 @@ public class AdminGroupMemberController(
         var (groupMembers, hits) =
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new GetAllGroupMembersResponse
+        return Ok(new AdminGetAllGroupMembersResponse
         {
-            Data = groupMembers.Select(x => new GetAllGroupMembersResponseData
+            Data = groupMembers.Select(x => new AdminGetAllGroupMembersResponseData
             {
                 Id = x.Id,
                 CreatedAt = x.CreatedAt
@@ -42,7 +42,7 @@ public class AdminGroupMemberController(
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, [FromRoute] Guid id)
+    public async Task<IActionResult> AdminGetGroupMemberById([FromRoute] Guid groupId, [FromRoute] Guid id)
     {
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
 
@@ -58,7 +58,7 @@ public class AdminGroupMemberController(
             return NotFound(new ErrorResponse("Group member not found."));
         }
 
-        return Ok(new GetGroupMemberByIdResponse
+        return Ok(new AdminGetGroupMemberByIdResponse
         {
             UserId = groupMember.UserId,
             IsOwner = groupMember.IsOwner,
@@ -68,7 +68,7 @@ public class AdminGroupMemberController(
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> RemoveGroupMemberById([FromRoute] Guid groupId,
+    public async Task<IActionResult> AdminRemoveGroupMemberById([FromRoute] Guid groupId,
         [FromRoute] Guid id)
     {
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
