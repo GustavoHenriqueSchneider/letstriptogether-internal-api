@@ -3,8 +3,9 @@
 public class Role : TrackableEntity
 {
     public string Name { get; init; } = null!;
-    // TODO: fazer listas readonly
-    public List<UserRole> UserRoles { get; init; } = [];
+
+    private readonly List<UserRole> _userRoles = [];
+    public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 
     private Role() { }
 }

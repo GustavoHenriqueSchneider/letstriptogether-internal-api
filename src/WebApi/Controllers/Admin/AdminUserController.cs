@@ -58,7 +58,7 @@ public class AdminUserController(
         {
             Name = user.Name,
             Email = user.Email,
-            Preferences = new AdminGetUserByIdPreferenceResponse { Categories = user.Preferences.Categories },
+            Preferences = new AdminGetUserByIdPreferenceResponse { Categories = user.Preferences.Categories.ToList() },
             CreatedAt = user.CreatedAt,
             UpdatedAt = user.UpdatedAt
         });
@@ -166,7 +166,7 @@ public class AdminUserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var preferences = new UserPreference { Categories = request.Categories };
+        var preferences = new UserPreference(request.Categories.ToList());
         user.SetPreferences(preferences);
 
         // TODO: ajustar logica do update para atualizar entidades filhas/relacionadas

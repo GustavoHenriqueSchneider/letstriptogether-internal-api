@@ -8,7 +8,7 @@ public class GroupMemberDestinationVote : TrackableEntity
     public Destination Destination { get; init; } = null!;
     public bool IsApproved { get; private set; }
 
-    private GroupMemberDestinationVote() {}
+    private GroupMemberDestinationVote() { }
 
     public GroupMemberDestinationVote(Guid groupMemberId, Guid destinationId, bool isApproved)
     {

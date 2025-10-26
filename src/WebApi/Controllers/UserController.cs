@@ -44,7 +44,7 @@ public class UserController(
         {
             Name = user.Name,
             Email = user.Email,
-            Preferences = new GetCurrentUserPreferenceResponse { Categories = user.Preferences.Categories },
+            Preferences = new GetCurrentUserPreferenceResponse { Categories = user.Preferences.Categories.ToList() },
             CreatedAt = user.CreatedAt,
             UpdatedAt = user.UpdatedAt
         });
@@ -128,7 +128,7 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var preferences = new UserPreference { Categories = request.Categories };
+        var preferences = new UserPreference(request.Categories.ToList());
         user.SetPreferences(preferences);
 
         // TODO: ajustar logica do update para atualizar entidades filhas/relacionadas
