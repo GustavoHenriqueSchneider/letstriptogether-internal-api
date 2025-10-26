@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
-using WebApi.DTOs.Requests;
-using WebApi.DTOs.Requests.GroupMember;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.GroupMember;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
-using WebApi.Security;
 
 namespace WebApi.Controllers;
 

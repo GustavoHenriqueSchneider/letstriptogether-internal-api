@@ -49,7 +49,7 @@ public class GroupController(
         await groupRepository.AddAsync(group);
 
         await unitOfWork.SaveAsync();
-        return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse(group.Id));
+        return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse { Id = group.Id });
     }
 
     [HttpGet]
