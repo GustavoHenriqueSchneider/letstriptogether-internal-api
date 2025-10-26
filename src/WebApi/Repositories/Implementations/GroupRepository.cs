@@ -14,6 +14,7 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
         return await _dbSet
             .AsNoTracking()
             .Include(g => g.Members)
+                .ThenInclude(x => x.User)
             .SingleOrDefaultAsync(g => g.Id == groupId);
     }
 
@@ -22,16 +23,14 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
     {
         var data = await _dbSet
             .AsNoTracking()
-            .Include(g => g.Members)
-            .ThenInclude(x => x.UserId == userId)
+            .Where(g => g.Members.Any(m => m.UserId == userId))
             .OrderByDescending(e => e.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
         var hits = await _dbSet
-            .Include(g => g.Members)
-            .ThenInclude(x => x.UserId == userId)
+            .Where(g => g.Members.Any(m => m.UserId == userId))
             .CountAsync();
 
         return (data, hits);

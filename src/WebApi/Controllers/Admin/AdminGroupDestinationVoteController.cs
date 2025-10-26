@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.GroupMemberDestinationVote;
+using WebApi.DTOs.Responses.Admin.GroupMemberDestinationVote;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -11,8 +12,10 @@ namespace WebApi.Controllers.Admin;
 [Authorize(Policy = Policies.Admin)]
 [Route("api/v1/admin/groups/{groupId:guid}/destination-votes")]
 public class AdminGroupDestinationVoteController(
+    IGroupRepository groupRepository,
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository) : ControllerBase
 {
+    [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupDestinationVotesById(
         [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -35,6 +38,13 @@ public class AdminGroupDestinationVoteController(
     public async Task<IActionResult> AdminGetGroupDestinationVoteById(
         [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId)
     {
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+
+        if (!groupExists)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
         var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(groupId, 
             destinationVoteId);
 

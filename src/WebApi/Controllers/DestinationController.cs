@@ -22,7 +22,7 @@ public class DestinationController(
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1,
+    public async Task<IActionResult> GetAllDestinations([FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var (destinations, hits) = await destinationRepository.GetAllAsync(pageNumber, pageSize); 
@@ -65,7 +65,7 @@ public class DestinationController(
     }
 
     [HttpGet("{destinationId:guid}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid destinationId)
+    public async Task<IActionResult> GetDestinationById([FromRoute] Guid destinationId)
     {
         var destination = await destinationRepository.GetByIdAsync(destinationId);
 

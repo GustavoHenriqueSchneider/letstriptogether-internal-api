@@ -49,12 +49,14 @@ public class GroupMemberController(
 
         return Ok(new GetAllGroupMembersResponse
         {
-            Data = groupMembers.Select(x => new GetAllGroupMembersResponseData
-            {
-                Id = x.Id,
-                CreatedAt = x.CreatedAt
-            }),
-            Hits = hits
+            Data = groupMembers
+                .Where(x => x.UserId != currentUserId)
+                .Select(x => new GetAllGroupMembersResponseData
+                {
+                    Id = x.Id,
+                    CreatedAt = x.CreatedAt
+                }),
+            Hits = hits > 0 ? hits - 1 : hits
         });
     }
 
@@ -93,7 +95,7 @@ public class GroupMemberController(
 
         return Ok(new GetGroupMemberByIdResponse
         {
-            UserId = groupMember.UserId,
+            Name = groupMember.User.Name,
             IsOwner = groupMember.IsOwner,
             CreatedAt = groupMember.CreatedAt,
             UpdatedAt = groupMember.UpdatedAt

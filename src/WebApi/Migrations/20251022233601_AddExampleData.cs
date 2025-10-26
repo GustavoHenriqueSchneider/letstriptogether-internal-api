@@ -30,6 +30,10 @@ namespace WebApi.Migrations
             var userId = Guid.NewGuid();
             var adminId = Guid.NewGuid();
 
+            var randomUser1 = Guid.NewGuid();
+            var randomUser2 = Guid.NewGuid();
+            var randomUser3 = Guid.NewGuid();
+
             var userPassword = passwordHashService.HashPassword("user@123");
             var adminPassword = passwordHashService.HashPassword("admin@123");
 
@@ -39,7 +43,10 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { userId, "Example User", $"{Roles.User}@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
-                    { adminId, "Admin", $"{Roles.Admin}@letstriptogether.com", adminPassword, false, DateTime.UtcNow, DateTime.UtcNow }
+                    { adminId, "Admin", $"{Roles.Admin}@letstriptogether.com", adminPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { randomUser1, "User 1", $"{Roles.User}1@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { randomUser2, "User 2", $"{Roles.User}2@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { randomUser3, "User 3", $"{Roles.User}3@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow }
                 });
 
             migrationBuilder.InsertData(
@@ -48,27 +55,71 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { Guid.NewGuid(), userId, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow },
-                    { Guid.NewGuid(), adminId, adminRoleId, DateTime.UtcNow, DateTime.UtcNow }
+                    { Guid.NewGuid(), adminId, adminRoleId, DateTime.UtcNow, DateTime.UtcNow },
+                    { Guid.NewGuid(), randomUser1, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow },
+                    { Guid.NewGuid(), randomUser2, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow },
+                    { Guid.NewGuid(), randomUser3, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow }
+                });
+
+            // setting destinations
+            var destination1 = Guid.NewGuid();
+            var destination2 = Guid.NewGuid();
+
+            migrationBuilder.InsertData(
+                table: "Destinations",
+                columns: new[] { "Id", "Address", "Categories", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { destination1, "Rua avenida oi", new List<string> { "tourism", "funny" }, DateTime.UtcNow, null },
+                    { destination2, "Rua teste 123", new List<string> { "warm", "cultural" }, DateTime.UtcNow, null }
                 });
 
             // setting group data
             var testGroupId = Guid.NewGuid();
+            var testGroupId2 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "Groups",
                 columns: new[] { "Id", "Name", "TripExpectedDate", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { testGroupId, "Test Group", DateTime.UtcNow.AddYears(3), DateTime.UtcNow, null }
+                    { testGroupId, "Test Group", DateTime.UtcNow.AddYears(3), DateTime.UtcNow, null },
+                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null }
                 });
+
+            var userMemberId = Guid.NewGuid();
+            var adminMemberId = Guid.NewGuid();
+            var exampleMemberId1 = Guid.NewGuid();
+            var exampleMemberId2 = Guid.NewGuid();
+            var exampleMemberId3 = Guid.NewGuid();
+            var exampleMemberId4 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "GroupMembers",
                 columns: new[] { "Id", "GroupId", "UserId", "IsOwner", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { Guid.NewGuid(), testGroupId, adminId, true, DateTime.UtcNow, null },
-                    { Guid.NewGuid(), testGroupId, userId, false, DateTime.UtcNow, null }
+                    { adminMemberId, testGroupId, adminId, true, DateTime.UtcNow, null },
+                    { userMemberId, testGroupId, userId, false, DateTime.UtcNow, null },
+                    { exampleMemberId1, testGroupId2, randomUser1, false, DateTime.UtcNow, null },
+                    { exampleMemberId2, testGroupId2, randomUser2, true, DateTime.UtcNow, null },
+                    { exampleMemberId3, testGroupId, randomUser3, false, DateTime.UtcNow, null },
+                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GroupMemberDestinationVotes",
+                columns: new[] { "Id", "GroupMemberId", "DestinationId", "IsApproved", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { Guid.NewGuid(), adminMemberId, destination1, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), adminMemberId, destination2, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), userMemberId, destination1, false, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), userMemberId, destination2, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId1, destination1, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId2, destination1, false, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId3, destination2, false, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId4, destination2, true, DateTime.UtcNow, null }
                 });
         }
 

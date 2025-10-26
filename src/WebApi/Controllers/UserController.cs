@@ -6,6 +6,7 @@ using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
@@ -26,6 +27,7 @@ public class UserController(
     IGroupMemberRepository groupMemberRepository,
     IUserGroupInvitationRepository userGroupInvitationRepository,
     IUserRoleRepository userRoleRepository,
+    IUserPreferenceRepository userPreferenceRepository,
     IRedisService redisService): ControllerBase
 {
     [HttpGet]
@@ -70,7 +72,6 @@ public class UserController(
     [HttpDelete]
     public async Task<IActionResult> DeleteCurrentUser()
     {
-
         var user = await userRepository.GetByIdAsync(currentUser.GetId());
 
         if (user is null)
@@ -78,6 +79,7 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
+        // TODO: parou de funcionar
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
 
@@ -129,7 +131,9 @@ public class UserController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        // TODO: ajustar logica do update para atualizar entidades filhas/relacionadas
         userRepository.Update(user);
+        userPreferenceRepository.Update(user.Preferences);
         await unitOfWork.SaveAsync();
 
         return NoContent();

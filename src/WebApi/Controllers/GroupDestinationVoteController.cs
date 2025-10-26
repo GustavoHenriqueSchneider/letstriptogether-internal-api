@@ -4,6 +4,7 @@ using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.GroupDestinationVote;
 using WebApi.DTOs.Requests.GroupMember;
 using WebApi.DTOs.Responses;
+using WebApi.DTOs.Responses.Admin.GroupMemberDestinationVote;
 using WebApi.DTOs.Responses.GroupMemberDestinationVote;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
@@ -154,6 +155,54 @@ public class GroupDestinationVoteController(
                 CreatedAt = x.CreatedAt
             }),
             Hits = hits
+        });
+    }
+
+    [HttpGet("{destinationVoteId:guid}")]
+    public async Task<IActionResult> GetGroupDestinationVoteById(
+        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId)
+    {
+        var currentUserId = currentUser.GetId();
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+
+        if (user is null)
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
+
+        if (groupMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(groupId,
+            destinationVoteId);
+
+        if (vote is null)
+        {
+            return NotFound(new ErrorResponse("Group member destination vote not found."));
+        }
+
+        if (vote.GroupMemberId != groupMember.Id)
+        {
+            return BadRequest(new ErrorResponse("You are not a owner of this vote."));
+        }
+
+        return Ok(new GetGroupDestinationVoteByIdResponse
+        {
+            DestinationId = vote.DestinationId,
+            IsApproved = vote.IsApproved,
+            CreatedAt = vote.CreatedAt,
+            UpdatedAt = vote.UpdatedAt
         });
     }
 }

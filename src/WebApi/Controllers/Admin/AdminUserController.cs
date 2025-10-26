@@ -5,6 +5,7 @@ using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.User;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
@@ -26,6 +27,7 @@ public class AdminUserController(
     IGroupMemberRepository groupMemberRepository,
     IUserGroupInvitationRepository userGroupInvitationRepository,
     IUserRoleRepository userRoleRepository,
+    IUserPreferenceRepository userPreferenceRepository,
     IRedisService redisService): ControllerBase
 {
     [HttpGet]
@@ -118,6 +120,7 @@ public class AdminUserController(
         var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
         await redisService.DeleteAsync(key);
 
+        // TODO: parou de funcionar
         userRepository.Remove(user);
         await unitOfWork.SaveAsync();
 
@@ -166,7 +169,9 @@ public class AdminUserController(
         var preferences = new UserPreference { Categories = request.Categories };
         user.SetPreferences(preferences);
 
+        // TODO: ajustar logica do update para atualizar entidades filhas/relacionadas
         userRepository.Update(user);
+        userPreferenceRepository.Update(user.Preferences);
         await unitOfWork.SaveAsync();
 
         return NoContent();
