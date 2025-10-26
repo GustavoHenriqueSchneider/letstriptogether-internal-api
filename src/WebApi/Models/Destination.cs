@@ -7,12 +7,4 @@ public class Destination : TrackableEntity
     public List<GroupMatch> GroupMatches { get; init; } = [];
     public List<GroupMemberDestinationVote> GroupMemberVotes { get; init; } = [];
     public List<string> Categories { get; init; } = [];
-
-    public Destination() { }
-
-    public Destination(string address, List<string> categories)
-    {
-        Address = address;
-        Categories = categories;
-    }
 }
