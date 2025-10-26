@@ -11,7 +11,7 @@ public class ApplicationUserContext(ClaimsPrincipal principal) : IApplicationUse
         var id = principal.FindFirstValue(Claims.Id);
         return Guid.TryParse(id, out var guid) ? guid : Guid.Empty;
     }
-   
+    
     public string GetName()
     {
         return principal.FindFirstValue(Claims.Name) ?? string.Empty;

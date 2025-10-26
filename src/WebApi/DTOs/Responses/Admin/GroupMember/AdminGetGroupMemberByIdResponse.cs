@@ -1,8 +1,8 @@
-namespace WebApi.DTOs.Responses.GroupMember;
+namespace WebApi.DTOs.Responses.Admin.GroupMember;
 
-public class GetGroupMemberByIdResponse
+public class AdminGetGroupMemberByIdResponse
 {
-    public string Name { get; init; } = null!;
+    public Guid UserId { get; init; }
     public bool IsOwner { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }

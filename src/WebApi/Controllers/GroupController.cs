@@ -7,7 +7,6 @@ using WebApi.DTOs.Responses.Group;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
-using WebApi.Security;
 
 namespace WebApi.Controllers;
 
@@ -15,8 +14,8 @@ namespace WebApi.Controllers;
 // TODO: colocar tag de versionamento e descricoes para swagger
 // TODO: converter returns de erro em exception
 
-[Authorize]
 [ApiController]
+[Authorize]
 [Route("api/v1/groups")]
 public class GroupController(
     IGroupRepository groupRepository,
@@ -43,11 +42,11 @@ public class GroupController(
     }
 
     [HttpGet]
-    [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, 
+    public async Task<IActionResult> GetAllGroups([FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10)
     {
-        var (groups, hits) = await groupRepository.GetAllAsync(pageNumber, pageSize);
+        var (groups, hits) = await groupRepository.GetAllGroupsByUserIdAsync(
+            currentUser.GetId(), pageNumber, pageSize);
 
         return Ok(new GetAllGroupsResponse
         {
@@ -60,15 +59,21 @@ public class GroupController(
         });
     }
 
-    [HttpGet("{id:guid}")]
-    [Authorize(Policy = Policies.Admin)]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    [HttpGet("{groupId:guid}")]
+    public async Task<IActionResult> GetGroupById([FromRoute] Guid groupId)
     {
-        var group = await groupRepository.GetByIdAsync(id);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
 
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var isMember = group.Members.Any(x => x.UserId == currentUser.GetId());
+
+        if (!isMember)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
         return Ok(new GetGroupByIdResponse

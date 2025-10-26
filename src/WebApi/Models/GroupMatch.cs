@@ -8,10 +8,4 @@ public class GroupMatch : TrackableEntity
     public Destination Destination { get; init; } = null!;
 
     private GroupMatch() { }
-
-    public GroupMatch(Guid groupId, Guid destinationId)
-    {
-        GroupId = groupId;
-        DestinationId = destinationId;
-    }
 }

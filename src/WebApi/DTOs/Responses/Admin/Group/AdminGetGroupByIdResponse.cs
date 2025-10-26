@@ -1,9 +1,9 @@
-namespace WebApi.DTOs.Responses.GroupMember;
+namespace WebApi.DTOs.Responses.Admin.Group;
 
-public class GetGroupMemberByIdResponse
+public class AdminGetGroupByIdResponse
 {
     public string Name { get; init; } = null!;
-    public bool IsOwner { get; init; }
+    public DateTime TripExpectedDate { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }
 }

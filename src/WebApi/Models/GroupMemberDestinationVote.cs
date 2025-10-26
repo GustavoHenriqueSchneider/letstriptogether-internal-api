@@ -6,7 +6,7 @@ public class GroupMemberDestinationVote : TrackableEntity
     public GroupMember GroupMember { get; init; } = null!;
     public Guid DestinationId { get; init; }
     public Destination Destination { get; init; } = null!;
-    public bool IsApproved { get; set; }
+    public bool IsApproved { get; private set; }
 
     private GroupMemberDestinationVote() {}
 
@@ -17,7 +17,7 @@ public class GroupMemberDestinationVote : TrackableEntity
         IsApproved = isApproved;
     }
 
-    public void Update(bool isApproved)
+    public void SetApproved(bool isApproved)
     {
         IsApproved = isApproved;
         SetUpdateAt(DateTime.UtcNow);
