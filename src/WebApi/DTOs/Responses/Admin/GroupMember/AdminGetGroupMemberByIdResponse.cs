@@ -1,6 +1,6 @@
-namespace WebApi.DTOs.Responses.GroupMember;
+namespace WebApi.DTOs.Responses.Admin.GroupMember;
 
-public class GetGroupMemberByIdResponse
+public class AdminGetGroupMemberByIdResponse
 {
     public Guid UserId { get; init; }
     public bool IsOwner { get; init; }
