@@ -27,14 +27,18 @@ public class GroupController(
     public async Task<IActionResult> Create([FromBody] CreateGroupRequest request)
     {
         var currentUserId = currentUser.GetId();
-        
+
         var group = new Group(request.Name, request.TripExpectedDate);
-        
+
         await groupRepository.AddAsync(group);
         await unitOfWork.SaveAsync();
-        
-        // Make the creator the owner
-        var groupMember = new GroupMember(group.Id, currentUserId, isOwner: true);
+
+        var groupMember = new GroupMember {
+            GroupId = group.Id,
+            UserId = currentUserId,
+            IsOwner = true
+        };
+
         await groupMemberRepository.AddAsync(groupMember);
         await unitOfWork.SaveAsync();
         
