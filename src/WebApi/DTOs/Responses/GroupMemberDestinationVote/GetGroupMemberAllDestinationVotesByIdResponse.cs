@@ -1,6 +1,6 @@
 using WebApi.DTOs.Responses;
 
-namespace WebApi.DTOs.Requests.GroupMember;
+namespace WebApi.DTOs.Responses.GroupMemberDestinationVote;
 
 public class GetGroupMemberAllDestinationVotesByIdResponse
     : PaginatedResponse<GetGroupMemberAllDestinationVotesByIdResponseData>
