@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.DTOs.Requests.User;
+using WebApi.DTOs.Requests.Admin.User;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.User;
+using WebApi.DTOs.Responses.Admin.User;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.Admin;
 
 // TODO: aplicar CQRS com usecases, mediator com mediatr e clean arc
 // TODO: colocar tag de versionamento e descricoes para swagger
@@ -30,20 +30,20 @@ public class AdminUserController(
 {
     [HttpGet]
 
-    public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber = 1, 
+    public async Task<IActionResult> AdminGetAllUsers([FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10)
     {
         var (users, hits) = await userRepository.GetAllAsync(pageNumber, pageSize);
 
-        return Ok(new GetAllUsersResponse
+        return Ok(new AdminGetAllUsersResponse
         {
-            Data = users.Select(x => new GetAllUsersResponseData { Id = x.Id, CreatedAt = x.CreatedAt }),
+            Data = users.Select(x => new AdminGetAllUsersResponseData { Id = x.Id, CreatedAt = x.CreatedAt }),
             Hits = hits
         });
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetUserById([FromRoute] Guid id)
+    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid id)
     {
         var user = await userRepository.GetByIdWithPreferencesAsync(id);
 
@@ -52,18 +52,18 @@ public class AdminUserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        return Ok(new GetUserByIdResponse
+        return Ok(new AdminGetUserByIdResponse
         {
             Name = user.Name,
             Email = user.Email,
-            Preferences = new GetUserByIdPreferenceResponse { Categories = user.Preferences.Categories },
+            Preferences = new AdminGetUserByIdPreferenceResponse { Categories = user.Preferences.Categories },
             CreatedAt = user.CreatedAt,
             UpdatedAt = user.UpdatedAt
         });
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> AdminCreateUser([FromBody] AdminCreateUserRequest request)
     {
         var email = request.Email;
         var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
@@ -83,12 +83,12 @@ public class AdminUserController(
         await userRepository.AddAsync(user);
         await unitOfWork.SaveAsync();
 
-        return CreatedAtAction(nameof(Create), new CreateUserResponse { Id = user.Id });
+        return CreatedAtAction(nameof(AdminCreateUser), new AdminCreateUserResponse { Id = user.Id });
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateUserById([FromRoute] Guid id, 
-        [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid id, 
+        [FromBody] AdminUpdateUserRequest request)
     {
         var user = await userRepository.GetByIdAsync(id);
 
@@ -106,7 +106,7 @@ public class AdminUserController(
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteUserById([FromRoute] Guid id)
+    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid id)
     {
         var user = await userRepository.GetByIdAsync(id);
 
@@ -125,7 +125,7 @@ public class AdminUserController(
     }
 
     [HttpPatch("{id:guid}/anonymize")]
-    public async Task<IActionResult> AnonymizeUserById([FromRoute] Guid id)
+    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid id)
     {
         var user = await userRepository.GetUserWithRelationshipsByIdAsync(id);
 
@@ -153,8 +153,8 @@ public class AdminUserController(
     }
 
     [HttpPut("{id:guid}/preferences")]
-    public async Task<IActionResult> SetUserPreferencesByUserId([FromRoute] Guid id, 
-        [FromBody] SetPreferencesByUserIdRequest request)
+    public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid id, 
+        [FromBody] AdminSetUserPreferencesByUserIdRequest request)
     {
         var user = await userRepository.GetByIdWithPreferencesAsync(id);
 

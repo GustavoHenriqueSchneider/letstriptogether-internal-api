@@ -38,11 +38,11 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        return Ok(new GetUserByIdResponse
+        return Ok(new GetCurrentUserResponse
         {
             Name = user.Name,
             Email = user.Email,
-            Preferences = new GetUserByIdPreferenceResponse { Categories = user.Preferences.Categories },
+            Preferences = new GetCurrentUserPreferenceResponse { Categories = user.Preferences.Categories },
             CreatedAt = user.CreatedAt,
             UpdatedAt = user.UpdatedAt
         });

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.Group;
+using WebApi.DTOs.Responses.Admin.Group;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.Admin;
 
 // TODO: aplicar CQRS com usecases, mediator com mediatr e clean arc
 // TODO: colocar tag de versionamento e descricoes para swagger
@@ -18,14 +18,14 @@ public class AdminGroupController(
     IGroupRepository groupRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllGroups([FromQuery] int pageNumber = 1, 
+    public async Task<IActionResult> AdminGetAllGroups([FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10)
     {
         var (groups, hits) = await groupRepository.GetAllAsync(pageNumber, pageSize);
 
-        return Ok(new GetAllGroupsResponse
+        return Ok(new AdminGetAllGroupsResponse
         {
-            Data = groups.Select(x => new GetAllGroupsResponseData
+            Data = groups.Select(x => new AdminGetAllGroupsResponseData
             {
                 Id = x.Id,
                 CreatedAt = x.CreatedAt
@@ -35,7 +35,7 @@ public class AdminGroupController(
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroupById([FromRoute] Guid id)
+    public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid id)
     {
         var group = await groupRepository.GetByIdAsync(id);
 
@@ -44,7 +44,7 @@ public class AdminGroupController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        return Ok(new GetGroupByIdResponse
+        return Ok(new AdminGetGroupByIdResponse
         {
             Name = group.Name,
             TripExpectedDate = group.TripExpectedDate,

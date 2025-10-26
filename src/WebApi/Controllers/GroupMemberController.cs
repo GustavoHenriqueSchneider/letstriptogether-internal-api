@@ -47,7 +47,7 @@ public class GroupMemberController(
         var (groupMembers, hits) = 
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new GetAllGroupMembersResponse
+        return Ok(new AdminGetAllGroupMembersResponse
         {
             Data = groupMembers.Select(x => new GetAllGroupMembersResponseData
             {
@@ -90,7 +90,7 @@ public class GroupMemberController(
             return NotFound(new ErrorResponse("Group member not found."));
         }
 
-        return Ok(new GetGroupMemberByIdResponse
+        return Ok(new AdminGetGroupMemberByIdResponse
         {
             UserId = groupMember.UserId,
             IsOwner = groupMember.IsOwner,
