@@ -4,10 +4,15 @@ public class Group : TrackableEntity
 {
     public string Name { get; private set; } = null!;
     public DateTime TripExpectedDate { get; private set; }
-    // TODO: fazer listas readonly
-    public List<GroupInvitation> Invitations { get; init; } = [];
-    public List<GroupMatch> Matches { get; init; } = [];
-    public List<GroupMember> Members { get; init; } = [];
+
+    private readonly List<GroupInvitation> _invitations = [];
+    public IReadOnlyCollection<GroupInvitation> Invitations => _invitations.AsReadOnly();
+
+    private readonly List<GroupMatch> _matches = [];
+    public IReadOnlyCollection<GroupMatch> Matches => _matches.AsReadOnly();
+
+    private readonly List<GroupMember> _members = [];
+    public IReadOnlyCollection<GroupMember> Members => _members.AsReadOnly();
 
     private Group() { }
 
@@ -15,6 +20,21 @@ public class Group : TrackableEntity
     {
         Name = name;
         TripExpectedDate = tripExpectedDate;
+    }
+
+    public bool HasMember(GroupMember member)
+    {
+        return _members.Contains(member);
+    }
+
+    public void AddMember(GroupMember member)
+    {
+        if (HasMember(member))
+        {
+            throw new Exception("This member is already included on the group.");
+        }
+
+        _members.Add(member);
     }
 
     public void Update(string? name, DateTime? tripExpectedDate)

@@ -1,3 +1,6 @@
 namespace WebApi.DTOs.Responses.Group;
 
-public record CreateGroupResponse(Guid Id);
+public class CreateGroupResponse
+{
+    public Guid Id { get; init; }
+}

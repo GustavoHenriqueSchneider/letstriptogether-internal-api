@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Group;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Group;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
@@ -19,30 +21,35 @@ namespace WebApi.Controllers;
 [Route("api/v1/groups")]
 public class GroupController(
     IGroupRepository groupRepository,
-    IGroupMemberRepository groupMemberRepository,
     IApplicationUserContext currentUser,
+    IUserRepository userRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateGroupRequest request)
+    public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
     {
         var currentUserId = currentUser.GetId();
+        var existsUser = await userRepository.ExistsByIdAsync(currentUserId);
+
+        if (!existsUser)
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
 
         var group = new Group(request.Name, request.TripExpectedDate);
 
-        await groupRepository.AddAsync(group);
-        await unitOfWork.SaveAsync();
-
-        var groupMember = new GroupMember {
+        var groupMember = new GroupMember
+        {
             GroupId = group.Id,
             UserId = currentUserId,
             IsOwner = true
         };
 
-        await groupMemberRepository.AddAsync(groupMember);
+        group.AddMember(groupMember);
+        await groupRepository.AddAsync(group);
+
         await unitOfWork.SaveAsync();
-        
-        return CreatedAtAction(nameof(Create), new CreateGroupResponse(group.Id));
+        return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse(group.Id));
     }
 
     [HttpGet]
@@ -89,11 +96,35 @@ public class GroupController(
         });
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateGroupRequest request)
+    [HttpPut("{groupId:guid}")]
+    public async Task<IActionResult> UpdateGroupById([FromRoute] Guid groupId, 
+        [FromBody] UpdateGroupRequest request)
     {
-        var group = await GetGroupWithOwnerValidation(id);
-        if (group is null) return NotFound(new ErrorResponse("Group not found."));
+        var currentUserId = currentUser.GetId();
+
+        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
+
+        if (currentUserMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        if (!currentUserMember.IsOwner)
+        {
+            return BadRequest(new ErrorResponse("Only the group owner can update group data."));
+        }
 
         group.Update(request.Name, request.TripExpectedDate);
         groupRepository.Update(group);
@@ -102,29 +133,39 @@ public class GroupController(
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [HttpDelete("{groupId:guid}")]
+    public async Task<IActionResult> DeleteGroupById([FromRoute] Guid groupId)
     {
-        var group = await GetGroupWithOwnerValidation(id);
-        if (group is null) return NotFound(new ErrorResponse("Group not found."));
+        var currentUserId = currentUser.GetId();
+
+        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
+
+        if (currentUserMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        if (!currentUserMember.IsOwner)
+        {
+            return BadRequest(new ErrorResponse("Only the group owner can delete the group."));
+        }
 
         groupRepository.Remove(group);
         await unitOfWork.SaveAsync();
 
         return NoContent();
-    }
-
-    private async Task<Group?> GetGroupWithOwnerValidation(Guid groupId)
-    {
-        var currentUserId = currentUser.GetId();
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-        
-        if (group is null) return null;
-
-        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
-        if (currentUserMember is null || !currentUserMember.IsOwner) return null;
-
-        return group;
     }
 }
 
