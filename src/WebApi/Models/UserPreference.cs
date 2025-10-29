@@ -15,13 +15,6 @@ public class UserPreference : TrackableEntity
         _categories = categories;
     }
 
-    private UserPreference() { }
-
-    public UserPreference(List<string> categories)
-    {
-        Categories = categories;
-    }
-
     public void Update(UserPreference preferences)
     {
         _categories.Clear();

@@ -34,9 +34,9 @@ public class AdminGroupMemberController(
         var (groupMembers, hits) =
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new AdminGetAllGroupMembersResponse
+        return Ok(new AdminGetAllGroupMembersByIdResponse
         {
-            Data = groupMembers.Select(x => new AdminGetAllGroupMembersResponseData
+            Data = groupMembers.Select(x => new AdminGetAllGroupMembersByIdResponseData
             {
                 Id = x.Id,
                 CreatedAt = x.CreatedAt

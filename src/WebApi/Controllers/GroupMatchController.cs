@@ -1,55 +1,57 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Responses;
 using WebApi.Models;
 using WebApi.Persistence.Interfaces;
+using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/v1/group-matches")]
+[Route("api/v1/groups/{groupId:guid}/matches")]
 public class GroupMatchController(
     IGroupMatchRepository groupMatchRepository,
     IGroupRepository groupRepository,
     IApplicationUserContext currentUser,
     IUnitOfWork unitOfWork) : ControllerBase
 {
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> RemoveGroupMatch([FromRoute] Guid id)
+    [HttpDelete("{matchId:guid}")]
+    public async Task<IActionResult> RemoveGroupMatchById([FromRoute] Guid groupId,
+        [FromRoute] Guid matchId)
     {
         var currentUserId = currentUser.GetId();
 
-        // Buscar o match com as relações para verificar se o usuário é membro do grupo
-        var groupMatch = await groupMatchRepository.GetByIdWithRelationsAsync(id);
-
-        if (groupMatch is null)
+        if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
-            return NotFound(new ErrorResponse("Group match not found."));
+            return NotFound(new ErrorResponse("User not found."));
         }
 
-        // Verificar se o usuário é membro do grupo
-        var group = await groupRepository.GetGroupWithMembersAsync(groupMatch.GroupId);
+        var group = await groupRepository.GetGroupWithMatchesAsync(groupId);
+
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var userMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
-        if (userMember is null)
+        var isMember = await groupRepository.ExistsMemberByUserIdAsync(groupId, currentUserId);
+
+        if (!isMember)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        // Apenas o owner do grupo pode remover matches
-        if (!userMember.IsOwner)
+        var matchToRemove = group.Matches.SingleOrDefault(m => m.Id == matchId);
+
+        if (matchToRemove is null)
         {
-            return BadRequest(new ErrorResponse("Only the group owner can remove matches."));
+            return NotFound(new ErrorResponse("The match was not found for this group."));
         }
 
-        groupMatchRepository.Remove(groupMatch);
+        groupMatchRepository.Remove(matchToRemove);
         await unitOfWork.SaveAsync();
 
         return NoContent();
