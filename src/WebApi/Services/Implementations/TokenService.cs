@@ -52,10 +52,10 @@ public class TokenService : ITokenService
         return token;
     }
 
-    public (string accessToken, string refreshToken) GenerateTokens(User user)
+    public (string accessToken, string refreshToken) GenerateTokens(User user, DateTime? refreshTokenExpiresIn = null)
     {
         var accessToken = GenerateAccessToken(user);
-        var refreshToken = GenerateRefreshToken(user.Id);
+        var refreshToken = GenerateRefreshToken(user.Id, refreshTokenExpiresIn);
 
         return (accessToken, refreshToken);
     }
@@ -99,7 +99,7 @@ public class TokenService : ITokenService
         return accessToken;
     }
 
-    private string GenerateRefreshToken(Guid userId)
+    private string GenerateRefreshToken(Guid userId, DateTime? expiresIn)
     {
         var claims = new List<Claim>
         {
@@ -107,9 +107,9 @@ public class TokenService : ITokenService
             new (Claims.TokenType, TokenTypes.Refresh)
         };
 
-        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
+        expiresIn ??= DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
 
-        var refreshToken = CreateJwtToken(claims, expiresIn);
+        var refreshToken = CreateJwtToken(claims, expiresIn.Value);
         return refreshToken;
     }
 
