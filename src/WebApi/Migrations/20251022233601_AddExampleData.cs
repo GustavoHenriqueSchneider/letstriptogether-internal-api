@@ -61,22 +61,38 @@ namespace WebApi.Migrations
                     { Guid.NewGuid(), randomUser3, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow }
                 });
 
+            // setting user preferences - necessário antes da migration ListsReadOnly
+            migrationBuilder.InsertData(
+                table: "UserPreferences",
+                columns: new[] { "Id", "UserId", "Categories", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { Guid.NewGuid(), userId, new List<string>(), DateTime.UtcNow, null },
+                    { Guid.NewGuid(), adminId, new List<string>(), DateTime.UtcNow, null },
+                    { Guid.NewGuid(), randomUser1, new List<string>(), DateTime.UtcNow, null },
+                    { Guid.NewGuid(), randomUser2, new List<string>(), DateTime.UtcNow, null },
+                    { Guid.NewGuid(), randomUser3, new List<string>(), DateTime.UtcNow, null }
+                });
+
             // setting destinations
             var destination1 = Guid.NewGuid();
             var destination2 = Guid.NewGuid();
+            var destination3 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "Destinations",
                 columns: new[] { "Id", "Address", "Categories", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { destination1, "Rua avenida oi", new List<string> { "tourism", "funny" }, DateTime.UtcNow, null },
-                    { destination2, "Rua teste 123", new List<string> { "warm", "cultural" }, DateTime.UtcNow, null }
+                    { destination1, "Rio de Janeiro, RJ - Praias de Copacabana", new List<string> { "tourism" }, DateTime.UtcNow, null },
+                    { destination2, "São Paulo, SP - Avenida Paulista", new List<string> { "tourism" }, DateTime.UtcNow, null },
+                    { destination3, "Florianópolis, SC - Praia da Joaquina", new List<string> { "tourism" }, DateTime.UtcNow, null }
                 });
 
             // setting group data
             var testGroupId = Guid.NewGuid();
             var testGroupId2 = Guid.NewGuid();
+            var testGroupId3 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "Groups",
@@ -84,7 +100,8 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { testGroupId, "Test Group", DateTime.UtcNow.AddYears(3), DateTime.UtcNow, null },
-                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null }
+                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null },
+                    { testGroupId3, "Test Group 3", DateTime.UtcNow.AddYears(2), DateTime.UtcNow, null }
                 });
 
             var userMemberId = Guid.NewGuid();
@@ -93,6 +110,8 @@ namespace WebApi.Migrations
             var exampleMemberId2 = Guid.NewGuid();
             var exampleMemberId3 = Guid.NewGuid();
             var exampleMemberId4 = Guid.NewGuid();
+            var exampleMemberId5 = Guid.NewGuid();
+            var exampleMemberId6 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "GroupMembers",
@@ -104,7 +123,9 @@ namespace WebApi.Migrations
                     { exampleMemberId1, testGroupId2, randomUser1, false, DateTime.UtcNow, null },
                     { exampleMemberId2, testGroupId2, randomUser2, true, DateTime.UtcNow, null },
                     { exampleMemberId3, testGroupId, randomUser3, false, DateTime.UtcNow, null },
-                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null }
+                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null },
+                    { exampleMemberId5, testGroupId3, userId, true, DateTime.UtcNow, null },
+                    { exampleMemberId6, testGroupId3, randomUser1, false, DateTime.UtcNow, null }
                 });
 
             migrationBuilder.InsertData(
@@ -119,7 +140,11 @@ namespace WebApi.Migrations
                     { Guid.NewGuid(), exampleMemberId1, destination1, true, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId2, destination1, false, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId3, destination2, false, DateTime.UtcNow, null },
-                    { Guid.NewGuid(), exampleMemberId4, destination2, true, DateTime.UtcNow, null }
+                    { Guid.NewGuid(), exampleMemberId4, destination2, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId5, destination3, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId5, destination1, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId6, destination3, false, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId6, destination1, true, DateTime.UtcNow, null }
                 });
         }
 

@@ -95,5 +95,9 @@ public class AppDbContext : DbContext
             .WithOne(u => u.Preferences)
             .HasForeignKey<UserPreference>(up => up.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserPreference>()
+            .Property<List<string>>("_categories")
+            .HasColumnName("Categories");
     }
 }

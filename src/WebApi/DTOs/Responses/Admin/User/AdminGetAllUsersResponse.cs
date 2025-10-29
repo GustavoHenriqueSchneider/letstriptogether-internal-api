@@ -7,5 +7,6 @@ public class AdminGetAllUsersResponse : PaginatedResponse<AdminGetAllUsersRespon
 public class AdminGetAllUsersResponseData
 {
     public Guid Id { get; init; }
+    public string Name { get; init; }
     public DateTime CreatedAt { get; init; }
 }
