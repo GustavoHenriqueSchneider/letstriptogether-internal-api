@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMatch;
-using WebApi.DTOs.Responses.Admin.GroupMember;
-using WebApi.Models;
-using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 

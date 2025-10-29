@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Responses;
-using WebApi.Models;
 using WebApi.Persistence.Interfaces;
-using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;

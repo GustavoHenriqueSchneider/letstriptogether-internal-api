@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMember;
-using WebApi.DTOs.Responses.Admin.GroupMemberDestinationVote;
-using WebApi.DTOs.Responses.GroupMemberDestinationVote;
 using WebApi.Persistence.Interfaces;
-using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
