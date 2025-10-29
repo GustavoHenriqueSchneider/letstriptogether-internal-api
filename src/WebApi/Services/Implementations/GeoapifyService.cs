@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using WebApi.Clients.Interfaces;
 using WebApi.Configurations;
 using WebApi.Models;

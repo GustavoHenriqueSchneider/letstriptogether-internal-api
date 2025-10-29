@@ -1,10 +1,10 @@
 namespace WebApi.DTOs.Responses.GroupMember;
 
-public class GetAllGroupMembersResponse : PaginatedResponse<GetAllGroupMembersResponseData>
+public class GetAllGroupMembersByIdResponse : PaginatedResponse<GetAllGroupMembersByIdResponseData>
 {
 }
 
-public class GetAllGroupMembersResponseData
+public class GetAllGroupMembersByIdResponseData
 {
     public Guid Id { get; init; }
     public DateTime CreatedAt { get; init; }

@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMember;
-using WebApi.DTOs.Responses.Admin.GroupMemberDestinationVote;
-using WebApi.DTOs.Responses.GroupMemberDestinationVote;
 using WebApi.Persistence.Interfaces;
-using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -34,9 +31,9 @@ public class AdminGroupMemberController(
         var (groupMembers, hits) =
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new AdminGetAllGroupMembersResponse
+        return Ok(new AdminGetAllGroupMembersByIdResponse
         {
-            Data = groupMembers.Select(x => new AdminGetAllGroupMembersResponseData
+            Data = groupMembers.Select(x => new AdminGetAllGroupMembersByIdResponseData
             {
                 Id = x.Id,
                 CreatedAt = x.CreatedAt
