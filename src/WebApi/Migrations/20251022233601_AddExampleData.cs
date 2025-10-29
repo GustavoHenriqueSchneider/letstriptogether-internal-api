@@ -77,6 +77,8 @@ namespace WebApi.Migrations
             // setting group data
             var testGroupId = Guid.NewGuid();
             var testGroupId2 = Guid.NewGuid();
+            var testGroupId3 = Guid.NewGuid();
+            var testGroupId4 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "Groups",
@@ -84,7 +86,9 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { testGroupId, "Test Group", DateTime.UtcNow.AddYears(3), DateTime.UtcNow, null },
-                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null }
+                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null },
+                    { testGroupId3, "Test Group 3", DateTime.UtcNow.AddYears(2), DateTime.UtcNow, null },
+                    { testGroupId4, "Test Group 4", DateTime.UtcNow.AddMonths(6), DateTime.UtcNow, null }
                 });
 
             var userMemberId = Guid.NewGuid();
@@ -93,6 +97,10 @@ namespace WebApi.Migrations
             var exampleMemberId2 = Guid.NewGuid();
             var exampleMemberId3 = Guid.NewGuid();
             var exampleMemberId4 = Guid.NewGuid();
+            var exampleMemberId5 = Guid.NewGuid();
+            var exampleMemberId6 = Guid.NewGuid();
+            var exampleMemberId7 = Guid.NewGuid();
+            var exampleMemberId8 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "GroupMembers",
@@ -104,7 +112,11 @@ namespace WebApi.Migrations
                     { exampleMemberId1, testGroupId2, randomUser1, false, DateTime.UtcNow, null },
                     { exampleMemberId2, testGroupId2, randomUser2, true, DateTime.UtcNow, null },
                     { exampleMemberId3, testGroupId, randomUser3, false, DateTime.UtcNow, null },
-                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null }
+                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null },
+                    { exampleMemberId5, testGroupId3, randomUser1, true, DateTime.UtcNow, null },
+                    { exampleMemberId6, testGroupId3, userId, false, DateTime.UtcNow, null },
+                    { exampleMemberId7, testGroupId4, randomUser2, true, DateTime.UtcNow, null },
+                    { exampleMemberId8, testGroupId4, adminId, false, DateTime.UtcNow, null }
                 });
 
             migrationBuilder.InsertData(
@@ -120,6 +132,31 @@ namespace WebApi.Migrations
                     { Guid.NewGuid(), exampleMemberId2, destination1, false, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId3, destination2, false, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId4, destination2, true, DateTime.UtcNow, null }
+                });
+
+            // setting group invitations data
+            var invitation1 = Guid.NewGuid();
+            var invitation2 = Guid.NewGuid();
+            var invitation3 = Guid.NewGuid();
+            var invitation4 = Guid.NewGuid();
+            var invitation5 = Guid.NewGuid();
+            var invitation6 = Guid.NewGuid();
+            var invitation7 = Guid.NewGuid();
+            var invitation8 = Guid.NewGuid();
+
+            migrationBuilder.InsertData(
+                table: "GroupInvitations",
+                columns: new[] { "Id", "GroupId", "ExpirationDate", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { invitation1, testGroupId, DateTime.UtcNow.AddDays(7), DateTime.UtcNow, null },
+                    { invitation2, testGroupId, DateTime.UtcNow.AddDays(30), DateTime.UtcNow, null },
+                    { invitation3, testGroupId2, DateTime.UtcNow.AddDays(15), DateTime.UtcNow, null },
+                    { invitation4, testGroupId2, DateTime.UtcNow.AddDays(60), DateTime.UtcNow, null },
+                    { invitation5, testGroupId3, DateTime.UtcNow.AddDays(10), DateTime.UtcNow, null },
+                    { invitation6, testGroupId3, DateTime.UtcNow.AddDays(45), DateTime.UtcNow, null },
+                    { invitation7, testGroupId4, DateTime.UtcNow.AddDays(20), DateTime.UtcNow, null },
+                    { invitation8, testGroupId4, DateTime.UtcNow.AddDays(90), DateTime.UtcNow, null }
                 });
         }
 
