@@ -39,7 +39,7 @@ public class AdminUserController(
 
         return Ok(new AdminGetAllUsersResponse
         {
-            Data = users.Select(x => new AdminGetAllUsersResponseData { Id = x.Id, CreatedAt = x.CreatedAt }),
+            Data = users.Select(x => new AdminGetAllUsersResponseData { Id = x.Id, Name = x.Name, CreatedAt = x.CreatedAt }),
             Hits = hits
         });
     }

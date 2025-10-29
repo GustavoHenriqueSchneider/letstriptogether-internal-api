@@ -34,6 +34,7 @@ public class DestinationController(
                 Data = destinations.Select(x => new GetAllDestinationsResponseData
                 {
                     Id = x.Id,
+                    Address = x.Address,
                     CreatedAt = x.CreatedAt
                 }),
                 Hits = hits
@@ -53,6 +54,7 @@ public class DestinationController(
                 Data = newDestinations.Select(x => new GetAllDestinationsResponseData
                 {
                     Id = x.Id,
+                    Address = x.Address,
                     CreatedAt = x.CreatedAt
                 }),
                 Hits = newDestinations.Count

@@ -64,6 +64,7 @@ public class GroupController(
             Data = groups.Select(x => new GetAllGroupsResponseData
             {
                 Id = x.Id,
+                Name = x.Name,
                 CreatedAt = x.CreatedAt
             }),
             Hits = hits
