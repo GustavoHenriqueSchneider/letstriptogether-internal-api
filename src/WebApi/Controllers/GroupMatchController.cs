@@ -17,6 +17,7 @@ public class GroupMatchController(
     IGroupMatchRepository groupMatchRepository,
     IGroupRepository groupRepository,
     IApplicationUserContext currentUser,
+    IUserRepository userRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpDelete("{matchId:guid}")]
@@ -37,7 +38,7 @@ public class GroupMatchController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var isMember = await groupRepository.ExistsMemberByUserIdAsync(groupId, currentUserId);
+        var isMember = await groupRepository.IsGroupMemberByUserIdAsync(groupId, currentUserId);
 
         if (!isMember)
         {

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
-using WebApi.DTOs.Requests.GroupMatch;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMatch;
 using WebApi.DTOs.Responses.Admin.GroupMember;
@@ -31,7 +30,7 @@ public class AdminGroupMatchController(
         }
 
         var (groupMatches, hits) = 
-            await groupMatchRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
+            await groupMatchRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize);
 
         return Ok(new AdminGetAllGroupMatchesByIdResponse
         {
@@ -55,9 +54,9 @@ public class AdminGroupMatchController(
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var groupMember = group.Matches.SingleOrDefault(x => x.Id == matchId);
+        var groupMatch = group.Matches.SingleOrDefault(x => x.Id == matchId);
 
-        if (groupMember is null)
+        if (groupMatch is null)
         {
             return NotFound(new ErrorResponse("Group match not found."));
         }
