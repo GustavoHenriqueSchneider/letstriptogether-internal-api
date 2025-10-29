@@ -182,7 +182,7 @@ public class AuthController(
             return Unauthorized(new ErrorResponse("Invalid refresh token."));
         }
 
-        var (isExpired, _) = tokenService.IsTokenExpired(request.RefreshToken);
+        var (isExpired, refreshTokenExpiresIn) = tokenService.IsTokenExpired(request.RefreshToken);
 
         if (isExpired)
         {
@@ -211,9 +211,8 @@ public class AuthController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
-        var (_, expiresIn) = tokenService.IsTokenExpired(refreshToken);
-        var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
+        var (accessToken, refreshToken) = tokenService.GenerateTokens(user, refreshTokenExpiresIn);
+        var ttlInSeconds = (int)(refreshTokenExpiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 
