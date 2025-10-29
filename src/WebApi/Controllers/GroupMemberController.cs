@@ -47,11 +47,11 @@ public class GroupMemberController(
         var (groupMembers, hits) = 
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new GetAllGroupMembersResponse
+        return Ok(new GetAllGroupMembersByIdResponse
         {
             Data = groupMembers
                 .Where(x => x.UserId != currentUserId)
-                .Select(x => new GetAllGroupMembersResponseData
+                .Select(x => new GetAllGroupMembersByIdResponseData
                 {
                     Id = x.Id,
                     CreatedAt = x.CreatedAt

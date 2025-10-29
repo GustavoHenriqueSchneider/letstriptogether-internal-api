@@ -117,9 +117,18 @@ namespace WebApi.Migrations
                     { Guid.NewGuid(), userMemberId, destination1, false, DateTime.UtcNow, null },
                     { Guid.NewGuid(), userMemberId, destination2, true, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId1, destination1, true, DateTime.UtcNow, null },
-                    { Guid.NewGuid(), exampleMemberId2, destination1, false, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId2, destination1, true, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId3, destination2, false, DateTime.UtcNow, null },
-                    { Guid.NewGuid(), exampleMemberId4, destination2, true, DateTime.UtcNow, null }
+                    { Guid.NewGuid(), exampleMemberId4, destination2, true, DateTime.UtcNow, null },
+                    { Guid.NewGuid(), exampleMemberId4, destination1, true, DateTime.UtcNow, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GroupMatches",
+                columns: new[] { "Id", "GroupId", "DestinationId", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { Guid.NewGuid(), testGroupId2, destination1, DateTime.UtcNow, null }
                 });
         }
 
