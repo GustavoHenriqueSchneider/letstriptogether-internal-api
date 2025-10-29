@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using System.Linq;
+using System.Text.Json;
 using WebApi.Clients.Interfaces;
 using WebApi.Configurations;
 using WebApi.Models;
@@ -54,11 +56,12 @@ public class GeoapifyService : IGeoapifyService
         {
             var properties = x.GetProperty("properties");
             var address = properties.GetProperty("formatted").GetString() ?? "Sem endereço";
+
             var categories = properties.GetProperty("categories").EnumerateArray()
                 .Select(c => c.GetString() ?? string.Empty)
                 .Where(s => !string.IsNullOrEmpty(s))
                 .ToList() ?? [];
-            
+
             return new Destination(address, categories);
         }));
 

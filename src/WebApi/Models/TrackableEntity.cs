@@ -3,8 +3,20 @@
 public class TrackableEntity
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; protected set; }
+
+    private DateTime _createdAt;
+    public DateTime CreatedAt 
+    {
+        get => _createdAt.ToUniversalTime();
+        init => _createdAt = DateTime.UtcNow;
+    }
+
+    private DateTime? _updateAt;
+    public DateTime? UpdatedAt
+    {
+        get => _updateAt?.ToUniversalTime();
+        private set => _updateAt = value ?? null;
+    }
 
     protected void SetUpdateAt(DateTime updatedAt) 
     {  

@@ -12,8 +12,27 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
     public async Task<Group?> GetGroupWithMembersAsync(Guid groupId)
     {
         return await _dbSet
-            .Include(g => g.Members)
             .AsNoTracking()
+            .Include(g => g.Members)
+                .ThenInclude(x => x.User)
             .SingleOrDefaultAsync(g => g.Id == groupId);
+    }
+
+    public async Task<(IEnumerable<Group> data, int hits)> GetAllGroupsByUserIdAsync(
+        Guid userId, int pageNumber = 1, int pageSize = 10)
+    {
+        var data = await _dbSet
+            .AsNoTracking()
+            .Where(g => g.Members.Any(m => m.UserId == userId))
+            .OrderByDescending(e => e.CreatedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var hits = await _dbSet
+            .Where(g => g.Members.Any(m => m.UserId == userId))
+            .CountAsync();
+
+        return (data, hits);
     }
 }

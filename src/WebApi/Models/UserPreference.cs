@@ -4,8 +4,16 @@ public class UserPreference : TrackableEntity
 {
     public Guid UserId { get; init; }
     public User User { get; init; } = null!;
-    // TODO: fazer listas readonly
-    public List<string> Categories { get; set; } = [];
+
+    private readonly List<string> _categories = [];
+    public IReadOnlyCollection<string> Categories => _categories.AsReadOnly();
+
+    private UserPreference() { }
+
+    public UserPreference(List<string> categories)
+    {
+        _categories = categories;
+    }
 
     private UserPreference() { }
 
@@ -16,7 +24,8 @@ public class UserPreference : TrackableEntity
 
     public void Update(UserPreference preferences)
     {
-        Categories = preferences.Categories;
+        _categories.Clear();
+        _categories.AddRange(preferences.Categories);
         // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
         SetUpdateAt(DateTime.UtcNow);
     }

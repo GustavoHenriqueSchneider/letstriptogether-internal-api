@@ -9,11 +9,6 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(AppDbContext context) : base(context) { }
 
-    public async Task<bool> ExistsByIdAsync(Guid id)
-    {
-        return await _dbSet.AnyAsync(u => u.Id == id);
-    }
-
     public async Task<bool> ExistsByEmailAsync(string email)
     {
         return await _dbSet.AnyAsync(u => u.Email == email);
@@ -42,6 +37,14 @@ public class UserRepository : BaseRepository<User>, IUserRepository
             .Include(u => u.AcceptedInvitations)
             .Include(u => u.Preferences)
             .Include(u => u.UserRoles)
+            .SingleOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<User?> GetUserWithGroupMembershipsAsync(Guid id)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(u => u.GroupMemberships)
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 

@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.DTOs.Requests.User;
+namespace WebApi.DTOs.Requests.Admin.User;
 
-public class CreateUserRequest
+public class AdminCreateUserRequest
 {
     [Required(ErrorMessage = "Name is required")]
     [MaxLength(150)]
