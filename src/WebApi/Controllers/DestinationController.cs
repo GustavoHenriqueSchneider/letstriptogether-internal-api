@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Context.Interfaces;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Destination;
 using WebApi.Persistence.Interfaces;
@@ -19,6 +20,9 @@ namespace WebApi.Controllers;
 public class DestinationController(
     IGeoapifyService geoapifyService,
     IDestinationRepository destinationRepository,
+    IApplicationUserContext currentUser,
+    IGroupRepository groupRepository,
+    IUserRepository userRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpGet]
@@ -34,6 +38,8 @@ public class DestinationController(
                 Data = destinations.Select(x => new GetAllDestinationsResponseData
                 {
                     Id = x.Id,
+                    Address = x.Address,
+                    Categories = x.Categories.ToList(),
                     CreatedAt = x.CreatedAt
                 }),
                 Hits = hits
@@ -53,6 +59,8 @@ public class DestinationController(
                 Data = newDestinations.Select(x => new GetAllDestinationsResponseData
                 {
                     Id = x.Id,
+                    Address = x.Address,
+                    Categories = x.Categories.ToList(),
                     CreatedAt = x.CreatedAt
                 }),
                 Hits = newDestinations.Count
@@ -80,6 +88,50 @@ public class DestinationController(
             Categories = destination.Categories.ToList(),
             CreatedAt = destination.CreatedAt,
             UpdatedAt = destination.UpdatedAt
+        });
+    }
+
+    [HttpGet("groups/{groupId:guid}/not-voted")]
+    public async Task<IActionResult> GetNotVotedDestinationsByGroup([FromRoute] Guid groupId,
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var currentUserId = currentUser.GetId();
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+
+        if (user is null)
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        // Verifica se o usuário é membro do grupo
+        var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
+
+        if (groupMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        // Busca destinos não votados pelo usuário no grupo
+        var (destinations, hits) = await destinationRepository.GetNotVotedByUserInGroupAsync(
+            currentUserId, groupId, pageNumber, pageSize);
+
+        return Ok(new GetAllDestinationsResponse
+        {
+            Data = destinations.Select(x => new GetAllDestinationsResponseData
+            {
+                Id = x.Id,
+                Address = x.Address,
+                Categories = x.Categories.ToList(),
+                CreatedAt = x.CreatedAt
+            }),
+            Hits = hits
         });
     }
 }
