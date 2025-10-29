@@ -7,5 +7,7 @@ public class GetAllDestinationsResponse : PaginatedResponse<GetAllDestinationsRe
 public class GetAllDestinationsResponseData
 {
     public Guid Id { get; init; }
+    public string Address { get; init; } = null!;
+    public List<string> Categories { get; init; } = [];
     public DateTime CreatedAt { get; init; }
 }
