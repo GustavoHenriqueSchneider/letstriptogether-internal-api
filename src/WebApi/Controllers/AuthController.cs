@@ -6,7 +6,7 @@ using WebApi.DTOs.Requests.Auth;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Auth;
 using WebApi.Extensions;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;

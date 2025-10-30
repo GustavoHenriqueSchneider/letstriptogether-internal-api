@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using WebApi.Clients.Interfaces;
 using WebApi.Configurations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Services.Implementations;

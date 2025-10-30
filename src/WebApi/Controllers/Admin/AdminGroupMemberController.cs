@@ -92,7 +92,8 @@ public class AdminGroupMemberController(
             return BadRequest(new ErrorResponse("It is not possible to remove the owner of group."));
         }
 
-        groupMemberRepository.Remove(userToRemove);
+        group.RemoveMember(userToRemove);
+        //groupMemberRepository.Remove(userToRemove);
         await unitOfWork.SaveAsync();
 
         return NoContent();

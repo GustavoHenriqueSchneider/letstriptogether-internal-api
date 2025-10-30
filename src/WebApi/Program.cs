@@ -151,6 +151,7 @@ builder.Services.AddScoped<IGroupInvitationRepository, GroupInvitationRepository
 builder.Services.AddScoped<IGroupMatchRepository, GroupMatchRepository>();
 builder.Services.AddScoped<IGroupMemberDestinationVoteRepository, GroupMemberDestinationVoteRepository>();
 builder.Services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
+builder.Services.AddScoped<IGroupPreferenceRepository, GroupPreferenceRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserGroupInvitationRepository, UserGroupInvitationRepository>();

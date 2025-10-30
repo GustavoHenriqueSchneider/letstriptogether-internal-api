@@ -8,8 +8,8 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-[Authorize]
 [ApiController]
+[Authorize]
 [Route("api/v1/groups/{groupId:guid}/members")]
 public class GroupMemberController(
     IUnitOfWork unitOfWork,
@@ -19,7 +19,7 @@ public class GroupMemberController(
     IGroupMemberRepository groupMemberRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllGroupMembersById([FromRoute] Guid groupId, 
+    public async Task<IActionResult> GetOtherGroupMembersById([FromRoute] Guid groupId, 
         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var currentUserId = currentUser.GetId();
@@ -47,11 +47,11 @@ public class GroupMemberController(
         var (groupMembers, hits) = 
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new GetAllGroupMembersByIdResponse
+        return Ok(new GetOtherGroupMembersByIdResponse
         {
             Data = groupMembers
                 .Where(x => x.UserId != currentUserId)
-                .Select(x => new GetAllGroupMembersByIdResponseData
+                .Select(x => new GetOtherGroupMembersByIdResponseData
                 {
                     Id = x.Id,
                     CreatedAt = x.CreatedAt
@@ -144,7 +144,8 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("User can not remove itself."));
         }
 
-        groupMemberRepository.Remove(userToRemove);
+        group.RemoveMember(userToRemove);
+        //groupMemberRepository.Remove(userToRemove);
         await unitOfWork.SaveAsync();
 
         return NoContent();

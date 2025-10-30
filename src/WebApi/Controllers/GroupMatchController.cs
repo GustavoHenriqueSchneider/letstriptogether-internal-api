@@ -8,8 +8,8 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-[Authorize]
 [ApiController]
+[Authorize]
 [Route("api/v1/groups/{groupId:guid}/matches")]
 public class GroupMatchController(
     IGroupMatchRepository groupMatchRepository,

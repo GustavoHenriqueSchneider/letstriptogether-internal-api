@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 namespace WebApi.Context.Implementations;
 
 // TODO: aplicar clean arc
@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<GroupMatch> GroupMatches { get; init; }
     public DbSet<GroupMember> GroupMembers { get; init; }
     public DbSet<GroupMemberDestinationVote> GroupMemberDestinationVotes { get; init; }
+    public DbSet<GroupPreference> GroupPreferences { get; init; }
     public DbSet<Role> Roles { get; init; }
     public DbSet<User> Users { get; init; }
     public DbSet<UserGroupInvitation> UserGroupInvitations { get; init; }
@@ -32,6 +33,11 @@ public class AppDbContext : DbContext
             .HasOne(gm => gm.Destination)
             .WithMany(d => d.GroupMatches)
             .HasForeignKey(gm => gm.DestinationId);
+
+        modelBuilder.Entity<GroupInvitation>()
+            .HasOne(gi => gi.Group)
+            .WithMany(g => g.Invitations)
+            .HasForeignKey(gi => gi.GroupId);
 
         modelBuilder.Entity<GroupMember>()
             .HasOne(gm => gm.Group)
@@ -95,5 +101,59 @@ public class AppDbContext : DbContext
             .WithOne(u => u.Preferences)
             .HasForeignKey<UserPreference>(up => up.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<GroupPreference>()
+            .HasOne(gp => gp.Group)
+            .WithOne(g => g.Preferences)
+            .HasForeignKey<GroupPreference>(gp => gp.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Configuração de listas de primitivos para Destination
+        modelBuilder.Entity<Destination>()
+            .Property<List<string>>("_categories")
+            .HasColumnName(nameof(Destination.Categories))
+            .IsRequired();
+
+        // Configuração de listas de primitivos para UserPreference
+        modelBuilder.Entity<UserPreference>()
+            .Property<List<string>>("_food")
+            .HasColumnName(nameof(UserPreference.Food))
+            .IsRequired();
+
+        modelBuilder.Entity<UserPreference>()
+            .Property<List<string>>("_culture")
+            .HasColumnName(nameof(UserPreference.Culture))
+            .IsRequired();
+
+        modelBuilder.Entity<UserPreference>()
+            .Property<List<string>>("_entertainment")
+            .HasColumnName(nameof(UserPreference.Entertainment))
+            .IsRequired();
+
+        modelBuilder.Entity<UserPreference>()
+            .Property<List<string>>("_placeTypes")
+            .HasColumnName(nameof(UserPreference.PlaceTypes))
+            .IsRequired();
+
+        // Configuração de listas de primitivos para GroupPreference
+        modelBuilder.Entity<GroupPreference>()
+            .Property<List<string>>("_food")
+            .HasColumnName(nameof(GroupPreference.Food))
+            .IsRequired();
+
+        modelBuilder.Entity<GroupPreference>()
+            .Property<List<string>>("_culture")
+            .HasColumnName(nameof(GroupPreference.Culture))
+            .IsRequired();
+
+        modelBuilder.Entity<GroupPreference>()
+            .Property<List<string>>("_entertainment")
+            .HasColumnName(nameof(GroupPreference.Entertainment))
+            .IsRequired();
+
+        modelBuilder.Entity<GroupPreference>()
+            .Property<List<string>>("_placeTypes")
+            .HasColumnName(nameof(GroupPreference.PlaceTypes))
+            .IsRequired();
     }
 }

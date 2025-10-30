@@ -1,4 +1,4 @@
-﻿namespace WebApi.Models;
+﻿namespace WebApi.Models.Aggregates;
 
 public class User : TrackableEntity
 {
@@ -13,7 +13,7 @@ public class User : TrackableEntity
     private readonly List<UserGroupInvitation> _acceptedInvitations = [];
     public IReadOnlyCollection<UserGroupInvitation> AcceptedInvitations => _acceptedInvitations.AsReadOnly();
     
-    public UserPreference Preferences { get; private set; } = new([]);
+    public UserPreference? Preferences { get; private set; }
 
     private readonly List<UserRole> _userRoles = [];
     public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
@@ -31,15 +31,20 @@ public class User : TrackableEntity
     public void Update(string? name)
     {
         Name = name ?? Name;
-        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
-        SetUpdateAt(DateTime.UtcNow);
     }
 
     public void SetPreferences(UserPreference preferences)
     {
-        Preferences.Update(preferences);
-        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
-        SetUpdateAt(DateTime.UtcNow);
+        preferences.UserId = Id;
+
+        if (Preferences is null)
+        {
+            Preferences = preferences;
+        }
+        else
+        {
+            Preferences.Update(preferences);
+        }
     }
 
     public void Anonymize()
@@ -47,15 +52,11 @@ public class User : TrackableEntity
         Name = "AnonymousUser";
         Email = $"anon_{Guid.NewGuid():N}@deleted.local";
         IsAnonymous = true;
-        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
-        SetUpdateAt(DateTime.UtcNow);
     }
 
     public void SetPasswordHash(string passwordHash)
     {
         PasswordHash = passwordHash;
-        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
-        SetUpdateAt(DateTime.UtcNow);
     }
 
     public void AddRole(Role role)
@@ -66,8 +67,6 @@ public class User : TrackableEntity
         }
 
         _userRoles.Add(new UserRole(Id, role.Id));
-        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
-        SetUpdateAt(DateTime.UtcNow);
     }
 
     public void RemoveRole(Guid roleId)
@@ -80,7 +79,5 @@ public class User : TrackableEntity
         }
 
         _userRoles.Remove(userRole);
-        // TODO: setupdatedat vai ir pra override do update ou algo assim no repository/unitofwork
-        SetUpdateAt(DateTime.UtcNow);
     }
 }

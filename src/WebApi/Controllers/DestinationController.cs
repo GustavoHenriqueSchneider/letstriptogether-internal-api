@@ -13,8 +13,8 @@ namespace WebApi.Controllers;
 // TODO: colocar tag de versionamento e descricoes para swagger
 // TODO: converter returns de erro em exception
 
-[Authorize]
 [ApiController]
+[Authorize]
 [Route("api/v1/destinations")]
 public class DestinationController(
     IGeoapifyService geoapifyService,
@@ -77,7 +77,7 @@ public class DestinationController(
         return Ok(new GetDestinationByIdResponse
         {
             Address = destination.Address,
-            Categories = destination.Categories.ToList(),
+            Categories = destination.Categories,
             CreatedAt = destination.CreatedAt,
             UpdatedAt = destination.UpdatedAt
         });

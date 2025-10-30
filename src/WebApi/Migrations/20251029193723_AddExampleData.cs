@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using WebApi.Models.ValueObjects;
 using WebApi.Security;
 using WebApi.Services.Implementations;
 
@@ -59,6 +60,37 @@ namespace WebApi.Migrations
                     { Guid.NewGuid(), randomUser1, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow },
                     { Guid.NewGuid(), randomUser2, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow },
                     { Guid.NewGuid(), randomUser3, defaultRoleId, DateTime.UtcNow, DateTime.UtcNow }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserPreferences",
+                columns: new[] { "Id", "UserId", "LikesCommercial", "FoodPreferences", "CulturePreferences", 
+                    "EntertainmentPreferences", "PlaceTypes", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { Guid.NewGuid(), userId, true, 
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Bar)) }, 
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)) }, 
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)) }, 
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)) }, DateTime.UtcNow, null },
+
+                    { Guid.NewGuid(), randomUser1, false,
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.Bar)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Sport)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)) }, DateTime.UtcNow, null },
+
+                    { Guid.NewGuid(), randomUser2, true,
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Bar)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Sights)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Spa)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Park)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)) }, DateTime.UtcNow, null },
+
+                    { Guid.NewGuid(), randomUser3, false,
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.Restaurant)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Museum)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Sport)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Park)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)) }, DateTime.UtcNow, null },
                 });
 
             // setting destinations
@@ -129,6 +161,25 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { Guid.NewGuid(), testGroupId2, destination1, DateTime.UtcNow, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GroupPreferences",
+                columns: new[] { "Id", "GroupId", "LikesCommercial", "FoodPreferences", "CulturePreferences",
+                    "EntertainmentPreferences", "PlaceTypes", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { Guid.NewGuid(), testGroupId, true,
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Bar)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)) }, DateTime.UtcNow, null },
+
+                    { Guid.NewGuid(), testGroupId2, true,
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.Bar)), new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Restaurant)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Sights)), new TripCulturePreferences(nameof(TripCulturePreferences.Museum)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Sport)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Spa)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)), new TripPlaceTypes(nameof(TripPlaceTypes.Park)) }, DateTime.UtcNow, null }
                 });
         }
 

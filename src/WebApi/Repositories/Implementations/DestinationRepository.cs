@@ -1,5 +1,5 @@
 ﻿using WebApi.Context.Implementations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Repositories.Implementations;
