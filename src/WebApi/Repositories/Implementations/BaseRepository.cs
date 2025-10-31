@@ -70,8 +70,32 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
     {
         // TODO: fazer atualizar o status das entidades filhas se houver modificação
         entity.SetUpdateAt();
-        _dbSet.Attach(entity);
-        _dbSet.Entry(entity).State = EntityState.Modified;
+        
+        var entry = _dbSet.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            try
+            {
+                _dbSet.Attach(entity);
+            }
+            catch (InvalidOperationException)
+            {
+                var trackedEntity = _dbSet.Find(entity.Id);
+                if (trackedEntity is null)
+                {
+                    throw;
+                }
+                
+                var trackedEntry = _dbSet.Entry(trackedEntity);
+                
+                trackedEntry.CurrentValues.SetValues(entity);
+                trackedEntry.State = EntityState.Modified;
+                
+                return;
+            }
+        }
+        
+        entry.State = EntityState.Modified;
     }
 
     public void Remove(T entity)

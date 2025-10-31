@@ -46,7 +46,7 @@ public class GroupController(
 
         try
         {
-            var _ = new UserPreference(user.Preferences);
+            _ = new UserPreference(user.Preferences);
             var group = new Group(request.Name, request.TripExpectedDate.ToUniversalTime());
 
             var groupMember = new GroupMember

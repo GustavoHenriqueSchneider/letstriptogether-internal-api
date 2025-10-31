@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.User;
@@ -45,7 +45,7 @@ public class UserController(
 
         try
         {
-            var _ = new UserPreference(user.Preferences);
+            _ = new UserPreference(user.Preferences);
 
             return Ok(new GetCurrentUserResponse
             {
@@ -158,8 +158,10 @@ public class UserController(
 
             userRepository.Update(user);
             await userPreferenceRepository.AddOrUpdateAsync(user.Preferences!);
+            await unitOfWork.SaveAsync();
 
-            var groupMemberships = await groupMemberRepository.GetAllByUserIdAsync(user.Id);
+            var groupMemberships = 
+                (await groupMemberRepository.GetAllByUserIdAsync(user.Id)).ToList();
 
             foreach (var membership in groupMemberships)
             {
@@ -171,14 +173,27 @@ public class UserController(
                     return BadRequest(
                         new ErrorResponse("Some of the groups that user is member were not found."));
                 }
-
+                
                 group.UpdatePreferences();
+                var groupToUpdate = await groupRepository.GetGroupWithPreferencesAsync(membership.GroupId);
 
-                groupRepository.Update(group);
-                groupPreferenceRepository.Update(group.Preferences);
+                if (groupToUpdate is null)
+                {
+                    return BadRequest(
+                        new ErrorResponse("Some of the groups that user is member were not found in the database."));
+                }
+                
+                groupToUpdate.Preferences.Update(group.Preferences);
+
+                groupRepository.Update(groupToUpdate);
+                groupPreferenceRepository.Update(groupToUpdate.Preferences);
             }
 
-            await unitOfWork.SaveAsync();
+            if (groupMemberships.Count != 0)
+            {
+                await unitOfWork.SaveAsync();
+            }
+            
             return NoContent();
         }
         catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))

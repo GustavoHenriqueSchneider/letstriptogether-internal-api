@@ -128,7 +128,7 @@ public class TokenService : ITokenService
                 IssuerSigningKey = new SymmetricSecurityKey(_key)
             };
 
-            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out var _);
+            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out _);
             var tokenType = claims.FindFirstValue(Claims.TokenType);
 
             if (tokenType is null || tokenType != TokenTypes.Refresh)

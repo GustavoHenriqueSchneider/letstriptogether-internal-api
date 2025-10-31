@@ -43,6 +43,18 @@ public class Group : TrackableEntity
         }
 
         _members.Add(member);
+
+        if (!AllMembersHavePreferences())
+        {
+            return;
+        }
+        
+        UpdatePreferences();
+    }
+
+    private bool AllMembersHavePreferences()
+    {
+        return _members.All(m => m.User?.Preferences is not null);
     }
 
     public void RemoveMember(GroupMember member)
@@ -65,12 +77,10 @@ public class Group : TrackableEntity
         var entertainmentPreferences = new List<string>();
         var placeTypes = new List<string>();
 
-        var anyMemberLikesCommercial = _members.Any(x => x.User.Preferences!.LikesCommercial == true);
+        var anyMemberLikesCommercial = _members.Any(x => x.User.Preferences!.LikesCommercial);
 
-        foreach (var member in _members)
+        foreach (var userPreference in _members.Select(member => member.User.Preferences))
         {
-            var userPreference = member.User.Preferences;
-
             foodPreferences.AddRange(userPreference!.Food);
             culturePreferences.AddRange(userPreference.Culture);
             entertainmentPreferences.AddRange(userPreference.Entertainment);
