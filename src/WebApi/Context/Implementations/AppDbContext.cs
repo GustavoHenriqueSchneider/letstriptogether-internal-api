@@ -18,6 +18,17 @@ public class AppDbContext : DbContext
     public DbSet<UserPreference> UserPreferences { get; init; }
     public DbSet<UserRole> UserRoles { get; init; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            return;
+        }
+        
+        // Garante que dados sensíveis nunca sejam logados
+        optionsBuilder.EnableSensitiveDataLogging(false);
+    }
+
     // TODO: configurações precisam ir para configurations de cada model
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
