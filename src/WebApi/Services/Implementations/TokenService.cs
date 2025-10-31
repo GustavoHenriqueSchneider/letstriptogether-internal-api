@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,14 +16,16 @@ public class TokenService : ITokenService
     private readonly JsonWebTokenSettings _jwtSettings;
     private readonly JwtSecurityTokenHandler _tokenHandler;
     private readonly byte[] _key;
+    private readonly ILogger<TokenService> _logger;
 
-    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings, JwtSecurityTokenHandler tokenHandler)
+    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings, JwtSecurityTokenHandler tokenHandler, ILogger<TokenService> logger)
     {
         _jwtSettings = jwtSettings.Value;
         _tokenHandler = tokenHandler;
 
         var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
         _key = Encoding.UTF8.GetBytes(key);
+        _logger = logger;
     }
 
     public string GenerateRegisterTokenForStep(string step, List<Claim> claims)
@@ -35,6 +38,7 @@ public class TokenService : ITokenService
         var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenValidityInMinutes);
 
         var token = CreateJwtToken(claims, expiresIn);
+        _logger.LogInformation("Step token generated. Step={Step} expiresAt={Expires}", step, expiresIn);
         return token;
     }
 
@@ -49,6 +53,7 @@ public class TokenService : ITokenService
         var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.ResetPasswordTokenValidityInMinutes);
 
         var token = CreateJwtToken(claims, expiresIn);
+        _logger.LogInformation("Password reset token generated. UserId={UserId} expiresAt={Expires}", userId, expiresIn);
         return token;
     }
 
@@ -57,6 +62,7 @@ public class TokenService : ITokenService
         var accessToken = GenerateAccessToken(user);
         var refreshToken = GenerateRefreshToken(user.Id, refreshTokenExpiresIn);
 
+        _logger.LogInformation("Tokens generated for user {UserId}", user.Id);
         return (accessToken, refreshToken);
     }
 
@@ -96,6 +102,7 @@ public class TokenService : ITokenService
         var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenValidityInMinutes);
 
         var accessToken = CreateJwtToken(claims, expiresIn);
+        _logger.LogInformation("Access token generated for {UserId} expiresAt={Expires}", user.Id, expiresIn);
         return accessToken;
     }
 
@@ -110,6 +117,7 @@ public class TokenService : ITokenService
         expiresIn ??= DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
 
         var refreshToken = CreateJwtToken(claims, expiresIn.Value);
+        _logger.LogInformation("Refresh token generated for {UserId} expiresAt={Expires}", userId, expiresIn.Value);
         return refreshToken;
     }
 
@@ -133,13 +141,16 @@ public class TokenService : ITokenService
 
             if (tokenType is null || tokenType != TokenTypes.Refresh)
             {
+                _logger.LogWarning("Invalid refresh token: wrong type");
                 return (false, null);
             }
 
+            _logger.LogInformation("Refresh token is valid");
             return (true, claims);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Failed to validate refresh token");
             return (false, null);
         }
     }
@@ -154,8 +165,9 @@ public class TokenService : ITokenService
 
             return (isExpired, expiresIn);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Failed to check token expiration");
             return (true, null);
         }
     }

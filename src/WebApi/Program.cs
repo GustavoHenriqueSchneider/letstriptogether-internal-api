@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -23,6 +24,13 @@ using WebApi.Services.Interfaces;
 // TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
 // e metodos por separacao: registerRepositories, registerServices...
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging
+    .AddConsole()
+    .AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.None)
+    .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning)
+    .AddFilter("WebApi", LogLevel.Information);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -142,7 +150,8 @@ builder.Services.AddHttpClient<IGeoapifyClient, GeoapifyClient>((_, client) =>
 builder.Services.AddScoped<IGeoapifyService, GeoapifyService>(sp =>
 {
     var httpClient = sp.GetRequiredService<IGeoapifyClient>();
-    return new GeoapifyService(httpClient, geoapifyApiSettings!);
+    var logger = sp.GetRequiredService<ILogger<GeoapifyService>>();
+    return new GeoapifyService(httpClient, geoapifyApiSettings!, logger);
 });
 
 // repositories
