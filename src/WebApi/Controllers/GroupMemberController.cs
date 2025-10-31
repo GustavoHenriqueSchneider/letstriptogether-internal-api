@@ -16,7 +16,8 @@ public class GroupMemberController(
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
     IGroupRepository groupRepository,
-    IGroupMemberRepository groupMemberRepository) : ControllerBase
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetOtherGroupMembersById([FromRoute] Guid groupId, 
@@ -107,21 +108,18 @@ public class GroupMemberController(
         [FromRoute] Guid memberId)
     {
         var currentUserId = currentUser.GetId();
-
         if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
         var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
-
         if (currentUserMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
@@ -133,7 +131,6 @@ public class GroupMemberController(
         }
 
         var userToRemove = group.Members.SingleOrDefault(m => m.Id == memberId);
-
         if (userToRemove is null)
         {
             return NotFound(new ErrorResponse("The user is not a member of this group."));
@@ -145,9 +142,12 @@ public class GroupMemberController(
         }
 
         group.RemoveMember(userToRemove);
-        //groupMemberRepository.Remove(userToRemove);
+        
+        groupRepository.Update(group);
+        groupMemberRepository.Remove(userToRemove);
+        groupPreferenceRepository.Update(group.Preferences);
+        
         await unitOfWork.SaveAsync();
-
         return NoContent();
     }
 }

@@ -109,6 +109,7 @@ namespace WebApi.Migrations
             // setting group data
             var testGroupId = Guid.NewGuid();
             var testGroupId2 = Guid.NewGuid();
+            var testGroupId3 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "Groups",
@@ -116,27 +117,32 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { testGroupId, "Test Group", DateTime.UtcNow.AddYears(3), DateTime.UtcNow, null },
-                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null }
+                    { testGroupId2, "Test Group 2", DateTime.UtcNow.AddYears(1), DateTime.UtcNow, null },
+                    { testGroupId3, "Test Group 3", DateTime.UtcNow.AddYears(2), DateTime.UtcNow, null }
                 });
 
             var userMemberId = Guid.NewGuid();
-            var adminMemberId = Guid.NewGuid();
             var exampleMemberId1 = Guid.NewGuid();
             var exampleMemberId2 = Guid.NewGuid();
             var exampleMemberId3 = Guid.NewGuid();
             var exampleMemberId4 = Guid.NewGuid();
+            var exampleMemberId5 = Guid.NewGuid();
+            var exampleMemberId6 = Guid.NewGuid();
+            var exampleMemberId7 = Guid.NewGuid();
 
             migrationBuilder.InsertData(
                 table: "GroupMembers",
                 columns: new[] { "Id", "GroupId", "UserId", "IsOwner", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { adminMemberId, testGroupId, adminId, true, DateTime.UtcNow, null },
-                    { userMemberId, testGroupId, userId, false, DateTime.UtcNow, null },
+                    { userMemberId, testGroupId, userId, true, DateTime.UtcNow, null },
                     { exampleMemberId1, testGroupId2, randomUser1, false, DateTime.UtcNow, null },
                     { exampleMemberId2, testGroupId2, randomUser2, true, DateTime.UtcNow, null },
                     { exampleMemberId3, testGroupId, randomUser3, false, DateTime.UtcNow, null },
-                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null }
+                    { exampleMemberId4, testGroupId2, randomUser3, false, DateTime.UtcNow, null },
+                    { exampleMemberId5, testGroupId3, userId, true, DateTime.UtcNow, null },
+                    { exampleMemberId6, testGroupId3, randomUser1, false, DateTime.UtcNow, null },
+                    { exampleMemberId7, testGroupId3, randomUser2, false, DateTime.UtcNow, null }
                 });
 
             migrationBuilder.InsertData(
@@ -144,8 +150,6 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "GroupMemberId", "DestinationId", "IsApproved", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { Guid.NewGuid(), adminMemberId, destination1, true, DateTime.UtcNow, null },
-                    { Guid.NewGuid(), adminMemberId, destination2, true, DateTime.UtcNow, null },
                     { Guid.NewGuid(), userMemberId, destination1, false, DateTime.UtcNow, null },
                     { Guid.NewGuid(), userMemberId, destination2, true, DateTime.UtcNow, null },
                     { Guid.NewGuid(), exampleMemberId1, destination1, true, DateTime.UtcNow, null },
@@ -170,15 +174,21 @@ namespace WebApi.Migrations
                 values: new object[,]
                 {
                     { Guid.NewGuid(), testGroupId, true,
-                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Bar)) },
-                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)) },
-                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)) },
-                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)) }, DateTime.UtcNow, null },
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Bar)), new TripFoodPreferences(nameof(TripFoodPreferences.Restaurant)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)), new TripCulturePreferences(nameof(TripCulturePreferences.Museum)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Sport)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)), new TripPlaceTypes(nameof(TripPlaceTypes.Park)) }, DateTime.UtcNow, null },
 
                     { Guid.NewGuid(), testGroupId2, true,
                         new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.Bar)), new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Restaurant)) },
                         new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Sights)), new TripCulturePreferences(nameof(TripCulturePreferences.Museum)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)) },
                         new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Sport)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Spa)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)) },
+                        new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)), new TripPlaceTypes(nameof(TripPlaceTypes.Park)) }, DateTime.UtcNow, null },
+                    
+                    { Guid.NewGuid(), testGroupId3, true,
+                        new List<string>{ new TripFoodPreferences(nameof(TripFoodPreferences.FastFood)), new TripFoodPreferences(nameof(TripFoodPreferences.Bar)) },
+                        new List<string>{ new TripCulturePreferences(nameof(TripCulturePreferences.Culture)), new TripCulturePreferences(nameof(TripCulturePreferences.Attraction)), new TripCulturePreferences(nameof(TripCulturePreferences.Sights)) },
+                        new List<string>{ new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Cinema)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Sport)), new TripEntertainmentPreferences(nameof(TripEntertainmentPreferences.Spa)) },
                         new List<string>{ new TripPlaceTypes(nameof(TripPlaceTypes.Beach)), new TripPlaceTypes(nameof(TripPlaceTypes.Mountain)), new TripPlaceTypes(nameof(TripPlaceTypes.Park)) }, DateTime.UtcNow, null }
                 });
         }
