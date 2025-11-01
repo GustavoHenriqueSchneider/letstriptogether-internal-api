@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Group;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.Admin.Group;
-using WebApi.DTOs.Responses.Admin.User;
 using WebApi.DTOs.Responses.Group;
 using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
-using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;

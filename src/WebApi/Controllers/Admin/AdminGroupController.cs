@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.Group;
-using WebApi.DTOs.Responses.Admin.User;
-using WebApi.DTOs.Responses.User;
 using WebApi.Models.Aggregates;
-using WebApi.Models.ValueObjects;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 

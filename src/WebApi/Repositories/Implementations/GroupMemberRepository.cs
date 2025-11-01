@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 using WebApi.Context.Implementations;
 using WebApi.Models.Aggregates;
 using WebApi.Repositories.Interfaces;

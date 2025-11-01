@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Requests.Admin.User;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.Admin.Group;
 using WebApi.DTOs.Responses.Admin.User;
-using WebApi.DTOs.Responses.User;
 using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Models.Aggregates;
 namespace WebApi.Context.Implementations;
 
@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     public DbSet<Destination> Destinations { get; init; }
+    public DbSet<DestinationAttraction> DestinationAttractions { get; init; }
     public DbSet<Group> Groups { get; init; }
     public DbSet<GroupInvitation> GroupInvitations { get; init; }
     public DbSet<GroupMatch> GroupMatches { get; init; }
@@ -107,14 +108,13 @@ public class AppDbContext : DbContext
             .WithOne(g => g.Preferences)
             .HasForeignKey<GroupPreference>(gp => gp.GroupId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        // Configuração de listas de primitivos para Destination
+        
         modelBuilder.Entity<Destination>()
-            .Property<List<string>>("_categories")
-            .HasColumnName(nameof(Destination.Categories))
-            .IsRequired();
+            .HasMany(x => x.Attractions)
+            .WithOne(x => x.Destination)
+            .HasForeignKey(x => x.DestinationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        // Configuração de listas de primitivos para UserPreference
         modelBuilder.Entity<UserPreference>()
             .Property<List<string>>("_food")
             .HasColumnName(nameof(UserPreference.Food))
@@ -135,7 +135,6 @@ public class AppDbContext : DbContext
             .HasColumnName(nameof(UserPreference.PlaceTypes))
             .IsRequired();
 
-        // Configuração de listas de primitivos para GroupPreference
         modelBuilder.Entity<GroupPreference>()
             .Property<List<string>>("_food")
             .HasColumnName(nameof(GroupPreference.Food))

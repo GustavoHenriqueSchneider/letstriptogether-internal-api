@@ -1,5 +1,4 @@
 ﻿using WebApi.Models.ValueObjects;
-using WebApi.Security;
 
 namespace WebApi.Models.Aggregates;
 

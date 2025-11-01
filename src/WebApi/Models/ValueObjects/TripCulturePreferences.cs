@@ -1,29 +1,37 @@
-﻿namespace WebApi.Models.ValueObjects;
+namespace WebApi.Models.ValueObjects;
 
 public class TripCulturePreferences
 {
-    public const string Library = "education.library";
-    public const string Culture = "entertainment.culture";
-    public const string Museum = "entertainment.museum";
-    public const string Attraction = "tourism.attraction";
-    public const string Sights = "tourism.sights";
+    public const string Prefix = "culture.";
+    
+    public const string Architecture = $"{Prefix}.architecture";
+    public const string Center = $"{Prefix}.center";
+    public const string Education = $"{Prefix}.education";
+    public const string Heritage = $"{Prefix}.heritage";
+    public const string Historical = $"{Prefix}.historical";
+    public const string Monument = $"{Prefix}.monument";
+    public const string Museum = $"{Prefix}.museum";
+    public const string Religious = $"{Prefix}.religious";
 
     private readonly string _culturePreference;
 
-    private static readonly IReadOnlyList<string> ValidTripCulturePreferences = new List<string>()
+    private static readonly IReadOnlyList<string> ValidPreferences = new List<string>
     {
-        nameof(Library),
-        nameof(Culture),
+        nameof(Architecture),
+        nameof(Center),
+        nameof(Education),
+        nameof(Heritage),
+        nameof(Historical),
+        nameof(Monument),
         nameof(Museum),
-        nameof(Attraction),
-        nameof(Sights)
+        nameof(Religious)
     };
 
     public TripCulturePreferences(string culturePreference)
     {
-        var key = culturePreference.ToLower();
+        var key = culturePreference;
 
-        if (!ValidTripCulturePreferences.Any(x => x.ToLower() == key))
+        if (!ValidPreferences.Any(v => v.Equals(key, StringComparison.OrdinalIgnoreCase)))
         {
             throw new InvalidOperationException($"Invalid culture preference: {key}");
         }

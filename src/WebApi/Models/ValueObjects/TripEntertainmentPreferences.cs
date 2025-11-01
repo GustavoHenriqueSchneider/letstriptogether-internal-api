@@ -1,31 +1,31 @@
-﻿using System.Text.RegularExpressions;
-
 namespace WebApi.Models.ValueObjects;
 
 public class TripEntertainmentPreferences
 {
-    public const string Cinema = "entertainment.cinema";
-    public const string ActivityPark = "entertainment.activity_park";
-    public const string Zoo = "entertainment.zoo";
-    public const string Spa = "leisure.spa";
-    public const string Sport = "sport";
+    public const string Prefix = "entertainment.";
+    
+    public const string Adventure = $"{Prefix}.adventure";
+    public const string Attraction = $"{Prefix}.attraction";
+    public const string Park = $"{Prefix}.park";
+    public const string Sports = $"{Prefix}.sports";
+    public const string Tour = $"{Prefix}.tour";
 
     private readonly string _entertainmentPreference;
 
-    private static readonly IReadOnlyList<string> ValidTripEntertainmentPreferences = new List<string>()
+    private static readonly IReadOnlyList<string> ValidPreferences = new List<string>
     {
-        nameof(Cinema),
-        nameof(ActivityPark),
-        nameof(Zoo),
-        nameof(Spa),
-        nameof(Sport)
+        nameof(Adventure),
+        nameof(Attraction),
+        nameof(Park),
+        nameof(Sports),
+        nameof(Tour)
     };
 
     public TripEntertainmentPreferences(string entertainmentPreference)
     {
-        var key = entertainmentPreference.ToLower();
+        var key = entertainmentPreference;
 
-        if (!ValidTripEntertainmentPreferences.Any(x => x.ToLower() == key))
+        if (!ValidPreferences.Any(v => v.Equals(key, StringComparison.OrdinalIgnoreCase)))
         {
             throw new InvalidOperationException($"Invalid entertainment preference: {key}");
         }

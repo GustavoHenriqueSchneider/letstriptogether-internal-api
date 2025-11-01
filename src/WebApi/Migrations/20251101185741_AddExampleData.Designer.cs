@@ -13,7 +13,7 @@ using WebApi.Context.Implementations;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251029193723_AddExampleData")]
+    [Migration("20251101185741_AddExampleData")]
     partial class AddExampleData
     {
         /// <inheritdoc />
@@ -39,17 +39,50 @@ namespace WebApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.PrimitiveCollection<List<string>>("_categories")
-                        .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Categories");
 
                     b.HasKey("Id");
 
                     b.ToTable("Destinations");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Aggregates.DestinationAttraction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("DestinationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinationId");
+
+                    b.ToTable("DestinationAttractions");
                 });
 
             modelBuilder.Entity("WebApi.Models.Aggregates.Group", b =>
@@ -206,20 +239,20 @@ namespace WebApi.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<string>>("_culturePreferences")
+                    b.PrimitiveCollection<List<string>>("_culture")
                         .IsRequired()
                         .HasColumnType("text[]")
-                        .HasColumnName("CulturePreferences");
+                        .HasColumnName("Culture");
 
-                    b.PrimitiveCollection<List<string>>("_entertainmentPreferences")
+                    b.PrimitiveCollection<List<string>>("_entertainment")
                         .IsRequired()
                         .HasColumnType("text[]")
-                        .HasColumnName("EntertainmentPreferences");
+                        .HasColumnName("Entertainment");
 
-                    b.PrimitiveCollection<List<string>>("_foodPreferences")
+                    b.PrimitiveCollection<List<string>>("_food")
                         .IsRequired()
                         .HasColumnType("text[]")
-                        .HasColumnName("FoodPreferences");
+                        .HasColumnName("Food");
 
                     b.PrimitiveCollection<List<string>>("_placeTypes")
                         .IsRequired()
@@ -335,20 +368,20 @@ namespace WebApi.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.PrimitiveCollection<List<string>>("_culturePreferences")
+                    b.PrimitiveCollection<List<string>>("_culture")
                         .IsRequired()
                         .HasColumnType("text[]")
-                        .HasColumnName("CulturePreferences");
+                        .HasColumnName("Culture");
 
-                    b.PrimitiveCollection<List<string>>("_entertainmentPreferences")
+                    b.PrimitiveCollection<List<string>>("_entertainment")
                         .IsRequired()
                         .HasColumnType("text[]")
-                        .HasColumnName("EntertainmentPreferences");
+                        .HasColumnName("Entertainment");
 
-                    b.PrimitiveCollection<List<string>>("_foodPreferences")
+                    b.PrimitiveCollection<List<string>>("_food")
                         .IsRequired()
                         .HasColumnType("text[]")
-                        .HasColumnName("FoodPreferences");
+                        .HasColumnName("Food");
 
                     b.PrimitiveCollection<List<string>>("_placeTypes")
                         .IsRequired()
@@ -385,6 +418,17 @@ namespace WebApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Aggregates.DestinationAttraction", b =>
+                {
+                    b.HasOne("WebApi.Models.Aggregates.Destination", "Destination")
+                        .WithMany("Attractions")
+                        .HasForeignKey("DestinationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Destination");
                 });
 
             modelBuilder.Entity("WebApi.Models.Aggregates.GroupInvitation", b =>
@@ -517,6 +561,8 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Aggregates.Destination", b =>
                 {
+                    b.Navigation("Attractions");
+
                     b.Navigation("GroupMatches");
 
                     b.Navigation("GroupMemberVotes");
@@ -555,8 +601,7 @@ namespace WebApi.Migrations
 
                     b.Navigation("GroupMemberships");
 
-                    b.Navigation("Preferences")
-                        .IsRequired();
+                    b.Navigation("Preferences");
 
                     b.Navigation("UserRoles");
                 });

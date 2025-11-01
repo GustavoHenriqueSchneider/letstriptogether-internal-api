@@ -128,23 +128,6 @@ builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
 // handlers
 builder.Services.AddTransient<JwtSecurityTokenHandler>();
 
-// geoapify api
-var geoapifyApiSettings = builder.Configuration
-    .GetRequiredSection(nameof(GeoapifyApiSettings))
-    .Get<GeoapifyApiSettings>();
-
-builder.Services.AddHttpClient<IGeoapifyClient, GeoapifyClient>((_, client) =>
-{
-    client.BaseAddress = new Uri(geoapifyApiSettings!.BaseUrl);
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
-
-builder.Services.AddScoped<IGeoapifyService, GeoapifyService>(sp =>
-{
-    var httpClient = sp.GetRequiredService<IGeoapifyClient>();
-    return new GeoapifyService(httpClient, geoapifyApiSettings!);
-});
-
 // repositories
 builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
 builder.Services.AddScoped<IGroupInvitationRepository, GroupInvitationRepository>();

@@ -1,29 +1,23 @@
-﻿using System.Text.RegularExpressions;
-
 namespace WebApi.Models.ValueObjects;
 
 public class TripFoodPreferences
 {
-    public const string Bar = "catering.bar";
-    public const string Cafe = "catering.cafe";
-    public const string FastFood = "catering.fast_food";
-    public const string Restaurant = "catering.restaurant";
+    public const string Prefix = "food.";
+    
+    public const string Restaurant = $"{Prefix}.restaurant";
 
     private readonly string _foodPreference;
 
-    private static readonly IReadOnlyList<string> ValidTripFoodPreferences = new List<string>()
+    private static readonly IReadOnlyList<string> ValidPreferences = new List<string>
     {
-        nameof(Bar),
-        nameof(Cafe),
-        nameof(FastFood),
         nameof(Restaurant)
     };
 
     public TripFoodPreferences(string foodPreference)
     {
-        var key = foodPreference.ToLower();
+        var key = foodPreference;
 
-        if (!ValidTripFoodPreferences.Any(x => x.ToLower() == key))
+        if (!ValidPreferences.Any(v => v.Equals(key, StringComparison.OrdinalIgnoreCase)))
         {
             throw new InvalidOperationException($"Invalid food preference: {key}");
         }

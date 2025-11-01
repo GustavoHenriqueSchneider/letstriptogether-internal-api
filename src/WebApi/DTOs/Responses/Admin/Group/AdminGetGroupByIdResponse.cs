@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace WebApi.DTOs.Responses.Admin.Group;
 
 public class AdminGetGroupByIdResponse
