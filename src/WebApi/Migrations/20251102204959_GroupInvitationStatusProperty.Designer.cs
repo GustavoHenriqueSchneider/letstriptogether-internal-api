@@ -13,8 +13,8 @@ using WebApi.Context.Implementations;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251101185741_AddExampleData")]
-    partial class AddExampleData
+    [Migration("20251102204959_GroupInvitationStatusProperty")]
+    partial class GroupInvitationStatusProperty
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,9 @@ namespace WebApi.Migrations
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

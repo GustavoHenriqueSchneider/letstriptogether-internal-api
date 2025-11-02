@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using WebApi.Clients.Implementations;
 using WebApi.Configurations;
 using WebApi.Models.Aggregates;
+using WebApi.Models.Enums;
 using WebApi.Models.ValueObjects;
 using WebApi.Models.ValueObjects.TripPreferences;
 using WebApi.Security;
@@ -303,6 +304,21 @@ namespace WebApi.Migrations
                         new List<string>{ new TripPreference.Entertainment(TripPreference.Entertainment.Attraction), new TripPreference.Entertainment(TripPreference.Entertainment.Sports), new TripPreference.Entertainment(TripPreference.Entertainment.Park) },
                         new List<string>{ new TripPreference.PlaceType(TripPreference.PlaceType.Beach), new TripPreference.PlaceType(TripPreference.PlaceType.Mountain), new TripPreference.PlaceType(TripPreference.PlaceType.Park) }, 
                         DateTime.UtcNow, null }
+                });
+            
+            // setting group invitations data
+            var invitation1 = Guid.NewGuid();
+            var invitation2 = Guid.NewGuid();
+            var invitation3 = Guid.NewGuid();
+
+            migrationBuilder.InsertData(
+                table: "GroupInvitations",
+                columns: new[] { "Id", "GroupId", "ExpirationDate", "Status", "CreatedAt", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { invitation1, testGroupId, DateTime.UtcNow - TimeSpan.FromDays(7), (int)GroupInvitationStatus.Expired, DateTime.UtcNow - TimeSpan.FromDays(14), DateTime.UtcNow - TimeSpan.FromDays(7) },
+                    { invitation2, testGroupId2, DateTime.UtcNow.AddDays(7), (int)GroupInvitationStatus.Cancelled, DateTime.UtcNow, DateTime.UtcNow.AddSeconds(10) },
+                    { invitation3, testGroupId2, DateTime.UtcNow.AddDays(7), (int)GroupInvitationStatus.Active, DateTime.UtcNow, null }
                 });
         }
 

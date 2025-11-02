@@ -2,7 +2,7 @@ namespace WebApi.DTOs.Responses.Destination;
 
 public class GetDestinationByIdResponse
 {
-    public string Address { get; init; } = null!;
+    public string Place { get; init; } = null!;
     public string Description { get; init; } = null!;
     public IEnumerable<DestinationAttractionModel> Attractions { get; init; } = [];
     public DateTime CreatedAt { get; init; }
