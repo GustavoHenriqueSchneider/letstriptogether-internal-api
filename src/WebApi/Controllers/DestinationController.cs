@@ -28,7 +28,7 @@ public class DestinationController(
 
         return Ok(new GetDestinationByIdResponse
         {
-            Address = destination.Address,
+            Place = destination.Address,
             Description = destination.Description,
             Attractions = destination.Attractions.Select(a => new DestinationAttractionModel
             {

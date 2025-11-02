@@ -68,7 +68,7 @@ public class AdminGroupInvitationsController(
 
         return Ok(new AdminGetGroupInvitationByIdResponse
         {
-            GroupId = invitation.GroupId,
+            Status = invitation.Status.ToString(),
             ExpirationDate = invitation.ExpirationDate,
             CreatedAt = invitation.CreatedAt,
             UpdatedAt = invitation.UpdatedAt

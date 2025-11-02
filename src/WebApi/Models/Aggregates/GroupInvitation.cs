@@ -1,4 +1,6 @@
-﻿namespace WebApi.Models.Aggregates;
+﻿using WebApi.Models.Enums;
+
+namespace WebApi.Models.Aggregates;
 
 public class GroupInvitation : TrackableEntity
 {
@@ -9,8 +11,10 @@ public class GroupInvitation : TrackableEntity
     public DateTime ExpirationDate
     {
         get => _expirationDate.ToUniversalTime();
-        init => _expirationDate = value;
+        private set => _expirationDate = value;
     }
+
+    public GroupInvitationStatus Status { get; private set; } = GroupInvitationStatus.Active;
 
     private readonly List<UserGroupInvitation> _answeredBy = [];
     public IReadOnlyCollection<UserGroupInvitation> AnsweredBy => _answeredBy.AsReadOnly();

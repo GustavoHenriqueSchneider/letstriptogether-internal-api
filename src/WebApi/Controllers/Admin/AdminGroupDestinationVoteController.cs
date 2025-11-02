@@ -54,7 +54,6 @@ public class AdminGroupDestinationVoteController(
 
         return Ok(new AdminGetGroupDestinationVoteByIdResponse
         {
-            GroupId = vote.GroupMember.GroupId,
             MemberId = vote.GroupMemberId,
             DestinationId = vote.DestinationId,
             IsApproved = vote.IsApproved,
