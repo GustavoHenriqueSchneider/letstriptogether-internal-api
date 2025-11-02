@@ -1,11 +1,10 @@
-using WebApi.Models.ValueObjects;
+using System.Collections.ObjectModel;
+using WebApi.Models.ValueObjects.TripPreferences;
 
 namespace WebApi.Models.Aggregates;
 
 public class Destination : TrackableEntity
 {
-    private const string ShoppingCategory = "shopping";
-    
     public string Address { get; init; } = null!;
     public string Description { get; init; } = null!;
 
@@ -20,25 +19,29 @@ public class Destination : TrackableEntity
     
     private Destination() { }
 
-    public bool HasCommercialCategory() => 
-        _attractions.Any(a => a.Category.Equals(ShoppingCategory, StringComparison.OrdinalIgnoreCase));
+    public bool HasCommercialCategory() => _attractions.Any(a => 
+        a.Category.Equals(TripPreference.Shopping, StringComparison.OrdinalIgnoreCase));
     
     public IReadOnlyCollection<string> GetFoodCategories() => 
-        GetReadonlyCategoryList(_attractions, TripFoodPreferences.Prefix);
+        GetReadonlyCategoryList(_attractions, TripPreference.FoodPrefix);
     
     public IReadOnlyCollection<string> GetCultureCategories() => 
-        GetReadonlyCategoryList(_attractions, TripCulturePreferences.Prefix);
+        GetReadonlyCategoryList(_attractions, TripPreference.CulturePrefix);
     
     public IReadOnlyCollection<string> GetEntertainmentCategories() => 
-        GetReadonlyCategoryList(_attractions, TripEntertainmentPreferences.Prefix);
+        GetReadonlyCategoryList(_attractions, TripPreference.EntertainmentPrefix);
     
     public IReadOnlyCollection<string> GetPlaceTypes() => 
-        GetReadonlyCategoryList(_attractions, TripPlaceTypes.Prefix);
+        GetReadonlyCategoryList(_attractions, TripPreference.PlaceTypePrefix);
 
-    private static IReadOnlyCollection<string> GetReadonlyCategoryList(List<DestinationAttraction> list, string prefix)
+    private static ReadOnlyCollection<string> GetReadonlyCategoryList(List<DestinationAttraction> list, string prefix)
     {
         return list
-            .Where(a => a.Category.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            .Where(a =>
+            {
+                var categoryPrefix = a.Category.Split('.').First();
+                return categoryPrefix.Equals(prefix, StringComparison.OrdinalIgnoreCase);
+            })
             .Select(a => a.Category)
             .Distinct()
             .OrderBy(c => c)

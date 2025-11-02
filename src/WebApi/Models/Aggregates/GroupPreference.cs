@@ -1,4 +1,4 @@
-﻿using WebApi.Models.ValueObjects;
+﻿using WebApi.Models.ValueObjects.TripPreferences;
 
 namespace WebApi.Models.Aggregates;
 
@@ -30,20 +30,20 @@ public class GroupPreference : TrackableEntity
         }
 
         LikesCommercial = groupPreference.LikesCommercial;
-        groupPreference.Food.ToList().ForEach(x => _food.Add(new TripFoodPreferences(x)));
-        groupPreference.Culture.ToList().ForEach(x => _culture.Add(new TripCulturePreferences(x)));
-        groupPreference.Entertainment.ToList().ForEach(x => _entertainment.Add(new TripEntertainmentPreferences(x)));
-        groupPreference.PlaceTypes.ToList().ForEach(x => _placeTypes.Add(new TripPlaceTypes(x)));
+        groupPreference.Food.ToList().ForEach(x => _food.Add(new TripPreference.Food(x)));
+        groupPreference.Culture.ToList().ForEach(x => _culture.Add(new TripPreference.Culture(x)));
+        groupPreference.Entertainment.ToList().ForEach(x => _entertainment.Add(new TripPreference.Entertainment(x)));
+        groupPreference.PlaceTypes.ToList().ForEach(x => _placeTypes.Add(new TripPreference.PlaceType(x)));
     }
 
     public GroupPreference(bool likesCommercial, IEnumerable<string> food,
         IEnumerable<string> culture, IEnumerable<string> entertainment, IEnumerable<string> placeTypes)
     {
         LikesCommercial = likesCommercial;
-        food.ToList().ForEach(x => _food.Add(new TripFoodPreferences(x)));
-        culture.ToList().ForEach(x => _culture.Add(new TripCulturePreferences(x)));
-        entertainment.ToList().ForEach(x => _entertainment.Add(new TripEntertainmentPreferences(x)));
-        placeTypes.ToList().ForEach(x => _placeTypes.Add(new TripPlaceTypes(x)));
+        food.ToList().ForEach(x => _food.Add(new TripPreference.Food(x)));
+        culture.ToList().ForEach(x => _culture.Add(new TripPreference.Culture(x)));
+        entertainment.ToList().ForEach(x => _entertainment.Add(new TripPreference.Entertainment(x)));
+        placeTypes.ToList().ForEach(x => _placeTypes.Add(new TripPreference.PlaceType(x)));
     }
 
     public void Update(GroupPreference groupPreference)

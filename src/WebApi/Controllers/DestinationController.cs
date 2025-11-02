@@ -16,23 +16,6 @@ namespace WebApi.Controllers;
 public class DestinationController(
     IDestinationRepository destinationRepository) : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAllDestinations([FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
-    {
-        var (destinations, hits) = await destinationRepository.GetAllAsync(pageNumber, pageSize); 
-
-        return Ok(new GetAllDestinationsResponse
-        {
-            Data = destinations.Select(x => new GetAllDestinationsResponseData
-            {
-                Id = x.Id,
-                CreatedAt = x.CreatedAt
-            }),
-            Hits = hits
-        });
-    }
-
     [HttpGet("{destinationId:guid}")]
     public async Task<IActionResult> GetDestinationById([FromRoute] Guid destinationId)
     {

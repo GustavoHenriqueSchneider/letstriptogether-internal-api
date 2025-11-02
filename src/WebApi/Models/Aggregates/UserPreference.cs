@@ -1,4 +1,4 @@
-﻿using WebApi.Models.ValueObjects;
+﻿using WebApi.Models.ValueObjects.TripPreferences;
 
 namespace WebApi.Models.Aggregates;
 
@@ -30,20 +30,20 @@ public class UserPreference : TrackableEntity
         }
 
         LikesCommercial = userPreference.LikesCommercial;
-        userPreference.Food.ToList().ForEach(x => _food.Add(new TripFoodPreferences(x)));
-        userPreference.Culture.ToList().ForEach(x => _culture.Add(new TripCulturePreferences(x)));
-        userPreference.Entertainment.ToList().ForEach(x => _entertainment.Add(new TripEntertainmentPreferences(x)));
-        userPreference.PlaceTypes.ToList().ForEach(x => _placeTypes.Add(new TripPlaceTypes(x)));
+        userPreference.Food.ToList().ForEach(x => _food.Add(new TripPreference.Food(x)));
+        userPreference.Culture.ToList().ForEach(x => _culture.Add(new TripPreference.Culture(x)));
+        userPreference.Entertainment.ToList().ForEach(x => _entertainment.Add(new TripPreference.Entertainment(x)));
+        userPreference.PlaceTypes.ToList().ForEach(x => _placeTypes.Add(new TripPreference.PlaceType(x)));
     }
 
     public UserPreference(bool likesCommercial, List<string> food,
         List<string> culture, List<string> entertainment, List<string> placeTypes)
     {
         LikesCommercial = likesCommercial;
-        food.ForEach(x => _food.Add(new TripFoodPreferences(x)));
-        culture.ForEach(x => _culture.Add(new TripCulturePreferences(x)));
-        entertainment.ForEach(x => _entertainment.Add(new TripEntertainmentPreferences(x)));
-        placeTypes.ForEach(x => _placeTypes.Add(new TripPlaceTypes(x)));
+        food.ForEach(x => _food.Add(new TripPreference.Food(x)));
+        culture.ForEach(x => _culture.Add(new TripPreference.Culture(x)));
+        entertainment.ForEach(x => _entertainment.Add(new TripPreference.Entertainment(x)));
+        placeTypes.ForEach(x => _placeTypes.Add(new TripPreference.PlaceType(x)));
     }
 
     public void Update(UserPreference userPreference)

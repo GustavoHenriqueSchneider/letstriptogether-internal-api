@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMatch;
+using WebApi.DTOs.Responses.GroupMatch;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 
