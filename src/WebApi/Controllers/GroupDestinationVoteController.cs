@@ -4,7 +4,7 @@ using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.GroupDestinationVote;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.GroupMemberDestinationVote;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 

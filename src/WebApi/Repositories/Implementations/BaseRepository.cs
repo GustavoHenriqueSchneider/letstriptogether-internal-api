@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using WebApi.Context.Implementations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Repositories.Implementations;
@@ -56,11 +55,47 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
         await _dbSet.AddRangeAsync(entityList);
     }
 
+    public async Task AddOrUpdateAsync(T entity)
+    {
+        if (!await ExistsByIdAsync(entity.Id))
+        {
+            await AddAsync(entity);
+            return;
+        }
+
+        Update(entity);
+    }
+
     public void Update(T entity)
     {
         // TODO: fazer atualizar o status das entidades filhas se houver modificação
-        _dbSet.Attach(entity);
-        _dbSet.Entry(entity).State = EntityState.Modified;
+        entity.SetUpdateAt();
+        
+        var entry = _dbSet.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            try
+            {
+                _dbSet.Attach(entity);
+            }
+            catch (InvalidOperationException)
+            {
+                var trackedEntity = _dbSet.Find(entity.Id);
+                if (trackedEntity is null)
+                {
+                    throw;
+                }
+                
+                var trackedEntry = _dbSet.Entry(trackedEntity);
+                
+                trackedEntry.CurrentValues.SetValues(entity);
+                trackedEntry.State = EntityState.Modified;
+                
+                return;
+            }
+        }
+        
+        entry.State = EntityState.Modified;
     }
 
     public void Remove(T entity)
