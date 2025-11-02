@@ -15,7 +15,8 @@ public class AdminGroupMemberController(
     IUnitOfWork unitOfWork,
     IGroupRepository groupRepository,
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
-    IGroupMemberRepository groupMemberRepository) : ControllerBase
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupMembersById([FromRoute] Guid groupId,
@@ -73,15 +74,13 @@ public class AdminGroupMemberController(
     public async Task<IActionResult> AdminRemoveGroupMemberById([FromRoute] Guid groupId,
         [FromRoute] Guid memberId)
     {
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
         var userToRemove = group.Members.SingleOrDefault(m => m.Id == memberId);
-
         if (userToRemove is null)
         {
             return NotFound(new ErrorResponse("The user is not a member of this group."));
@@ -92,9 +91,13 @@ public class AdminGroupMemberController(
             return BadRequest(new ErrorResponse("It is not possible to remove the owner of group."));
         }
 
+        group.RemoveMember(userToRemove);
+        
+        groupRepository.Update(group);
         groupMemberRepository.Remove(userToRemove);
+        groupPreferenceRepository.Update(group.Preferences);
+        
         await unitOfWork.SaveAsync();
-
         return NoContent();
     }
 

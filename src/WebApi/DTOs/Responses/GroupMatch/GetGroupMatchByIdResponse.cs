@@ -1,4 +1,4 @@
-namespace WebApi.DTOs.Responses.Admin.GroupMatch;
+namespace WebApi.DTOs.Responses.GroupMatch;
 
 public class GetGroupMatchByIdResponse
 {

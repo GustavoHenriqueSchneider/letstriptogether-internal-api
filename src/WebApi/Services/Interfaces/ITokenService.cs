@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 
 namespace WebApi.Services.Interfaces;
 

@@ -1,4 +1,4 @@
-﻿namespace WebApi.Models;
+﻿namespace WebApi.Models.Aggregates;
 
 public class GroupMemberDestinationVote : TrackableEntity
 {
@@ -20,6 +20,5 @@ public class GroupMemberDestinationVote : TrackableEntity
     public void SetApproved(bool isApproved)
     {
         IsApproved = isApproved;
-        SetUpdateAt(DateTime.UtcNow);
     }
 }

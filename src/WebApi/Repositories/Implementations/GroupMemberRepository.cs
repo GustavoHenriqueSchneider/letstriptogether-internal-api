@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi.Context.Implementations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Repositories.Implementations;
@@ -23,6 +23,14 @@ public class GroupMemberRepository : BaseRepository<GroupMember>, IGroupMemberRe
         var hits = await _dbSet.CountAsync(x => x.GroupId == groupId);
 
         return (data, hits);
+    }
+
+    public async Task<IEnumerable<GroupMember>> GetAllByUserIdAsync(Guid userId)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
     }
 }
 

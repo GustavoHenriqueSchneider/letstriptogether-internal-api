@@ -1,4 +1,4 @@
-﻿namespace WebApi.Models;
+﻿namespace WebApi.Models.Aggregates;
 
 public class Role : TrackableEntity
 {

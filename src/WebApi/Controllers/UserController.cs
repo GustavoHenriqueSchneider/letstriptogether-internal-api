@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.User;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.User;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
@@ -27,6 +27,8 @@ public class UserController(
     IUserGroupInvitationRepository userGroupInvitationRepository,
     IUserRoleRepository userRoleRepository,
     IUserPreferenceRepository userPreferenceRepository,
+    IGroupRepository groupRepository,
+    IGroupPreferenceRepository groupPreferenceRepository,
     IRedisService redisService): ControllerBase
 {
     [HttpGet]
@@ -39,14 +41,32 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        return Ok(new GetCurrentUserResponse
+        try
         {
-            Name = user.Name,
-            Email = user.Email,
-            Preferences = new GetCurrentUserPreferenceResponse { Categories = user.Preferences.Categories.ToList() },
-            CreatedAt = user.CreatedAt,
-            UpdatedAt = user.UpdatedAt
-        });
+            _ = new UserPreference(user.Preferences);
+
+            return Ok(new GetCurrentUserResponse
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Preferences = user.Preferences is not null ? 
+                    new GetCurrentUserPreferenceResponse
+                    {
+                        LikesCommercial = user.Preferences.LikesCommercial,
+                        Food = user.Preferences.Food,
+                        Culture = user.Preferences.Culture,
+                        Entertainment = user.Preferences.Entertainment,
+                        PlaceTypes = user.Preferences.PlaceTypes,
+                    } : null,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt
+            });
+        }
+        catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))
+        {
+            return UnprocessableEntity(
+                new ErrorResponse("Invalid preferences are filled for current user, please contact support."));
+        }
     }
 
     [HttpPut]
@@ -127,14 +147,56 @@ public class UserController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var preferences = new UserPreference(request.Categories.ToList());
-        user.SetPreferences(preferences);
+        try
+        {
+            var preferences = new UserPreference(request.LikesCommercial, request.Food,
+                request.Culture, request.Entertainment, request.PlaceTypes);
 
-        // TODO: ajustar logica do update para atualizar entidades filhas/relacionadas
-        userRepository.Update(user);
-        userPreferenceRepository.Update(user.Preferences);
-        await unitOfWork.SaveAsync();
+            user.SetPreferences(preferences);
 
-        return NoContent();
+            userRepository.Update(user);
+            await userPreferenceRepository.AddOrUpdateAsync(user.Preferences!);
+            await unitOfWork.SaveAsync();
+
+            var groupMemberships = 
+                (await groupMemberRepository.GetAllByUserIdAsync(user.Id)).ToList();
+
+            foreach (var membership in groupMemberships)
+            {
+                var group =
+                    await groupRepository.GetGroupWithMembersPreferencesAsync(membership.GroupId);
+
+                if (group is null)
+                {
+                    return BadRequest(
+                        new ErrorResponse("Some of the groups that user is member were not found."));
+                }
+                
+                group.UpdatePreferences();
+                var groupToUpdate = await groupRepository.GetGroupWithPreferencesAsync(membership.GroupId);
+
+                if (groupToUpdate is null)
+                {
+                    return BadRequest(
+                        new ErrorResponse("Some of the groups that user is member were not found in the database."));
+                }
+                
+                groupToUpdate.Preferences.Update(group.Preferences);
+
+                groupRepository.Update(groupToUpdate);
+                groupPreferenceRepository.Update(groupToUpdate.Preferences);
+            }
+
+            if (groupMemberships.Count != 0)
+            {
+                await unitOfWork.SaveAsync();
+            }
+            
+            return NoContent();
+        }
+        catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))
+        {
+            return UnprocessableEntity(new ErrorResponse(ex.Message));
+        }
     }
 }

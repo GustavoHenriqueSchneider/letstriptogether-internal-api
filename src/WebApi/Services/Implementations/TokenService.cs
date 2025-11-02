@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApi.Configurations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
 
@@ -128,7 +128,7 @@ public class TokenService : ITokenService
                 IssuerSigningKey = new SymmetricSecurityKey(_key)
             };
 
-            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out var _);
+            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out _);
             var tokenType = claims.FindFirstValue(Claims.TokenType);
 
             if (tokenType is null || tokenType != TokenTypes.Refresh)

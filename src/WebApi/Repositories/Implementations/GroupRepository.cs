@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Context.Implementations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Repositories.Implementations;
@@ -9,12 +9,31 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
 {
     public GroupRepository(AppDbContext context) : base(context) { }
 
+    public async Task<Group?> GetGroupWithPreferencesAsync(Guid groupId)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(g => g.Preferences)
+            .SingleOrDefaultAsync(g => g.Id == groupId);
+    }
+
     public async Task<Group?> GetGroupWithMembersAsync(Guid groupId)
     {
         return await _dbSet
             .AsNoTracking()
             .Include(g => g.Members)
                 .ThenInclude(x => x.User)
+            .SingleOrDefaultAsync(g => g.Id == groupId);
+    }
+
+    public async Task<Group?> GetGroupWithMembersPreferencesAsync(Guid groupId)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(x => x.Preferences)
+            .Include(g => g.Members)
+                .ThenInclude(x => x.User)
+                    .ThenInclude(x => x.Preferences)
             .SingleOrDefaultAsync(g => g.Id == groupId);
     }
 

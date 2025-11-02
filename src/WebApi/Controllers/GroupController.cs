@@ -4,7 +4,7 @@ using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Group;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Group;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
 
@@ -21,33 +21,52 @@ public class GroupController(
     IGroupRepository groupRepository,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupMemberRepository groupMemberRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
     {
         var currentUserId = currentUser.GetId();
-        var existsUser = await userRepository.ExistsByIdAsync(currentUserId);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId);
 
-        if (!existsUser)
+        if (user is null)
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = new Group(request.Name, request.TripExpectedDate.ToUniversalTime());
-
-        var groupMember = new GroupMember
+        if (user.Preferences is null)
         {
-            GroupId = group.Id,
-            UserId = currentUserId,
-            IsOwner = true
-        };
+            return BadRequest(new ErrorResponse("User has not filled any preferences yet."));
+        }
 
-        group.AddMember(groupMember);
-        await groupRepository.AddAsync(group);
+        try
+        {
+            _ = new UserPreference(user.Preferences);
+            var group = new Group(request.Name, request.TripExpectedDate.ToUniversalTime());
 
-        await unitOfWork.SaveAsync();
-        return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse { Id = group.Id });
+            var groupMember = new GroupMember
+            {
+                GroupId = group.Id,
+                UserId = currentUserId,
+                IsOwner = true
+            };
+
+            group.AddMember(groupMember);
+            var groupPreferences = group.UpdatePreferences(user.Preferences);
+
+            await groupRepository.AddAsync(group);
+            await groupMemberRepository.AddAsync(groupMember);
+            await groupPreferenceRepository.AddAsync(groupPreferences);
+
+            await unitOfWork.SaveAsync();
+            return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse { Id = group.Id });
+        }
+        catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))
+        {
+            return UnprocessableEntity(new ErrorResponse(ex.Message));
+        }
     }
 
     [HttpGet]
@@ -85,13 +104,32 @@ public class GroupController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        return Ok(new GetGroupByIdResponse
+        try
         {
-            Name = group.Name,
-            TripExpectedDate = group.TripExpectedDate,
-            CreatedAt = group.CreatedAt,
-            UpdatedAt = group.UpdatedAt
-        });
+            var groupPreferences = await groupPreferenceRepository.GetByGroupIdAsync(groupId)
+                ?? throw new InvalidOperationException("Invalid preferences");
+
+            return Ok(new GetGroupByIdResponse
+            {
+                Name = group.Name,
+                TripExpectedDate = group.TripExpectedDate,
+                Preferences = new GetGroupByIdPreferenceResponse
+                {
+                    LikesCommercial = groupPreferences.LikesCommercial,
+                    Food = groupPreferences.Food,
+                    Culture = groupPreferences.Culture,
+                    Entertainment = groupPreferences.Entertainment,
+                    PlaceTypes = groupPreferences.PlaceTypes,
+                },
+                CreatedAt = group.CreatedAt,
+                UpdatedAt = group.UpdatedAt
+            });
+        }
+        catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))
+        {
+            return UnprocessableEntity(
+                new ErrorResponse("Invalid preferences are filled for this group, please contact support."));
+        }
     }
 
     [HttpPut("{groupId:guid}")]
