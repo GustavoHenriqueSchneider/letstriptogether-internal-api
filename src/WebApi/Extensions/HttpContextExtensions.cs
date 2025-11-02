@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace WebApi.Extensions;
 
 public static class HttpContextExtensions

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using WebApi.Models;
+﻿using WebApi.Models.Aggregates;
 
 namespace WebApi.Repositories.Interfaces;
 
@@ -11,6 +10,7 @@ public interface IBaseRepository<T> where T : TrackableEntity
     Task<int> GetHitsAsync();
     Task AddAsync(T entity);
     Task AddRangeAsync(IEnumerable<T> entityList);
+    Task AddOrUpdateAsync(T entity);
     void Update(T entity);
     void Remove(T entity);
     void RemoveRange(IEnumerable<T> entityList);

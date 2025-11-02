@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.Group;
+using WebApi.Models.Aggregates;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -37,20 +38,38 @@ public class AdminGroupController(
     [HttpGet("{groupId:guid}")]
     public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid groupId)
     {
-        var group = await groupRepository.GetByIdAsync(groupId);
+        var group = await groupRepository.GetGroupWithPreferencesAsync(groupId);
 
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        return Ok(new AdminGetGroupByIdResponse
+        try
         {
-            Name = group.Name,
-            TripExpectedDate = group.TripExpectedDate,
-            CreatedAt = group.CreatedAt,
-            UpdatedAt = group.UpdatedAt
-        });
+            var groupPreferences = new GroupPreference(group.Preferences);
+
+            return Ok(new AdminGetGroupByIdResponse
+            {
+                Name = group.Name,
+                TripExpectedDate = group.TripExpectedDate,
+                Preferences = new AdminGetGroupByIdPreferenceResponse
+                {
+                    LikesCommercial = groupPreferences.LikesCommercial,
+                    Food = groupPreferences.Food,
+                    Culture = groupPreferences.Culture,
+                    Entertainment = groupPreferences.Entertainment,
+                    PlaceTypes = groupPreferences.PlaceTypes,
+                },
+                CreatedAt = group.CreatedAt,
+                UpdatedAt = group.UpdatedAt
+            });
+        }
+        catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))
+        {
+            return UnprocessableEntity(
+                new ErrorResponse("Invalid preferences are filled for this group, please fix it."));
+        }
     }
 }
 

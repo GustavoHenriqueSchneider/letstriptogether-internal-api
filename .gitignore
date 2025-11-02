@@ -5,3 +5,4 @@ src/WebApi/bin
 src/WebApi/obj
 src/WebApi/WebApi.csproj.user
 TemplateEngineHost
+.idea/

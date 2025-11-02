@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "1",
+    "name": "Rio de Janeiro",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade maravilhosa com praias, samba e o Cristo Redentor.",
+    "description_en": "Wonderful city with beaches, samba and the Redeemer Christ."
+  },
+  {
+    "id": "2",
+    "name": "Salvador",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Berço da cultura afro-brasileira, acarajé e festas populares.",
+    "description_en": "Cradle of Afro-Brazilian culture, acarajé and popular parties."
+  },
+  {
+    "id": "3",
+    "name": "São Paulo",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Maior cidade do Brasil, centro financeiro e cultural vibrante.",
+    "description_en": "Largest city in Brazil, vibrant financial and cultural center."
+  },
+  {
+    "id": "4",
+    "name": "Brasília",
+    "state": "DF",
+    "region": "Centro-Oeste",
+    "description": "Capital federal com arquitetura modernista de Oscar Niemeyer.",
+    "description_en": "Federal capital with modernist architecture of Oscar Niemeyer."
+  },
+  {
+    "id": "5",
+    "name": "Fortaleza",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Praias paradisíacas, culinária regional e vida noturna animada.",
+    "description_en": "Paradisiacal beaches, regional cuisine and lively nightlife."
+  },
+  {
+    "id": "6",
+    "name": "Belo Horizonte",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Conhecida por sua gastronomia e o Conjunto Arquitetônico da Pampulha.",
+    "description_en": "Known for its gastronomy and the architectural ensemble of Pampulha."
+  },
+  {
+    "id": "7",
+    "name": "Manaus",
+    "state": "AM",
+    "region": "Norte",
+    "description": "Porta de entrada para a Amazônia, com o famoso Teatro Amazonas.",
+    "description_en": "Gate for the Amazon, with the famous Amazonas Theater."
+  },
+  {
+    "id": "8",
+    "name": "Curitiba",
+    "state": "PR",
+    "region": "Sul",
+    "description": "Referência em planejamento urbano e sustentabilidade.",
+    "description_en": "Reference in urban planning and sustainability."
+  },
+  {
+    "id": "9",
+    "name": "Recife",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Conhecida como 'Veneza Brasileira', com rica cena cultural.",
+    "description_en": "Known as 'Venice Brasileira', with rich cultural scene."
+  },
+  {
+    "id": "10",
+    "name": "Goiânia",
+    "state": "GO",
+    "region": "Centro-Oeste",
+    "description": "Cidade planejada com parques e vida cultural ativa.",
+    "description_en": "City planned with parks and active cultural life."
+  },
+  {
+    "id": "11",
+    "name": "Belém",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Porta de entrada para o norte, famosa pelo Círio de Nazaré.",
+    "description_en": "Gate to the north, famous for the Círio de Nazaré."
+  },
+  {
+    "id": "12",
+    "name": "Porto Alegre",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Capital gaúcha com forte influência cultural europeia.",
+    "description_en": "Gaucho capital with strong European cultural influence."
+  },
+  {
+    "id": "13",
+    "name": "Campinas",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Importante polo tecnológico e universitário do interior paulista.",
+    "description_en": "Important technological and university hub in the interior of São Paulo."
+  },
+  {
+    "id": "14",
+    "name": "São Luís",
+    "state": "MA",
+    "region": "Nordeste",
+    "description": "Centro histórico colonial e rica cultura maranhense.",
+    "description_en": "Colonial Historic Center and rich Maranhão Culture."
+  },
+  {
+    "id": "15",
+    "name": "Maceió",
+    "state": "AL",
+    "region": "Nordeste",
+    "description": "Praias de águas cristalinas e piscinas naturais.",
+    "description_en": "Beaches of crystal clear waters and natural pools."
+  },
+  {
+    "id": "16",
+    "name": "Natal",
+    "state": "RN",
+    "region": "Nordeste",
+    "description": "Conhecida pelas dunas e o Forte dos Reis Magos.",
+    "description_en": "Known for the dunes and the Fort of the Magi."
+  },
+  {
+    "id": "17",
+    "name": "Florianópolis",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Ilha da Magia com praias, lagoas e excelente qualidade de vida.",
+    "description_en": "Magic Island with beaches, lagoons and excellent quality of life."
+  },
+  {
+    "id": "18",
+    "name": "Foz do Iguaçu",
+    "state": "PR",
+    "region": "Sul",
+    "description": "Lar das impressionantes Cataratas do Iguaçu.",
+    "description_en": "Home of the impressive Falls of Iguaçu."
+  },
+  {
+    "id": "19",
+    "name": "Gramado",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Destino turístico com arquitetura europeia e festivais de cinema.",
+    "description_en": "Tourist destination with European architecture and film festivals."
+  },
+  {
+    "id": "20",
+    "name": "Ouro Preto",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade histórica com igrejas barrocas e patrimônio colonial.",
+    "description_en": "Historical city with baroque churches and colonial heritage."
+  },
+  {
+    "id": "21",
+    "name": "Paraty",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade colonial charmosa com ruas de pedra e festivais culturais.",
+    "description_en": "Charming colonial city with stone streets and cultural festivals."
+  },
+  {
+    "id": "22",
+    "name": "Jericoacoara",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Paraíso rústico com dunas, lagoas e pôr do sol espetacular.",
+    "description_en": "Rustic paradise with dunes, lagoons and spectacular sunset."
+  },
+  {
+    "id": "23",
+    "name": "Bonito",
+    "state": "MS",
+    "region": "Centro-Oeste",
+    "description": "Destino ecoturístico com rios cristalinos e grutas impressionantes.",
+    "description_en": "Ecoturistic destination with crystalline rivers and impressive caves."
+  },
+  {
+    "id": "24",
+    "name": "Fernando de Noronha",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Arquipélago paradisíaco com rica vida marinha e praias intocadas.",
+    "description_en": "Paradisiac archipelago with rich marine life and untouched beaches."
+  },
+  {
+    "id": "25",
+    "name": "Canela",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Cidade serrana com belas paisagens e atrações naturais.",
+    "description_en": "Serrana city with beautiful landscapes and natural attractions."
+  },
+  {
+    "id": "26",
+    "name": "Ilhabela",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Ilha com praias deslumbrantes e trilhas em meio à mata atlântica.",
+    "description_en": "Island with stunning beaches and trails amid the Atlantic Forest."
+  },
+  {
+    "id": "27",
+    "name": "Porto de Galinhas",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Praias de águas mornas e piscinas naturais formadas por recifes.",
+    "description_en": "Warm water beaches and natural pools formed by reefs."
+  },
+  {
+    "id": "28",
+    "name": "Arraial do Cabo",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Conhecida como o 'Caribe Brasileiro' por suas águas cristalinas.",
+    "description_en": "Known as the 'Brazilian Caribbean' for its crystal clear waters."
+  },
+  {
+    "id": "29",
+    "name": "Lençóis",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Porta de entrada para a Chapada Diamantina, com trilhas e cachoeiras.",
+    "description_en": "Gate for Chapada Diamantina, with trails and waterfalls."
+  },
+  {
+    "id": "30",
+    "name": "Tiradentes",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade histórica com arquitetura colonial e rica cena gastronômica.",
+    "description_en": "Historical city with colonial architecture and rich gastronomic scene."
+  },
+  {
+    "id": "31",
+    "name": "Guarulhos",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Importante centro industrial e logístico da Grande São Paulo.",
+    "description_en": "Important Industrial and Logistics Center of Greater São Paulo."
+  },
+  {
+    "id": "32",
+    "name": "Campinas",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Polo tecnológico e universitário do interior paulista.",
+    "description_en": "Technological and university hub in the interior of São Paulo."
+  },
+  {
+    "id": "33",
+    "name": "São Gonçalo",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Grande cidade da região metropolitana do Rio de Janeiro.",
+    "description_en": "Large city of the metropolitan region of Rio de Janeiro."
+  },
+  {
+    "id": "34",
+    "name": "Duque de Caxias",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Importante polo industrial e comercial do estado.",
+    "description_en": "Important industrial and commercial center of the state."
+  },
+  {
+    "id": "35",
+    "name": "Nova Iguaçu",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade com forte presença comercial e cultural.",
+    "description_en": "City with strong commercial and cultural presence."
+  },
+  {
+    "id": "36",
+    "name": "São Bernardo do Campo",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Conhecida pela indústria automobilística e sindicalismo.",
+    "description_en": "Known by the auto industry and unionism."
+  },
+  {
+    "id": "37",
+    "name": "Osasco",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Importante centro financeiro e comercial da Grande São Paulo.",
+    "description_en": "Important Financial and Commercial Center of Greater São Paulo."
+  },
+  {
+    "id": "38",
+    "name": "Santo André",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Cidade com forte presença industrial e cultural.",
+    "description_en": "City with strong industrial and cultural presence."
+  },
+  {
+    "id": "39",
+    "name": "São José dos Campos",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Polo aeroespacial e tecnológico do país.",
+    "description_en": "Aerospace and Technological Polo of the country."
+  },
+  {
+    "id": "40",
+    "name": "Ribeirão Preto",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Importante centro agroindustrial e universitário.",
+    "description_en": "Important Agroindustrial and University Center."
+  },
+  {
+    "id": "41",
+    "name": "Uberlândia",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Centro logístico e tecnológico do Triângulo Mineiro.",
+    "description_en": "Logistics and Technological Center of the Mineiro Triangle."
+  },
+  {
+    "id": "42",
+    "name": "Contagem",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Importante polo industrial da região metropolitana de BH.",
+    "description_en": "Important industrial hub of the BH metropolitan region."
+  },
+  {
+    "id": "43",
+    "name": "Juiz de Fora",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade histórica com forte presença universitária.",
+    "description_en": "Historical city with strong university presence."
+  },
+  {
+    "id": "44",
+    "name": "Joinville",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Maior cidade de Santa Catarina, conhecida pela dança e indústria.",
+    "description_en": "Largest city of Santa Catarina, known for dance and industry."
+  },
+  {
+    "id": "45",
+    "name": "Londrina",
+    "state": "PR",
+    "region": "Sul",
+    "description": "Importante centro agrícola e universitário do norte do Paraná.",
+    "description_en": "Important Agricultural and University Center of Northern Paraná."
+  },
+  {
+    "id": "46",
+    "name": "Caxias do Sul",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Polo industrial e vinícola da Serra Gaúcha.",
+    "description_en": "Serra Gaucha Industrial Pole and Winery."
+  },
+  {
+    "id": "47",
+    "name": "Ananindeua",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Cidade da região metropolitana de Belém com forte comércio.",
+    "description_en": "City of the metropolitan region of Belém with strong trade."
+  },
+  {
+    "id": "48",
+    "name": "Santarém",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Conhecida por suas praias de água doce e o encontro das águas.",
+    "description_en": "Known for its freshwater beaches and the meeting of the waters."
+  },
+  {
+    "id": "49",
+    "name": "Parauapebas",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Cidade mineradora em crescimento no sudeste do Pará.",
+    "description_en": "Mining city growing in southeastern Pará."
+  },
+  {
+    "id": "50",
+    "name": "Chapada dos Guimarães",
+    "state": "MT",
+    "region": "Centro-Oeste",
+    "description": "Destino turístico com belas paisagens e cachoeiras.",
+    "description_en": "Tourist destination with beautiful landscapes and waterfalls."
+  },
+  {
+    "id": "51",
+    "name": "Domingos Martins",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Cidade serrana com influência europeia e clima ameno.",
+    "description_en": "Mountain city with European influence and mild climate."
+  },
+  {
+    "id": "52",
+    "name": "Monte Verde",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Destino romântico com clima frio e natureza exuberante.",
+    "description_en": "Romantic destination with cold climate and lush nature."
+  },
+  {
+    "id": "53",
+    "name": "Campos do Jordão",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Conhecida como a 'Suíça Brasileira', destino de inverno.",
+    "description_en": "Known as 'Brazilian Switzerland', a winter destination."
+  },
+  {
+    "id": "54",
+    "name": "Penedo",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Colônia finlandesa com charme europeu e natureza.",
+    "description_en": "Finnish colony with European charm and nature."
+  },
+  {
+    "id": "55",
+    "name": "Nova Petrópolis",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Cidade com forte influência alemã e belas paisagens.",
+    "description_en": "City with strong German influence and beautiful landscapes."
+  },
+  {
+    "id": "56",
+    "name": "Canindé de São Francisco",
+    "state": "SE",
+    "region": "Nordeste",
+    "description": "Conhecida pelos cânions do Rio São Francisco.",
+    "description_en": "Known by the Canyons of the São Francisco River."
+  },
+  {
+    "id": "57",
+    "name": "São Miguel do Gostoso",
+    "state": "RN",
+    "region": "Nordeste",
+    "description": "Destino de praias paradisíacas e esportes náuticos.",
+    "description_en": "Destination of paradisiacal beaches and water sports."
+  },
+  {
+    "id": "58",
+    "name": "Alter do Chão",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Conhecida como o 'Caribe Amazônico' por suas praias fluviais.",
+    "description_en": "Known as the 'Amazonian Caribbean' for its river beaches."
+  },
+  {
+    "id": "59",
+    "name": "Maragogi",
+    "state": "AL",
+    "region": "Nordeste",
+    "description": "Famosa pelas piscinas naturais e águas cristalinas.",
+    "description_en": "Famous for natural pools and crystal clear waters."
+  },
+  {
+    "id": "60",
+    "name": "Palmas",
+    "state": "TO",
+    "region": "Norte",
+    "description": "Capital mais jovem do Brasil, com natureza exuberante ao redor.",
+    "description_en": "Younger capital in Brazil, with lush nature around."
+  },
+  {
+    "id": "61",
+    "name": "Macapá",
+    "state": "AP",
+    "region": "Norte",
+    "description": "Cortada pela linha do Equador, com o Marco Zero como atração.",
+    "description_en": "Cut by the Ecuador line, with Marco Zero as an attraction."
+  },
+  {
+    "id": "62",
+    "name": "Boa Vista",
+    "state": "RR",
+    "region": "Norte",
+    "description": "Cidade planejada com influências amazônicas e caribenhas.",
+    "description_en": "City planned with Amazonian and Caribbean influences."
+  },
+  {
+    "id": "63",
+    "name": "Cuiabá",
+    "state": "MT",
+    "region": "Centro-Oeste",
+    "description": "Porta de entrada para o Pantanal e Chapada dos Guimarães.",
+    "description_en": "Gateway to the Pantanal and Chapada dos Guimarães."
+  },
+  {
+    "id": "64",
+    "name": "Rondonópolis",
+    "state": "MT",
+    "region": "Centro-Oeste",
+    "description": "Importante centro agrícola e industrial do Mato Grosso.",
+    "description_en": "Important Agricultural and Industrial Center of Mato Grosso."
+  },
+  {
+    "id": "65",
+    "name": "Vitória",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Capital litorânea com belas praias e ilhas.",
+    "description_en": "Coastal capital with beautiful beaches and islands."
+  },
+  {
+    "id": "66",
+    "name": "Vila Velha",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Famosa pela Praia da Costa e o Convento da Penha.",
+    "description_en": "Famous by Costa Beach and the Penha Convent."
+  },
+  {
+    "id": "67",
+    "name": "Itacaré",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Destino de surfistas e amantes da natureza com praias selvagens.",
+    "description_en": "Destiny of surfers and nature lovers with wild beaches."
+  },
+  {
+    "id": "68",
+    "name": "Trancoso",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Vila charmosa com praias paradisíacas e vida noturna sofisticada.",
+    "description_en": "Charming village with paradisiacal beaches and sophisticated nightlife."
+  },
+  {
+    "id": "69",
+    "name": "Barreirinhas",
+    "state": "MA",
+    "region": "Nordeste",
+    "description": "Principal acesso aos Lençóis Maranhenses.",
+    "description_en": "Main access to Maranhão Lençóis."
+  },
+  {
+    "id": "70",
+    "name": "Brumadinho",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Sede do Instituto Inhotim, maior museu a céu aberto do mundo.",
+    "description_en": "Headquarters of the Inhotim Institute, the largest open -air museum in the world."
+  },
+  {
+    "id": "71",
+    "name": "Petrolina",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Importante polo agrícola no semiárido, às margens do Rio São Francisco.",
+    "description_en": "Important Agricultural Pole in the Semiarid, on the banks of the São Francisco River."
+  },
+  {
+    "id": "72",
+    "name": "Juazeiro do Norte",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Destino de romarias religiosas e base do Padre Cícero.",
+    "description_en": "Destiny of Religious Pilgrimages and Father Cicero's base."
+  },
+  {
+    "id": "73",
+    "name": "Aparecida",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Centro de peregrinação religiosa com o Santuário Nacional de Aparecida.",
+    "description_en": "Religious Pilgrimage Center with the National Sanctuary of Aparecida."
+  },
+  {
+    "id": "74",
+    "name": "Caldas Novas",
+    "state": "GO",
+    "region": "Centro-Oeste",
+    "description": "Maior estância hidrotermal do mundo, muito procurada por turistas.",
+    "description_en": "Higher hydrothermal resort in the world, much sought after by tourists."
+  },
+  {
+    "id": "75",
+    "name": "Poços de Caldas",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Estância hidromineral com clima ameno e arquitetura charmosa.",
+    "description_en": "Hydromineral resort with mild climate and charming architecture."
+  },
+  {
+    "id": "76",
+    "name": "Bento Gonçalves",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Capital brasileira do vinho, com belas paisagens e cultura italiana.",
+    "description_en": "Brazilian capital of wine, with beautiful landscapes and Italian culture."
+  },
+  {
+    "id": "77",
+    "name": "Aracaju",
+    "state": "SE",
+    "region": "Nordeste",
+    "description": "Capital com orla organizada e gastronomia regional marcante.",
+    "description_en": "Capital with organized waterfront and remarkable regional cuisine."
+  },
+  {
+    "id": "78",
+    "name": "Itabuna",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Centro econômico regional do sul da Bahia.",
+    "description_en": "Southern Regional Economic Center of Bahia."
+  },
+  {
+    "id": "79",
+    "name": "Ilhéus",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Terra de Jorge Amado, com belas praias e casarões históricos.",
+    "description_en": "Land of Jorge Amado, with beautiful beaches and historical mansions."
+  },
+  {
+    "id": "80",
+    "name": "Arraial d'Ajuda",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Destino charmoso com praias paradisíacas e vilarejos encantadores.",
+    "description_en": "Charming destination with paradisiacal beaches and charming villages."
+  },
+  {
+    "id": "81",
+    "name": "São João del-Rei",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade histórica com igrejas barrocas e tradição ferroviária.",
+    "description_en": "Historical city with baroque churches and railway tradition."
+  },
+  {
+    "id": "82",
+    "name": "Piracicaba",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Importante cidade do interior paulista com forte presença universitária.",
+    "description_en": "Important city in the interior of São Paulo with strong university presence."
+  },
+  {
+    "id": "83",
+    "name": "Jundiaí",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Conhecida pela Festa da Uva e desenvolvimento industrial.",
+    "description_en": "Known for the grape party and industrial development."
+  },
+  {
+    "id": "84",
+    "name": "Francisco Beltrão",
+    "state": "PR",
+    "region": "Sul",
+    "description": "Cidade em crescimento no sudoeste paranaense, com destaque no agronegócio.",
+    "description_en": "Growth city in the southwest of Paraná, highlighted in agribusiness."
+  },
+  {
+    "id": "85",
+    "name": "Aracati",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Cidade histórica próxima a Canoa Quebrada, famosa por suas praias.",
+    "description_en": "Historical city near the broken canoe, famous for its beaches."
+  },
+  {
+    "id": "86",
+    "name": "Bragança Paulista",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Cidade serrana com clima agradável e tradição gastronômica.",
+    "description_en": "Mountain city with pleasant climate and gastronomic tradition."
+  },
+  {
+    "id": "87",
+    "name": "Teresina",
+    "state": "PI",
+    "region": "Nordeste",
+    "description": "Única capital nordestina sem litoral, cortada pelos rios Parnaíba e Poti.",
+    "description_en": "Only northeastern capital without coastal, cut by the Parnaíba and Poti rivers."
+  },
+  {
+    "id": "88",
+    "name": "Caruaru",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Conhecida como a 'Capital do Forró' e pelo São João mais tradicional do Brasil.",
+    "description_en": "Known as 'forró capital' and the most traditional São João in Brazil."
+  },
+  {
+    "id": "89",
+    "name": "Garanhuns",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Cidade das flores e clima ameno, sede do Festival de Inverno de Garanhuns.",
+    "description_en": "City of Flowers and Ameno climate, headquarters of the Guaranhuns Winter Festival."
+  },
+  {
+    "id": "90",
+    "name": "Itu",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Famosa por suas 'coisas grandes' e importante destino turístico histórico.",
+    "description_en": "Famous for their 'big things' and important historical tourist destination."
+  },
+  {
+    "id": "91",
+    "name": "Balneário Camboriú",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Destino turístico com arranha-céus e belas praias, a 'Dubai Brasileira'.",
+    "description_en": "Tourist destination with skyscrapers and beautiful beaches, the 'Brazilian Dubai'."
+  },
+  {
+    "id": "92",
+    "name": "Araruama",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade litorânea conhecida por suas lagoas e esportes aquáticos.",
+    "description_en": "Coastal city known for its lagoons and water sports."
+  },
+  {
+    "id": "93",
+    "name": "Linhares",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Importante polo industrial e agrícola, com lagoas e litoral atrativos.",
+    "description_en": "Important industrial and agricultural center, with attractive lagoons and coastal."
+  },
+  {
+    "id": "94",
+    "name": "Vitória da Conquista",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Centro comercial e universitário do sudoeste baiano.",
+    "description_en": "Shopping and University Center of Southwest Bahia."
+  },
+  {
+    "id": "95",
+    "name": "Sete Lagoas",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade com forte indústria e atrativos naturais como grutas e lagoas.",
+    "description_en": "City with strong industry and natural attractions such as caves and lagoons."
+  },
+  {
+    "id": "96",
+    "name": "Palhoça",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Parte da Grande Florianópolis, com praias e natureza preservada.",
+    "description_en": "Part of Greater Florianópolis, with beaches and preserved nature."
+  },
+  {
+    "id": "97",
+    "name": "São José",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Cidade da região metropolitana de Florianópolis, com economia diversificada.",
+    "description_en": "City of the Metropolitan Region of Florianópolis, with diverse economy."
+  },
+  {
+    "id": "98",
+    "name": "Itajaí",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Importante porto brasileiro e sede de eventos náuticos internacionais.",
+    "description_en": "Important Brazilian Port and headquarters of international nautical events."
+  },
+  {
+    "id": "99",
+    "name": "Araguaína",
+    "state": "TO",
+    "region": "Norte",
+    "description": "Segunda maior cidade do Tocantins, centro agropecuário e educacional.",
+    "description_en": "Second largest city in Tocantins, Agricultural and Educational Center."
+  },
+  {
+    "id": "100",
+    "name": "Paranaguá",
+    "state": "PR",
+    "region": "Sul",
+    "description": "Sede de um dos principais portos do Brasil, com centro histórico preservado.",
+    "description_en": "Headquarters of one of the main ports in Brazil, with preserved historical center."
+  },
+  {
+    "id": "101",
+    "name": "Bauru",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Importante cidade do interior paulista com forte setor de serviços e educação.",
+    "description_en": "Important city in the interior of São Paulo with a strong sector of services and education."
+  },
+  {
+    "id": "102",
+    "name": "Dourados",
+    "state": "MS",
+    "region": "Centro-Oeste",
+    "description": "Segunda maior cidade de Mato Grosso do Sul, centro agroindustrial.",
+    "description_en": "Second largest city in Mato Grosso do Sul, Agroindustrial Center."
+  },
+  {
+    "id": "103",
+    "name": "Barretos",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Famosa pela maior festa de peão da América Latina.",
+    "description_en": "Famous for the largest pawn party in Latin America."
+  },
+  {
+    "id": "104",
+    "name": "Paraty-Mirim",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Distrito histórico de Paraty com natureza intocada e ruínas coloniais.",
+    "description_en": "Paraty Historical District with untouched nature and colonial ruins."
+  },
+  {
+    "id": "105",
+    "name": "Porto Seguro",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Berço do descobrimento do Brasil, com praias animadas e história.",
+    "description_en": "Cradle of Brazil's discovery, with animated beaches and history."
+  },
+  {
+    "id": "106",
+    "name": "Valença",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Ponto de acesso à Ilha de Tinharé, onde está Morro de São Paulo.",
+    "description_en": "Point of access to the island of Tinharé, where Morro de São Paulo is."
+  },
+  {
+    "id": "107",
+    "name": "Morro de São Paulo",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Destino paradisíaco com praias sem carros e vida noturna animada.",
+    "description_en": "Paradisiacal destination with beaches without car and lively nightlife."
+  },
+  {
+    "id": "108",
+    "name": "Imbituba",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Famosa pela Praia do Rosa e temporada de avistamento de baleias.",
+    "description_en": "Famous for Rosa Beach and whale sighting season."
+  },
+  {
+    "id": "109",
+    "name": "Garopaba",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Destino de surfistas e turistas, com belas praias e natureza preservada.",
+    "description_en": "Destiny of surfers and tourists, with beautiful beaches and preserved nature."
+  },
+  {
+    "id": "110",
+    "name": "Cambará do Sul",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Lar dos cânions Itaimbezinho e Fortaleza, atrativo do turismo ecológico.",
+    "description_en": "Home of Canyons Itaimbezinho and Fortaleza, attractive of ecological tourism."
+  },
+  {
+    "id": "111",
+    "name": "Ipojuca",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Município que abriga Porto de Galinhas e belas praias do litoral sul pernambucano.",
+    "description_en": "Municipality that houses port of chickens and beautiful beaches of the South Pernambuco coast."
+  },
+  {
+    "id": "112",
+    "name": "São Roque",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Famosa pelo Roteiro do Vinho e pelas estações de esqui artificial.",
+    "description_en": "Famous for the wine script and artificial ski resorts."
+  },
+  {
+    "id": "113",
+    "name": "Holambra",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Cidade das flores, com influência holandesa e eventos florais como a Expoflora.",
+    "description_en": "City of Flores, with Dutch influence and floral events such as Expoflora."
+  },
+  {
+    "id": "114",
+    "name": "Paracuru",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Destino de praias extensas, dunas e esportes como kitesurf.",
+    "description_en": "Destination of extensive beaches, dunes and sports like Kitesurf."
+  },
+  {
+    "id": "115",
+    "name": "Tibau do Sul",
+    "state": "RN",
+    "region": "Nordeste",
+    "description": "Onde está localizada a famosa Praia da Pipa, destino turístico internacional.",
+    "description_en": "Where is located the famous Pipa beach, international tourist destination."
+  },
+  {
+    "id": "116",
+    "name": "Maricá",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade litorânea com belas praias e lagoas, próxima à capital.",
+    "description_en": "Coastal city with beautiful beaches and lagoons, near the capital."
+  },
+  {
+    "id": "117",
+    "name": "Itanhaém",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Uma das cidades mais antigas do Brasil, com praias e centro histórico.",
+    "description_en": "One of the oldest cities in Brazil, with beaches and historic center."
+  },
+  {
+    "id": "118",
+    "name": "Caraguatatuba",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Destino popular do Litoral Norte de SP, com belas praias e trilhas.",
+    "description_en": "Popular destination of the North Coast of SP, with beautiful beaches and trails."
+  },
+  {
+    "id": "119",
+    "name": "Ubatuba",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Paraíso do surf com mais de 100 praias e rica biodiversidade.",
+    "description_en": "Surf Paradise with over 100 beaches and rich biodiversity."
+  },
+  {
+    "id": "120",
+    "name": "Itapema",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Destino turístico em crescimento, com mar calmo e ótima infraestrutura.",
+    "description_en": "Growing tourist destination, with calm sea and great infrastructure."
+  },
+  {
+    "id": "121",
+    "name": "Cabo Frio",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Praias de areia branca e águas cristalinas, muito procurado no verão.",
+    "description_en": "White sand beaches and crystal clear waters, much sought after in summer."
+  },
+  {
+    "id": "122",
+    "name": "Praia Grande",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Uma das maiores cidades litorâneas do Brasil, com turismo e comércio forte.",
+    "description_en": "One of the largest coastal cities in Brazil, with tourism and strong trade."
+  },
+  {
+    "id": "123",
+    "name": "Rondon do Pará",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Cidade agrícola e estratégica no sudeste paraense.",
+    "description_en": "Agricultural and Strategic City in Southeast Para."
+  },
+  {
+    "id": "124",
+    "name": "Sobral",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Centro educacional e econômico do interior cearense, com rica história.",
+    "description_en": "Educational and Economic Center of Ceará interior, with rich history."
+  },
+  {
+    "id": "125",
+    "name": "Teófilo Otoni",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Referência no comércio de pedras preciosas e semipreciosas.",
+    "description_en": "Reference in the trade of precious and semi -compliance stones."
+  },
+  {
+    "id": "126",
+    "name": "Linhares",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Polo agrícola e industrial com belas lagoas e praias.",
+    "description_en": "Agricultural and industrial hub with beautiful lagoons and beaches."
+  },
+  {
+    "id": "127",
+    "name": "Ourinhos",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Centro regional do interior paulista, com tradição cultural.",
+    "description_en": "Regional Center of the interior of São Paulo, with cultural tradition."
+  },
+  {
+    "id": "128",
+    "name": "Tubarão",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Cidade com águas termais, próxima ao litoral catarinense.",
+    "description_en": "City with thermal waters, near the coastal Santa Catarina."
+  },
+  {
+    "id": "129",
+    "name": "Cabo de Santo Agostinho",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Importante polo industrial e turístico do litoral pernambucano.",
+    "description_en": "Important industrial and tourist center of the Pernambuco coast."
+  },
+  {
+    "id": "130",
+    "name": "Resende",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade industrial com belas paisagens da Serra da Mantiqueira.",
+    "description_en": "Industrial city with beautiful landscapes of Serra da Mantiqueira."
+  },
+  {
+    "id": "131",
+    "name": "Barra de São Miguel",
+    "state": "AL",
+    "region": "Nordeste",
+    "description": "Praias paradisíacas e águas calmas, próxima a Maceió.",
+    "description_en": "Paradisiacal beaches and calm waters, near Maceió."
+  },
+  {
+    "id": "132",
+    "name": "Anchieta",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Cidade litorânea com belas praias e tradição religiosa.",
+    "description_en": "Coastal city with beautiful beaches and religious tradition."
+  },
+  {
+    "id": "133",
+    "name": "Iguaba Grande",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Destino tranquilo na Região dos Lagos, com lagoa e esportes náuticos.",
+    "description_en": "Quiet destination in the Lagos region, with lagoon and water sports."
+  },
+  {
+    "id": "134",
+    "name": "São Mateus",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Cidade histórica com acesso ao balneário de Guriri.",
+    "description_en": "Historical city with access to the Guriri resort."
+  },
+  {
+    "id": "135",
+    "name": "Torres",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Única praia com falésias no RS, famosa pelo Festival Internacional de Balonismo.",
+    "description_en": "The only beach with cliffs in RS, famous for the International Ballooning Festival."
+  },
+  {
+    "id": "136",
+    "name": "Camaçari",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Importante polo industrial e com belas praias na Linha Verde.",
+    "description_en": "Important industrial hub and with beautiful beaches on the green line."
+  },
+  {
+    "id": "137",
+    "name": "Itapipoca",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Cidade com praias e serra, conhecida como 'Cidade dos Três Climas'.",
+    "description_en": "City with beaches and Serra, known as 'City of Three Climates'."
+  },
+  {
+    "id": "138",
+    "name": "Jequié",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Conhecida como a 'Cidade Sol', com forte comércio e cultura regional.",
+    "description_en": "Known as 'City Sol', with strong trade and regional culture."
+  },
+  {
+    "id": "139",
+    "name": "Paulo Afonso",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Cidade com grande potencial turístico por suas quedas d’água e usina hidrelétrica.",
+    "description_en": "City with great tourist potential for their waterfalls and hydroelectric plant."
+  },
+  {
+    "id": "140",
+    "name": "Altamira",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Uma das maiores cidades em área do mundo, com destaque no setor energético.",
+    "description_en": "One of the largest cities in the area in the world, with prominence in the energy sector."
+  },
+  {
+    "id": "141",
+    "name": "Colatina",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Cidade às margens do Rio Doce, com economia diversificada.",
+    "description_en": "City on the banks of Rio Doce, with diverse economy."
+  },
+  {
+    "id": "142",
+    "name": "Araguaçu",
+    "state": "TO",
+    "region": "Norte",
+    "description": "Cidade em expansão com paisagens naturais e atividades agropecuárias.",
+    "description_en": "Expanding city with natural landscapes and agricultural activities."
+  },
+  {
+    "id": "143",
+    "name": "Ituiutaba",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Importante cidade do Triângulo Mineiro, com destaque no agronegócio.",
+    "description_en": "Important City of Triangulo Mineiro, highlighted in agribusiness."
+  },
+  {
+    "id": "144",
+    "name": "Lavras",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Centro universitário e agrícola no sul de Minas.",
+    "description_en": "University and Agricultural Center in the south of Minas."
+  },
+  {
+    "id": "145",
+    "name": "Rio Branco",
+    "state": "AC",
+    "region": "Norte",
+    "description": "Capital do Acre, rodeada por floresta amazônica e cultura regional forte.",
+    "description_en": "Capital of Acre, surrounded by Amazon rainforest and strong regional culture."
+  },
+  {
+    "id": "146",
+    "name": "Cruzeiro do Sul",
+    "state": "AC",
+    "region": "Norte",
+    "description": "Segunda maior cidade do Acre, com acesso ao Parque Nacional da Serra do Divisor.",
+    "description_en": "Acre's second largest city, with access to the Serra do Divisor National Park."
+  },
+  {
+    "id": "147",
+    "name": "Bagé",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Importante cidade da Campanha Gaúcha, com tradição pecuária e arquitetura histórica.",
+    "description_en": "Important city of the Rio Grande do Sul campaign, with livestock tradition and historical architecture."
+  },
+  {
+    "id": "148",
+    "name": "Corumbá",
+    "state": "MS",
+    "region": "Centro-Oeste",
+    "description": "Porta de entrada para o Pantanal, com natureza exuberante e rica cultura fronteiriça.",
+    "description_en": "Gateway to the Pantanal, with lush nature and rich border culture."
+  },
+  {
+    "id": "149",
+    "name": "Parintins",
+    "state": "AM",
+    "region": "Norte",
+    "description": "Famosa pelo Festival Folclórico de Parintins, um dos maiores espetáculos culturais do Brasil.",
+    "description_en": "Famous by the Parintins Folkloric Festival, one of the greatest cultural shows in Brazil."
+  },
+  {
+    "id": "150",
+    "name": "Humaitá",
+    "state": "AM",
+    "region": "Norte",
+    "description": "Cidade ribeirinha com potencial ecoturístico e acesso à BR-319.",
+    "description_en": "Riverside city with ecoturistic potential and access to BR-319."
+  },
+  {
+    "id": "151",
+    "name": "Brusque",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Centro têxtil catarinense com forte influência germânica.",
+    "description_en": "Santa Catarina Textile Center with strong Germanic influence."
+  },
+  {
+    "id": "152",
+    "name": "Concórdia",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Cidade desenvolvida com tradição agroindustrial e qualidade de vida.",
+    "description_en": "City developed with agroindustrial tradition and quality of life."
+  },
+  {
+    "id": "153",
+    "name": "Itabira",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Terra natal de Carlos Drummond de Andrade e polo da mineração.",
+    "description_en": "Carlos Drummond de Andrade and Mining Polo."
+  },
+  {
+    "id": "154",
+    "name": "Patos de Minas",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Conhecida pela Festa Nacional do Milho e economia agrícola.",
+    "description_en": "Known for the National Festival of Corn and Agricultural Economy."
+  },
+  {
+    "id": "155",
+    "name": "Rorainópolis",
+    "state": "RR",
+    "region": "Norte",
+    "description": "Município em crescimento, com relevância agrícola e biodiversidade amazônica.",
+    "description_en": "Growth municipality, with agricultural relevance and Amazonian biodiversity."
+  },
+  {
+    "id": "156",
+    "name": "Itabaiana",
+    "state": "SE",
+    "region": "Nordeste",
+    "description": "Conhecida como 'Cidade Serrana', com forte comércio e festas populares.",
+    "description_en": "Known as 'Serrana City', with strong trade and popular parties."
+  },
+  {
+    "id": "157",
+    "name": "Araguaiana",
+    "state": "MT",
+    "region": "Centro-Oeste",
+    "description": "Cidade pacata às margens do Rio Araguaia, com turismo de pesca e natureza.",
+    "description_en": "Cidade quietly on the banks of the Araguaia River, with fishing and nature tourism."
+  },
+  {
+    "id": "158",
+    "name": "Rio das Ostras",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Destino turístico com praias preservadas e eventos culturais.",
+    "description_en": "Tourist destination with preserved beaches and cultural events."
+  },
+  {
+    "id": "159",
+    "name": "Mossoró",
+    "state": "RN",
+    "region": "Nordeste",
+    "description": "Importante cidade potiguar, com destaque em energia e cultura junina.",
+    "description_en": "Important Potiguar city, with emphasis on energy and June culture."
+  },
+  {
+    "id": "160",
+    "name": "Chapecó",
+    "state": "SC",
+    "region": "Sul",
+    "description": "Centro do agronegócio e polo industrial do oeste catarinense.",
+    "description_en": "Center of Agribusiness and Industrial Polo of West Santa Catarina."
+  },
+  {
+    "id": "161",
+    "name": "Linhares",
+    "state": "ES",
+    "region": "Sudeste",
+    "description": "Importante polo agroindustrial e turístico, com lagoas e praias.",
+    "description_en": "Important Agroindustrial and Tourist Polo, with lagoons and beaches."
+  },
+  {
+    "id": "162",
+    "name": "Alagoinhas",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Centro logístico e industrial do interior baiano.",
+    "description_en": "Logistics and Industrial Center of the Bahian interior."
+  },
+  {
+    "id": "163",
+    "name": "Itabira",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade natal do poeta Drummond, com forte presença na mineração.",
+    "description_en": "Poet Drummond's hometown, with a strong presence in mining."
+  },
+  {
+    "id": "164",
+    "name": "Varginha",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Famosa pelo caso do ET de Varginha e polo do sul de Minas.",
+    "description_en": "Famous for the case of ET of Varginha and Polo do Sul de Minas."
+  },
+  {
+    "id": "165",
+    "name": "Ituiutaba",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade agrícola e universitária no Triângulo Mineiro.",
+    "description_en": "Agricultural and university city in the Triangulo Mineiro."
+  },
+  {
+    "id": "166",
+    "name": "Barbacena",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade serrana com forte tradição militar e clima ameno.",
+    "description_en": "Serrana city with strong military tradition and mild climate."
+  },
+  {
+    "id": "167",
+    "name": "Sertãozinho",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Polo da indústria sucroalcooleira e de máquinas agrícolas.",
+    "description_en": "Pole of the sugar and alcohol industry and agricultural machinery."
+  },
+  {
+    "id": "168",
+    "name": "Teresópolis",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade serrana com clima frio, sede da Granja Comary.",
+    "description_en": "Mountain city with cold weather, headquarters of Granja Comary."
+  },
+  {
+    "id": "169",
+    "name": "Nova Friburgo",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Forte influência suíça, clima frio e roteiros de aventura.",
+    "description_en": "Strong Swiss influence, cold weather and adventure scripts."
+  },
+  {
+    "id": "170",
+    "name": "Itaboraí",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Área industrial em expansão com importância logística.",
+    "description_en": "Expanding industrial area with logistics importance."
+  },
+  {
+    "id": "171",
+    "name": "Nilópolis",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Cidade da famosa escola de samba Beija-Flor e economia local ativa.",
+    "description_en": "City of the famous Hummingbird samba school and active local economy."
+  },
+  {
+    "id": "172",
+    "name": "Mesquita",
+    "state": "RJ",
+    "region": "Sudeste",
+    "description": "Município da Baixada Fluminense com população crescente.",
+    "description_en": "Municipality of Baixada Fluminense with increasing population."
+  },
+  {
+    "id": "173",
+    "name": "Santa Luzia",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Importante cidade histórica da Região Metropolitana de BH.",
+    "description_en": "Important historical city of the BH Metropolitan Region."
+  },
+  {
+    "id": "174",
+    "name": "Marabá",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Importante centro comercial e logístico do sudeste paraense.",
+    "description_en": "Important Southeast Southeast Shopping Center."
+  },
+  {
+    "id": "175",
+    "name": "Altos",
+    "state": "PI",
+    "region": "Nordeste",
+    "description": "Cidade em crescimento na região de Teresina, com relevância regional.",
+    "description_en": "Growth city in the Teresina region, with regional relevance."
+  },
+  {
+    "id": "176",
+    "name": "Ariquemes",
+    "state": "RO",
+    "region": "Norte",
+    "description": "Cidade estratégica no setor agropecuário de Rondônia.",
+    "description_en": "Strategic city in the agricultural sector of Rondônia."
+  },
+  {
+    "id": "177",
+    "name": "Ji-Paraná",
+    "state": "RO",
+    "region": "Norte",
+    "description": "Segunda maior cidade de Rondônia, com setor industrial crescente.",
+    "description_en": "Second largest city in Rondônia, with increasing industrial sector."
+  },
+  {
+    "id": "178",
+    "name": "Passo Fundo",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Importante polo de saúde e educação do norte gaúcho.",
+    "description_en": "IMPORTANT HEALTH AND EDUCATION POLO OF NORTHERN GAUCHO."
+  },
+  {
+    "id": "179",
+    "name": "Alegrete",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Maior município em extensão do RS, com tradição campeira.",
+    "description_en": "Largest municipality in extension of RS, with champion tradition."
+  },
+  {
+    "id": "180",
+    "name": "São Leopoldo",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Cidade histórica com colonização alemã e vida acadêmica intensa.",
+    "description_en": "Historical city with German colonization and intense academic life."
+  },
+  {
+    "id": "181",
+    "name": "Esteio",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Conhecida por sediar a Expointer, feira agropecuária internacional.",
+    "description_en": "Known for hosting Expointer, International Agricultural Fair."
+  },
+  {
+    "id": "182",
+    "name": "Viamão",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Município histórico com áreas de preservação e tradição rural.",
+    "description_en": "Historical municipality with areas of preservation and rural tradition."
+  },
+  {
+    "id": "183",
+    "name": "Parnaíba",
+    "state": "PI",
+    "region": "Nordeste",
+    "description": "Porta de entrada para o Delta do Parnaíba, com grande valor turístico.",
+    "description_en": "Gate of entrance to the Parnaíba Delta, with great tourist value."
+  },
+  {
+    "id": "184",
+    "name": "Crato",
+    "state": "CE",
+    "region": "Nordeste",
+    "description": "Cidade histórica na Chapada do Araripe, com tradição cultural forte.",
+    "description_en": "Historical city in Chapada do Araripe, with strong cultural tradition."
+  },
+  {
+    "id": "185",
+    "name": "Barra do Garças",
+    "state": "MT",
+    "region": "Centro-Oeste",
+    "description": "Conhecida por suas águas termais, serras e turismo místico.",
+    "description_en": "Known for its thermal waters, mountains and mystical tourism."
+  },
+  {
+    "id": "186",
+    "name": "Itumbiara",
+    "state": "GO",
+    "region": "Centro-Oeste",
+    "description": "Cidade ribeirinha com forte atividade agroindustrial e turismo náutico.",
+    "description_en": "Riverside city with strong agroindustrial activity and nautical tourism."
+  },
+  {
+    "id": "187",
+    "name": "Formosa",
+    "state": "GO",
+    "region": "Centro-Oeste",
+    "description": "Importante polo do entorno do DF com belas cachoeiras.",
+    "description_en": "Important pole around the DF with beautiful waterfalls."
+  },
+  {
+    "id": "188",
+    "name": "Luziânia",
+    "state": "GO",
+    "region": "Centro-Oeste",
+    "description": "Cidade histórica do entorno de Brasília com forte crescimento populacional.",
+    "description_en": "Historical city around Brasilia with strong population growth."
+  },
+  {
+    "id": "189",
+    "name": "Bragança",
+    "state": "PA",
+    "region": "Norte",
+    "description": "Cidade litorânea com cultura forte e belezas naturais no nordeste do Pará.",
+    "description_en": "Coastal city with strong culture and natural beauties in northeastern Pará."
+  },
+  {
+    "id": "190",
+    "name": "Macururé",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Cidade histórica com tradições culturais sertanejas.",
+    "description_en": "Historical city with country cultural traditions."
+  },
+  {
+    "id": "191",
+    "name": "Piripiri",
+    "state": "PI",
+    "region": "Nordeste",
+    "description": "Cidade estratégica com forte presença no comércio e serviços regionais.",
+    "description_en": "Strategic city with strong presence in trade and regional services."
+  },
+  {
+    "id": "192",
+    "name": "Rio Verde",
+    "state": "GO",
+    "region": "Centro-Oeste",
+    "description": "Um dos maiores polos do agronegócio do país.",
+    "description_en": "One of the largest agribusiness poles in the country."
+  },
+  {
+    "id": "193",
+    "name": "Canoas",
+    "state": "RS",
+    "region": "Sul",
+    "description": "Importante polo industrial da Região Metropolitana de Porto Alegre.",
+    "description_en": "Important Industrial Pole of the Porto Alegre Metropolitan Region."
+  },
+  {
+    "id": "194",
+    "name": "Itabuna",
+    "state": "BA",
+    "region": "Nordeste",
+    "description": "Centro comercial e logístico do sul da Bahia.",
+    "description_en": "Shopping and Logistics Center of southern Bahia."
+  },
+  {
+    "id": "195",
+    "name": "Petrolina",
+    "state": "PE",
+    "region": "Nordeste",
+    "description": "Importante polo agroexportador às margens do Rio São Francisco.",
+    "description_en": "Important Agroexport Pole on the banks of the São Francisco River."
+  },
+  {
+    "id": "196",
+    "name": "Paracatu",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade histórica com tradição na mineração de ouro.",
+    "description_en": "Historical city with tradition in gold mining."
+  },
+  {
+    "id": "197",
+    "name": "Catanduva",
+    "state": "SP",
+    "region": "Sudeste",
+    "description": "Centro regional com tradição agrícola e setor industrial ativo.",
+    "description_en": "Regional Center with Agricultural Tradition and Active Industrial Sector."
+  },
+  {
+    "id": "198",
+    "name": "Boa Esperança",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade turística com paisagens montanhosas e o Lago de Furnas.",
+    "description_en": "Tourist city with mountainous landscapes and Furnas Lake."
+  },
+  {
+    "id": "199",
+    "name": "Coronel Fabriciano",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Parte do Vale do Aço, com economia baseada na siderurgia.",
+    "description_en": "Part of the Steel Valley, with economy based on steel."
+  },
+  {
+    "id": "200",
+    "name": "Patrocínio",
+    "state": "MG",
+    "region": "Sudeste",
+    "description": "Cidade produtora de café, destaque no agronegócio mineiro.",
+    "description_en": "Coffee producing city, featured in Mineiro Agribusiness."
+  }
+]

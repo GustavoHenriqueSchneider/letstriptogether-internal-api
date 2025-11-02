@@ -1,0 +1,1416 @@
+[
+  {
+    "name": "Rio de Janeiro",
+    "description": "Cidade maravilhosa com praias, samba e o Cristo Redentor.",
+    "attractions": [
+      {
+        "name": "Cristo Redentor",
+        "description": "Estátua icônica no topo do Corcovado.",
+        "category": "culture.monument"
+      },
+      {
+        "name": "Museu do Amanhã",
+        "description": "Museu de ciência e futuro com arquitetura futurista na zona portuária do Rio de Janeiro.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Pão de Açúcar",
+        "description": "Complexo de montanhas com vista panorâmica da Baía de Guanabara.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Escadaria Selarón",
+        "description": "Escadaria colorida decorada com azulejos do mundo todo.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Rua das Pedras",
+        "description": "Ruas movimentadas com bares e lojas em Búzios.",
+        "category": "shopping"
+      },
+      {
+        "name": "Mirante Dona Marta",
+        "description": "Vista panorâmica do Cristo Redentor e da Baía de Guanabara.",
+        "category": "placetype.viewpoint"
+      },
+      {
+        "name": "Catedral Metropolitana de São Sebastião",
+        "description": "Catedral moderna em forma de pirâmide.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Forte de Copacabana",
+        "description": "Forte histórico com museu e vista para a praia.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Vila do Abraão",
+        "description": "Principal vila da Ilha Grande, com acesso a trilhas e praias.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Museu Nacional",
+        "description": "Antigo palácio imperial, atualmente em restauração após incêndio.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Parque das Ruínas",
+        "description": "Centro cultural com vista panorâmica no bairro Santa Teresa.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Feira Hippie de Ipanema",
+        "description": "Feira de artesanato dominical ao ar livre.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Salvador",
+    "description": "Berço da cultura afro-brasileira, acarajé e festas populares.",
+    "attractions": [
+      {
+        "name": "Pelourinho",
+        "description": "Centro histórico de Salvador com arquitetura colonial.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Farol da Barra",
+        "description": "Um dos cartões-postais de Salvador, com forte histórico e vista para o mar.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Elevador Lacerda",
+        "description": "Elevador urbano que conecta Cidade Alta à Cidade Baixa.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Praia do Forte",
+        "description": "Praia com projeto TAMAR e ruínas de fortaleza.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Solar do Unhão",
+        "description": "Museu de Arte Moderna às margens da Baía de Todos-os-Santos.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Largo do Pelourinho",
+        "description": "Coração do centro histórico soteropolitano com casarões coloniais.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Basílica do Senhor do Bonfim",
+        "description": "Um dos maiores símbolos religiosos da Bahia.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Casa do Rio Vermelho",
+        "description": "Residência de Jorge Amado e Zélia Gattai, hoje museu.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Feira do Mercado Modelo",
+        "description": "Artesanato, cultura e culinária típica baiana.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "São Paulo",
+    "description": "Maior cidade do Brasil, centro financeiro e cultural vibrante.",
+    "attractions": [
+      {
+        "name": "Parque do Ibirapuera",
+        "description": "Principal parque urbano de São Paulo, com museus, lagos e áreas de lazer.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Museu da Língua Portuguesa",
+        "description": "Museu interativo sobre o idioma português.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Farol do Cabo Branco",
+        "description": "Marco geográfico do ponto mais oriental das Américas.",
+        "category": "culture.monument"
+      },
+      {
+        "name": "Parque do Povo",
+        "description": "Área de lazer arborizada no centro de São Paulo.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Estação da Luz",
+        "description": "Estação ferroviária histórica que abriga o Museu da Língua Portuguesa.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Aquário de São Paulo",
+        "description": "Maior aquário da América Latina com centenas de espécies.",
+        "category": "culture.education"
+      },
+      {
+        "name": "Pico do Jaraguá",
+        "description": "Ponto mais alto da cidade de São Paulo, com trilhas e mirantes.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Ponte Estaiada",
+        "description": "Cartão-postal moderno de São Paulo sobre o rio Pinheiros.",
+        "category": "culture.architecture"
+      },
+      {
+        "name": "Teatro Municipal de São Paulo",
+        "description": "Obra-prima da arquitetura e palco de grandes espetáculos.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Brasília",
+    "description": "Capital federal com arquitetura modernista de Oscar Niemeyer.",
+    "attractions": [
+      {
+        "name": "Parque da Cidade Sarah Kubitschek",
+        "description": "Grande área verde de lazer no coração da capital do Brasil.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Memorial JK",
+        "description": "Museu dedicado ao presidente Juscelino Kubitschek.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Ponte JK",
+        "description": "Ponte estaiada premiada que cruza o Lago Paranoá.",
+        "category": "culture.architecture"
+      },
+      {
+        "name": "Catedral Metropolitana de Brasília",
+        "description": "Obra-prima de Oscar Niemeyer com vitrais coloridos.",
+        "category": "culture.architecture"
+      },
+      {
+        "name": "Zoológico de Brasília",
+        "description": "Espaço com grande variedade de fauna brasileira.",
+        "category": "culture.education"
+      }
+    ]
+  },
+  {
+    "name": "Fortaleza",
+    "description": "Praias paradisíacas, culinária regional e vida noturna animada.",
+    "attractions": [
+      {
+        "name": "Centro Dragão do Mar de Arte e Cultura",
+        "description": "Complexo cultural com museus, cinemas e teatros em Fortaleza.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Catedral Metropolitana de Fortaleza",
+        "description": "Um dos maiores templos religiosos do Brasil.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Beach Park",
+        "description": "Maior parque aquático da América Latina.",
+        "category": "entertainment.park"
+      },
+      {
+        "name": "Feirinha da Beira-Mar",
+        "description": "Feira de artesanato e comidas típicas à beira-mar.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Museu da Cachaça",
+        "description": "Museu dedicado à história e produção da cachaça.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Belo Horizonte",
+    "description": "Conhecida por sua gastronomia e o Conjunto Arquitetônico da Pampulha.",
+    "attractions": [
+      {
+        "name": "Catedral de Nossa Senhora das Neves",
+        "description": "Imponente catedral em estilo neoclássico.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Mercado Central de Belo Horizonte",
+        "description": "Tradição mineira em forma de sabores e artesanato.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Igreja de São Francisco de Assis",
+        "description": "Famosa igrejinha da Pampulha, patrimônio modernista.",
+        "category": "culture.architecture"
+      },
+      {
+        "name": "Parque Municipal Américo Renné Giannetti",
+        "description": "Área verde no centro de BH com lago, trilhas e brinquedos.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Parque Nacional da Serra do Cipó",
+        "description": "Destino de trilhas, rios e cachoeiras em meio ao cerrado.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Cachoeira do Tabuleiro",
+        "description": "Maior queda d’água de MG, com 273 metros.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Gruta Rei do Mato",
+        "description": "Caverna com formações calcárias e pinturas rupestres.",
+        "category": "placetype.cave"
+      },
+      {
+        "name": "Parque Municipal da Lagoa do Nado",
+        "description": "Parque urbano com lagoa, trilhas e centro cultural.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Complexo da Pampulha",
+        "description": "Conjunto modernista de Niemeyer com lago e museus.",
+        "category": "culture.architecture"
+      },
+      {
+        "name": "Parque Nacional Cavernas do Peruaçu",
+        "description": "Formações calcárias monumentais e sítios arqueológicos.",
+        "category": "placetype.cave"
+      }
+    ]
+  },
+  {
+    "name": "Manaus",
+    "description": "Porta de entrada para a Amazônia, com o famoso Teatro Amazonas.",
+    "attractions": [
+      {
+        "name": "Teatro Amazonas",
+        "description": "Teatro histórico com arquitetura neoclássica no coração da Amazônia.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Museu da Amazônia (MUSA)",
+        "description": "Observatório na floresta, trilhas e educação ambiental.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Teatro Amazonas",
+        "description": "Símbolo cultural de Manaus com arquitetura neoclássica.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Encontro das Águas",
+        "description": "Fenômeno natural entre os rios Negro e Solimões.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Curitiba",
+    "description": "Referência em planejamento urbano e sustentabilidade.",
+    "attractions": [
+      {
+        "name": "Jardim Botânico de Curitiba",
+        "description": "Cartão-postal com estufa inspirada no Palácio de Cristal de Londres.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Parque Estadual de Vila Velha",
+        "description": "Formações rochosas esculpidas pelo tempo em meio à natureza.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Parque Tanguá",
+        "description": "Parque paisagístico com cascata, mirante e túneis de pedra.",
+        "category": "placetype.viewpoint"
+      },
+      {
+        "name": "Ópera de Arame",
+        "description": "Espaço cultural em estrutura metálica sobre lago.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Museu Egípcio e Rosa-Cruz",
+        "description": "Réplica do Templo de Luxor com exposições culturais.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Museu Oscar Niemeyer",
+        "description": "Museu de arte moderna em prédio icônico em forma de olho.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Feira do Largo da Ordem",
+        "description": "Feira de artesanato tradicional nas ruas históricas de Curitiba.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Recife",
+    "description": "Conhecida como 'Veneza Brasileira', com rica cena cultural.",
+    "attractions": [
+      {
+        "name": "Marco Zero",
+        "description": "Ponto simbólico do nascimento da cidade de Recife, com vista para esculturas de Brennand.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Parque das Esculturas Francisco Brennand",
+        "description": "Espaço cultural ao ar livre na zona portuária.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Ladeira do Amparo",
+        "description": "Ruas de Olinda com ateliês e casarões coloniais.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Cais do Sertão",
+        "description": "Museu interativo sobre a cultura nordestina.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Centro Histórico de Olinda",
+        "description": "Patrimônio Mundial da UNESCO, com ladeiras e casarios coloridos.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Forte Orange",
+        "description": "Forte colonial holandês localizado na Ilha de Itamaracá.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Parque da Jaqueira",
+        "description": "Oásis verde em meio ao Recife, ideal para caminhadas.",
+        "category": "placetype.park"
+      }
+    ]
+  },
+  {
+    "name": "Belém",
+    "description": "Porta de entrada para o norte, famosa pelo Círio de Nazaré.",
+    "attractions": [
+      {
+        "name": "Parque Zoobotânico",
+        "description": "Reserva ecológica em Belém com zoológico e jardim botânico.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Basílica Santuário de Nazaré",
+        "description": "Local onde ocorre o famoso Círio de Nazaré.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Parque Mangal das Garças",
+        "description": "Parque ecológico com passarelas, mirante e fauna local.",
+        "category": "placetype.viewpoint"
+      },
+      {
+        "name": "Santuário de Nossa Senhora de Nazaré",
+        "description": "Local de fé e destino final do Círio de Nazaré.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Ilha de Mosqueiro",
+        "description": "Destino de veraneio com praias de água doce no Pará.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Mercado Ver-o-Peso",
+        "description": "Um dos mercados mais tradicionais do Brasil.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Porto Alegre",
+    "description": "Capital gaúcha com forte influência cultural europeia.",
+    "attractions": [
+      {
+        "name": "Orla do Guaíba",
+        "description": "Área revitalizada para lazer e contemplação do pôr do sol.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Estádio Beira-Rio",
+        "description": "Estádio do Internacional com visita guiada e museu.",
+        "category": "entertainment.sports"
+      },
+      {
+        "name": "Mercado Público de Porto Alegre",
+        "description": "Centro gastronômico e cultural com produtos típicos do sul.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "São Luís",
+    "description": "Centro histórico colonial e rica cultura maranhense.",
+    "attractions": [
+      {
+        "name": "Centro Histórico de São Luís",
+        "description": "Patrimônio Mundial com azulejos portugueses e casarões coloniais.",
+        "category": "culture.historical"
+      }
+    ]
+  },
+  {
+    "name": "Maceió",
+    "description": "Praias de águas cristalinas e piscinas naturais.",
+    "attractions": [
+      {
+        "name": "Catedral de Maceió",
+        "description": "Templo católico com arquitetura imponente no centro da cidade.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Parque Municipal de Maceió",
+        "description": "Área de conservação com trilhas e observação de fauna.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Praia do Francês",
+        "description": "Uma das praias mais populares de Maceió, com mar calmo e infraestrutura.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Natal",
+    "description": "Conhecida pelas dunas e o Forte dos Reis Magos.",
+    "attractions": [
+      {
+        "name": "Parque das Dunas",
+        "description": "Reserva ambiental em meio urbano com trilhas e educação ambiental.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Morro do Careca",
+        "description": "Duna icônica à beira-mar em Natal.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Aquário de Natal",
+        "description": "Aquário com espécies marinhas e tanque de toque.",
+        "category": "culture.education"
+      },
+      {
+        "name": "Parque da Cidade Dom Nivaldo Monte",
+        "description": "Maior área verde de Natal, com mirante e trilhas.",
+        "category": "placetype.trail"
+      }
+    ]
+  },
+  {
+    "name": "Foz do Iguaçu",
+    "description": "Lar das impressionantes Cataratas do Iguaçu.",
+    "attractions": [
+      {
+        "name": "Cataratas do Iguaçu",
+        "description": "Conjunto de quedas d’água impressionantes na fronteira com a Argentina.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Gramado",
+    "description": "Destino turístico com arquitetura europeia e festivais de cinema.",
+    "attractions": [
+      {
+        "name": "Rua Coberta",
+        "description": "Ponto turístico central de Gramado, com lojas e restaurantes sob cobertura charmosa.",
+        "category": "shopping"
+      },
+      {
+        "name": "Mirante do Vale do Quilombo",
+        "description": "Vista espetacular entre Gramado e Canela.",
+        "category": "placetype.viewpoint"
+      },
+      {
+        "name": "Igreja Matriz São Pedro",
+        "description": "Cartão-postal no centro de Gramado, construída em pedra basalto.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Lago Negro",
+        "description": "Lago artificial com pedalinhos e vegetação típica europeia.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Igreja Matriz de São Pedro",
+        "description": "Igreja imponente no centro histórico de Gramado.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "Ouro Preto",
+    "description": "Cidade histórica com igrejas barrocas e patrimônio colonial.",
+    "attractions": [
+      {
+        "name": "Centro Histórico de Ouro Preto",
+        "description": "Conjunto arquitetônico barroco preservado, Patrimônio Mundial da UNESCO.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Igreja de São Francisco de Assis",
+        "description": "Obra-prima do barroco mineiro projetada por Aleijadinho.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Museu da Inconfidência",
+        "description": "Museu com relíquias da luta pela independência.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Igreja de São Francisco de Paula",
+        "description": "Construção histórica com belos altares em Ouro Preto.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "Paraty",
+    "description": "Cidade colonial charmosa com ruas de pedra e festivais culturais.",
+    "attractions": [
+      {
+        "name": "Centro Histórico de Paraty",
+        "description": "Ruas de pedra, casarões coloniais e igrejas barrocas preservadas.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Caminho do Ouro",
+        "description": "Trilha histórica usada no século XVIII para escoamento do ouro.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Cachoeira do Tobogã",
+        "description": "Queda d’água em pedra lisa onde visitantes escorregam.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Passeio de barco pelas ilhas",
+        "description": "Tour imperdível pelas ilhas e enseadas de Paraty.",
+        "category": "entertainment.tour"
+      }
+    ]
+  },
+  {
+    "name": "Jericoacoara",
+    "description": "Paraíso rústico com dunas, lagoas e pôr do sol espetacular.",
+    "attractions": [
+      {
+        "name": "Lagoa do Paraíso",
+        "description": "Lagoa de águas cristalinas com redes dentro d'água.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Passeio de buggy nas dunas de Jeri",
+        "description": "Atividade clássica em Jericoacoara pelas dunas e lagoas.",
+        "category": "entertainment.adventure"
+      },
+      {
+        "name": "Pedra Furada",
+        "description": "Formação rochosa icônica em Jericoacoara.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Bonito",
+    "description": "Destino ecoturístico com rios cristalinos e grutas impressionantes.",
+    "attractions": [
+      {
+        "name": "Aquário Encantado",
+        "description": "Poço de água cristalina onde se observa peixes sem mergulhar.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Gruta do Lago Azul",
+        "description": "Cartão-postal de Bonito, com caverna e lago azul intenso.",
+        "category": "placetype.cave"
+      },
+      {
+        "name": "Parque Ecológico do Rio Formoso",
+        "description": "Atividades como boia cross, flutuação e trilhas.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Mirante da Lagoa Azul",
+        "description": "Vista panorâmica de uma das paisagens mais famosas de Bonito.",
+        "category": "placetype.viewpoint"
+      }
+    ]
+  },
+  {
+    "name": "Fernando de Noronha",
+    "description": "Arquipélago paradisíaco com rica vida marinha e praias intocadas.",
+    "attractions": [
+      {
+        "name": "Praia do Sancho",
+        "description": "Considerada uma das praias mais bonitas do mundo, com acesso por trilha e escadas.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Parque Nacional Marinho de Fernando de Noronha",
+        "description": "Área de proteção com rica biodiversidade marinha.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Praia da Cacimba do Padre",
+        "description": "Uma das praias mais famosas de Fernando de Noronha.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Canela",
+    "description": "Cidade serrana com belas paisagens e atrações naturais.",
+    "attractions": [
+      {
+        "name": "Catedral de Pedra",
+        "description": "Igreja neogótica símbolo da cidade serrana.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Parque do Caracol",
+        "description": "Parque natural com cachoeira de 131 metros e trilhas ecológicas.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Parque das Serras",
+        "description": "Reserva de mata atlântica com trilhas e nascentes.",
+        "category": "placetype.mountain"
+      }
+    ]
+  },
+  {
+    "name": "Ilhabela",
+    "description": "Ilha com praias deslumbrantes e trilhas em meio à mata atlântica.",
+    "attractions": [
+      {
+        "name": "Trilha do Pico do Papagaio",
+        "description": "Vista panorâmica sobre Ilhabela e mar aberto.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Cachoeira do Gato",
+        "description": "Queda d’água com piscina natural acessível por trilha.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Porto de Galinhas",
+    "description": "Praias de águas mornas e piscinas naturais formadas por recifes.",
+    "attractions": [
+      {
+        "name": "Trilha das Piscinas Naturais",
+        "description": "Passeio por piscinas naturais formadas por recifes em Porto de Galinhas.",
+        "category": "placetype.trail"
+      },
+      {
+        "name": "Praia dos Carneiros",
+        "description": "Praia paradisíaca com coqueiros e igreja à beira-mar.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Arraial do Cabo",
+    "description": "Conhecida como o 'Caribe Brasileiro' por suas águas cristalinas.",
+    "attractions": [
+      {
+        "name": "Praia do Farol",
+        "description": "Praia com acesso controlado e mar cristalino em Arraial do Cabo.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Praia do Forno",
+        "description": "Uma das praias mais conhecidas de Arraial, acessível por trilha.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Lençóis",
+    "description": "Porta de entrada para a Chapada Diamantina, com trilhas e cachoeiras.",
+    "attractions": [
+      {
+        "name": "Parque Nacional da Chapada Diamantina",
+        "description": "Um dos destinos de ecoturismo mais procurados do Brasil.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Cachoeira da Fumaça",
+        "description": "Uma das mais altas do Brasil, com 340m de queda livre.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Cachoeira da Eubiose",
+        "description": "Queda d’água em meio à Chapada Diamantina.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Morro do Pai Inácio",
+        "description": "Mirante mais famoso da Chapada Diamantina.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Cachoeira do Buracão",
+        "description": "Trilha e cânion levam a uma impressionante queda d’água.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Tiradentes",
+    "description": "Cidade histórica com arquitetura colonial e rica cena gastronômica.",
+    "attractions": [
+      {
+        "name": "Parque Estadual do Ibitipoca",
+        "description": "Trilhas, cavernas e cachoeiras entre montanhas.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Igreja Matriz de Santo Antônio",
+        "description": "Igreja colonial ricamente decorada com ouro.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Igreja Matriz de Santo Antônio",
+        "description": "Igreja barroca símbolo de Tiradentes.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "São Gonçalo",
+    "description": "Grande cidade da região metropolitana do Rio de Janeiro.",
+    "attractions": [
+      {
+        "name": "Fortaleza de Santa Cruz da Barra",
+        "description": "Fortaleza histórica com vista para a Baía de Guanabara.",
+        "category": "culture.historical"
+      }
+    ]
+  },
+  {
+    "name": "São Bernardo do Campo",
+    "description": "Conhecida pela indústria automobilística e sindicalismo.",
+    "attractions": [
+      {
+        "name": "Caverna do Diabo",
+        "description": "Maior caverna do estado de São Paulo, com visita guiada.",
+        "category": "placetype.cave"
+      }
+    ]
+  },
+  {
+    "name": "São José dos Campos",
+    "description": "Polo aeroespacial e tecnológico do país.",
+    "attractions": [
+      {
+        "name": "Sítio do Picapau Amarelo",
+        "description": "Museu dedicado a Monteiro Lobato.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Uberlândia",
+    "description": "Centro logístico e tecnológico do Triângulo Mineiro.",
+    "attractions": [
+      {
+        "name": "Teatro Municipal de Uberlândia",
+        "description": "Espaço cultural moderno com eventos diversos.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Joinville",
+    "description": "Maior cidade de Santa Catarina, conhecida pela dança e indústria.",
+    "attractions": [
+      {
+        "name": "Vila Germânica",
+        "description": "Centro de eventos e arquitetura típica alemã.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Parque Ramiro Ruediger",
+        "description": "Área de lazer com pistas de caminhada, quadras e lago.",
+        "category": "placetype.park"
+      },
+      {
+        "name": "Catedral de Joinville",
+        "description": "Templo católico imponente com vitrais coloridos.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "Londrina",
+    "description": "Importante centro agrícola e universitário do norte do Paraná.",
+    "attractions": [
+      {
+        "name": "Lago Igapó",
+        "description": "Cartão-postal de Londrina, ideal para caminhadas e esportes.",
+        "category": "placetype.park"
+      }
+    ]
+  },
+  {
+    "name": "Chapada dos Guimarães",
+    "description": "Destino turístico com belas paisagens e cachoeiras.",
+    "attractions": [
+      {
+        "name": "Caverna Aroe Jari",
+        "description": "Maior caverna de arenito do Brasil, com lagoa azul.",
+        "category": "placetype.cave"
+      },
+      {
+        "name": "Cachoeira Véu da Noiva",
+        "description": "Cachoeira deslumbrante em meio à Chapada dos Guimarães.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Mirante da Serra de São Vicente",
+        "description": "Vista privilegiada da Chapada dos Guimarães.",
+        "category": "placetype.mountain"
+      }
+    ]
+  },
+  {
+    "name": "Nova Petrópolis",
+    "description": "Cidade com forte influência alemã e belas paisagens.",
+    "attractions": [
+      {
+        "name": "Rota do Enxaimel",
+        "description": "Conjunto de casas de arquitetura alemã tradicional.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Canindé de São Francisco",
+    "description": "Conhecida pelos cânions do Rio São Francisco.",
+    "attractions": [
+      {
+        "name": "Cânion do Xingó",
+        "description": "Paisagem impressionante com paredões esculpidos pelo Rio São Francisco.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Maragogi",
+    "description": "Famosa pelas piscinas naturais e águas cristalinas.",
+    "attractions": [
+      {
+        "name": "Passeio de jangada nas piscinas naturais",
+        "description": "Atração clássica de Maragogi, com águas cristalinas.",
+        "category": "entertainment.attraction"
+      },
+      {
+        "name": "Praia de Antunes",
+        "description": "Uma das praias mais bonitas de Maragogi, com águas calmas e transparentes.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Praia de São Miguel dos Milagres",
+        "description": "Praia intocada com águas transparentes e piscinas naturais.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Palmas",
+    "description": "Capital mais jovem do Brasil, com natureza exuberante ao redor.",
+    "attractions": [
+      {
+        "name": "Lagoa do Japonês",
+        "description": "Lagoa de águas azul-turquesa cercada por vegetação.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Parque Estadual do Jalapão",
+        "description": "Destino de ecoturismo com dunas, fervedouros e cachoeiras.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Cachoeira Santa Bárbara",
+        "description": "Famosa pela coloração azul-turquesa de suas águas.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Cachoeira do Formiga",
+        "description": "Cachoeira de água cristalina no Jalapão.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Boa Vista",
+    "description": "Cidade planejada com influências amazônicas e caribenhas.",
+    "attractions": [
+      {
+        "name": "Parque Nacional do Monte Roraima",
+        "description": "Montanha com topo plano e paisagens surreais.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Mirante de Boa Vista",
+        "description": "Vista privilegiada da cidade e da floresta.",
+        "category": "placetype.viewpoint"
+      }
+    ]
+  },
+  {
+    "name": "Cuiabá",
+    "description": "Porta de entrada para o Pantanal e Chapada dos Guimarães.",
+    "attractions": [
+      {
+        "name": "Orla Morena",
+        "description": "Corredor de lazer, esportes e gastronomia.",
+        "category": "placetype.park"
+      }
+    ]
+  },
+  {
+    "name": "Vitória",
+    "description": "Capital litorânea com belas praias e ilhas.",
+    "attractions": [
+      {
+        "name": "Pico da Bandeira",
+        "description": "Terceiro ponto mais alto do Brasil, com trilhas desafiadoras.",
+        "category": "placetype.mountain"
+      }
+    ]
+  },
+  {
+    "name": "Vila Velha",
+    "description": "Famosa pela Praia da Costa e o Convento da Penha.",
+    "attractions": [
+      {
+        "name": "Convento da Penha",
+        "description": "Monumento religioso no alto de um morro com vista para o mar.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "Barreirinhas",
+    "description": "Principal acesso aos Lençóis Maranhenses.",
+    "attractions": [
+      {
+        "name": "Parque Nacional dos Lençóis Maranhenses",
+        "description": "Paisagem única com dunas brancas e lagoas cristalinas.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Brumadinho",
+    "description": "Sede do Instituto Inhotim, maior museu a céu aberto do mundo.",
+    "attractions": [
+      {
+        "name": "Instituto Inhotim",
+        "description": "Maior museu de arte contemporânea a céu aberto da América Latina.",
+        "category": "culture.museum"
+      }
+    ]
+  },
+  {
+    "name": "Aparecida",
+    "description": "Centro de peregrinação religiosa com o Santuário Nacional de Aparecida.",
+    "attractions": [
+      {
+        "name": "Basílica de Nossa Senhora Aparecida",
+        "description": "Maior templo católico do Brasil, destino de peregrinação religiosa.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "Poços de Caldas",
+    "description": "Estância hidromineral com clima ameno e arquitetura charmosa.",
+    "attractions": [
+      {
+        "name": "Parque das Águas",
+        "description": "Fonte de águas termais e relaxamento no sul de Minas.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Bento Gonçalves",
+    "description": "Capital brasileira do vinho, com belas paisagens e cultura italiana.",
+    "attractions": [
+      {
+        "name": "Vinícola Miolo",
+        "description": "Uma das maiores vinícolas do Brasil com visitação guiada.",
+        "category": "food.restaurant"
+      },
+      {
+        "name": "Vale dos Vinhedos",
+        "description": "Rota turística de vinícolas com paisagens encantadoras.",
+        "category": "placetype.rural"
+      }
+    ]
+  },
+  {
+    "name": "Ilhéus",
+    "description": "Terra de Jorge Amado, com belas praias e casarões históricos.",
+    "attractions": [
+      {
+        "name": "Igreja Matriz de São Jorge",
+        "description": "Igreja centenária com arquitetura imponente no centro da cidade.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Casa de Jorge Amado",
+        "description": "Museu e centro cultural dedicado ao escritor baiano.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "São João del-Rei",
+    "description": "Cidade histórica com igrejas barrocas e tradição ferroviária.",
+    "attractions": [
+      {
+        "name": "Igreja Matriz de Nossa Senhora da Conceição",
+        "description": "Símbolo da cidade com arquitetura colonial preservada.",
+        "category": "culture.religious"
+      },
+      {
+        "name": "Centro Histórico de São João del-Rei",
+        "description": "Casarões coloniais e igrejas barrocas preservadas.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Museu Regional",
+        "description": "Acervo de arte sacra e mobiliário do período colonial.",
+        "category": "culture.museum"
+      },
+      {
+        "name": "Ferrovia Maria Fumaça",
+        "description": "Passeio de trem turístico entre São João del-Rei e Tiradentes.",
+        "category": "entertainment.tour"
+      },
+      {
+        "name": "Igreja de São Francisco Xavier",
+        "description": "Um dos símbolos do barroco mineiro em São João del-Rei.",
+        "category": "culture.religious"
+      }
+    ]
+  },
+  {
+    "name": "Teresina",
+    "description": "Única capital nordestina sem litoral, cortada pelos rios Parnaíba e Poti.",
+    "attractions": [
+      {
+        "name": "Parque Nacional da Serra da Capivara",
+        "description": "Sítios arqueológicos com pinturas rupestres milenares.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Sítio Arqueológico do Geoparque Seridó",
+        "description": "Formações geológicas e pinturas rupestres no sertão.",
+        "category": "culture.heritage"
+      },
+      {
+        "name": "Parque Ambiental Encontro dos Rios",
+        "description": "Ponto de encontro dos rios Poti e Parnaíba.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Caruaru",
+    "description": "Conhecida como a 'Capital do Forró' e pelo São João mais tradicional do Brasil.",
+    "attractions": [
+      {
+        "name": "Vale do Catimbau",
+        "description": "Sítio arqueológico e paisagem única no sertão pernambucano.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Memorial Luiz Gonzaga",
+        "description": "Espaço cultural dedicado ao rei do baião.",
+        "category": "culture.center"
+      },
+      {
+        "name": "Feira de Caruaru",
+        "description": "Uma das maiores feiras livres do Brasil, com artesanato e comidas típicas.",
+        "category": "culture.center"
+      }
+    ]
+  },
+  {
+    "name": "Balneário Camboriú",
+    "description": "Destino turístico com arranha-céus e belas praias, a 'Dubai Brasileira'.",
+    "attractions": [
+      {
+        "name": "Cristo Luz",
+        "description": "Monumento com luzes que iluminam Balneário Camboriú à noite.",
+        "category": "culture.monument"
+      },
+      {
+        "name": "Unipraias",
+        "description": "Bondinhos aéreos com vistas deslumbrantes e atrações no topo.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Molhes da Barra Sul",
+        "description": "Píer que avança sobre o mar, ótimo para caminhada.",
+        "category": "placetype.nature"
+      },
+      {
+        "name": "Cristo Redentor de Barra Velha",
+        "description": "Estátua do Cristo com vista para o mar.",
+        "category": "culture.monument"
+      },
+      {
+        "name": "Praia Brava",
+        "description": "Praia entre Itajaí e BC com natureza e surf.",
+        "category": "placetype.beach"
+      },
+      {
+        "name": "Roda Gigante de Balneário Camboriú",
+        "description": "Atração moderna com vista panorâmica da orla.",
+        "category": "entertainment.park"
+      }
+    ]
+  },
+  {
+    "name": "Bauru",
+    "description": "Importante cidade do interior paulista com forte setor de serviços e educação.",
+    "attractions": [
+      {
+        "name": "Jardim Botânico de Bauru",
+        "description": "Espaço de conservação com flora e fauna do cerrado.",
+        "category": "placetype.park"
+      }
+    ]
+  },
+  {
+    "name": "Porto Seguro",
+    "description": "Berço do descobrimento do Brasil, com praias animadas e história.",
+    "attractions": [
+      {
+        "name": "Parque Nacional do Pau Brasil",
+        "description": "Área de preservação ambiental com trilhas e biodiversidade.",
+        "category": "placetype.trail"
+      }
+    ]
+  },
+  {
+    "name": "Imbituba",
+    "description": "Famosa pela Praia do Rosa e temporada de avistamento de baleias.",
+    "attractions": [
+      {
+        "name": "Praia do Rosa",
+        "description": "Refúgio de surfistas e observadores de baleias.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Tibau do Sul",
+    "description": "Onde está localizada a famosa Praia da Pipa, destino turístico internacional.",
+    "attractions": [
+      {
+        "name": "Praia de Pipa",
+        "description": "Praia paradisíaca com falésias, golfinhos e vida noturna.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Ubatuba",
+    "description": "Paraíso do surf com mais de 100 praias e rica biodiversidade.",
+    "attractions": [
+      {
+        "name": "Aquário de Ubatuba",
+        "description": "Grande acervo de vida marinha, referência em educação ambiental.",
+        "category": "culture.education"
+      },
+      {
+        "name": "Trilha das Sete Praias",
+        "description": "Rota ecológica entre praias isoladas em Ubatuba.",
+        "category": "placetype.beach"
+      }
+    ]
+  },
+  {
+    "name": "Cabo Frio",
+    "description": "Praias de areia branca e águas cristalinas, muito procurado no verão.",
+    "attractions": [
+      {
+        "name": "Ilha do Japonês",
+        "description": "Pequena ilha de águas calmas, ideal para famílias.",
+        "category": "entertainment.attraction"
+      }
+    ]
+  },
+  {
+    "name": "Praia Grande",
+    "description": "Uma das maiores cidades litorâneas do Brasil, com turismo e comércio forte.",
+    "attractions": [
+      {
+        "name": "Aquário Municipal de Santos",
+        "description": "Um dos aquários mais antigos do Brasil, com diversidade marinha.",
+        "category": "culture.education"
+      },
+      {
+        "name": "Engenho São Jorge dos Erasmos",
+        "description": "Ruínas históricas do período colonial no litoral paulista.",
+        "category": "culture.historical"
+      },
+      {
+        "name": "Museu do Café",
+        "description": "Localizado na antiga Bolsa Oficial do Café.",
+        "category": "culture.museum"
+      }
+    ]
+  },
+  {
+    "name": "Tubarão",
+    "description": "Cidade com águas termais, próxima ao litoral catarinense.",
+    "attractions": [
+      {
+        "name": "Serra do Rio do Rastro",
+        "description": "Estrada sinuosa com vista panorâmica na serra catarinense.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Mirante da Serra do Rio do Rastro",
+        "description": "Visual impressionante da serra com estrada sinuosa.",
+        "category": "placetype.mountain"
+      },
+      {
+        "name": "Museu Ferroviário de Tubarão",
+        "description": "Acervo de locomotivas e história da ferrovia no sul do Brasil.",
+        "category": "culture.museum"
+      }
+    ]
+  },
+  {
+    "name": "Resende",
+    "description": "Cidade industrial com belas paisagens da Serra da Mantiqueira.",
+    "attractions": [
+      {
+        "name": "Parque Nacional do Itatiaia",
+        "description": "Primeiro parque nacional do Brasil, com cachoeiras e picos.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Barra de São Miguel",
+    "description": "Praias paradisíacas e águas calmas, próxima a Maceió.",
+    "attractions": [
+      {
+        "name": "Rampa do Voo Livre",
+        "description": "Mirante e ponto de decolagem para esportes aéreos.",
+        "category": "placetype.viewpoint"
+      }
+    ]
+  },
+  {
+    "name": "Rio Branco",
+    "description": "Capital do Acre, rodeada por floresta amazônica e cultura regional forte.",
+    "attractions": [
+      {
+        "name": "Palácio Rio Branco",
+        "description": "Sede histórica do governo do Acre.",
+        "category": "culture.historical"
+      }
+    ]
+  },
+  {
+    "name": "São Leopoldo",
+    "description": "Cidade histórica com colonização alemã e vida acadêmica intensa.",
+    "attractions": [
+      {
+        "name": "Centro Histórico de São Leopoldo",
+        "description": "Berço da colonização alemã no Brasil.",
+        "category": "culture.historical"
+      }
+    ]
+  },
+  {
+    "name": "Parnaíba",
+    "description": "Porta de entrada para o Delta do Parnaíba, com grande valor turístico.",
+    "attractions": [
+      {
+        "name": "Delta do Parnaíba",
+        "description": "Terceiro maior delta oceânico do mundo, com ecossistema único.",
+        "category": "placetype.nature"
+      }
+    ]
+  },
+  {
+    "name": "Formosa",
+    "description": "Importante polo do entorno do DF com belas cachoeiras.",
+    "attractions": [
+      {
+        "name": "Chapada dos Veadeiros",
+        "description": "Parque nacional com trilhas, cachoeiras e formações rochosas milenares.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Mirante da Janela",
+        "description": "Trilha com vista icônica da Cachoeira do Abismo.",
+        "category": "placetype.waterfall"
+      },
+      {
+        "name": "Cachoeira da Formosa",
+        "description": "Paisagem exuberante com acesso por trilha.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Luziânia",
+    "description": "Cidade histórica do entorno de Brasília com forte crescimento populacional.",
+    "attractions": [
+      {
+        "name": "Cachoeira do Itiquira",
+        "description": "Uma das maiores quedas d'água acessíveis por estrada.",
+        "category": "placetype.waterfall"
+      }
+    ]
+  },
+  {
+    "name": "Canoas",
+    "description": "Importante polo industrial da Região Metropolitana de Porto Alegre.",
+    "attractions": [
+      {
+        "name": "Arena do Grêmio",
+        "description": "Estádio moderno com museu e tour guiado.",
+        "category": "entertainment.sports"
+      }
+    ]
+  },
+  {
+    "name": "Coronel Fabriciano",
+    "description": "Parte do Vale do Aço, com economia baseada na siderurgia.",
+    "attractions": [
+      {
+        "name": "Parque Estadual do Rio Doce",
+        "description": "Maior floresta tropical de Minas fora da Amazônia.",
+        "category": "placetype.nature"
+      }
+    ]
+  }
+]

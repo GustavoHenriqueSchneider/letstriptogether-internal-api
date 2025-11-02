@@ -4,7 +4,18 @@ namespace WebApi.DTOs.Requests.Admin.User;
 
 public class AdminSetUserPreferencesByUserIdRequest
 {
-    // TODO: nao pode ser string vazia quando informado no body
-    [Required(ErrorMessage = "Categories are required.")]
-    public List<string> Categories { get; set; } = [];
+    [Required(ErrorMessage = "Likes commercial preference is required.")]
+    public bool LikesCommercial { get; init; }
+
+    [Required(ErrorMessage = "Food preferences are required.")]
+    public List<string> Food { get; init; } = [];
+
+    [Required(ErrorMessage = "Culture preferences are required.")]
+    public List<string> Culture { get; init; } = [];
+
+    [Required(ErrorMessage = "Entertainment preferences are required.")]
+    public List<string> Entertainment { get; init; } = [];
+
+    [Required(ErrorMessage = "Place types are required.")]
+    public List<string> PlaceTypes { get; init; } = [];
 }

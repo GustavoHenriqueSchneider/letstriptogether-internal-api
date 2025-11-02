@@ -8,18 +8,19 @@ using WebApi.Repositories.Interfaces;
 
 namespace WebApi.Controllers;
 
-[Authorize]
 [ApiController]
+[Authorize]
 [Route("api/v1/groups/{groupId:guid}/members")]
 public class GroupMemberController(
     IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
     IGroupRepository groupRepository,
-    IGroupMemberRepository groupMemberRepository) : ControllerBase
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllGroupMembersById([FromRoute] Guid groupId, 
+    public async Task<IActionResult> GetOtherGroupMembersById([FromRoute] Guid groupId, 
         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var currentUserId = currentUser.GetId();
@@ -47,11 +48,11 @@ public class GroupMemberController(
         var (groupMembers, hits) = 
             await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
 
-        return Ok(new GetAllGroupMembersResponse
+        return Ok(new GetOtherGroupMembersByIdResponse
         {
             Data = groupMembers
                 .Where(x => x.UserId != currentUserId)
-                .Select(x => new GetAllGroupMembersResponseData
+                .Select(x => new GetOtherGroupMembersByIdResponseData
                 {
                     Id = x.Id,
                     CreatedAt = x.CreatedAt
@@ -107,21 +108,18 @@ public class GroupMemberController(
         [FromRoute] Guid memberId)
     {
         var currentUserId = currentUser.GetId();
-
         if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
         var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
-
         if (currentUserMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
@@ -133,7 +131,6 @@ public class GroupMemberController(
         }
 
         var userToRemove = group.Members.SingleOrDefault(m => m.Id == memberId);
-
         if (userToRemove is null)
         {
             return NotFound(new ErrorResponse("The user is not a member of this group."));
@@ -144,9 +141,13 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("User can not remove itself."));
         }
 
+        group.RemoveMember(userToRemove);
+        
+        groupRepository.Update(group);
         groupMemberRepository.Remove(userToRemove);
+        groupPreferenceRepository.Update(group.Preferences);
+        
         await unitOfWork.SaveAsync();
-
         return NoContent();
     }
 }

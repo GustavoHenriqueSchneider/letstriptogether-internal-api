@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "1",
+    "name": "Cristo Redentor",
+    "description": "Estátua icônica no topo do Corcovado.",
+    "description_en": "Iconic statue at the top of Corcovado.",
+    "type": "Monumento",
+    "cityId": "1"
+  },
+  {
+    "id": "2",
+    "name": "Pelourinho",
+    "description": "Centro histórico de Salvador com arquitetura colonial.",
+    "description_en": "Salvador Historic Center with colonial architecture.",
+    "type": "Histórico",
+    "cityId": "2"
+  },
+  {
+    "id": "3",
+    "name": "Teatro Amazonas",
+    "description": "Teatro histórico com arquitetura neoclássica no coração da Amazônia.",
+    "description_en": "Historical theater with neoclassical architecture in the heart of the Amazon.",
+    "type": "Cultural",
+    "cityId": "7"
+  },
+  {
+    "id": "4",
+    "name": "Cataratas do Iguaçu",
+    "description": "Conjunto de quedas d’água impressionantes na fronteira com a Argentina.",
+    "description_en": "Set of impressive waterfalls on the Argentina border.",
+    "type": "Natural",
+    "cityId": "18"
+  },
+  {
+    "id": "5",
+    "name": "Chapada dos Veadeiros",
+    "description": "Parque nacional com trilhas, cachoeiras e formações rochosas milenares.",
+    "description_en": "National Park with trails, waterfalls and millennial rock formations.",
+    "type": "Natural",
+    "cityId": "187"
+  },
+  {
+    "id": "6",
+    "name": "Instituto Inhotim",
+    "description": "Maior museu de arte contemporânea a céu aberto da América Latina.",
+    "description_en": "Largest open -air contemporary art museum in Latin America.",
+    "type": "Museu",
+    "cityId": "70"
+  },
+  {
+    "id": "7",
+    "name": "Centro Histórico de Ouro Preto",
+    "description": "Conjunto arquitetônico barroco preservado, Patrimônio Mundial da UNESCO.",
+    "description_en": "Preserved Baroque Architectural Set, UNESCO World Heritage Site.",
+    "type": "Histórico",
+    "cityId": "20"
+  },
+  {
+    "id": "8",
+    "name": "Delta do Parnaíba",
+    "description": "Terceiro maior delta oceânico do mundo, com ecossistema único.",
+    "description_en": "Third largest ocean delta in the world, with a single ecosystem.",
+    "type": "Natural",
+    "cityId": "183"
+  },
+  {
+    "id": "9",
+    "name": "Basílica de Nossa Senhora Aparecida",
+    "description": "Maior templo católico do Brasil, destino de peregrinação religiosa.",
+    "description_en": "Largest Catholic temple in Brazil, destination of religious pilgrimage.",
+    "type": "Religioso",
+    "cityId": "73"
+  },
+  {
+    "id": "10",
+    "name": "Praia do Sancho",
+    "description": "Considerada uma das praias mais bonitas do mundo, com acesso por trilha e escadas.",
+    "description_en": "Considered one of the most beautiful beaches in the world, with trail access and stairs.",
+    "type": "Praia",
+    "cityId": "24"
+  },
+  {
+    "id": "11",
+    "name": "Marco Zero",
+    "description": "Ponto simbólico do nascimento da cidade de Recife, com vista para esculturas de Brennand.",
+    "description_en": "Symbolic point of the birth of the city of Recife, overlooking Brennand's sculptures.",
+    "type": "Histórico",
+    "cityId": "9"
+  },
+  {
+    "id": "12",
+    "name": "Parque do Ibirapuera",
+    "description": "Principal parque urbano de São Paulo, com museus, lagos e áreas de lazer.",
+    "description_en": "São Paulo's main urban park, with museums, lakes and leisure areas.",
+    "type": "Parque",
+    "cityId": "3"
+  },
+  {
+    "id": "13",
+    "name": "Parque das Dunas",
+    "description": "Reserva ambiental em meio urbano com trilhas e educação ambiental.",
+    "description_en": "Environmental reserve in urban environment with trails and environmental education.",
+    "type": "Natural",
+    "cityId": "16"
+  },
+  {
+    "id": "14",
+    "name": "Centro Dragão do Mar de Arte e Cultura",
+    "description": "Complexo cultural com museus, cinemas e teatros em Fortaleza.",
+    "description_en": "Cultural complex with museums, cinemas and theaters in Fortaleza.",
+    "type": "Cultural",
+    "cityId": "5"
+  },
+  {
+    "id": "15",
+    "name": "Jardim Botânico de Curitiba",
+    "description": "Cartão-postal com estufa inspirada no Palácio de Cristal de Londres.",
+    "description_en": "Postcard with greenhouse inspired by the London Crystal Palace.",
+    "type": "Parque",
+    "cityId": "8"
+  },
+  {
+    "id": "16",
+    "name": "Parque Nacional da Chapada Diamantina",
+    "description": "Um dos destinos de ecoturismo mais procurados do Brasil.",
+    "description_en": "One of the most sought after ecotourism destinations in Brazil.",
+    "type": "Natural",
+    "cityId": "29"
+  },
+  {
+    "id": "17",
+    "name": "Rua Coberta",
+    "description": "Ponto turístico central de Gramado, com lojas e restaurantes sob cobertura charmosa.",
+    "description_en": "Central Tourist Point of Gramado, with shops and restaurants under charming coverage.",
+    "type": "Comercial",
+    "cityId": "19"
+  },
+  {
+    "id": "18",
+    "name": "Farol da Barra",
+    "description": "Um dos cartões-postais de Salvador, com forte histórico e vista para o mar.",
+    "description_en": "One of Salvador's postcards, with strong history and sea view.",
+    "type": "Histórico",
+    "cityId": "2"
+  },
+  {
+    "id": "19",
+    "name": "Parque Nacional dos Lençóis Maranhenses",
+    "description": "Paisagem única com dunas brancas e lagoas cristalinas.",
+    "description_en": "Unique landscape with white dunes and crystal clear ponds.",
+    "type": "Natural",
+    "cityId": "69"
+  },
+  {
+    "id": "20",
+    "name": "Museu do Amanhã",
+    "description": "Museu de ciência e futuro com arquitetura futurista na zona portuária do Rio de Janeiro.",
+    "description_en": "Museum of Science and Future with futuristic architecture in the port area of ​​Rio de Janeiro.",
+    "type": "Museu",
+    "cityId": "1"
+  },
+  {
+    "id": "21",
+    "name": "Pão de Açúcar",
+    "description": "Complexo de montanhas com vista panorâmica da Baía de Guanabara.",
+    "description_en": "Mountain Complex with panoramic views of Guanabara Bay.",
+    "type": "Natural",
+    "cityId": "1"
+  },
+  {
+    "id": "22",
+    "name": "Escadaria Selarón",
+    "description": "Escadaria colorida decorada com azulejos do mundo todo.",
+    "description_en": "Colorful staircase decorated with tiles from all over the world.",
+    "type": "Cultural",
+    "cityId": "1"
+  },
+  {
+    "id": "23",
+    "name": "Aquário de Ubatuba",
+    "description": "Grande acervo de vida marinha, referência em educação ambiental.",
+    "description_en": "Great collection of marine life, reference in environmental education.",
+    "type": "Educativo",
+    "cityId": "119"
+  },
+  {
+    "id": "24",
+    "name": "Parque da Cidade Sarah Kubitschek",
+    "description": "Grande área verde de lazer no coração da capital do Brasil.",
+    "description_en": "Greater green leisure area in the heart of the capital of Brazil.",
+    "type": "Parque",
+    "cityId": "4"
+  },
+  {
+    "id": "25",
+    "name": "Memorial JK",
+    "description": "Museu dedicado ao presidente Juscelino Kubitschek.",
+    "description_en": "Museum dedicated to President Juscelino Kubitschek.",
+    "type": "Museu",
+    "cityId": "4"
+  },
+  {
+    "id": "26",
+    "name": "Ponte JK",
+    "description": "Ponte estaiada premiada que cruza o Lago Paranoá.",
+    "description_en": "Awarded cable bridge that crosses Paranoá Lake.",
+    "type": "Arquitetura",
+    "cityId": "4"
+  },
+  {
+    "id": "27",
+    "name": "Lagoa do Paraíso",
+    "description": "Lagoa de águas cristalinas com redes dentro d'água.",
+    "description_en": "Crystalian water pond with nets in the water.",
+    "type": "Natural",
+    "cityId": "22"
+  },
+  {
+    "id": "28",
+    "name": "Morro do Careca",
+    "description": "Duna icônica à beira-mar em Natal.",
+    "description_en": "Iconic dune by the sea in Natal.",
+    "type": "Natural",
+    "cityId": "16"
+  },
+  {
+    "id": "29",
+    "name": "Parque Estadual de Vila Velha",
+    "description": "Formações rochosas esculpidas pelo tempo em meio à natureza.",
+    "description_en": "Rock formations carved by time in the midst of nature.",
+    "type": "Natural",
+    "cityId": "8"
+  },
+  {
+    "id": "30",
+    "name": "Mirante do Vale do Quilombo",
+    "description": "Vista espetacular entre Gramado e Canela.",
+    "description_en": "Spectacular view between lawn and cinnamon.",
+    "type": "Mirante",
+    "cityId": "19"
+  },
+  {
+    "id": "31",
+    "name": "Catedral de Pedra",
+    "description": "Igreja neogótica símbolo da cidade serrana.",
+    "description_en": "Neogotic Church symbol of the mountain city.",
+    "type": "Religioso",
+    "cityId": "25"
+  },
+  {
+    "id": "32",
+    "name": "Parque Estadual do Ibitipoca",
+    "description": "Trilhas, cavernas e cachoeiras entre montanhas.",
+    "description_en": "Trails, caves and waterfalls between mountains.",
+    "type": "Natural",
+    "cityId": "30"
+  },
+  {
+    "id": "33",
+    "name": "Centro Histórico de São Luís",
+    "description": "Patrimônio Mundial com azulejos portugueses e casarões coloniais.",
+    "description_en": "World Heritage Site with Portuguese tiles and colonial mansions.",
+    "type": "Histórico",
+    "cityId": "14"
+  },
+  {
+    "id": "34",
+    "name": "Igreja de São Francisco de Assis",
+    "description": "Obra-prima do barroco mineiro projetada por Aleijadinho.",
+    "description_en": "Master's masterpiece designed by Aleijadinho.",
+    "type": "Religioso",
+    "cityId": "20"
+  },
+  {
+    "id": "35",
+    "name": "Igreja Matriz de Santo Antônio",
+    "description": "Igreja colonial ricamente decorada com ouro.",
+    "description_en": "Colonial church richly decorated with gold.",
+    "type": "Religioso",
+    "cityId": "30"
+  },
+  {
+    "id": "36",
+    "name": "Parque Nacional Marinho de Fernando de Noronha",
+    "description": "Área de proteção com rica biodiversidade marinha.",
+    "description_en": "Protection area with rich marine biodiversity.",
+    "type": "Natural",
+    "cityId": "24"
+  },
+  {
+    "id": "37",
+    "name": "Mirante da Janela",
+    "description": "Trilha com vista icônica da Cachoeira do Abismo.",
+    "description_en": "Trail with iconic view of the Abyss Waterfall.",
+    "type": "Natural",
+    "cityId": "187"
+  },
+  {
+    "id": "38",
+    "name": "Caverna Aroe Jari",
+    "description": "Maior caverna de arenito do Brasil, com lagoa azul.",
+    "description_en": "Largest sandstone cave in Brazil, with Blue Lagoon.",
+    "type": "Natural",
+    "cityId": "50"
+  },
+  {
+    "id": "39",
+    "name": "Cachoeira Véu da Noiva",
+    "description": "Cachoeira deslumbrante em meio à Chapada dos Guimarães.",
+    "description_en": "Stunning waterfall amid Chapada dos Guimarães.",
+    "type": "Natural",
+    "cityId": "50"
+  },
+  {
+    "id": "40",
+    "name": "Parque das Esculturas Francisco Brennand",
+    "description": "Espaço cultural ao ar livre na zona portuária.",
+    "description_en": "Outdoor cultural space in the port area.",
+    "type": "Cultural",
+    "cityId": "9"
+  },
+  {
+    "id": "41",
+    "name": "Convento da Penha",
+    "description": "Monumento religioso no alto de um morro com vista para o mar.",
+    "description_en": "Religious monument at the top of a hill overlooking the sea.",
+    "type": "Religioso",
+    "cityId": "66"
+  },
+  {
+    "id": "42",
+    "name": "Ladeira do Amparo",
+    "description": "Ruas de Olinda com ateliês e casarões coloniais.",
+    "description_en": "Streets of Olinda with workshops and colonial mansions.",
+    "type": "Histórico",
+    "cityId": "9"
+  },
+  {
+    "id": "43",
+    "name": "Elevador Lacerda",
+    "description": "Elevador urbano que conecta Cidade Alta à Cidade Baixa.",
+    "description_en": "Urban elevator that connects Cidade Alta to the Baixa Cidade.",
+    "type": "Histórico",
+    "cityId": "2"
+  },
+  {
+    "id": "44",
+    "name": "Fortaleza de Santa Cruz da Barra",
+    "description": "Fortaleza histórica com vista para a Baía de Guanabara.",
+    "description_en": "Historical fortress overlooking Guanabara Bay.",
+    "type": "Histórico",
+    "cityId": "33"
+  },
+  {
+    "id": "45",
+    "name": "Praia do Forte",
+    "description": "Praia com projeto TAMAR e ruínas de fortaleza.",
+    "description_en": "Beach with Tamar Project and Ruins of Fortaleza.",
+    "type": "Natural",
+    "cityId": "2"
+  },
+  {
+    "id": "46",
+    "name": "Serra do Rio do Rastro",
+    "description": "Estrada sinuosa com vista panorâmica na serra catarinense.",
+    "description_en": "Sinuous road with panoramic views in the Santa Catarina mountain range.",
+    "type": "Natural",
+    "cityId": "128"
+  },
+  {
+    "id": "47",
+    "name": "Igreja Matriz São Pedro",
+    "description": "Cartão-postal no centro de Gramado, construída em pedra basalto.",
+    "description_en": "Postpostal card in the center of lawn, built in basalt stone.",
+    "type": "Religioso",
+    "cityId": "19"
+  },
+  {
+    "id": "48",
+    "name": "Parque do Caracol",
+    "description": "Parque natural com cachoeira de 131 metros e trilhas ecológicas.",
+    "description_en": "Natural park with 131 meter waterfall and ecological trails.",
+    "type": "Natural",
+    "cityId": "25"
+  },
+  {
+    "id": "49",
+    "name": "Rua das Pedras",
+    "description": "Ruas movimentadas com bares e lojas em Búzios.",
+    "description_en": "Streets moved with bars and stores in Buzios.",
+    "type": "Comercial",
+    "cityId": "1"
+  },
+  {
+    "id": "50",
+    "name": "Solar do Unhão",
+    "description": "Museu de Arte Moderna às margens da Baía de Todos-os-Santos.",
+    "description_en": "Museum of Modern Art on the banks of the bay of all saints.",
+    "type": "Cultural",
+    "cityId": "2"
+  },
+  {
+    "id": "51",
+    "name": "Museu da Língua Portuguesa",
+    "description": "Museu interativo sobre o idioma português.",
+    "description_en": "Interactive Museum on the Portuguese Language.",
+    "type": "Museu",
+    "cityId": "3"
+  },
+  {
+    "id": "52",
+    "name": "Vale do Catimbau",
+    "description": "Sítio arqueológico e paisagem única no sertão pernambucano.",
+    "description_en": "Archaeological site and unique landscape in the Pernambuco hinterland.",
+    "type": "Natural",
+    "cityId": "88"
+  },
+  {
+    "id": "53",
+    "name": "Cristo Luz",
+    "description": "Monumento com luzes que iluminam Balneário Camboriú à noite.",
+    "description_en": "Monument with lights that illuminate Balneário Camboriú at night.",
+    "type": "Monumento",
+    "cityId": "91"
+  },
+  {
+    "id": "54",
+    "name": "Lago Negro",
+    "description": "Lago artificial com pedalinhos e vegetação típica europeia.",
+    "description_en": "Artificial lake with pedal boats and typical European vegetation.",
+    "type": "Parque",
+    "cityId": "19"
+  },
+  {
+    "id": "55",
+    "name": "Cachoeira da Fumaça",
+    "description": "Uma das mais altas do Brasil, com 340m de queda livre.",
+    "description_en": "One of the highest in Brazil, with 340m of free fall.",
+    "type": "Natural",
+    "cityId": "29"
+  },
+  {
+    "id": "56",
+    "name": "Igreja Matriz de São Jorge",
+    "description": "Igreja centenária com arquitetura imponente no centro da cidade.",
+    "description_en": "Centenary Church with imposing architecture in the city center.",
+    "type": "Religioso",
+    "cityId": "79"
+  },
+  {
+    "id": "57",
+    "name": "Catedral de Nossa Senhora das Neves",
+    "description": "Imponente catedral em estilo neoclássico.",
+    "description_en": "Imposing neoclassical style cathedral.",
+    "type": "Religioso",
+    "cityId": "6"
+  },
+  {
+    "id": "58",
+    "name": "Parque Nacional do Pau Brasil",
+    "description": "Área de preservação ambiental com trilhas e biodiversidade.",
+    "description_en": "Environmental preservation area with trails and biodiversity.",
+    "type": "Natural",
+    "cityId": "105"
+  },
+  {
+    "id": "59",
+    "name": "Aquário Encantado",
+    "description": "Poço de água cristalina onde se observa peixes sem mergulhar.",
+    "description_en": "Crystalline water well where fish is observed without diving.",
+    "type": "Natural",
+    "cityId": "23"
+  },
+  {
+    "id": "60",
+    "name": "Gruta do Lago Azul",
+    "description": "Cartão-postal de Bonito, com caverna e lago azul intenso.",
+    "description_en": "Bonito-postcard, with intense blue cave and lake.",
+    "type": "Natural",
+    "cityId": "23"
+  },
+  {
+    "id": "61",
+    "name": "Parque Ecológico do Rio Formoso",
+    "description": "Atividades como boia cross, flutuação e trilhas.",
+    "description_en": "Activities such as cross buoy, fluctuation and trails.",
+    "type": "Natural",
+    "cityId": "23"
+  },
+  {
+    "id": "62",
+    "name": "Passeio de jangada nas piscinas naturais",
+    "description": "Atração clássica de Maragogi, com águas cristalinas.",
+    "description_en": "Classic attraction of Maragogi, with crystal clear waters.",
+    "type": "Praia",
+    "cityId": "59"
+  },
+  {
+    "id": "63",
+    "name": "Farol do Cabo Branco",
+    "description": "Marco geográfico do ponto mais oriental das Américas.",
+    "description_en": "Geographical framework of the eastern point of the Americas.",
+    "type": "Monumento",
+    "cityId": "3"
+  },
+  {
+    "id": "64",
+    "name": "Igreja Matriz de Santo Antônio",
+    "description": "Igreja barroca símbolo de Tiradentes.",
+    "description_en": "Baroque Church symbol of Tiradentes.",
+    "type": "Religioso",
+    "cityId": "30"
+  },
+  {
+    "id": "65",
+    "name": "Parque Nacional do Itatiaia",
+    "description": "Primeiro parque nacional do Brasil, com cachoeiras e picos.",
+    "description_en": "First National Park of Brazil, with waterfalls and peaks.",
+    "type": "Natural",
+    "cityId": "130"
+  },
+  {
+    "id": "66",
+    "name": "Praia de Pipa",
+    "description": "Praia paradisíaca com falésias, golfinhos e vida noturna.",
+    "description_en": "Paradise beach with cliffs, dolphins and nightlife.",
+    "type": "Praia",
+    "cityId": "115"
+  },
+  {
+    "id": "67",
+    "name": "Cânion do Xingó",
+    "description": "Paisagem impressionante com paredões esculpidos pelo Rio São Francisco.",
+    "description_en": "Impressive landscape with walls carved by the São Francisco River.",
+    "type": "Natural",
+    "cityId": "56"
+  },
+  {
+    "id": "68",
+    "name": "Catedral Metropolitana de Brasília",
+    "description": "Obra-prima de Oscar Niemeyer com vitrais coloridos.",
+    "description_en": "Oscar Niemeyer's masterpiece with colorful stained glass.",
+    "type": "Arquitetura",
+    "cityId": "4"
+  },
+  {
+    "id": "69",
+    "name": "Parque do Povo",
+    "description": "Área de lazer arborizada no centro de São Paulo.",
+    "description_en": "Tree leisure area in downtown São Paulo.",
+    "type": "Parque",
+    "cityId": "3"
+  },
+  {
+    "id": "70",
+    "name": "Igreja Matriz de Nossa Senhora da Conceição",
+    "description": "Símbolo da cidade com arquitetura colonial preservada.",
+    "description_en": "City symbol with preserved colonial architecture.",
+    "type": "Religioso",
+    "cityId": "81"
+  },
+  {
+    "id": "71",
+    "name": "Parque Zoobotânico",
+    "description": "Reserva ecológica em Belém com zoológico e jardim botânico.",
+    "description_en": "Ecological reserve in Belém with zoo and botanical garden.",
+    "type": "Natural",
+    "cityId": "11"
+  },
+  {
+    "id": "72",
+    "name": "Basílica Santuário de Nazaré",
+    "description": "Local onde ocorre o famoso Círio de Nazaré.",
+    "description_en": "Where the famous Círio de Nazaré occurs.",
+    "type": "Religioso",
+    "cityId": "11"
+  },
+  {
+    "id": "73",
+    "name": "Pico da Bandeira",
+    "description": "Terceiro ponto mais alto do Brasil, com trilhas desafiadoras.",
+    "description_en": "Third highest point in Brazil, with challenging trails.",
+    "type": "Natural",
+    "cityId": "65"
+  },
+  {
+    "id": "74",
+    "name": "Parque Mangal das Garças",
+    "description": "Parque ecológico com passarelas, mirante e fauna local.",
+    "description_en": "Ecological park with catwalks, lookout and local fauna.",
+    "type": "Natural",
+    "cityId": "11"
+  },
+  {
+    "id": "75",
+    "name": "Parque Nacional do Monte Roraima",
+    "description": "Montanha com topo plano e paisagens surreais.",
+    "description_en": "Mountain with flat top and surreal landscapes.",
+    "type": "Natural",
+    "cityId": "62"
+  },
+  {
+    "id": "76",
+    "name": "Centro Histórico de Paraty",
+    "description": "Ruas de pedra, casarões coloniais e igrejas barrocas preservadas.",
+    "description_en": "Stone streets, colonial mansions and preserved baroque churches.",
+    "type": "Histórico",
+    "cityId": "21"
+  },
+  {
+    "id": "77",
+    "name": "Caminho do Ouro",
+    "description": "Trilha histórica usada no século XVIII para escoamento do ouro.",
+    "description_en": "Historical trail used in the eighteenth century for the flow of gold.",
+    "type": "Histórico",
+    "cityId": "21"
+  },
+  {
+    "id": "78",
+    "name": "Trilha do Pico do Papagaio",
+    "description": "Vista panorâmica sobre Ilhabela e mar aberto.",
+    "description_en": "Panoramic view of Ilhabela and Open Sea.",
+    "type": "Trilha",
+    "cityId": "26"
+  },
+  {
+    "id": "79",
+    "name": "Cachoeira do Gato",
+    "description": "Queda d’água com piscina natural acessível por trilha.",
+    "description_en": "Water drop with natural pool accessible per track.",
+    "type": "Natural",
+    "cityId": "26"
+  },
+  {
+    "id": "80",
+    "name": "Passeio de buggy nas dunas de Jeri",
+    "description": "Atividade clássica em Jericoacoara pelas dunas e lagoas.",
+    "description_en": "Classical activity in Jericoacoara for the dunes and lagoons.",
+    "type": "Aventura",
+    "cityId": "22"
+  },
+  {
+    "id": "81",
+    "name": "Catedral Metropolitana de Fortaleza",
+    "description": "Um dos maiores templos religiosos do Brasil.",
+    "description_en": "One of the largest religious temples in Brazil.",
+    "type": "Religioso",
+    "cityId": "5"
+  },
+  {
+    "id": "82",
+    "name": "Beach Park",
+    "description": "Maior parque aquático da América Latina.",
+    "description_en": "Largest water park in Latin America.",
+    "type": "Entretenimento",
+    "cityId": "5"
+  },
+  {
+    "id": "83",
+    "name": "Memorial Luiz Gonzaga",
+    "description": "Espaço cultural dedicado ao rei do baião.",
+    "description_en": "Cultural space dedicated to the king of baião.",
+    "type": "Cultural",
+    "cityId": "88"
+  },
+  {
+    "id": "84",
+    "name": "Cachoeira da Eubiose",
+    "description": "Queda d’água em meio à Chapada Diamantina.",
+    "description_en": "Waterfall in the midst of Chapada Diamantina.",
+    "type": "Natural",
+    "cityId": "29"
+  },
+  {
+    "id": "85",
+    "name": "Parque Estadual do Rio Doce",
+    "description": "Maior floresta tropical de Minas fora da Amazônia.",
+    "description_en": "Largest Tropical Forest of Minas Gerais outside the Amazon.",
+    "type": "Natural",
+    "cityId": "199"
+  },
+  {
+    "id": "86",
+    "name": "Palácio Rio Branco",
+    "description": "Sede histórica do governo do Acre.",
+    "description_en": "Historic headquarters of the government of Acre.",
+    "type": "Histórico",
+    "cityId": "145"
+  },
+  {
+    "id": "87",
+    "name": "Mercado Central de Belo Horizonte",
+    "description": "Tradição mineira em forma de sabores e artesanato.",
+    "description_en": "Minas Gerais tradition in the form of flavors and crafts.",
+    "type": "Cultural",
+    "cityId": "6"
+  },
+  {
+    "id": "88",
+    "name": "Parque das Águas",
+    "description": "Fonte de águas termais e relaxamento no sul de Minas.",
+    "description_en": "Source of thermal water and relaxation in the south of Minas.",
+    "type": "Natural",
+    "cityId": "75"
+  },
+  {
+    "id": "89",
+    "name": "Igreja de São Francisco de Assis",
+    "description": "Famosa igrejinha da Pampulha, patrimônio modernista.",
+    "description_en": "Famous Pampulha Church, Modernist Heritage.",
+    "type": "Arquitetura",
+    "cityId": "6"
+  },
+  {
+    "id": "90",
+    "name": "Parque Nacional da Serra da Capivara",
+    "description": "Sítios arqueológicos com pinturas rupestres milenares.",
+    "description_en": "Archaeological sites with millennial rock paintings.",
+    "type": "Patrimônio",
+    "cityId": "87"
+  },
+  {
+    "id": "91",
+    "name": "Parque Municipal Américo Renné Giannetti",
+    "description": "Área verde no centro de BH com lago, trilhas e brinquedos.",
+    "description_en": "Green area in the center of BH with lake, trails and toys.",
+    "type": "Parque",
+    "cityId": "6"
+  },
+  {
+    "id": "92",
+    "name": "Feirinha da Beira-Mar",
+    "description": "Feira de artesanato e comidas típicas à beira-mar.",
+    "description_en": "Craft fair and typical seaside foods.",
+    "type": "Cultural",
+    "cityId": "5"
+  },
+  {
+    "id": "93",
+    "name": "Mirante Dona Marta",
+    "description": "Vista panorâmica do Cristo Redentor e da Baía de Guanabara.",
+    "description_en": "Panoramic view of the Redeemer Christ and Guanabara Bay.",
+    "type": "Mirante",
+    "cityId": "1"
+  },
+  {
+    "id": "94",
+    "name": "Mirante da Serra do Rio do Rastro",
+    "description": "Visual impressionante da serra com estrada sinuosa.",
+    "description_en": "Impressive look of the mountain with winding road.",
+    "type": "Mirante",
+    "cityId": "128"
+  },
+  {
+    "id": "95",
+    "name": "Estação da Luz",
+    "description": "Estação ferroviária histórica que abriga o Museu da Língua Portuguesa.",
+    "description_en": "Historical Railway Station that houses the Portuguese Language Museum.",
+    "type": "Histórico",
+    "cityId": "3"
+  },
+  {
+    "id": "96",
+    "name": "Aquário Municipal de Santos",
+    "description": "Um dos aquários mais antigos do Brasil, com diversidade marinha.",
+    "description_en": "One of the oldest aquariums in Brazil, with marine diversity.",
+    "type": "Educativo",
+    "cityId": "122"
+  },
+  {
+    "id": "97",
+    "name": "Orla do Guaíba",
+    "description": "Área revitalizada para lazer e contemplação do pôr do sol.",
+    "description_en": "Revitalized area for leisure and sunset contemplation.",
+    "type": "Parque",
+    "cityId": "12"
+  },
+  {
+    "id": "98",
+    "name": "Cais do Sertão",
+    "description": "Museu interativo sobre a cultura nordestina.",
+    "description_en": "Interactive Museum on Northeastern Culture.",
+    "type": "Museu",
+    "cityId": "9"
+  },
+  {
+    "id": "99",
+    "name": "Centro Histórico de Olinda",
+    "description": "Patrimônio Mundial da UNESCO, com ladeiras e casarios coloridos.",
+    "description_en": "UNESCO World Heritage Site, with colorful slopes and houses.",
+    "type": "Histórico",
+    "cityId": "9"
+  },
+  {
+    "id": "100",
+    "name": "Praia de Antunes",
+    "description": "Uma das praias mais bonitas de Maragogi, com águas calmas e transparentes.",
+    "description_en": "One of the most beautiful beaches of Maragogi, with calm and transparent waters.",
+    "type": "Praia",
+    "cityId": "59"
+  },
+  {
+    "id": "101",
+    "name": "Catedral Metropolitana de São Sebastião",
+    "description": "Catedral moderna em forma de pirâmide.",
+    "description_en": "Modern Pyramid Cathedral.",
+    "type": "Religioso",
+    "cityId": "1"
+  },
+  {
+    "id": "102",
+    "name": "Forte de Copacabana",
+    "description": "Forte histórico com museu e vista para a praia.",
+    "description_en": "Strong history with museum and beach view.",
+    "type": "Histórico",
+    "cityId": "1"
+  },
+  {
+    "id": "103",
+    "name": "Largo do Pelourinho",
+    "description": "Coração do centro histórico soteropolitano com casarões coloniais.",
+    "description_en": "Heart of the Soteropolitan Historic Center with colonial mansions.",
+    "type": "Histórico",
+    "cityId": "2"
+  },
+  {
+    "id": "104",
+    "name": "Vila Germânica",
+    "description": "Centro de eventos e arquitetura típica alemã.",
+    "description_en": "Typical German Events and Architecture Center.",
+    "type": "Cultural",
+    "cityId": "44"
+  },
+  {
+    "id": "105",
+    "name": "Parque Ramiro Ruediger",
+    "description": "Área de lazer com pistas de caminhada, quadras e lago.",
+    "description_en": "Recreation area with walking, courts and lake clues.",
+    "type": "Parque",
+    "cityId": "44"
+  },
+  {
+    "id": "106",
+    "name": "Catedral de Joinville",
+    "description": "Templo católico imponente com vitrais coloridos.",
+    "description_en": "Imposing Catholic Temple with colored stained glass.",
+    "type": "Religioso",
+    "cityId": "44"
+  },
+  {
+    "id": "107",
+    "name": "Santuário de Nossa Senhora de Nazaré",
+    "description": "Local de fé e destino final do Círio de Nazaré.",
+    "description_en": "Place of faith and final destination of Círio de Nazaré.",
+    "type": "Religioso",
+    "cityId": "11"
+  },
+  {
+    "id": "108",
+    "name": "Cachoeira do Tobogã",
+    "description": "Queda d’água em pedra lisa onde visitantes escorregam.",
+    "description_en": "Fall of Water in Lisa Stone where visitors slip.",
+    "type": "Natural",
+    "cityId": "21"
+  },
+  {
+    "id": "109",
+    "name": "Passeio de barco pelas ilhas",
+    "description": "Tour imperdível pelas ilhas e enseadas de Paraty.",
+    "description_en": "Must -see tour of Paraty's islands and covers.",
+    "type": "Passeio",
+    "cityId": "21"
+  },
+  {
+    "id": "110",
+    "name": "Pedra Furada",
+    "description": "Formação rochosa icônica em Jericoacoara.",
+    "description_en": "Iconic rock formation in Jericoacoara.",
+    "type": "Natural",
+    "cityId": "22"
+  },
+  {
+    "id": "111",
+    "name": "Lagoa do Japonês",
+    "description": "Lagoa de águas azul-turquesa cercada por vegetação.",
+    "description_en": "Turquoes Blue Water Lagoon surrounded by vegetation.",
+    "type": "Natural",
+    "cityId": "60"
+  },
+  {
+    "id": "112",
+    "name": "Centro Histórico de São João del-Rei",
+    "description": "Casarões coloniais e igrejas barrocas preservadas.",
+    "description_en": "Colonial mansions and preserved baroque churches.",
+    "type": "Histórico",
+    "cityId": "81"
+  },
+  {
+    "id": "113",
+    "name": "Museu Regional",
+    "description": "Acervo de arte sacra e mobiliário do período colonial.",
+    "description_en": "Sacred art collection and furniture of the colonial period.",
+    "type": "Museu",
+    "cityId": "81"
+  },
+  {
+    "id": "114",
+    "name": "Ferrovia Maria Fumaça",
+    "description": "Passeio de trem turístico entre São João del-Rei e Tiradentes.",
+    "description_en": "Tour train ride between São João Del-Rei and Tiradentes.",
+    "type": "Passeio",
+    "cityId": "81"
+  },
+  {
+    "id": "115",
+    "name": "Praia do Farol",
+    "description": "Praia com acesso controlado e mar cristalino em Arraial do Cabo.",
+    "description_en": "Beach with controlled access and crystalline sea in Arraial do Cabo.",
+    "type": "Praia",
+    "cityId": "28"
+  },
+  {
+    "id": "116",
+    "name": "Praia do Forno",
+    "description": "Uma das praias mais conhecidas de Arraial, acessível por trilha.",
+    "description_en": "One of Arraial's best known beaches, accessible by trail.",
+    "type": "Praia",
+    "cityId": "28"
+  },
+  {
+    "id": "117",
+    "name": "Trilha das Sete Praias",
+    "description": "Rota ecológica entre praias isoladas em Ubatuba.",
+    "description_en": "Ecological route between isolated beaches in Ubatuba.",
+    "type": "Trilha",
+    "cityId": "119"
+  },
+  {
+    "id": "118",
+    "name": "Aquário de São Paulo",
+    "description": "Maior aquário da América Latina com centenas de espécies.",
+    "description_en": "Largest aquarium in Latin America with hundreds of species.",
+    "type": "Educativo",
+    "cityId": "3"
+  },
+  {
+    "id": "119",
+    "name": "Parque Tanguá",
+    "description": "Parque paisagístico com cascata, mirante e túneis de pedra.",
+    "description_en": "Landscape park with waterfall, lookout and stone tunnels.",
+    "type": "Parque",
+    "cityId": "8"
+  },
+  {
+    "id": "120",
+    "name": "Ópera de Arame",
+    "description": "Espaço cultural em estrutura metálica sobre lago.",
+    "description_en": "Cultural Space in Metal Structure on Lake.",
+    "type": "Cultural",
+    "cityId": "8"
+  },
+  {
+    "id": "121",
+    "name": "Unipraias",
+    "description": "Bondinhos aéreos com vistas deslumbrantes e atrações no topo.",
+    "description_en": "Aerial cable car with stunning views and attractions at the top.",
+    "type": "Entretenimento",
+    "cityId": "91"
+  },
+  {
+    "id": "122",
+    "name": "Molhes da Barra Sul",
+    "description": "Píer que avança sobre o mar, ótimo para caminhada.",
+    "description_en": "Pier that advances on the sea, great for walking.",
+    "type": "Natural",
+    "cityId": "91"
+  },
+  {
+    "id": "123",
+    "name": "Cristo Redentor de Barra Velha",
+    "description": "Estátua do Cristo com vista para o mar.",
+    "description_en": "Statue of Christ with sea view.",
+    "type": "Monumento",
+    "cityId": "91"
+  },
+  {
+    "id": "124",
+    "name": "Praia Brava",
+    "description": "Praia entre Itajaí e BC com natureza e surf.",
+    "description_en": "Beach between Itajaí and BC with nature and surfing.",
+    "type": "Praia",
+    "cityId": "91"
+  },
+  {
+    "id": "125",
+    "name": "Ilha do Japonês",
+    "description": "Pequena ilha de águas calmas, ideal para famílias.",
+    "description_en": "Small island of calm waters, ideal for families.",
+    "type": "Praia",
+    "cityId": "121"
+  },
+  {
+    "id": "126",
+    "name": "Casa de Jorge Amado",
+    "description": "Museu e centro cultural dedicado ao escritor baiano.",
+    "description_en": "Museum and Cultural Center dedicated to the Bahian writer.",
+    "type": "Cultural",
+    "cityId": "79"
+  },
+  {
+    "id": "127",
+    "name": "Parque Nacional da Serra do Cipó",
+    "description": "Destino de trilhas, rios e cachoeiras em meio ao cerrado.",
+    "description_en": "Destination of trails, rivers and waterfalls in the cerrado.",
+    "type": "Natural",
+    "cityId": "6"
+  },
+  {
+    "id": "128",
+    "name": "Trilha das Piscinas Naturais",
+    "description": "Passeio por piscinas naturais formadas por recifes em Porto de Galinhas.",
+    "description_en": "Walk through reefing natural pools in Porto de Galinhas.",
+    "type": "Passeio",
+    "cityId": "27"
+  },
+  {
+    "id": "129",
+    "name": "Praia dos Carneiros",
+    "description": "Praia paradisíaca com coqueiros e igreja à beira-mar.",
+    "description_en": "Paradise beach with coconut trees and the sea church.",
+    "type": "Praia",
+    "cityId": "27"
+  },
+  {
+    "id": "130",
+    "name": "Praia do Rosa",
+    "description": "Refúgio de surfistas e observadores de baleias.",
+    "description_en": "Surfers and whale observers refuge.",
+    "type": "Praia",
+    "cityId": "108"
+  },
+  {
+    "id": "131",
+    "name": "Sítio Arqueológico do Geoparque Seridó",
+    "description": "Formações geológicas e pinturas rupestres no sertão.",
+    "description_en": "Geological formations and rock paintings in the backlands.",
+    "type": "Patrimônio",
+    "cityId": "87"
+  },
+  {
+    "id": "132",
+    "name": "Mirante da Serra de São Vicente",
+    "description": "Vista privilegiada da Chapada dos Guimarães.",
+    "description_en": "Privileged view of Chapada dos Guimarães.",
+    "type": "Mirante",
+    "cityId": "50"
+  },
+  {
+    "id": "133",
+    "name": "Igreja Matriz de São Pedro",
+    "description": "Igreja imponente no centro histórico de Gramado.",
+    "description_en": "Imposing church in the historic center of Gramado.",
+    "type": "Religioso",
+    "cityId": "19"
+  },
+  {
+    "id": "134",
+    "name": "Museu Egípcio e Rosa-Cruz",
+    "description": "Réplica do Templo de Luxor com exposições culturais.",
+    "description_en": "Replica of the Luxor Temple with cultural exhibitions.",
+    "type": "Museu",
+    "cityId": "8"
+  },
+  {
+    "id": "135",
+    "name": "Rampa do Voo Livre",
+    "description": "Mirante e ponto de decolagem para esportes aéreos.",
+    "description_en": "Lookout and takeoff point for air sports.",
+    "type": "Aventura",
+    "cityId": "131"
+  },
+  {
+    "id": "136",
+    "name": "Parque das Serras",
+    "description": "Reserva de mata atlântica com trilhas e nascentes.",
+    "description_en": "Atlantic Forest Reserve with trails and springs.",
+    "type": "Natural",
+    "cityId": "25"
+  },
+  {
+    "id": "137",
+    "name": "Museu Ferroviário de Tubarão",
+    "description": "Acervo de locomotivas e história da ferrovia no sul do Brasil.",
+    "description_en": "Locomotive collection and railroad history in southern Brazil.",
+    "type": "Museu",
+    "cityId": "128"
+  },
+  {
+    "id": "138",
+    "name": "Lago Igapó",
+    "description": "Cartão-postal de Londrina, ideal para caminhadas e esportes.",
+    "description_en": "Londrina postcard, ideal for hiking and sports.",
+    "type": "Parque",
+    "cityId": "45"
+  },
+  {
+    "id": "139",
+    "name": "Vinícola Miolo",
+    "description": "Uma das maiores vinícolas do Brasil com visitação guiada.",
+    "description_en": "One of the largest wineries in Brazil with guided visitation.",
+    "type": "Gastronomia",
+    "cityId": "76"
+  },
+  {
+    "id": "140",
+    "name": "Vale dos Vinhedos",
+    "description": "Rota turística de vinícolas com paisagens encantadoras.",
+    "description_en": "Tourist route of wineries with charming landscapes.",
+    "type": "Turismo Rural",
+    "cityId": "76"
+  },
+  {
+    "id": "141",
+    "name": "Centro Histórico de São Leopoldo",
+    "description": "Berço da colonização alemã no Brasil.",
+    "description_en": "Cradle of German colonization in Brazil.",
+    "type": "Histórico",
+    "cityId": "180"
+  },
+  {
+    "id": "142",
+    "name": "Museu da Cachaça",
+    "description": "Museu dedicado à história e produção da cachaça.",
+    "description_en": "Museum dedicated to the history and production of cachaça.",
+    "type": "Cultural",
+    "cityId": "5"
+  },
+  {
+    "id": "143",
+    "name": "Feira de Caruaru",
+    "description": "Uma das maiores feiras livres do Brasil, com artesanato e comidas típicas.",
+    "description_en": "One of the largest free fairs in Brazil, with handicrafts and typical foods.",
+    "type": "Cultural",
+    "cityId": "88"
+  },
+  {
+    "id": "144",
+    "name": "Teatro Municipal de Uberlândia",
+    "description": "Espaço cultural moderno com eventos diversos.",
+    "description_en": "Modern cultural space with various events.",
+    "type": "Cultural",
+    "cityId": "41"
+  },
+  {
+    "id": "145",
+    "name": "Cachoeira do Tabuleiro",
+    "description": "Maior queda d’água de MG, com 273 metros.",
+    "description_en": "Largest MG water drop with 273 meters.",
+    "type": "Natural",
+    "cityId": "6"
+  },
+  {
+    "id": "146",
+    "name": "Estádio Beira-Rio",
+    "description": "Estádio do Internacional com visita guiada e museu.",
+    "description_en": "International stadium with guided tour and museum.",
+    "type": "Esportivo",
+    "cityId": "12"
+  },
+  {
+    "id": "147",
+    "name": "Arena do Grêmio",
+    "description": "Estádio moderno com museu e tour guiado.",
+    "description_en": "Modern stadium with museum and guided tour.",
+    "type": "Esportivo",
+    "cityId": "193"
+  },
+  {
+    "id": "148",
+    "name": "Jardim Botânico de Bauru",
+    "description": "Espaço de conservação com flora e fauna do cerrado.",
+    "description_en": "Conservation space with flora and cerrado fauna.",
+    "type": "Parque",
+    "cityId": "101"
+  },
+  {
+    "id": "149",
+    "name": "Engenho São Jorge dos Erasmos",
+    "description": "Ruínas históricas do período colonial no litoral paulista.",
+    "description_en": "Historical ruins of the colonial period on the coast of São Paulo.",
+    "type": "Histórico",
+    "cityId": "122"
+  },
+  {
+    "id": "150",
+    "name": "Aquário de Natal",
+    "description": "Aquário com espécies marinhas e tanque de toque.",
+    "description_en": "Aquarium with sea species and touch tank.",
+    "type": "Educativo",
+    "cityId": "16"
+  },
+  {
+    "id": "151",
+    "name": "Pico do Jaraguá",
+    "description": "Ponto mais alto da cidade de São Paulo, com trilhas e mirantes.",
+    "description_en": "Highest point in the city of São Paulo, with trails and lookouts.",
+    "type": "Natural",
+    "cityId": "3"
+  },
+  {
+    "id": "152",
+    "name": "Museu da Inconfidência",
+    "description": "Museu com relíquias da luta pela independência.",
+    "description_en": "Museum with relics of the struggle for independence.",
+    "type": "Museu",
+    "cityId": "20"
+  },
+  {
+    "id": "153",
+    "name": "Parque da Cidade Dom Nivaldo Monte",
+    "description": "Maior área verde de Natal, com mirante e trilhas.",
+    "description_en": "Largest green area of ​​Christmas, with lookout and trails.",
+    "type": "Parque",
+    "cityId": "16"
+  },
+  {
+    "id": "154",
+    "name": "Museu Oscar Niemeyer",
+    "description": "Museu de arte moderna em prédio icônico em forma de olho.",
+    "description_en": "Museum of Modern Art in an iconic eye -shaped building.",
+    "type": "Museu",
+    "cityId": "8"
+  },
+  {
+    "id": "155",
+    "name": "Parque Estadual do Jalapão",
+    "description": "Destino de ecoturismo com dunas, fervedouros e cachoeiras.",
+    "description_en": "Ecotourism destination with dunes, boils and waterfalls.",
+    "type": "Natural",
+    "cityId": "60"
+  },
+  {
+    "id": "156",
+    "name": "Orla Morena",
+    "description": "Corredor de lazer, esportes e gastronomia.",
+    "description_en": "Leisure, sports and gastronomy corridor.",
+    "type": "Parque",
+    "cityId": "63"
+  },
+  {
+    "id": "157",
+    "name": "Igreja de São Francisco Xavier",
+    "description": "Um dos símbolos do barroco mineiro em São João del-Rei.",
+    "description_en": "One of the symbols of the Mineiro Baroque in São João del-Rei.",
+    "type": "Religioso",
+    "cityId": "81"
+  },
+  {
+    "id": "158",
+    "name": "Museu da Amazônia (MUSA)",
+    "description": "Observatório na floresta, trilhas e educação ambiental.",
+    "description_en": "Observatory in the forest, trails and environmental education.",
+    "type": "Museu",
+    "cityId": "7"
+  },
+  {
+    "id": "159",
+    "name": "Zoológico de Brasília",
+    "description": "Espaço com grande variedade de fauna brasileira.",
+    "description_en": "Space with a wide variety of Brazilian fauna.",
+    "type": "Educativo",
+    "cityId": "4"
+  },
+  {
+    "id": "160",
+    "name": "Basílica do Senhor do Bonfim",
+    "description": "Um dos maiores símbolos religiosos da Bahia.",
+    "description_en": "One of the greatest religious symbols in Bahia.",
+    "type": "Religioso",
+    "cityId": "2"
+  },
+  {
+    "id": "161",
+    "name": "Morro do Pai Inácio",
+    "description": "Mirante mais famoso da Chapada Diamantina.",
+    "description_en": "Most famous lookout from Chapada Diamantina.",
+    "type": "Mirante",
+    "cityId": "29"
+  },
+  {
+    "id": "162",
+    "name": "Caverna do Diabo",
+    "description": "Maior caverna do estado de São Paulo, com visita guiada.",
+    "description_en": "Largest cave in the state of São Paulo, with guided tour.",
+    "type": "Natural",
+    "cityId": "36"
+  },
+  {
+    "id": "163",
+    "name": "Mirante de Boa Vista",
+    "description": "Vista privilegiada da cidade e da floresta.",
+    "description_en": "Privileged view of the city and the forest.",
+    "type": "Mirante",
+    "cityId": "62"
+  },
+  {
+    "id": "164",
+    "name": "Ponte Estaiada",
+    "description": "Cartão-postal moderno de São Paulo sobre o rio Pinheiros.",
+    "description_en": "Modern Postal Card of São Paulo over the Pinheiros River.",
+    "type": "Arquitetura",
+    "cityId": "3"
+  },
+  {
+    "id": "165",
+    "name": "Praia da Cacimba do Padre",
+    "description": "Uma das praias mais famosas de Fernando de Noronha.",
+    "description_en": "One of Fernando de Noronha's most famous beaches.",
+    "type": "Praia",
+    "cityId": "24"
+  },
+  {
+    "id": "166",
+    "name": "Ilha de Mosqueiro",
+    "description": "Destino de veraneio com praias de água doce no Pará.",
+    "description_en": "VERANEIO DESTINATION WITH FURTHY WATER BEACHES IN PARÁ.",
+    "type": "Natural",
+    "cityId": "11"
+  },
+  {
+    "id": "167",
+    "name": "Vila do Abraão",
+    "description": "Principal vila da Ilha Grande, com acesso a trilhas e praias.",
+    "description_en": "Main village of Ilha Grande, with access to trails and beaches.",
+    "type": "Turismo de Natureza",
+    "cityId": "1"
+  },
+  {
+    "id": "168",
+    "name": "Cachoeira Santa Bárbara",
+    "description": "Famosa pela coloração azul-turquesa de suas águas.",
+    "description_en": "Famous for the turquoise blue color of its waters.",
+    "type": "Natural",
+    "cityId": "60"
+  },
+  {
+    "id": "169",
+    "name": "Museu Nacional",
+    "description": "Antigo palácio imperial, atualmente em restauração após incêndio.",
+    "description_en": "Old Imperial Palace, currently in restoration after fire.",
+    "type": "Histórico",
+    "cityId": "1"
+  },
+  {
+    "id": "170",
+    "name": "Catedral de Maceió",
+    "description": "Templo católico com arquitetura imponente no centro da cidade.",
+    "description_en": "Catholic temple with imposing architecture in the city center.",
+    "type": "Religioso",
+    "cityId": "15"
+  },
+  {
+    "id": "171",
+    "name": "Feira do Largo da Ordem",
+    "description": "Feira de artesanato tradicional nas ruas históricas de Curitiba.",
+    "description_en": "Traditional Craft Fair in the historic streets of Curitiba.",
+    "type": "Cultural",
+    "cityId": "8"
+  },
+  {
+    "id": "172",
+    "name": "Teatro Municipal de São Paulo",
+    "description": "Obra-prima da arquitetura e palco de grandes espetáculos.",
+    "description_en": "Masterpiece of architecture and stage of great shows.",
+    "type": "Cultural",
+    "cityId": "3"
+  },
+  {
+    "id": "173",
+    "name": "Mercado Público de Porto Alegre",
+    "description": "Centro gastronômico e cultural com produtos típicos do sul.",
+    "description_en": "Gastronomic and Cultural Center with typical southern products.",
+    "type": "Cultural",
+    "cityId": "12"
+  },
+  {
+    "id": "174",
+    "name": "Igreja de São Francisco de Paula",
+    "description": "Construção histórica com belos altares em Ouro Preto.",
+    "description_en": "Historical construction with beautiful altars in Ouro Preto.",
+    "type": "Religioso",
+    "cityId": "20"
+  },
+  {
+    "id": "175",
+    "name": "Forte Orange",
+    "description": "Forte colonial holandês localizado na Ilha de Itamaracá.",
+    "description_en": "Fort Dutch colonial located on Itamaracá Island.",
+    "type": "Histórico",
+    "cityId": "9"
+  },
+  {
+    "id": "176",
+    "name": "Gruta Rei do Mato",
+    "description": "Caverna com formações calcárias e pinturas rupestres.",
+    "description_en": "Cave with limestone formations and rock paintings.",
+    "type": "Natural",
+    "cityId": "6"
+  },
+  {
+    "id": "177",
+    "name": "Sítio do Picapau Amarelo",
+    "description": "Museu dedicado a Monteiro Lobato.",
+    "description_en": "Museum dedicated to Monteiro Lobato.",
+    "type": "Cultural",
+    "cityId": "39"
+  },
+  {
+    "id": "178",
+    "name": "Parque Municipal da Lagoa do Nado",
+    "description": "Parque urbano com lagoa, trilhas e centro cultural.",
+    "description_en": "Urban Park with Lagoon, Trails and Cultural Center.",
+    "type": "Parque",
+    "cityId": "6"
+  },
+  {
+    "id": "179",
+    "name": "Praia de São Miguel dos Milagres",
+    "description": "Praia intocada com águas transparentes e piscinas naturais.",
+    "description_en": "Praia untouched with transparent waters and natural pools.",
+    "type": "Praia",
+    "cityId": "59"
+  },
+  {
+    "id": "180",
+    "name": "Cachoeira do Formiga",
+    "description": "Cachoeira de água cristalina no Jalapão.",
+    "description_en": "Crystalline Water Waterfall in Jalapão.",
+    "type": "Natural",
+    "cityId": "60"
+  },
+  {
+    "id": "181",
+    "name": "Parque Ambiental Encontro dos Rios",
+    "description": "Ponto de encontro dos rios Poti e Parnaíba.",
+    "description_en": "Meeting Point of Poti and Parnaíba rivers.",
+    "type": "Natural",
+    "cityId": "87"
+  },
+  {
+    "id": "182",
+    "name": "Roda Gigante de Balneário Camboriú",
+    "description": "Atração moderna com vista panorâmica da orla.",
+    "description_en": "Modern attraction with panoramic view of the waterfront.",
+    "type": "Entretenimento",
+    "cityId": "91"
+  },
+  {
+    "id": "183",
+    "name": "Parque Municipal de Maceió",
+    "description": "Área de conservação com trilhas e observação de fauna.",
+    "description_en": "Conservation area with trails and fauna observation.",
+    "type": "Natural",
+    "cityId": "15"
+  },
+  {
+    "id": "184",
+    "name": "Museu do Café",
+    "description": "Localizado na antiga Bolsa Oficial do Café.",
+    "description_en": "Located in the old official coffee bag.",
+    "type": "Museu",
+    "cityId": "122"
+  },
+  {
+    "id": "185",
+    "name": "Teatro Amazonas",
+    "description": "Símbolo cultural de Manaus com arquitetura neoclássica.",
+    "description_en": "Manaus cultural symbol with neoclassical architecture.",
+    "type": "Cultural",
+    "cityId": "7"
+  },
+  {
+    "id": "186",
+    "name": "Encontro das Águas",
+    "description": "Fenômeno natural entre os rios Negro e Solimões.",
+    "description_en": "Natural phenomenon between black rivers and solimões.",
+    "type": "Natural",
+    "cityId": "7"
+  },
+  {
+    "id": "187",
+    "name": "Cachoeira do Itiquira",
+    "description": "Uma das maiores quedas d'água acessíveis por estrada.",
+    "description_en": "One of the largest waterfalls accessible by road.",
+    "type": "Natural",
+    "cityId": "188"
+  },
+  {
+    "id": "188",
+    "name": "Cachoeira do Buracão",
+    "description": "Trilha e cânion levam a uma impressionante queda d’água.",
+    "description_en": "Trail and canyon lead to an impressive waterfall.",
+    "type": "Natural",
+    "cityId": "29"
+  },
+  {
+    "id": "189",
+    "name": "Casa do Rio Vermelho",
+    "description": "Residência de Jorge Amado e Zélia Gattai, hoje museu.",
+    "description_en": "Residence of Jorge Amado and Zélia Gattai, today museum.",
+    "type": "Cultural",
+    "cityId": "2"
+  },
+  {
+    "id": "190",
+    "name": "Mercado Ver-o-Peso",
+    "description": "Um dos mercados mais tradicionais do Brasil.",
+    "description_en": "One of the most traditional markets in Brazil.",
+    "type": "Cultural",
+    "cityId": "11"
+  },
+  {
+    "id": "191",
+    "name": "Parque das Ruínas",
+    "description": "Centro cultural com vista panorâmica no bairro Santa Teresa.",
+    "description_en": "Cultural Center with panoramic view in the Santa Teresa neighborhood.",
+    "type": "Cultural",
+    "cityId": "1"
+  },
+  {
+    "id": "192",
+    "name": "Feira Hippie de Ipanema",
+    "description": "Feira de artesanato dominical ao ar livre.",
+    "description_en": "Outdoor Sunday Craft Fair.",
+    "type": "Cultural",
+    "cityId": "1"
+  },
+  {
+    "id": "193",
+    "name": "Parque da Jaqueira",
+    "description": "Oásis verde em meio ao Recife, ideal para caminhadas.",
+    "description_en": "Oasis green in the middle of Recife, ideal for walks.",
+    "type": "Parque",
+    "cityId": "9"
+  },
+  {
+    "id": "194",
+    "name": "Complexo da Pampulha",
+    "description": "Conjunto modernista de Niemeyer com lago e museus.",
+    "description_en": "Niemeyer's modernist set with lake and museums.",
+    "type": "Arquitetura",
+    "cityId": "6"
+  },
+  {
+    "id": "195",
+    "name": "Praia do Francês",
+    "description": "Uma das praias mais populares de Maceió, com mar calmo e infraestrutura.",
+    "description_en": "One of the most popular beaches of Maceió, with calm sea and infrastructure.",
+    "type": "Praia",
+    "cityId": "15"
+  },
+  {
+    "id": "196",
+    "name": "Feira do Mercado Modelo",
+    "description": "Artesanato, cultura e culinária típica baiana.",
+    "description_en": "Typical Bahian culture and cuisine.",
+    "type": "Cultural",
+    "cityId": "2"
+  },
+  {
+    "id": "197",
+    "name": "Mirante da Lagoa Azul",
+    "description": "Vista panorâmica de uma das paisagens mais famosas de Bonito.",
+    "description_en": "Panoramic view of one of Bonito's most famous landscapes.",
+    "type": "Mirante",
+    "cityId": "23"
+  },
+  {
+    "id": "198",
+    "name": "Cachoeira da Formosa",
+    "description": "Paisagem exuberante com acesso por trilha.",
+    "description_en": "Exuberant landscape with trail access.",
+    "type": "Natural",
+    "cityId": "187"
+  },
+  {
+    "id": "199",
+    "name": "Rota do Enxaimel",
+    "description": "Conjunto de casas de arquitetura alemã tradicional.",
+    "description_en": "Set of traditional German architectural houses.",
+    "type": "Cultural",
+    "cityId": "55"
+  },
+  {
+    "id": "200",
+    "name": "Parque Nacional Cavernas do Peruaçu",
+    "description": "Formações calcárias monumentais e sítios arqueológicos.",
+    "description_en": "Monumental limestone and archaeological sites.",
+    "type": "Natural",
+    "cityId": "6"
+  }
+]
