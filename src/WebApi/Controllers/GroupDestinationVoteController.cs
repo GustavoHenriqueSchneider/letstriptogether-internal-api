@@ -13,6 +13,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/v1/groups/{groupId:guid}/destination-votes")]
+[Tags("Grupos")]
 public class GroupDestinationVoteController(
     IApplicationUserContext currentUser,
     IGroupRepository groupRepository,

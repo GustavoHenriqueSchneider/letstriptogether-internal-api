@@ -17,13 +17,30 @@ namespace WebApi.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/v1/groups")]
+[Tags("Grupos")]
 public class GroupController(
     IGroupRepository groupRepository,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
+    /// <summary>
+    ///  Cria um novo grupo.
+    /// </summary>
+    /// <remarks>
+    /// Cria um grupo e adiciona o usuário atual como owner.
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <response code="201">Grupo criado com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
+    /// <returns></returns>
     [HttpPost]
+    [ProducesResponseType(typeof(CreateGroupResponse),StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
     {
         var currentUserId = currentUser.GetId();
@@ -49,8 +66,20 @@ public class GroupController(
         await unitOfWork.SaveAsync();
         return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse { Id = group.Id });
     }
-
+    /// <summary>
+    ///  Busca todos os grupos do usuário atual.
+    /// </summary>
+    /// <remarks>
+    /// Retorna uma lista de todos os grupos do usuário autenticado ordenado por paginação.
+    /// </remarks>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <response code="200">Retorna lista paginada de todos os grupos do usuário</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(GetAllGroupsResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetAllGroups([FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10)
     {
@@ -67,8 +96,19 @@ public class GroupController(
             Hits = hits
         });
     }
-
+    /// <summary>
+    /// Busca um grupo pelo Id.
+    /// </summary>
+    /// <param name="groupId">Retorna o Guid do grupo a ser buscado</param>
+    /// <response code="200">Retorna o grupo buscado pelo Id</response>
+    /// <response code="400">Usuário não é membro deste grupo</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Grupo não encontrado</response>
     [HttpGet("{groupId:guid}")]
+    [ProducesResponseType(typeof(GetGroupByIdResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGroupById([FromRoute] Guid groupId)
     {
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
@@ -93,9 +133,21 @@ public class GroupController(
             UpdatedAt = group.UpdatedAt
         });
     }
-
+    /// <summary>
+    /// Atualiza um grupo pelo Id.
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="request"></param>
+    /// <response code="204">Grupo atualizado com sucesso</response>
+    /// <response code="400">Requisição inválida, usuário não é membro ou não é owner</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Grupo ou usuário não encontrado</response>
     [HttpPut("{groupId:guid}")]
-    public async Task<IActionResult> UpdateGroupById([FromRoute] Guid groupId, 
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateGroupById([FromRoute] Guid groupId,
         [FromBody] UpdateGroupRequest request)
     {
         var currentUserId = currentUser.GetId();
@@ -130,8 +182,19 @@ public class GroupController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Deleta um grupo pelo Id.
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <response code="204">Grupo deletado com sucesso</response>
+    /// <response code="400">Usuário não é membro ou não é owner</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Grupo ou usuário não encontrado</response>
     [HttpDelete("{groupId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteGroupById([FromRoute] Guid groupId)
     {
         var currentUserId = currentUser.GetId();

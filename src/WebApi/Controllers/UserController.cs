@@ -19,6 +19,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/v1/users/me")]
+[Tags("Usuário")]
 public class UserController(
     IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser,
@@ -29,7 +30,20 @@ public class UserController(
     IUserPreferenceRepository userPreferenceRepository,
     IRedisService redisService): ControllerBase
 {
+    /// <summary>
+    ///  Busca o usuário atual.
+    /// </summary>
+    /// <remarks>
+    /// Retorna os dados do usuário autenticado incluindo preferências.
+    /// </remarks>
+    /// <response code="200">Retorna os dados do usuário atual</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
+    /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(GetCurrentUserResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCurrentUser()
     {
         var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId());
@@ -48,8 +62,19 @@ public class UserController(
             UpdatedAt = user.UpdatedAt
         });
     }
-
+    /// <summary>
+    /// Atualiza o usuário atual.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="204">Usuário atualizado com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCurrentUser(
         [FromBody] UpdateCurrentUserRequest request)
     {
@@ -67,8 +92,16 @@ public class UserController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Deleta o usuário atual.
+    /// </summary>
+    /// <response code="204">Usuário deletado com sucesso</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCurrentUser()
     {
         var user = await userRepository.GetByIdAsync(currentUser.GetId());
@@ -87,8 +120,16 @@ public class UserController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Anonimiza o usuário atual.
+    /// </summary>
+    /// <response code="204">Usuário anonimizado com sucesso</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPatch("anonymize")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AnonymizeCurrentUser()
     {
         var user = await userRepository.GetUserWithRelationshipsByIdAsync(currentUser.GetId());
@@ -115,8 +156,19 @@ public class UserController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Define as preferências do usuário atual.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="204">Preferências definidas com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPut("preferences")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SetCurrentUserPreferences(
         [FromBody] SetCurrentUserPreferencesRequest request)
     {

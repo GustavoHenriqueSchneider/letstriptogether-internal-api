@@ -11,6 +11,7 @@ namespace WebApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/groups/{groupId:guid}/matches")]
+[Tags("Grupos")]
 public class GroupMatchController(
     IGroupMatchRepository groupMatchRepository,
     IGroupRepository groupRepository,

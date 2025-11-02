@@ -16,12 +16,26 @@ namespace WebApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/destinations")]
+[Tags("Destinos")]
 public class DestinationController(
     IGeoapifyService geoapifyService,
     IDestinationRepository destinationRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
+    /// <summary>
+    ///  Busca todos os destinos.
+    /// </summary>
+    /// <remarks>
+    /// Retorna uma lista de todos os destinos ordenado por paginação.
+    /// </remarks>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <response code="200">Retorna lista paginada de todos os destinos</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(GetAllDestinationsResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetAllDestinations([FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -63,8 +77,17 @@ public class DestinationController(
             return StatusCode((int)ex.StatusCode!, new ErrorResponse(ex.Message));
         }
     }
-
+    /// <summary>
+    /// Busca um destino pelo Id.
+    /// </summary>
+    /// <param name="destinationId">Retorna o Guid do destino a ser buscado</param>
+    /// <response code="200">Retorna o destino buscado pelo Id</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Destino não encontrado</response>
     [HttpGet("{destinationId:guid}")]
+    [ProducesResponseType(typeof(GetDestinationByIdResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDestinationById([FromRoute] Guid destinationId)
     {
         var destination = await destinationRepository.GetByIdAsync(destinationId);

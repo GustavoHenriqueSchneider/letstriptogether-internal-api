@@ -20,6 +20,7 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/v1/auth")]
+[Tags("Autenticação")]
 public class AuthController(
     IEmailSenderService emailSenderService, 
     IPasswordHashService passwordHashService, 
@@ -31,8 +32,17 @@ public class AuthController(
     IUnitOfWork unitOfWork,
     IApplicationUserContext currentUser) : ControllerBase
 {
+    /// <summary>
+    /// Envia email de confirmação para registro.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="200">Email enviado com sucesso</response>
+    /// <response code="409">Já existe um usuário usando este email</response>
+    /// <returns></returns>
     [HttpPost("email/send")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(SendRegisterConfirmationEmailResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> SendRegisterConfirmationEmail(
         [FromBody] SendRegisterConfirmationEmailRequest request)
     {
@@ -63,9 +73,18 @@ public class AuthController(
 
         return Ok(new SendRegisterConfirmationEmailResponse { Token = token });
     }
-
+    /// <summary>
+    /// Valida código de confirmação de email.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="200">Código validado com sucesso</response>
+    /// <response code="400">Código inválido</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
     [HttpPost("email/validate")]
     [Authorize(Policy = Policies.RegisterValidateEmail)]
+    [ProducesResponseType(typeof(ValidateRegisterConfirmationCodeResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ValidateRegisterConfirmationCode(
         [FromBody] ValidateRegisterConfirmationCodeRequest request)
     {
@@ -88,9 +107,22 @@ public class AuthController(
 
         return Ok(new ValidateRegisterConfirmationCodeResponse { Token = token });
     }
-
+    /// <summary>
+    /// Registra um novo usuário.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="201">Usuário registrado com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Role padrão não encontrado</response>
+    /// <response code="409">Já existe um usuário usando este email</response>
     [HttpPost("register")]
     [Authorize(Policy = Policies.RegisterSetPassword)]
+    [ProducesResponseType(typeof(RegisterResponse),StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         if (!request.HasAcceptedTermsOfUse)
@@ -121,9 +153,17 @@ public class AuthController(
 
         return CreatedAtAction(nameof(Register), new RegisterResponse { Id = user.Id });
     }
-
+    /// <summary>
+    /// Realiza login do usuário.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="200">Login realizado com sucesso</response>
+    /// <response code="401">Credenciais inválidas</response>
+    /// <returns></returns>
     [HttpPost("login")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(LoginResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var user = await userRepository.GetUserWithRolesByEmailAsync(request.Email);
@@ -150,9 +190,17 @@ public class AuthController(
 
         return Ok(new LoginResponse{ AccessToken = accessToken, RefreshToken = refreshToken });
     }
-
+    /// <summary>
+    /// Realiza logout do usuário.
+    /// </summary>
+    /// <response code="204">Logout realizado com sucesso</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPost("logout")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Logout()
     {
         var userId = currentUser.GetId();
@@ -170,9 +218,18 @@ public class AuthController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Atualiza o token de acesso usando o refresh token.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="200">Token atualizado com sucesso</response>
+    /// <response code="401">Refresh token inválido ou expirado</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPost("refresh")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(RefreshTokenResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
         var (isValid, claims) = tokenService.ValidateRefreshToken(request.RefreshToken);
@@ -218,9 +275,15 @@ public class AuthController(
 
         return Ok(new RefreshTokenResponse { AccessToken = accessToken, RefreshToken = refreshToken });
     }
-
+    /// <summary>
+    /// Solicita reset de senha.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="202">Se o email informado existe, uma mensagem será enviada</response>
+    /// <returns></returns>
     [HttpPost("reset-password/request")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(BaseResponse),StatusCodes.Status202Accepted)]
     public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordRequest request) 
     {
         var user = await userRepository.GetByEmailAsync(request.Email);
@@ -242,9 +305,20 @@ public class AuthController(
 
         return Accepted(new BaseResponse("If the informed email exists, an message will be sent."));
     }
-
+    /// <summary>
+    /// Reseta a senha do usuário.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="204">Senha resetada com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Token de reset inválido ou usuário não autorizado</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPost("reset-password")]
     [Authorize(Policy = Policies.ResetPassword)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request) 
     {
         var user = await userRepository.GetByIdAsync(currentUser.GetId());

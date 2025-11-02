@@ -14,10 +14,24 @@ namespace WebApi.Controllers.Admin;
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
 [Route("api/v1/admin/groups")]
+[Tags("Admin - Grupos")]
 public class AdminGroupController(
     IGroupRepository groupRepository) : ControllerBase
 {
+    /// <summary>
+    ///  Busca todos os grupos (Admin).
+    /// </summary>
+    /// <remarks>
+    /// Retorna uma lista de todos os grupos ordenado por pagina��o.
+    /// </remarks>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <response code="200">Retorna lista paginada de todos os grupos</response>
+    /// <response code="401">Usu�rio n�o autorizado(Token inv�lido ou vencido)</response>
+    /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(AdminGetAllGroupsResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> AdminGetAllGroups([FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10)
     {
@@ -33,8 +47,17 @@ public class AdminGroupController(
             Hits = hits
         });
     }
-
+    /// <summary>
+    /// Busca um grupo pelo Id (Admin).
+    /// </summary>
+    /// <param name="groupId">Retorna o Guid do grupo a ser buscado</param>
+    /// <response code="200">Retorna o grupo buscado pelo Id</response>
+    /// <response code="401">Usu�rio n�o autorizado(Token inv�lido ou vencido)</response>
+    /// <response code="404">Grupo n�o encontrado</response>
     [HttpGet("{groupId:guid}")]
+    [ProducesResponseType(typeof(AdminGetGroupByIdResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid groupId)
     {
         var group = await groupRepository.GetByIdAsync(groupId);

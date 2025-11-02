@@ -19,14 +19,26 @@ using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 using WebApi.Services.Implementations;
 using WebApi.Services.Interfaces;
+using System.Reflection;
 
 // TODO: quebrar esse arquivo em classes menores dependencyInjection por camada
 // e metodos por separacao: registerRepositories, registerServices...
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar URL padrão se nenhuma estiver definida (para desenvolvimento)
+if (builder.Environment.IsDevelopment() && string.IsNullOrEmpty(builder.Configuration["urls"]))
+{
+    builder.WebHost.UseUrls("http://localhost:5088");
+}
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen (c => 
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 // authentication
 var jwtSection = builder.Configuration.GetRequiredSection(nameof(JsonWebTokenSettings));
@@ -167,10 +179,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
+        c.RoutePrefix = "swagger";
+    });
 }
 
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
 app.MapControllers();
 

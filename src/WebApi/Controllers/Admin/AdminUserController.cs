@@ -18,6 +18,7 @@ namespace WebApi.Controllers.Admin;
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
 [Route("api/v1/admin/users")]
+[Tags("Admin - Usuários")]
 public class AdminUserController(
     IUnitOfWork unitOfWork,
     IPasswordHashService passwordHashService,
@@ -29,8 +30,20 @@ public class AdminUserController(
     IUserPreferenceRepository userPreferenceRepository,
     IRedisService redisService): ControllerBase
 {
+    /// <summary>
+    ///  Busca todos os usuários (Admin).
+    /// </summary>
+    /// <remarks>
+    /// Retorna uma lista de todos os usuários ordenado por paginação.
+    /// </remarks>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <response code="200">Retorna lista paginada de todos os usuários</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <returns></returns>
     [HttpGet]
-
+    [ProducesResponseType(typeof(AdminGetAllUsersResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> AdminGetAllUsers([FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10)
     {
@@ -42,8 +55,17 @@ public class AdminUserController(
             Hits = hits
         });
     }
-
+    /// <summary>
+    /// Busca um usuário pelo Id (Admin).
+    /// </summary>
+    /// <param name="userId">Retorna o Guid do usuário a ser buscado</param>
+    /// <response code="200">Retorna o usuário buscado pelo Id</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpGet("{userId:guid}")]
+    [ProducesResponseType(typeof(AdminGetUserByIdResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminGetUserById([FromRoute] Guid userId)
     {
         var user = await userRepository.GetByIdWithPreferencesAsync(userId);
@@ -62,8 +84,21 @@ public class AdminUserController(
             UpdatedAt = user.UpdatedAt
         });
     }
-
+    /// <summary>
+    /// Cria um novo usuário (Admin).
+    /// </summary>
+    /// <param name="request"></param>
+    /// <response code="201">Usuário criado com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Role não encontrado</response>
+    /// <response code="409">Já existe um usuário usando este email</response>
     [HttpPost]
+    [ProducesResponseType(typeof(AdminCreateUserResponse),StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AdminCreateUser([FromBody] AdminCreateUserRequest request)
     {
         var email = request.Email;
@@ -86,8 +121,20 @@ public class AdminUserController(
 
         return CreatedAtAction(nameof(AdminCreateUser), new AdminCreateUserResponse { Id = user.Id });
     }
-
+    /// <summary>
+    /// Atualiza um usuário pelo Id (Admin).
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="request"></param>
+    /// <response code="204">Usuário atualizado com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPut("{userId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid userId, 
         [FromBody] AdminUpdateUserRequest request)
     {
@@ -105,8 +152,17 @@ public class AdminUserController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Deleta um usuário pelo Id (Admin).
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <response code="204">Usuário deletado com sucesso</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpDelete("{userId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid userId)
     {
         var user = await userRepository.GetByIdAsync(userId);
@@ -125,8 +181,17 @@ public class AdminUserController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Anonimiza um usuário pelo Id (Admin).
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <response code="204">Usuário anonimizado com sucesso</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPatch("{userId:guid}/anonymize")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid userId)
     {
         var user = await userRepository.GetUserWithRelationshipsByIdAsync(userId);
@@ -153,8 +218,20 @@ public class AdminUserController(
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Define as preferências de um usuário pelo Id (Admin).
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="request"></param>
+    /// <response code="204">Preferências definidas com sucesso</response>
+    /// <response code="400">Requisição inválida</response>
+    /// <response code="401">Usuário não autorizado(Token inválido ou vencido)</response>
+    /// <response code="404">Usuário não encontrado</response>
     [HttpPut("{userId:guid}/preferences")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid userId, 
         [FromBody] AdminSetUserPreferencesByUserIdRequest request)
     {
