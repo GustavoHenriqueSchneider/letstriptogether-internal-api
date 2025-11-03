@@ -1,5 +1,3 @@
-using WebApi.DTOs.Responses;
-
 namespace WebApi.DTOs.Responses.GroupMemberDestinationVote;
 
 public class GetGroupMemberAllDestinationVotesByIdResponse

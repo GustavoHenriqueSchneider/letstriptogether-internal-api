@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApi.Configurations;
-using WebApi.Models;
+using WebApi.Models.Aggregates;
 using WebApi.Security;
 using WebApi.Services.Interfaces;
 
@@ -52,10 +52,24 @@ public class TokenService : ITokenService
         return token;
     }
 
-    public (string accessToken, string refreshToken) GenerateTokens(User user)
+    public string GenerateInvitationToken(Guid invitationId)
+    {
+        var claims = new List<Claim>
+        {
+            new (Claims.Id, invitationId.ToString()),
+            new (Claims.TokenType, TokenTypes.Invitation)
+        };
+
+        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.InvitationTokenValidityInMinutes);
+
+        var token = CreateJwtToken(claims, expiresIn);
+        return token;
+    }
+
+    public (string accessToken, string refreshToken) GenerateTokens(User user, DateTime? refreshTokenExpiresIn = null)
     {
         var accessToken = GenerateAccessToken(user);
-        var refreshToken = GenerateRefreshToken(user.Id);
+        var refreshToken = GenerateRefreshToken(user.Id, refreshTokenExpiresIn);
 
         return (accessToken, refreshToken);
     }
@@ -99,7 +113,7 @@ public class TokenService : ITokenService
         return accessToken;
     }
 
-    private string GenerateRefreshToken(Guid userId)
+    private string GenerateRefreshToken(Guid userId, DateTime? expiresIn)
     {
         var claims = new List<Claim>
         {
@@ -107,9 +121,9 @@ public class TokenService : ITokenService
             new (Claims.TokenType, TokenTypes.Refresh)
         };
 
-        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
+        expiresIn ??= DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
 
-        var refreshToken = CreateJwtToken(claims, expiresIn);
+        var refreshToken = CreateJwtToken(claims, expiresIn.Value);
         return refreshToken;
     }
 
@@ -128,7 +142,7 @@ public class TokenService : ITokenService
                 IssuerSigningKey = new SymmetricSecurityKey(_key)
             };
 
-            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out var _);
+            var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out _);
             var tokenType = claims.FindFirstValue(Claims.TokenType);
 
             if (tokenType is null || tokenType != TokenTypes.Refresh)
@@ -137,6 +151,38 @@ public class TokenService : ITokenService
             }
 
             return (true, claims);
+        }
+        catch
+        {
+            return (false, null);
+        }
+    }
+    
+    public (bool isValid, string? invitationId) ValidateInvitationToken(string invitationToken)
+    {
+        try
+        {
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = _jwtSettings.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(_key)
+            };
+
+            var claims = _tokenHandler.ValidateToken(invitationToken, validationParameters, out _);
+            var tokenType = claims.FindFirstValue(Claims.TokenType);
+
+            if (tokenType is null || tokenType != TokenTypes.Invitation)
+            {
+                return (false, null);
+            }
+            
+            var invitationId = claims.FindFirstValue(Claims.Id);
+            return (true, invitationId);
         }
         catch
         {

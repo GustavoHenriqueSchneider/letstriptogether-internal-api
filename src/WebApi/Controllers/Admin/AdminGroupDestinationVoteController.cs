@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs.Responses;
 using WebApi.DTOs.Responses.Admin.GroupMemberDestinationVote;
-using WebApi.Repositories.Implementations;
 using WebApi.Repositories.Interfaces;
 using WebApi.Security;
 
@@ -55,7 +54,6 @@ public class AdminGroupDestinationVoteController(
 
         return Ok(new AdminGetGroupDestinationVoteByIdResponse
         {
-            GroupId = vote.GroupMember.GroupId,
             MemberId = vote.GroupMemberId,
             DestinationId = vote.DestinationId,
             IsApproved = vote.IsApproved,
