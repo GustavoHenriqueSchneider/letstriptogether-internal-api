@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
 using WebApi.DTOs.Requests.Group;
 using WebApi.DTOs.Responses;
+using WebApi.DTOs.Responses.Destination;
 using WebApi.DTOs.Responses.Group;
 using WebApi.Models.Aggregates;
 using WebApi.Persistence.Interfaces;
@@ -23,6 +24,7 @@ public class GroupController(
     IUserRepository userRepository,
     IGroupPreferenceRepository groupPreferenceRepository,
     IGroupMemberRepository groupMemberRepository,
+    IDestinationRepository destinationRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
@@ -231,6 +233,42 @@ public class GroupController(
         
         await unitOfWork.SaveAsync();
         return NoContent();
+    }
+    
+    [HttpGet("{groupId:guid}/destinations-not-voted")]
+    public async Task<IActionResult> GetNotVotedDestinationsByMemberOnGroup([FromRoute] Guid groupId,
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var currentUserId = currentUser.GetId();
+        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+        
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+        
+        var isGroupMember = group.Members.Any(m => m.UserId == currentUserId);
+        if (!isGroupMember)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+        
+        var (destinations, hits) = await destinationRepository.GetNotVotedByUserInGroupAsync(
+            currentUserId, groupId, pageNumber, pageSize);
+
+        return Ok(new GetAllNotVotedDestinationsForGroupResponse
+        {
+            Data = destinations.Select(x => new GetAllNotVotedDestinationsForGroupResponseData
+            {
+                Id = x.Id,
+                CreatedAt = x.CreatedAt
+            }),
+            Hits = hits
+        });
     }
 }
 
