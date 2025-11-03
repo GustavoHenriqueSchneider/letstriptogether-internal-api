@@ -12,31 +12,35 @@ public partial class TripPreference
         public const string Sports = $"{EntertainmentPrefix}.sports";
         public const string Tour = $"{EntertainmentPrefix}.tour";
 
-        private readonly string _entertainmentPreference;
+        private readonly string _preference;
 
-        private static readonly IReadOnlyList<string> ValidPreferences = new List<string>
+        private static readonly IReadOnlyDictionary<string,string> ValidPreferences = new Dictionary<string,string>
         {
-            Adventure,
-            Attraction,
-            Park,
-            Sports,
-            Tour
+            { nameof(Adventure), Adventure },
+            { nameof(Attraction), Attraction },
+            { nameof(Park), Park },
+            { nameof(Sports), Sports },
+            { nameof(Tour), Tour }
         };
 
-        public Entertainment(string entertainmentPreference)
+        public Entertainment(string preferenceValue)
         {
-            var key = entertainmentPreference;
-
-            if (!ValidPreferences.Any(v => v.Equals(key, StringComparison.OrdinalIgnoreCase)))
+            var value = preferenceValue;
+            
+            if (!value.StartsWith($"{EntertainmentPrefix}.", StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"Invalid entertainment preference: {key}");
+                value = $"{EntertainmentPrefix}.{preferenceValue}";
             }
+            
+            var preference = ValidPreferences.SingleOrDefault(x => 
+                x.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
 
-            _entertainmentPreference = key;
+            _preference = preference.Key?.ToLower()
+                          ?? throw new InvalidOperationException($"Invalid entertainment preference: {preferenceValue}");
         }
 
-        public override string ToString() => _entertainmentPreference;
+        public override string ToString() => _preference;
 
-        public static implicit operator string(Entertainment s) => s._entertainmentPreference;
+        public static implicit operator string(Entertainment s) => s._preference;
     }
 }

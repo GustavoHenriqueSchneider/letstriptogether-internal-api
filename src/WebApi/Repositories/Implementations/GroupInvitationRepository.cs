@@ -2,6 +2,7 @@
 using WebApi.Repositories.Interfaces;
 using WebApi.Context.Implementations;
 using WebApi.Models.Aggregates;
+using WebApi.Models.Enums;
 
 namespace WebApi.Repositories.Implementations;
 
@@ -25,5 +26,21 @@ public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroup
             .CountAsync(x => x.GroupId == groupId);
 
         return (data, hits);
+    }
+
+    public async Task<GroupInvitation?> GetByIdWithAnsweredByAsync(Guid id)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(gi => gi.AnsweredBy)
+            .SingleOrDefaultAsync(gi => gi.Id == id);
+    }
+
+    public async Task<GroupInvitation?> GetByGroupAndStatusAsync(Guid groupId, GroupInvitationStatus status)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(gi => gi.AnsweredBy)
+            .SingleOrDefaultAsync(gi => gi.GroupId == groupId && gi.Status == status);
     }
 }

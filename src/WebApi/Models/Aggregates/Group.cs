@@ -35,8 +35,15 @@ public class Group : TrackableEntity
         return _members.Contains(member);
     }
 
-    public void AddMember(GroupMember member)
+    public GroupMember AddMember(User user, bool isOwner)
     {
+        var member = new GroupMember
+        {
+            GroupId = Id,
+            UserId = user.Id,
+            IsOwner = isOwner
+        };
+        
         if (HasMember(member))
         {
             throw new InvalidOperationException("This member is already included on the group.");
@@ -46,10 +53,11 @@ public class Group : TrackableEntity
 
         if (!AllMembersHavePreferences())
         {
-            return;
+            return member;
         }
         
         UpdatePreferences();
+        return member;
     }
 
     private bool AllMembersHavePreferences()

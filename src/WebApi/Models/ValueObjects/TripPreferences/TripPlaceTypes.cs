@@ -16,35 +16,39 @@ public partial class TripPreference
         public const string Viewpoint = $"{PlaceTypePrefix}.viewpoint";
         public const string Waterfall = $"{PlaceTypePrefix}.waterfall";
 
-        private readonly string _placeType;
+        private readonly string _preference;
 
-        private static readonly IReadOnlyList<string> ValidPreferences = new List<string>
+        private static readonly IReadOnlyDictionary<string,string> ValidPreferences = new Dictionary<string,string>
         {
-            Beach,
-            Cave,
-            Mountain,
-            Nature,
-            Park,
-            Rural,
-            Trail,
-            Viewpoint,
-            Waterfall
+            { nameof(Beach), Beach },
+            { nameof(Cave), Cave },
+            { nameof(Mountain), Mountain },
+            { nameof(Nature), Nature },
+            { nameof(Park), Park },
+            { nameof(Rural), Rural },
+            { nameof(Trail), Trail },
+            { nameof(Viewpoint), Viewpoint },
+            { nameof(Waterfall), Waterfall }
         };
 
-        public PlaceType(string placeType)
+        public PlaceType(string preferenceValue)
         {
-            var key = placeType;
-
-            if (!ValidPreferences.Any(v => v.Equals(key, StringComparison.OrdinalIgnoreCase)))
+            var value = preferenceValue;
+            
+            if (!value.StartsWith($"{PlaceTypePrefix}.", StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"Invalid place type: {key}");
+                value = $"{PlaceTypePrefix}.{preferenceValue}";
             }
+            
+            var preference = ValidPreferences.SingleOrDefault(x => 
+                x.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
 
-            _placeType = key;
+            _preference = preference.Key?.ToLower()
+                          ?? throw new InvalidOperationException($"Invalid place type preference: {preferenceValue}");
         }
 
-        public override string ToString() => _placeType;
+        public override string ToString() => _preference;
 
-        public static implicit operator string(PlaceType s) => s._placeType;
+        public static implicit operator string(PlaceType s) => s._preference;
     }
 }

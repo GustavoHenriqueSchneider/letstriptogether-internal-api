@@ -52,6 +52,20 @@ public class TokenService : ITokenService
         return token;
     }
 
+    public string GenerateInvitationToken(Guid invitationId)
+    {
+        var claims = new List<Claim>
+        {
+            new (Claims.Id, invitationId.ToString()),
+            new (Claims.TokenType, TokenTypes.Invitation)
+        };
+
+        var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.InvitationTokenValidityInMinutes);
+
+        var token = CreateJwtToken(claims, expiresIn);
+        return token;
+    }
+
     public (string accessToken, string refreshToken) GenerateTokens(User user, DateTime? refreshTokenExpiresIn = null)
     {
         var accessToken = GenerateAccessToken(user);
@@ -137,6 +151,38 @@ public class TokenService : ITokenService
             }
 
             return (true, claims);
+        }
+        catch
+        {
+            return (false, null);
+        }
+    }
+    
+    public (bool isValid, string? invitationId) ValidateInvitationToken(string invitationToken)
+    {
+        try
+        {
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = _jwtSettings.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(_key)
+            };
+
+            var claims = _tokenHandler.ValidateToken(invitationToken, validationParameters, out _);
+            var tokenType = claims.FindFirstValue(Claims.TokenType);
+
+            if (tokenType is null || tokenType != TokenTypes.Invitation)
+            {
+                return (false, null);
+            }
+            
+            var invitationId = claims.FindFirstValue(Claims.Id);
+            return (true, invitationId);
         }
         catch
         {
