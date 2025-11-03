@@ -31,4 +31,27 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
             .Include(d => d.Attractions)
             .SingleOrDefaultAsync(e => e.Id == id);
     }
+    
+    public async Task<(IEnumerable<Destination> data, int hits)> GetNotVotedByUserInGroupAsync(
+        Guid userId, Guid groupId, int pageNumber = 1, int pageSize = 10)
+    {
+        var data = await _dbSet
+            .AsNoTracking()
+            .Where(x =>
+                !x.GroupMemberVotes.Any(v => 
+                    v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
+            .OrderByDescending(d => d.CreatedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var hits = await _dbSet
+            .AsNoTracking()
+            .Where(x =>
+                !x.GroupMemberVotes.Any(v => 
+                    v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
+            .CountAsync();
+
+        return (data, hits);
+    }
 }
