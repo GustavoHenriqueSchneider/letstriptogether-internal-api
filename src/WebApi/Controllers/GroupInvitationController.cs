@@ -1,13 +1,13 @@
-using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Context.Interfaces;
-using WebApi.DTOs.Requests.Group;
 using WebApi.DTOs.Responses;
-using WebApi.DTOs.Responses.Group;
-using WebApi.Models;
+using WebApi.DTOs.Responses.GroupInvitation;
+using WebApi.Models.Aggregates;
+using WebApi.Models.Enums;
 using WebApi.Persistence.Interfaces;
 using WebApi.Repositories.Interfaces;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers;
 
@@ -21,28 +21,26 @@ public class GroupInvitationController(
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
     IGroupMemberRepository groupMemberRepository,
+    ITokenService tokenService,
+    IRedisService redisService,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateGroupInvitation([FromRoute] Guid groupId, 
-        [FromBody] CreateGroupInvitationRequest request)
+    public async Task<IActionResult> CreateGroupInvitation([FromRoute] Guid groupId)
     {
         var currentUserId = currentUser.GetId();
-
         if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
         var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
-
         if (currentUserMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
@@ -53,52 +51,46 @@ public class GroupInvitationController(
             return BadRequest(new ErrorResponse("Only the group owner can create invitations."));
         }
 
-        var existingInvitation = await groupInvitationRepository.GetByGroupIdAsync(groupId);
-
+        GroupInvitation groupInvitation;
+        
+        var existingInvitation = 
+            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active);
+        
         if (existingInvitation is not null)
         {
-            return Conflict(new ErrorResponse("An invitation already exists for this group."));
+            groupInvitation = existingInvitation.Copy();
+            groupInvitationRepository.Update(existingInvitation);
         }
-
-        var groupInvitation = (GroupInvitation)Activator.CreateInstance(
-            typeof(GroupInvitation),
-            BindingFlags.NonPublic | BindingFlags.Instance,
-            null,
-            [],
-            null)!;
-        
-        typeof(GroupInvitation).GetProperty(nameof(GroupInvitation.GroupId))!
-            .SetValue(groupInvitation, groupId);
-        typeof(GroupInvitation).GetProperty(nameof(GroupInvitation.ExpirationDate))!
-            .SetValue(groupInvitation, request.ExpirationDate.ToUniversalTime());
+        else
+        {
+            groupInvitation = new GroupInvitation(groupId);
+        }
 
         await groupInvitationRepository.AddAsync(groupInvitation);
         await unitOfWork.SaveAsync();
+        
+        var invitationToken = tokenService.GenerateInvitationToken(groupInvitation.Id);
 
         return CreatedAtAction(nameof(CreateGroupInvitation), 
-            new CreateGroupInvitationResponse { Id = groupInvitation.Id });
+            new CreateGroupInvitationResponse { Token = invitationToken });
     }
-
-    [HttpDelete("{invitationId:guid}")]
-    public async Task<IActionResult> RemoveGroupInvitation([FromRoute] Guid groupId, 
-        [FromRoute] Guid invitationId)
+    
+    [HttpGet]
+    public async Task<IActionResult> GetActiveGroupInvitation([FromRoute] Guid groupId)
     {
         var currentUserId = currentUser.GetId();
-
         if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
         var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
         var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
-
         if (currentUserMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
@@ -106,161 +98,59 @@ public class GroupInvitationController(
 
         if (!currentUserMember.IsOwner)
         {
-            return BadRequest(new ErrorResponse("Only the group owner can remove invitations."));
+            return BadRequest(new ErrorResponse("Only the group owner can get group invitation."));
         }
 
-        var groupInvitation = await groupInvitationRepository.GetByIdAsync(invitationId);
-
-        if (groupInvitation is null)
+        var activeInvitation = 
+            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active);
+        
+        if (activeInvitation is null)
         {
-            return NotFound(new ErrorResponse("Invitation not found."));
+            return NotFound(new ErrorResponse("Active invitation not found."));
         }
-
-        if (groupInvitation.GroupId != groupId)
-        {
-            return BadRequest(new ErrorResponse("Invitation does not belong to this group."));
-        }
-
-        groupInvitationRepository.Remove(groupInvitation);
-        await unitOfWork.SaveAsync();
-
-        return NoContent();
+        
+        var invitationToken = tokenService.GenerateInvitationToken(activeInvitation.Id);
+        return Ok(new GetActiveGroupInvitationResponse { Token =  invitationToken });
     }
 
-    [HttpPost("{invitationId:guid}/accept")]
-    public async Task<IActionResult> AcceptGroupInvitation([FromRoute] Guid groupId, 
-        [FromRoute] Guid invitationId)
+    [HttpPatch("cancel")]
+    public async Task<IActionResult> CancelActiveGroupInvitation([FromRoute] Guid groupId)
     {
         var currentUserId = currentUser.GetId();
-
         if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId);
-
-        if (groupInvitation is null)
-        {
-            return NotFound(new ErrorResponse("Invitation not found."));
-        }
-
-        if (groupInvitation.GroupId != groupId)
-        {
-            return BadRequest(new ErrorResponse("Invitation does not belong to this group."));
-        }
-
-        if (groupInvitation.ExpirationDate < DateTime.UtcNow)
-        {
-            return BadRequest(new ErrorResponse("Invitation has expired."));
-        }
-
-        var existingAnswer = await userGroupInvitationRepository.GetByUserIdAndGroupInvitationIdAsync(
-            currentUserId, invitationId);
-
-        if (existingAnswer is not null)
-        {
-            return Conflict(new ErrorResponse("You have already answered this invitation."));
-        }
-
-        var groupWithMembers = await groupRepository.GetGroupWithMembersAsync(groupId);
-
-        if (groupWithMembers is null)
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var isAlreadyMember = groupWithMembers.Members.Any(m => m.UserId == currentUserId);
-
-        if (isAlreadyMember)
+        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
+        if (currentUserMember is null)
         {
-            return BadRequest(new ErrorResponse("You are already a member of this group."));
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var userGroupInvitation = (UserGroupInvitation)Activator.CreateInstance(
-            typeof(UserGroupInvitation),
-            BindingFlags.NonPublic | BindingFlags.Instance,
-            null,
-            [],
-            null)!;
+        if (!currentUserMember.IsOwner)
+        {
+            return BadRequest(new ErrorResponse("Only the group owner can get group invitation."));
+        }
+
+        var activeInvitation = 
+            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active);
         
-        typeof(UserGroupInvitation).GetProperty(nameof(UserGroupInvitation.GroupInvitationId))!
-            .SetValue(userGroupInvitation, invitationId);
-        typeof(UserGroupInvitation).GetProperty(nameof(UserGroupInvitation.UserId))!
-            .SetValue(userGroupInvitation, currentUserId);
-        typeof(UserGroupInvitation).GetProperty(nameof(UserGroupInvitation.IsAccepted))!
-            .SetValue(userGroupInvitation, true);
-
-        await userGroupInvitationRepository.AddAsync(userGroupInvitation);
-
-        var groupMember = new GroupMember
+        if (activeInvitation is null)
         {
-            GroupId = groupId,
-            UserId = currentUserId,
-            IsOwner = false
-        };
-
-        await groupMemberRepository.AddAsync(groupMember);
-
-        await unitOfWork.SaveAsync();
-
-        return Ok();
-    }
-
-    [HttpPost("{invitationId:guid}/refuse")]
-    public async Task<IActionResult> RefuseGroupInvitation([FromRoute] Guid groupId, 
-        [FromRoute] Guid invitationId)
-    {
-        var currentUserId = currentUser.GetId();
-
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
-        {
-            return NotFound(new ErrorResponse("User not found."));
+            return NotFound(new ErrorResponse("Active invitation not found."));
         }
 
-        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId);
-
-        if (groupInvitation is null)
-        {
-            return NotFound(new ErrorResponse("Invitation not found."));
-        }
-
-        if (groupInvitation.GroupId != groupId)
-        {
-            return BadRequest(new ErrorResponse("Invitation does not belong to this group."));
-        }
-
-        if (groupInvitation.ExpirationDate < DateTime.UtcNow)
-        {
-            return BadRequest(new ErrorResponse("Invitation has expired."));
-        }
-
-        var existingAnswer = await userGroupInvitationRepository.GetByUserIdAndGroupInvitationIdAsync(
-            currentUserId, invitationId);
-
-        if (existingAnswer is not null)
-        {
-            return Conflict(new ErrorResponse("You have already answered this invitation."));
-        }
-
-        var userGroupInvitation = (UserGroupInvitation)Activator.CreateInstance(
-            typeof(UserGroupInvitation),
-            BindingFlags.NonPublic | BindingFlags.Instance,
-            null,
-            [],
-            null)!;
+        activeInvitation.Cancel();
+        groupInvitationRepository.Update(activeInvitation);
         
-        typeof(UserGroupInvitation).GetProperty(nameof(UserGroupInvitation.GroupInvitationId))!
-            .SetValue(userGroupInvitation, invitationId);
-        typeof(UserGroupInvitation).GetProperty(nameof(UserGroupInvitation.UserId))!
-            .SetValue(userGroupInvitation, currentUserId);
-        typeof(UserGroupInvitation).GetProperty(nameof(UserGroupInvitation.IsAccepted))!
-            .SetValue(userGroupInvitation, false);
-
-        await userGroupInvitationRepository.AddAsync(userGroupInvitation);
         await unitOfWork.SaveAsync();
-
-        return Ok();
+        return NoContent();
     }
 }
-

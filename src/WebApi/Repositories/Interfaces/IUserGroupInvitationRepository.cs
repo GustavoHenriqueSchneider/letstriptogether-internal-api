@@ -4,5 +4,5 @@ namespace WebApi.Repositories.Interfaces;
 
 public interface IUserGroupInvitationRepository : IBaseRepository<UserGroupInvitation>
 {
-    Task<UserGroupInvitation?> GetByUserIdAndGroupInvitationIdAsync(Guid userId, Guid groupInvitationId);
+    Task<bool> ExistsByUserIdAndGroupInvitationIdAsync(Guid userId, Guid groupInvitationId);
 }

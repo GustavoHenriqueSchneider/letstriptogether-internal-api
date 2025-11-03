@@ -29,6 +29,8 @@ public partial class TripPreference
             PlaceTypePrefix => new PlaceType(preference),
             _ => throw new InvalidOperationException($"Invalid prefix {prefix} for preference")
         };
+
+        _category = _category.ToLower();
     }
     
     public override string ToString() => _category;

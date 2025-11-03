@@ -15,34 +15,38 @@ public partial class TripPreference
         public const string Museum = $"{CulturePrefix}.museum";
         public const string Religious = $"{CulturePrefix}.religious";
 
-        private readonly string _culturePreference;
+        private readonly string _preference;
 
-        private static readonly IReadOnlyList<string> ValidPreferences = new List<string>
+        private static readonly IReadOnlyDictionary<string,string> ValidPreferences = new Dictionary<string,string>
         {
-            Architecture,
-            Center,
-            Education,
-            Heritage,
-            Historical,
-            Monument,
-            Museum,
-            Religious
+            { nameof(Architecture), Architecture },
+            { nameof(Center), Center },
+            { nameof(Education), Education },
+            { nameof(Heritage), Heritage },
+            { nameof(Historical), Historical },
+            { nameof(Monument), Monument },
+            { nameof(Museum), Museum },
+            { nameof(Religious), Religious }
         };
 
-        public Culture(string culturePreference)
+        public Culture(string preferenceValue)
         {
-            var key = culturePreference;
-
-            if (!ValidPreferences.Any(v => v.Equals(key, StringComparison.OrdinalIgnoreCase)))
+            var value = preferenceValue;
+            
+            if (!value.StartsWith($"{CulturePrefix}.", StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"Invalid culture preference: {key}");
+                value = $"{CulturePrefix}.{preferenceValue}";
             }
+            
+            var preference = ValidPreferences.SingleOrDefault(x => 
+                x.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
 
-            _culturePreference = key;
+            _preference = preference.Key?.ToLower()
+                          ?? throw new InvalidOperationException($"Invalid culture preference: {preferenceValue}");
         }
 
-        public override string ToString() => _culturePreference;
+        public override string ToString() => _preference;
 
-        public static implicit operator string(Culture s) => s._culturePreference;
+        public static implicit operator string(Culture s) => s._preference;
     }
 }

@@ -46,14 +46,7 @@ public class GroupController(
             _ = new UserPreference(user.Preferences);
             var group = new Group(request.Name, request.TripExpectedDate.ToUniversalTime());
 
-            var groupMember = new GroupMember
-            {
-                GroupId = group.Id,
-                UserId = currentUserId,
-                IsOwner = true
-            };
-
-            group.AddMember(groupMember);
+            var groupMember = group.AddMember(user, isOwner: true);
             var groupPreferences = group.UpdatePreferences(user.Preferences);
 
             await groupRepository.AddAsync(group);
@@ -201,6 +194,42 @@ public class GroupController(
         groupRepository.Remove(group);
         await unitOfWork.SaveAsync();
 
+        return NoContent();
+    }
+    
+    [HttpPatch("{groupId:guid}/leave")]
+    public async Task<IActionResult> LeaveGroupById([FromRoute] Guid groupId)
+    {
+        var currentUserId = currentUser.GetId();
+        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        {
+            return NotFound(new ErrorResponse("User not found."));
+        }
+
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+
+        var currentUserMember = group.Members.SingleOrDefault(m => m.UserId == currentUserId);
+        if (currentUserMember is null)
+        {
+            return BadRequest(new ErrorResponse("You are not a member of this group."));
+        }
+
+        if (currentUserMember.IsOwner)
+        {
+            return BadRequest(new ErrorResponse("The group owner can not leave the group, only delete it."));
+        }
+
+        group.RemoveMember(currentUserMember);
+        
+        groupRepository.Update(group);
+        groupMemberRepository.Remove(currentUserMember);
+        groupPreferenceRepository.Update(group.Preferences);
+        
+        await unitOfWork.SaveAsync();
         return NoContent();
     }
 }

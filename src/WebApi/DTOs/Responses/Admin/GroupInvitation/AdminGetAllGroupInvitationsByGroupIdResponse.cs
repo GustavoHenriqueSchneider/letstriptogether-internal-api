@@ -1,5 +1,3 @@
-using WebApi.DTOs.Responses;
-
 namespace WebApi.DTOs.Responses.Admin.GroupInvitation;
 
 public class AdminGetAllGroupInvitationsByGroupIdResponse 
