@@ -10,10 +10,10 @@ public class UserGroupInvitationRepository
 {
     public UserGroupInvitationRepository(AppDbContext context) : base(context) { }
 
-    public async Task<bool> ExistsByUserIdAndGroupInvitationIdAsync(Guid userId, Guid groupInvitationId)
+    public async Task<bool> ExistsByUserIdAndGroupInvitationIdAsync(Guid userId, Guid groupInvitationId, CancellationToken cancellationToken)
     {
         return await _dbSet
             .AsNoTracking()
-            .AnyAsync(ugi => ugi.UserId == userId && ugi.GroupInvitationId == groupInvitationId);
+            .AnyAsync(ugi => ugi.UserId == userId && ugi.GroupInvitationId == groupInvitationId, cancellationToken);
     }
 }

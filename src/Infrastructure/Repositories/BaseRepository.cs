@@ -13,52 +13,53 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
         _dbSet = context.Set<T>();
     }
 
-    public async Task<bool> ExistsByIdAsync(Guid id)
+    public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbSet.AnyAsync(e => e.Id == id);
+        return await _dbSet.AnyAsync(e => e.Id == id, cancellationToken);
     }
 
-    public async Task<(IEnumerable<T> data, int hits)> GetAllAsync(int pageNumber = 1, int pageSize = 10)
+    public async Task<(IEnumerable<T> data, int hits)> GetAllAsync(
+        int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var data = await _dbSet
             .AsNoTracking()
             .OrderByDescending(e => e.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-        var hits = await _dbSet.CountAsync();
+        var hits = await _dbSet.CountAsync(cancellationToken);
 
         return (data, hits);
     }
 
-    public async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbSet
             .AsNoTracking()
-            .SingleOrDefaultAsync(e => e.Id == id);
+            .SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
-    public async Task<int> GetHitsAsync()
+    public async Task<int> GetHitsAsync(CancellationToken cancellationToken)
     {
-        return await _dbSet.CountAsync();
+        return await _dbSet.CountAsync(cancellationToken);
     }
 
-    public async Task AddAsync(T entity)
+    public async Task AddAsync(T entity, CancellationToken cancellationToken)
     {
-        await _dbSet.AddAsync(entity);
+        await _dbSet.AddAsync(entity, cancellationToken);
     }
 
-    public async Task AddRangeAsync(IEnumerable<T> entityList)
+    public async Task AddRangeAsync(IEnumerable<T> entityList, CancellationToken cancellationToken)
     {
-        await _dbSet.AddRangeAsync(entityList);
+        await _dbSet.AddRangeAsync(entityList, cancellationToken);
     }
 
-    public async Task AddOrUpdateAsync(T entity)
+    public async Task AddOrUpdateAsync(T entity, CancellationToken cancellationToken)
     {
-        if (!await ExistsByIdAsync(entity.Id))
+        if (!await ExistsByIdAsync(entity.Id, cancellationToken))
         {
-            await AddAsync(entity);
+            await AddAsync(entity, cancellationToken);
             return;
         }
 

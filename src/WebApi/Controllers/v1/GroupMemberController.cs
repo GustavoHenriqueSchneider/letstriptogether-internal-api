@@ -21,10 +21,10 @@ public class GroupMemberController(
 {
     [HttpGet]
     public async Task<IActionResult> GetOtherGroupMembersById([FromRoute] Guid groupId, 
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -38,7 +38,7 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -46,7 +46,7 @@ public class GroupMemberController(
         }
 
         var (groupMembers, hits) = 
-            await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
+            await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize, cancellationToken);
 
         return Ok(new GetOtherGroupMembersByIdResponse
         {
@@ -63,10 +63,10 @@ public class GroupMemberController(
 
     [HttpGet("{memberId:guid}")]
     public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, 
-        [FromRoute] Guid memberId)
+        [FromRoute] Guid memberId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -80,7 +80,7 @@ public class GroupMemberController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -105,15 +105,15 @@ public class GroupMemberController(
 
     [HttpDelete("{memberId:guid}")]
     public async Task<IActionResult> RemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid memberId)
+        [FromRoute] Guid memberId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -147,7 +147,7 @@ public class GroupMemberController(
         groupMemberRepository.Remove(userToRemove);
         groupPreferenceRepository.Update(group.Preferences);
         
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         return NoContent();
     }
 }

@@ -16,9 +16,9 @@ public class AdminGroupMatchController(
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupMatchesById([FromRoute] Guid groupId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -26,7 +26,7 @@ public class AdminGroupMatchController(
         }
 
         var (groupMatches, hits) = 
-            await groupMatchRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize);
+            await groupMatchRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetAllGroupMatchesByIdResponse
         {
@@ -41,9 +41,9 @@ public class AdminGroupMatchController(
 
     [HttpGet("{matchId:guid}")]
     public async Task<IActionResult> AdminGetGroupMatchById([FromRoute] Guid groupId,
-        [FromRoute] Guid matchId)
+        [FromRoute] Guid matchId, CancellationToken cancellationToken)
     {
-        var group = await groupRepository.GetGroupWithMatchesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMatchesAsync(groupId, cancellationToken);
 
         if (group is null)
         {

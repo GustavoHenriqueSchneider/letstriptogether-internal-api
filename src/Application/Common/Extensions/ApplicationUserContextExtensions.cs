@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Claims = LetsTripTogether.InternalApi.Domain.Security.Claim;
+using LetsTripTogether.InternalApi.Domain.Security;
 
 namespace LetsTripTogether.InternalApi.Application.Common.Extensions;
 

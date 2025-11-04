@@ -31,10 +31,10 @@ public class GroupController(
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
+    public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -54,11 +54,11 @@ public class GroupController(
             var groupMember = group.AddMember(user, isOwner: true);
             var groupPreferences = group.UpdatePreferences(user.Preferences);
 
-            await groupRepository.AddAsync(group);
-            await groupMemberRepository.AddAsync(groupMember);
-            await groupPreferenceRepository.AddAsync(groupPreferences);
+            await groupRepository.AddAsync(group, cancellationToken);
+            await groupMemberRepository.AddAsync(groupMember, cancellationToken);
+            await groupPreferenceRepository.AddAsync(groupPreferences, cancellationToken);
 
-            await unitOfWork.SaveAsync();
+            await unitOfWork.SaveAsync(cancellationToken);
             return CreatedAtAction(nameof(CreateGroup), new CreateGroupResponse { Id = group.Id });
         }
         catch (InvalidOperationException ex) when (ex.Message.StartsWith("Invalid"))
@@ -69,10 +69,10 @@ public class GroupController(
 
     [HttpGet]
     public async Task<IActionResult> GetAllGroups([FromQuery] int pageNumber = 1, 
-        [FromQuery] int pageSize = 10)
+        [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var (groups, hits) = await groupRepository.GetAllGroupsByUserIdAsync(
-            currentUser.GetId(), pageNumber, pageSize);
+            currentUser.GetId(), pageNumber, pageSize, cancellationToken);
 
         return Ok(new GetAllGroupsResponse
         {
@@ -86,9 +86,9 @@ public class GroupController(
     }
 
     [HttpGet("{groupId:guid}")]
-    public async Task<IActionResult> GetGroupById([FromRoute] Guid groupId)
+    public async Task<IActionResult> GetGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -104,7 +104,7 @@ public class GroupController(
 
         try
         {
-            var groupPreferences = await groupPreferenceRepository.GetByGroupIdAsync(groupId)
+            var groupPreferences = await groupPreferenceRepository.GetByGroupIdAsync(groupId, cancellationToken)
                 ?? throw new InvalidOperationException("Invalid preferences");
 
             return Ok(new GetGroupByIdResponse
@@ -132,16 +132,16 @@ public class GroupController(
 
     [HttpPut("{groupId:guid}")]
     public async Task<IActionResult> UpdateGroupById([FromRoute] Guid groupId, 
-        [FromBody] UpdateGroupRequest request)
+        [FromBody] UpdateGroupRequest request, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
 
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -162,22 +162,22 @@ public class GroupController(
 
         group.Update(request.Name, request.TripExpectedDate);
         groupRepository.Update(group);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return NoContent();
     }
 
     [HttpDelete("{groupId:guid}")]
-    public async Task<IActionResult> DeleteGroupById([FromRoute] Guid groupId)
+    public async Task<IActionResult> DeleteGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
 
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -197,21 +197,21 @@ public class GroupController(
         }
 
         groupRepository.Remove(group);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return NoContent();
     }
     
     [HttpPatch("{groupId:guid}/leave")]
-    public async Task<IActionResult> LeaveGroupById([FromRoute] Guid groupId)
+    public async Task<IActionResult> LeaveGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -232,7 +232,7 @@ public class GroupController(
         
         if (group.Members.Count == 1)
         {
-            var matches = await groupMatchRepository.GetAllMatchesByGroupAsync(groupId);
+            var matches = await groupMatchRepository.GetAllMatchesByGroupAsync(groupId, cancellationToken);
             groupMatchRepository.RemoveRange(matches);
         }
         
@@ -240,21 +240,21 @@ public class GroupController(
         groupMemberRepository.Remove(currentUserMember);
         groupPreferenceRepository.Update(group.Preferences);
         
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         return NoContent();
     }
     
     [HttpGet("{groupId:guid}/destinations-not-voted")]
     public async Task<IActionResult> GetNotVotedDestinationsByMemberOnGroup([FromRoute] Guid groupId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
         
-        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -269,7 +269,7 @@ public class GroupController(
         var groupPreferences = group.Preferences.ToList();
         
         var (destinations, hits) = await destinationRepository.GetNotVotedByUserInGroupAsync(
-            currentUserId, groupId, groupPreferences, pageNumber, pageSize);
+            currentUserId, groupId, groupPreferences, pageNumber, pageSize, cancellationToken);
 
         return Ok(new GetAllNotVotedDestinationsForGroupResponse
         {

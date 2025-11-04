@@ -1,6 +1,6 @@
 ﻿namespace LetsTripTogether.InternalApi.Domain.Security;
 
-public class TokenType
+public class TokenTypes
 {
     public const string Access = "access";
     public const string Refresh = "refresh";

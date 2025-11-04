@@ -1,6 +1,6 @@
 ﻿namespace LetsTripTogether.InternalApi.Domain.Security;
 
-public class Claim
+public class Claims
 {
     public const string Id = "id";
     public const string Name = "name";

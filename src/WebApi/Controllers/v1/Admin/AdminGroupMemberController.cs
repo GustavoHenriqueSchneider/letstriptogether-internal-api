@@ -20,9 +20,9 @@ public class AdminGroupMemberController(
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupMembersById([FromRoute] Guid groupId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -30,7 +30,7 @@ public class AdminGroupMemberController(
         }
 
         var (groupMembers, hits) =
-            await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize);
+            await groupMemberRepository.GetAllByGroupIdAsync(groupId, pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetAllGroupMembersByIdResponse
         {
@@ -45,9 +45,9 @@ public class AdminGroupMemberController(
 
     [HttpGet("{memberId:guid}")]
     public async Task<IActionResult> AdminGetGroupMemberById([FromRoute] Guid groupId, 
-        [FromRoute] Guid memberId)
+        [FromRoute] Guid memberId, CancellationToken cancellationToken)
     {
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -72,9 +72,9 @@ public class AdminGroupMemberController(
 
     [HttpDelete("{memberId:guid}")]
     public async Task<IActionResult> AdminRemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid memberId)
+        [FromRoute] Guid memberId, CancellationToken cancellationToken)
     {
-        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -97,15 +97,15 @@ public class AdminGroupMemberController(
         groupMemberRepository.Remove(userToRemove);
         groupPreferenceRepository.Update(group.Preferences);
         
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         return NoContent();
     }
 
     [HttpGet("{memberId:guid}/destination-votes")]
     public async Task<IActionResult> AdminGetGroupMemberAllDestinationVotesById([FromRoute] Guid groupId,
-        [FromRoute] Guid memberId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromRoute] Guid memberId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -120,7 +120,7 @@ public class AdminGroupMemberController(
         }
 
         var (votes, hits) = await groupMemberDestinationVoteRepository.GetByMemberIdAsync(memberId,
-            pageNumber, pageSize);
+            pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetGroupMemberAllDestinationVotesByIdResponse
         {

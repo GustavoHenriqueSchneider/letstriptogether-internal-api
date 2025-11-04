@@ -20,9 +20,9 @@ public class AdminGroupController(
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroups([FromQuery] int pageNumber = 1, 
-        [FromQuery] int pageSize = 10)
+        [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var (groups, hits) = await groupRepository.GetAllAsync(pageNumber, pageSize);
+        var (groups, hits) = await groupRepository.GetAllAsync(pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetAllGroupsResponse
         {
@@ -36,9 +36,9 @@ public class AdminGroupController(
     }
 
     [HttpGet("{groupId:guid}")]
-    public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid groupId)
+    public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
-        var group = await groupRepository.GetGroupWithPreferencesAsync(groupId);
+        var group = await groupRepository.GetGroupWithPreferencesAsync(groupId, cancellationToken);
 
         if (group is null)
         {

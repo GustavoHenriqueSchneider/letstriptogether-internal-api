@@ -1,4 +1,5 @@
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+using LetsTripTogether.InternalApi.Application.Helpers;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
@@ -31,9 +32,9 @@ public class UserController(
     IRedisService redisService): ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetCurrentUser()
+    public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId());
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId(), cancellationToken);
 
         if (user is null)
         {
@@ -70,9 +71,9 @@ public class UserController(
 
     [HttpPut]
     public async Task<IActionResult> UpdateCurrentUser(
-        [FromBody] UpdateCurrentUserRequest request)
+        [FromBody] UpdateCurrentUserRequest request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(currentUser.GetId());
+        var user = await userRepository.GetByIdAsync(currentUser.GetId(), cancellationToken);
 
         if (user is null)
         {
@@ -82,15 +83,15 @@ public class UserController(
         user.Update(request.Name);
 
         userRepository.Update(user);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return NoContent();
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteCurrentUser()
+    public async Task<IActionResult> DeleteCurrentUser(CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(currentUser.GetId());
+        var user = await userRepository.GetByIdAsync(currentUser.GetId(), cancellationToken);
 
         if (user is null)
         {
@@ -99,18 +100,18 @@ public class UserController(
 
         // TODO: parou de funcionar
         userRepository.Remove(user);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserRefreshToken(user.Id);
         await redisService.DeleteAsync(key);
 
         return NoContent();
     }
 
     [HttpPatch("anonymize")]
-    public async Task<IActionResult> AnonymizeCurrentUser()
+    public async Task<IActionResult> AnonymizeCurrentUser(CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetUserWithRelationshipsByIdAsync(currentUser.GetId());
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(currentUser.GetId(), cancellationToken);
 
         if (user is null)
         {
@@ -124,9 +125,9 @@ public class UserController(
         user.Anonymize();
 
         userRepository.Update(user);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserRefreshToken(user.Id);
         await redisService.DeleteAsync(key);
 
         // TODO: registrar log de auditoria da anonimização do usuário
@@ -137,9 +138,9 @@ public class UserController(
 
     [HttpPut("preferences")]
     public async Task<IActionResult> SetCurrentUserPreferences(
-        [FromBody] SetCurrentUserPreferencesRequest request)
+        [FromBody] SetCurrentUserPreferencesRequest request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId());
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUser.GetId(), cancellationToken);
 
         if (user is null)
         {
@@ -154,16 +155,16 @@ public class UserController(
             user.SetPreferences(preferences);
 
             userRepository.Update(user);
-            await userPreferenceRepository.AddOrUpdateAsync(user.Preferences!);
-            await unitOfWork.SaveAsync();
+            await userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
             var groupMemberships = 
-                (await groupMemberRepository.GetAllByUserIdAsync(user.Id)).ToList();
+                (await groupMemberRepository.GetAllByUserIdAsync(user.Id, cancellationToken)).ToList();
 
             foreach (var membership in groupMemberships)
             {
                 var group =
-                    await groupRepository.GetGroupWithMembersPreferencesAsync(membership.GroupId);
+                    await groupRepository.GetGroupWithMembersPreferencesAsync(membership.GroupId, cancellationToken);
 
                 if (group is null)
                 {
@@ -172,7 +173,7 @@ public class UserController(
                 }
                 
                 group.UpdatePreferences();
-                var groupToUpdate = await groupRepository.GetGroupWithPreferencesAsync(membership.GroupId);
+                var groupToUpdate = await groupRepository.GetGroupWithPreferencesAsync(membership.GroupId, cancellationToken);
 
                 if (groupToUpdate is null)
                 {
@@ -188,7 +189,7 @@ public class UserController(
 
             if (groupMemberships.Count != 0)
             {
-                await unitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync(cancellationToken);
             }
             
             return NoContent();

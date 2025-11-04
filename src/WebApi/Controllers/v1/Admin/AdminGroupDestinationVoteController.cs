@@ -16,11 +16,11 @@ public class AdminGroupDestinationVoteController(
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupDestinationVotesById(
-        [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var (votes, hits) = 
             await groupMemberDestinationVoteRepository.GetByGroupIdAsync(groupId, 
-                pageNumber, pageSize);
+                pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetAllGroupDestinationVotesByIdResponse
         {
@@ -35,9 +35,9 @@ public class AdminGroupDestinationVoteController(
 
     [HttpGet("{destinationVoteId:guid}")]
     public async Task<IActionResult> AdminGetGroupDestinationVoteById(
-        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId)
+        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId, CancellationToken cancellationToken)
     {
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -45,7 +45,7 @@ public class AdminGroupDestinationVoteController(
         }
 
         var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(groupId, 
-            destinationVoteId);
+            destinationVoteId, cancellationToken);
 
         if (vote is null)
         {

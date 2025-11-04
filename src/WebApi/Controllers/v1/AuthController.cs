@@ -2,10 +2,13 @@
 using LetsTripTogether.InternalApi.Application.Common.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.Common.Policies;
+using LetsTripTogether.InternalApi.Application.Helpers;
 using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
+using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects;
 using LetsTripTogether.InternalApi.Infrastructure.DTOs.Requests.Auth;
 using LetsTripTogether.InternalApi.Infrastructure.DTOs.Responses;
 using LetsTripTogether.InternalApi.Infrastructure.DTOs.Responses.Auth;
@@ -34,10 +37,10 @@ public class AuthController(
     [HttpPost("email/send")]
     [AllowAnonymous]
     public async Task<IActionResult> SendRegisterConfirmationEmail(
-        [FromBody] SendRegisterConfirmationEmailRequest request)
+        [FromBody] SendRegisterConfirmationEmailRequest request, CancellationToken cancellationToken)
     {
         var email = request.Email;
-        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email, cancellationToken);
 
         if (existsUserWithEmail)
         {
@@ -50,16 +53,16 @@ public class AuthController(
             new (ClaimTypes.Email, email)
         };
 
-        var token = tokenService.GenerateRegisterTokenForStep(Steps.ValidateEmail, claims);
+        var token = tokenService.GenerateRegisterTokenForStep(Step.ValidateEmail, claims);
         var (_, expiresIn) = tokenService.IsTokenExpired(token);
 
-        var key = RedisKeys.RegisterEmailConfirmation.Replace("{email}", email);
+        var key = KeyHelper.RegisterEmailConfirmation(email);
         var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         var code = randomCodeGeneratorService.Generate();
         await redisService.SetAsync(key, code, ttlInSeconds);
         // TODO: tirar valor hard coded e criar templates de email
-        await emailSenderService.SendAsync(request.Email, "Email Confirmation", code);
+        await emailSenderService.SendAsync(request.Email, "Email Confirmation", code, cancellationToken);
 
         return Ok(new SendRegisterConfirmationEmailResponse { Token = token });
     }
@@ -67,9 +70,9 @@ public class AuthController(
     [HttpPost("email/validate")]
     [Authorize(Policy = Policies.RegisterValidateEmail)]
     public async Task<IActionResult> ValidateRegisterConfirmationCode(
-        [FromBody] ValidateRegisterConfirmationCodeRequest request)
+        [FromBody] ValidateRegisterConfirmationCodeRequest request, CancellationToken cancellationToken)
     {
-        var key = RedisKeys.RegisterEmailConfirmation.Replace("{email}", currentUser.GetEmail());
+        var key = KeyHelper.RegisterEmailConfirmation(currentUser.GetEmail());
         var code = await redisService.GetAsync(key);
 
         if (code is null || code != request.Code)
@@ -83,7 +86,7 @@ public class AuthController(
             new (ClaimTypes.Email, currentUser.GetEmail())
         };
 
-        var token = tokenService.GenerateRegisterTokenForStep(Steps.SetPassword, claims);
+        var token = tokenService.GenerateRegisterTokenForStep(Step.SetPassword, claims);
         await redisService.DeleteAsync(key);
 
         return Ok(new ValidateRegisterConfirmationCodeResponse { Token = token });
@@ -91,7 +94,7 @@ public class AuthController(
 
     [HttpPost("register")]
     [Authorize(Policy = Policies.RegisterSetPassword)]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         if (!request.HasAcceptedTermsOfUse)
         {
@@ -99,14 +102,14 @@ public class AuthController(
         }
 
         var email = currentUser.GetEmail();
-        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email, cancellationToken);
 
         if (existsUserWithEmail)
         {
             return Conflict(new ErrorResponse("There is already an user using this email."));
         }
 
-        var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
+        var defaultRole = await roleRepository.GetDefaultUserRoleAsync(cancellationToken);
 
         if (defaultRole is null)
         {
@@ -116,17 +119,17 @@ public class AuthController(
         var passwordHash = passwordHashService.HashPassword(request.Password);
         var user = new User(currentUser.GetName(), email, passwordHash, defaultRole);
 
-        await userRepository.AddAsync(user);
-        await unitOfWork.SaveAsync();
+        await userRepository.AddAsync(user, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return CreatedAtAction(nameof(Register), new RegisterResponse { Id = user.Id });
     }
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetUserWithRolesByEmailAsync(request.Email);
+        var user = await userRepository.GetUserWithRolesByEmailAsync(request.Email, cancellationToken);
 
         if (user is null)
         {
@@ -143,7 +146,7 @@ public class AuthController(
         var (accessToken, refreshToken) = tokenService.GenerateTokens(user);
         var (_, expiresIn) = tokenService.IsTokenExpired(refreshToken);
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserRefreshToken(user.Id);
         var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         await redisService.SetAsync(key, refreshToken, ttlInSeconds);
@@ -153,17 +156,17 @@ public class AuthController(
 
     [HttpPost("logout")]
     [Authorize]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
         var userId = currentUser.GetId();
-        var userExists = await userRepository.ExistsByIdAsync(userId);
+        var userExists = await userRepository.ExistsByIdAsync(userId, cancellationToken);
 
         if (!userExists)
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", userId.ToString());
+        var key = KeyHelper.UserRefreshToken(userId);
         await redisService.DeleteAsync(key);
 
         // TODO: fazer logica pra travar accesstoken usado no logout enquanto ainda nao expirar
@@ -173,7 +176,7 @@ public class AuthController(
 
     [HttpPost("refresh")]
     [AllowAnonymous]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
         var (isValid, claims) = tokenService.ValidateRefreshToken(request.RefreshToken);
 
@@ -196,7 +199,7 @@ public class AuthController(
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", userId.ToString());
+        var key = KeyHelper.UserRefreshToken(userId);
         var storedRefreshToken = await redisService.GetAsync(key);
 
         if (storedRefreshToken is null || storedRefreshToken != request.RefreshToken)
@@ -204,7 +207,7 @@ public class AuthController(
             return Unauthorized(new ErrorResponse("Invalid refresh token."));
         }
 
-        var user = await userRepository.GetUserWithRolesByIdAsync(userId);
+        var user = await userRepository.GetUserWithRolesByIdAsync(userId, cancellationToken);
 
         if (user is null)
         {
@@ -221,9 +224,9 @@ public class AuthController(
 
     [HttpPost("reset-password/request")]
     [AllowAnonymous]
-    public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordRequest request) 
+    public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordRequest request, CancellationToken cancellationToken) 
     {
-        var user = await userRepository.GetByEmailAsync(request.Email);
+        var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         if (user is null)
         {
@@ -233,28 +236,28 @@ public class AuthController(
         var resetPasswordToken = tokenService.GenerateResetPasswordToken(user.Id);
         var (_, expiresIn) = tokenService.IsTokenExpired(resetPasswordToken);
 
-        var key = RedisKeys.UserResetPassword.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserResetPassword(user.Id);
         var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         await redisService.SetAsync(key, resetPasswordToken, ttlInSeconds);
         // TODO: tirar valor hard coded e criar templates de email
-        await emailSenderService.SendAsync(request.Email, "Reset Password", resetPasswordToken);
+        await emailSenderService.SendAsync(request.Email, "Reset Password", resetPasswordToken, cancellationToken);
 
         return Accepted(new BaseResponse("If the informed email exists, an message will be sent."));
     }
 
     [HttpPost("reset-password")]
     [Authorize(Policy = Policies.ResetPassword)]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request) 
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken) 
     {
-        var user = await userRepository.GetByIdAsync(currentUser.GetId());
+        var user = await userRepository.GetByIdAsync(currentUser.GetId(), cancellationToken);
 
         if (user is null)
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var key = RedisKeys.UserResetPassword.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserResetPassword(user.Id);
         var storedResetPasswordToken = await redisService.GetAsync(key);
 
         if (storedResetPasswordToken is null || storedResetPasswordToken != HttpContext.GetBearerToken())
@@ -267,7 +270,7 @@ public class AuthController(
         user.SetPasswordHash(passwordHash);
         userRepository.Update(user);
 
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         await redisService.DeleteAsync(key);
 
         return NoContent();

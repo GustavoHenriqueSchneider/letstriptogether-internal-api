@@ -9,7 +9,8 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
 {
     public DestinationRepository(AppDbContext context) : base(context) { }
 
-    public new async Task<(IEnumerable<Destination> data, int hits)> GetAllAsync(int pageNumber = 1, int pageSize = 10)
+    public new async Task<(IEnumerable<Destination> data, int hits)> GetAllAsync(
+        int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var data = await _dbSet
             .AsNoTracking()
@@ -17,23 +18,24 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
             .OrderByDescending(e => e.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-        var hits = await _dbSet.CountAsync();
+        var hits = await _dbSet.CountAsync(cancellationToken);
 
         return (data, hits);
     }
 
-    public new async Task<Destination?> GetByIdAsync(Guid id)
+    public new async Task<Destination?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbSet
             .AsNoTracking()
             .Include(d => d.Attractions)
-            .SingleOrDefaultAsync(e => e.Id == id);
+            .SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
     
     public async Task<(IEnumerable<Destination> data, int hits)> GetNotVotedByUserInGroupAsync(
-        Guid userId, Guid groupId, IEnumerable<string> groupPreferences, int pageNumber = 1, int pageSize = 10)
+        Guid userId, Guid groupId, IEnumerable<string> groupPreferences, 
+        int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var data = await _dbSet
             .AsNoTracking()
@@ -44,14 +46,14 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
             .OrderByDescending(d => d.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         var hits = await _dbSet
             .AsNoTracking()
             .Where(x => !x.GroupMemberVotes.Any(v => 
                 v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
             .Where(x => x.Attractions.Any(d => groupPreferences.Contains(d.Category)))
-            .CountAsync();
+            .CountAsync(cancellationToken);
 
         return (data, hits);
     }

@@ -8,8 +8,6 @@ using LetsTripTogether.InternalApi.Domain.ValueObjects;
 using LetsTripTogether.InternalApi.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Claim = System.Security.Claims.Claim;
-using Claims = LetsTripTogether.InternalApi.Domain.Security.Claim;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Services;
 
@@ -31,7 +29,7 @@ public class TokenService : ITokenService
     public string GenerateRegisterTokenForStep(string step, List<Claim> claims)
     {
         claims.AddRange([
-            new(Claims.TokenType, TokenType.Step),
+            new(Claims.TokenType, TokenTypes.Step),
             new(Claims.Step, new Step(step))
         ]);
 
@@ -46,7 +44,7 @@ public class TokenService : ITokenService
         var claims = new List<Claim>
         {
             new (Claims.Id, userId.ToString()),
-            new (Claims.TokenType, TokenType.ResetPassword)
+            new (Claims.TokenType, TokenTypes.ResetPassword)
         };
 
         var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.ResetPasswordTokenValidityInMinutes);
@@ -60,7 +58,7 @@ public class TokenService : ITokenService
         var claims = new List<Claim>
         {
             new (Claims.Id, invitationId.ToString()),
-            new (Claims.TokenType, TokenType.Invitation)
+            new (Claims.TokenType, TokenTypes.Invitation)
         };
 
         var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.InvitationTokenValidityInMinutes);
@@ -102,7 +100,7 @@ public class TokenService : ITokenService
             new (Claims.Id, user.Id.ToString()),
             new (Claims.Name, user.Name),
             new (ClaimTypes.Email, user.Email),
-            new (Claims.TokenType, TokenType.Access)
+            new (Claims.TokenType, TokenTypes.Access)
         };
 
         foreach (var userRole in user.UserRoles)
@@ -121,7 +119,7 @@ public class TokenService : ITokenService
         var claims = new List<Claim>
         {
             new (Claims.Id, userId.ToString()),
-            new (Claims.TokenType, TokenType.Refresh)
+            new (Claims.TokenType, TokenTypes.Refresh)
         };
 
         expiresIn ??= DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenValidityInMinutes);
@@ -148,7 +146,7 @@ public class TokenService : ITokenService
             var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out _);
             var tokenType = claims.FindFirstValue(Claims.TokenType);
 
-            if (tokenType is null || tokenType != TokenType.Refresh)
+            if (tokenType is null || tokenType != TokenTypes.Refresh)
             {
                 return (false, null);
             }
@@ -179,7 +177,7 @@ public class TokenService : ITokenService
             var claims = _tokenHandler.ValidateToken(invitationToken, validationParameters, out _);
             var tokenType = claims.FindFirstValue(Claims.TokenType);
 
-            if (tokenType is null || tokenType != TokenType.Invitation)
+            if (tokenType is null || tokenType != TokenTypes.Invitation)
             {
                 return (false, null);
             }

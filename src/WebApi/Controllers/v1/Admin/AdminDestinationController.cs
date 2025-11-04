@@ -18,9 +18,9 @@ public class AdminDestinationController(
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllDestinations([FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
+        [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var (destinations, hits) = await destinationRepository.GetAllAsync(pageNumber, pageSize); 
+        var (destinations, hits) = await destinationRepository.GetAllAsync(pageNumber, pageSize, cancellationToken); 
 
         return Ok(new AdminGetAllDestinationsResponse
         {

@@ -20,9 +20,9 @@ public class AdminGroupInvitationsController(
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupInvitationsByGroupId(
-        [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -30,7 +30,7 @@ public class AdminGroupInvitationsController(
         }
 
         var (invitations, hits) = 
-            await groupInvitationRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize);
+            await groupInvitationRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetAllGroupInvitationsByGroupIdResponse
         {
@@ -45,16 +45,16 @@ public class AdminGroupInvitationsController(
 
     [HttpGet("{invitationId:guid}")]
     public async Task<IActionResult> AdminGetGroupInvitationById(
-        [FromRoute] Guid groupId, [FromRoute] Guid invitationId)
+        [FromRoute] Guid groupId, [FromRoute] Guid invitationId, CancellationToken cancellationToken)
     {
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var invitation = await groupInvitationRepository.GetByIdAsync(invitationId);
+        var invitation = await groupInvitationRepository.GetByIdAsync(invitationId, cancellationToken);
 
         if (invitation is null)
         {

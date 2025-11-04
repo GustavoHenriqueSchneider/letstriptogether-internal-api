@@ -21,24 +21,24 @@ public class GroupMatchController(
 {
     [HttpGet]
     public async Task<IActionResult> GetAllGroupMatchesById([FromRoute] Guid groupId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var currentUserId = currentUser.GetId();
-        var existsUser = await userRepository.ExistsByIdAsync(currentUserId);
+        var existsUser = await userRepository.ExistsByIdAsync(currentUserId, cancellationToken);
 
         if (!existsUser)
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId);
+        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
 
         if (!groupExists)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var isGroupMember = await groupRepository.IsGroupMemberByUserIdAsync(groupId, currentUserId);
+        var isGroupMember = await groupRepository.IsGroupMemberByUserIdAsync(groupId, currentUserId, cancellationToken);
 
         if (!isGroupMember)
         {
@@ -46,7 +46,7 @@ public class GroupMatchController(
         }
 
         var (groupMatches, hits) =
-            await groupMatchRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize);
+            await groupMatchRepository.GetByGroupIdAsync(groupId, pageNumber, pageSize, cancellationToken);
 
         return Ok(new GetAllGroupMatchesByIdResponse
         {
@@ -61,24 +61,24 @@ public class GroupMatchController(
 
     [HttpGet("{matchId:guid}")]
     public async Task<IActionResult> GetGroupMatchById([FromRoute] Guid groupId,
-        [FromRoute] Guid matchId)
+        [FromRoute] Guid matchId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var existsUser = await userRepository.ExistsByIdAsync(currentUserId);
+        var existsUser = await userRepository.ExistsByIdAsync(currentUserId, cancellationToken);
 
         if (!existsUser)
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMatchesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMatchesAsync(groupId, cancellationToken);
 
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var isGroupMember = await groupRepository.IsGroupMemberByUserIdAsync(groupId, currentUserId);
+        var isGroupMember = await groupRepository.IsGroupMemberByUserIdAsync(groupId, currentUserId, cancellationToken);
 
         if (!isGroupMember)
         {
@@ -102,15 +102,15 @@ public class GroupMatchController(
 
     [HttpDelete("{matchId:guid}")]
     public async Task<IActionResult> RemoveGroupMatchById([FromRoute] Guid groupId,
-        [FromRoute] Guid matchId)
+        [FromRoute] Guid matchId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -129,7 +129,7 @@ public class GroupMatchController(
         }
         
         var vote = await groupDestinationVoteRepository.GetByMemberAndDestinationAsync(
-            groupMember.Id, matchToRemove.DestinationId);
+            groupMember.Id, matchToRemove.DestinationId, cancellationToken);
         
         if (vote is null)
         {
@@ -141,7 +141,7 @@ public class GroupMatchController(
         groupMatchRepository.Remove(matchToRemove);
         groupDestinationVoteRepository.Update(vote);
         
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         return NoContent();
     }
 }

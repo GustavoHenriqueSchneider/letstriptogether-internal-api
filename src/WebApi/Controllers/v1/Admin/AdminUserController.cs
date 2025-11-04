@@ -1,5 +1,6 @@
 ﻿using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.Common.Policies;
+using LetsTripTogether.InternalApi.Application.Helpers;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
@@ -36,9 +37,9 @@ public class AdminUserController(
     [HttpGet]
 
     public async Task<IActionResult> AdminGetAllUsers([FromQuery] int pageNumber = 1, 
-        [FromQuery] int pageSize = 10)
+        [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var (users, hits) = await userRepository.GetAllAsync(pageNumber, pageSize);
+        var (users, hits) = await userRepository.GetAllAsync(pageNumber, pageSize, cancellationToken);
 
         return Ok(new AdminGetAllUsersResponse
         {
@@ -48,9 +49,9 @@ public class AdminUserController(
     }
 
     [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid userId)
+    public async Task<IActionResult> AdminGetUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(userId);
+        var user = await userRepository.GetByIdWithPreferencesAsync(userId, cancellationToken);
 
         if (user is null)
         {
@@ -86,16 +87,16 @@ public class AdminUserController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> AdminCreateUser([FromBody] AdminCreateUserRequest request)
+    public async Task<IActionResult> AdminCreateUser([FromBody] AdminCreateUserRequest request, CancellationToken cancellationToken)
     {
         var email = request.Email;
-        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email);
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email, cancellationToken);
 
         if (existsUserWithEmail)
         {
             return Conflict(new ErrorResponse("There is already an user using this email."));
         }
-        var defaultRole = await roleRepository.GetDefaultUserRoleAsync();
+        var defaultRole = await roleRepository.GetDefaultUserRoleAsync(cancellationToken);
         if (defaultRole is null)
         {
             return NotFound(new ErrorResponse("Role not found."));
@@ -103,17 +104,17 @@ public class AdminUserController(
         var passwordHash = passwordHashService.HashPassword(request.Password);
         var user = new User(request.Name, email, passwordHash, defaultRole);
 
-        await userRepository.AddAsync(user);
-        await unitOfWork.SaveAsync();
+        await userRepository.AddAsync(user, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return CreatedAtAction(nameof(AdminCreateUser), new AdminCreateUserResponse { Id = user.Id });
     }
 
     [HttpPut("{userId:guid}")]
     public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid userId, 
-        [FromBody] AdminUpdateUserRequest request)
+        [FromBody] AdminUpdateUserRequest request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId, cancellationToken);
 
         if (user is null)
         {
@@ -123,35 +124,35 @@ public class AdminUserController(
         user.Update(request.Name);
 
         userRepository.Update(user);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return NoContent();
     }
 
     [HttpDelete("{userId:guid}")]
-    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid userId)
+    public async Task<IActionResult> AdminDeleteUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId, cancellationToken);
 
         if (user is null)
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserRefreshToken(user.Id);
         await redisService.DeleteAsync(key);
 
         // TODO: parou de funcionar
         userRepository.Remove(user);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
         return NoContent();
     }
 
     [HttpPatch("{userId:guid}/anonymize")]
-    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid userId)
+    public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetUserWithRelationshipsByIdAsync(userId);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(userId, cancellationToken);
 
         if (user is null)
         {
@@ -165,9 +166,9 @@ public class AdminUserController(
         user.Anonymize();
 
         userRepository.Update(user);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
-        var key = RedisKeys.UserRefreshToken.Replace("{userId}", user.Id.ToString());
+        var key = KeyHelper.UserRefreshToken(user.Id);
         await redisService.DeleteAsync(key);
 
         // TODO: registrar log de auditoria da anonimização do usuário
@@ -178,9 +179,9 @@ public class AdminUserController(
 
     [HttpPut("{userId:guid}/preferences")]
     public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid userId, 
-        [FromBody] AdminSetUserPreferencesByUserIdRequest request)
+        [FromBody] AdminSetUserPreferencesByUserIdRequest request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdWithPreferencesAsync(userId);
+        var user = await userRepository.GetByIdWithPreferencesAsync(userId, cancellationToken);
 
         if (user is null)
         {
@@ -195,16 +196,16 @@ public class AdminUserController(
             user.SetPreferences(preferences);
 
             userRepository.Update(user);
-            await userPreferenceRepository.AddOrUpdateAsync(user.Preferences!);
-            await unitOfWork.SaveAsync();
+            await userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
             var groupMemberships = 
-                (await groupMemberRepository.GetAllByUserIdAsync(user.Id)).ToList();
+                (await groupMemberRepository.GetAllByUserIdAsync(user.Id, cancellationToken)).ToList();
 
             foreach (var membership in groupMemberships)
             {
                 var group =
-                    await groupRepository.GetGroupWithMembersPreferencesAsync(membership.GroupId);
+                    await groupRepository.GetGroupWithMembersPreferencesAsync(membership.GroupId, cancellationToken);
 
                 if (group is null)
                 {
@@ -213,7 +214,7 @@ public class AdminUserController(
                 }
                 
                 group.UpdatePreferences();
-                var groupToUpdate = await groupRepository.GetGroupWithPreferencesAsync(membership.GroupId);
+                var groupToUpdate = await groupRepository.GetGroupWithPreferencesAsync(membership.GroupId, cancellationToken);
 
                 if (groupToUpdate is null)
                 {
@@ -229,7 +230,7 @@ public class AdminUserController(
 
             if (groupMemberships.Count != 0)
             {
-                await unitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync(cancellationToken);
             }
             
             return NoContent();

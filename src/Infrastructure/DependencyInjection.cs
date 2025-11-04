@@ -78,22 +78,22 @@ public static class DependencyInjection
         {
             options.DefaultPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claim.TokenType, TokenType.Access)
+                .RequireClaim(Claims.TokenType, TokenTypes.Access)
                 .Build();
     
             options.AddPolicy(Policies.RegisterValidateEmail, policy =>
-                policy.RequireClaim(Claim.TokenType, TokenType.Step)
-                    .RequireClaim(Claim.Step, Step.ValidateEmail));
+                policy.RequireClaim(Claims.TokenType, TokenTypes.Step)
+                    .RequireClaim(Claims.Step, Step.ValidateEmail));
 
             options.AddPolicy(Policies.RegisterSetPassword, policy => 
-                policy.RequireClaim(Claim.TokenType, TokenType.Step)
-                    .RequireClaim(Claim.Step, Step.SetPassword));
+                policy.RequireClaim(Claims.TokenType, TokenTypes.Step)
+                    .RequireClaim(Claims.Step, Step.SetPassword));
 
             options.AddPolicy(Policies.ResetPassword, policy =>
-                policy.RequireClaim(Claim.TokenType, TokenType.ResetPassword));
+                policy.RequireClaim(Claims.TokenType, TokenTypes.ResetPassword));
 
             options.AddPolicy(Policies.Admin, policy => 
-                policy.RequireRole(Role.Admin).RequireClaim(Claim.TokenType, TokenType.Access));
+                policy.RequireRole(Roles.Admin).RequireClaim(Claims.TokenType, TokenTypes.Access));
         });
         
         services.AddTransient<JwtSecurityTokenHandler>();

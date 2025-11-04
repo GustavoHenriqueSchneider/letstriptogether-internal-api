@@ -17,9 +17,9 @@ public class DestinationController(
     IDestinationRepository destinationRepository) : ControllerBase
 {
     [HttpGet("{destinationId:guid}")]
-    public async Task<IActionResult> GetDestinationById([FromRoute] Guid destinationId)
+    public async Task<IActionResult> GetDestinationById([FromRoute] Guid destinationId, CancellationToken cancellationToken)
     {
-        var destination = await destinationRepository.GetByIdAsync(destinationId);
+        var destination = await destinationRepository.GetByIdAsync(destinationId, cancellationToken);
 
         if (destination is null)
         {

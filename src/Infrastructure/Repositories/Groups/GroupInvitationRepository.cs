@@ -11,7 +11,7 @@ public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroup
     public GroupInvitationRepository(AppDbContext context) : base(context) { }
 
     public async Task<(IEnumerable<GroupInvitation> data, int hits)> GetByGroupIdAsync(
-        Guid groupId, int pageNumber = 1, int pageSize = 10)
+        Guid groupId, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var data = await _dbSet
             .AsNoTracking()
@@ -19,28 +19,28 @@ public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroup
             .OrderByDescending(x => x.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         var hits = await _dbSet
             .AsNoTracking()
-            .CountAsync(x => x.GroupId == groupId);
+            .CountAsync(x => x.GroupId == groupId, cancellationToken);
 
         return (data, hits);
     }
 
-    public async Task<GroupInvitation?> GetByIdWithAnsweredByAsync(Guid id)
+    public async Task<GroupInvitation?> GetByIdWithAnsweredByAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbSet
             .AsNoTracking()
             .Include(gi => gi.AnsweredBy)
-            .SingleOrDefaultAsync(gi => gi.Id == id);
+            .SingleOrDefaultAsync(gi => gi.Id == id, cancellationToken);
     }
 
-    public async Task<GroupInvitation?> GetByGroupAndStatusAsync(Guid groupId, GroupInvitationStatus status)
+    public async Task<GroupInvitation?> GetByGroupAndStatusAsync(Guid groupId, GroupInvitationStatus status, CancellationToken cancellationToken)
     {
         return await _dbSet
             .AsNoTracking()
             .Include(gi => gi.AnsweredBy)
-            .SingleOrDefaultAsync(gi => gi.GroupId == groupId && gi.Status == status);
+            .SingleOrDefaultAsync(gi => gi.GroupId == groupId && gi.Status == status, cancellationToken);
     }
 }

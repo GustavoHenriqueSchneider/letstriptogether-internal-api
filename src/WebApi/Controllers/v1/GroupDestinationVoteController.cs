@@ -25,10 +25,10 @@ public class GroupDestinationVoteController(
 {
     [HttpPost]
     public async Task<IActionResult> VoteAtDestinationForGroupId([FromRoute] Guid groupId,
-        [FromBody] VoteAtDestinationForGroupIdRequest request)
+        [FromBody] VoteAtDestinationForGroupIdRequest request, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -41,13 +41,13 @@ public class GroupDestinationVoteController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var existsGroup = await groupRepository.ExistsByIdAsync(groupId);
+        var existsGroup = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
         if (!existsGroup)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var destinationExists = await destinationRepository.ExistsByIdAsync(request.DestinationId);
+        var destinationExists = await destinationRepository.ExistsByIdAsync(request.DestinationId, cancellationToken);
 
         if (!destinationExists)
         {
@@ -56,7 +56,7 @@ public class GroupDestinationVoteController(
 
         var existsVote = 
             await groupMemberDestinationVoteRepository.ExistsByGroupMemberDestinationVoteByIdsAsync(
-                groupMember.Id, request.DestinationId);
+                groupMember.Id, request.DestinationId, cancellationToken);
         
         if (existsVote)
         {
@@ -64,15 +64,15 @@ public class GroupDestinationVoteController(
         }
 
         var vote = new GroupMemberDestinationVote(groupMember.Id, request.DestinationId, request.IsApproved);
-        await groupMemberDestinationVoteRepository.AddAsync(vote);
-        await unitOfWork.SaveAsync();
+        await groupMemberDestinationVoteRepository.AddAsync(vote, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
 
         if (!vote.IsApproved)
         {
             return Ok(new VoteAtDestinationForGroupIdResponse { Id = vote.Id });
         }
 
-        var group = await groupRepository.GetGroupWithMembersVotesAndMatchesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersVotesAndMatchesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -81,8 +81,8 @@ public class GroupDestinationVoteController(
         try
         {
             var match = group.CreateMatch(request.DestinationId);
-            await groupMatchRepository.AddAsync(match);
-            await unitOfWork.SaveAsync();
+            await groupMatchRepository.AddAsync(match, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
                 
             // TODO: criar service de notificação
         }
@@ -96,10 +96,10 @@ public class GroupDestinationVoteController(
 
     [HttpPut("{destinationVoteId:guid}")]
     public async Task<IActionResult> UpdateDestinationVoteById([FromRoute] Guid groupId, 
-        [FromRoute] Guid destinationVoteId, [FromBody] UpdateDestinationVoteByIdRequest request)
+        [FromRoute] Guid destinationVoteId, [FromBody] UpdateDestinationVoteByIdRequest request, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -112,13 +112,13 @@ public class GroupDestinationVoteController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var existsGroup = await groupRepository.ExistsByIdAsync(groupId);
+        var existsGroup = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
         if (!existsGroup)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var vote = await groupMemberDestinationVoteRepository.GetByIdAsync(destinationVoteId);
+        var vote = await groupMemberDestinationVoteRepository.GetByIdAsync(destinationVoteId, cancellationToken);
 
         if (vote is null)
         {
@@ -130,7 +130,7 @@ public class GroupDestinationVoteController(
             return BadRequest(new ErrorResponse("You are not a owner of this vote."));
         }
         
-        var match = await groupMatchRepository.GetByGroupAndDestinationAsync(groupId, vote.DestinationId);
+        var match = await groupMatchRepository.GetByGroupAndDestinationAsync(groupId, vote.DestinationId, cancellationToken);
         if (match is not null)
         {
             return BadRequest(new ErrorResponse("There is already a match with this vote, you can not change it."));
@@ -139,14 +139,14 @@ public class GroupDestinationVoteController(
         vote.SetApproved(request.IsApproved);
         
         groupMemberDestinationVoteRepository.Update(vote);
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
 
         if (!vote.IsApproved)
         {
             return NoContent();
         }
         
-        var group = await groupRepository.GetGroupWithMembersVotesAndMatchesAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersVotesAndMatchesAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -155,8 +155,8 @@ public class GroupDestinationVoteController(
         try
         {
             match = group.CreateMatch(vote.DestinationId);
-            await groupMatchRepository.AddAsync(match);
-            await unitOfWork.SaveAsync();
+            await groupMatchRepository.AddAsync(match, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
             
             // TODO: criar service de notificação
         }
@@ -170,10 +170,10 @@ public class GroupDestinationVoteController(
 
     [HttpGet]
     public async Task<IActionResult> GetGroupMemberAllDestinationVotesById([FromRoute] Guid groupId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -187,7 +187,7 @@ public class GroupDestinationVoteController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -195,7 +195,7 @@ public class GroupDestinationVoteController(
         }
 
         var (votes, hits) = await groupMemberDestinationVoteRepository.GetByMemberIdAsync(groupMember.Id,
-            pageNumber, pageSize);
+            pageNumber, pageSize, cancellationToken);
 
         return Ok(new GetGroupMemberAllDestinationVotesByIdResponse
         {
@@ -210,10 +210,10 @@ public class GroupDestinationVoteController(
 
     [HttpGet("{destinationVoteId:guid}")]
     public async Task<IActionResult> GetGroupDestinationVoteById(
-        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId)
+        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -227,7 +227,7 @@ public class GroupDestinationVoteController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
 
         if (group is null)
         {
@@ -235,7 +235,7 @@ public class GroupDestinationVoteController(
         }
 
         var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(groupId,
-            destinationVoteId);
+            destinationVoteId, cancellationToken);
 
         if (vote is null)
         {
@@ -256,4 +256,3 @@ public class GroupDestinationVoteController(
         });
     }
 }
-

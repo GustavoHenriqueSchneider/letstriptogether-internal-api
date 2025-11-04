@@ -26,15 +26,15 @@ public class GroupInvitationController(
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateGroupInvitation([FromRoute] Guid groupId)
+    public async Task<IActionResult> CreateGroupInvitation([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -54,7 +54,7 @@ public class GroupInvitationController(
         GroupInvitation groupInvitation;
         
         var existingInvitation = 
-            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active);
+            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active, cancellationToken);
         
         if (existingInvitation is not null)
         {
@@ -66,8 +66,8 @@ public class GroupInvitationController(
             groupInvitation = new GroupInvitation(groupId);
         }
 
-        await groupInvitationRepository.AddAsync(groupInvitation);
-        await unitOfWork.SaveAsync();
+        await groupInvitationRepository.AddAsync(groupInvitation, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
         
         var invitationToken = tokenService.GenerateInvitationToken(groupInvitation.Id);
 
@@ -76,15 +76,15 @@ public class GroupInvitationController(
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetActiveGroupInvitation([FromRoute] Guid groupId)
+    public async Task<IActionResult> GetActiveGroupInvitation([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -102,7 +102,7 @@ public class GroupInvitationController(
         }
 
         var activeInvitation = 
-            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active);
+            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active, cancellationToken);
         
         if (activeInvitation is null)
         {
@@ -114,15 +114,15 @@ public class GroupInvitationController(
     }
 
     [HttpPatch("cancel")]
-    public async Task<IActionResult> CancelActiveGroupInvitation([FromRoute] Guid groupId)
+    public async Task<IActionResult> CancelActiveGroupInvitation([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        if (!await userRepository.ExistsByIdAsync(currentUserId))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -140,7 +140,7 @@ public class GroupInvitationController(
         }
 
         var activeInvitation = 
-            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active);
+            await groupInvitationRepository.GetByGroupAndStatusAsync(groupId, GroupInvitationStatus.Active, cancellationToken);
         
         if (activeInvitation is null)
         {
@@ -150,7 +150,7 @@ public class GroupInvitationController(
         activeInvitation.Cancel();
         groupInvitationRepository.Update(activeInvitation);
         
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         return NoContent();
     }
 }

@@ -5,11 +5,11 @@ namespace LetsTripTogether.InternalApi.Infrastructure.Services;
 
 public class RandomCodeGeneratorService : IRandomCodeGeneratorService
 {
-    private const int MIN = 100000;
-    private const int MAX = 999999;
+    private const int Min = 100000;
+    private const int Max = 999999;
 
     public string Generate()
     {
-        return RandomNumberGenerator.GetInt32(MIN, MAX + 1).ToString();
+        return RandomNumberGenerator.GetInt32(Min, Max + 1).ToString();
     }
 }

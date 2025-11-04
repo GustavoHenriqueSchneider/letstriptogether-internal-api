@@ -31,10 +31,10 @@ public class InvitationController(
     IGroupMatchRepository groupMatchRepository): ControllerBase
 {
     [HttpPost("accept")]
-    public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationRequest request)
+    public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationRequest request, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
         
         if (user is null)
         {
@@ -67,7 +67,7 @@ public class InvitationController(
             return NotFound(new ErrorResponse("Invitation not found."));
         }
         
-        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId);
+        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId, cancellationToken);
         if (groupInvitation is null)
         {
             return NotFound(new ErrorResponse("Invitation not found."));
@@ -83,7 +83,7 @@ public class InvitationController(
             groupInvitation.Expire();
             
             groupInvitationRepository.Update(groupInvitation);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.SaveAsync(cancellationToken);
             
             return BadRequest(new ErrorResponse("Invitation is not active."));
         }
@@ -94,7 +94,7 @@ public class InvitationController(
             return Conflict(new ErrorResponse("You have already answered this invitation."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupInvitation.GroupId);
+        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupInvitation.GroupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -109,11 +109,11 @@ public class InvitationController(
         var invitationAnswer = groupInvitation.AddAnswer(currentUserId, isAccepted: true);
         var groupMember = group.AddMember(user, false);
         
-        await userGroupInvitationRepository.AddAsync(invitationAnswer);
-        await groupMemberRepository.AddAsync(groupMember);
-        await unitOfWork.SaveAsync();
+        await userGroupInvitationRepository.AddAsync(invitationAnswer, cancellationToken);
+        await groupMemberRepository.AddAsync(groupMember, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
         
-        var groupToUpdate = await groupRepository.GetGroupWithMembersPreferencesAsync(group.Id);
+        var groupToUpdate = await groupRepository.GetGroupWithMembersPreferencesAsync(group.Id, cancellationToken);
         if (groupToUpdate is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -124,15 +124,15 @@ public class InvitationController(
         groupRepository.Update(groupToUpdate);
         groupPreferenceRepository.Update(groupToUpdate.Preferences);
 
-        await unitOfWork.SaveAsync();
+        await unitOfWork.SaveAsync(cancellationToken);
         return Ok();
     }
 
     [HttpPost("refuse")]
-    public async Task<IActionResult> RefuseInvitation([FromBody] RefuseInvitationRequest request)
+    public async Task<IActionResult> RefuseInvitation([FromBody] RefuseInvitationRequest request, CancellationToken cancellationToken)
     {
         var currentUserId = currentUser.GetId();
-        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
         
         if (user is null)
         {
@@ -163,7 +163,7 @@ public class InvitationController(
             return NotFound(new ErrorResponse("Invitation not found."));
         }
         
-        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId);
+        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId, cancellationToken);
         if (groupInvitation is null)
         {
             return NotFound(new ErrorResponse("Invitation not found."));
@@ -179,7 +179,7 @@ public class InvitationController(
             groupInvitation.Expire();
             
             groupInvitationRepository.Update(groupInvitation);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.SaveAsync(cancellationToken);
             
             return BadRequest(new ErrorResponse("Invitation is not active."));
         }
@@ -190,7 +190,7 @@ public class InvitationController(
             return Conflict(new ErrorResponse("You have already answered this invitation."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupInvitation.GroupId);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupInvitation.GroupId, cancellationToken);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -204,8 +204,8 @@ public class InvitationController(
         
         var invitationAnswer = groupInvitation.AddAnswer(currentUserId, isAccepted: false);
         
-        await userGroupInvitationRepository.AddAsync(invitationAnswer);
-        await unitOfWork.SaveAsync();
+        await userGroupInvitationRepository.AddAsync(invitationAnswer, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
         
         return Ok();
     }
