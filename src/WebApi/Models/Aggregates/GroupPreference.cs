@@ -62,4 +62,21 @@ public class GroupPreference : TrackableEntity
         _placeTypes.Clear();
         _placeTypes.AddRange(groupPreference.PlaceTypes);
     }
+    
+    public IReadOnlyList<string> ToList()
+    {
+        var list = new List<string>();
+
+        if (LikesCommercial)
+        {
+            list.Add(TripPreference.Shopping.ToLower());
+        }
+        
+        list.AddRange(_food.Select(x => $"{TripPreference.FoodPrefix}.{x}".ToLower()));
+        list.AddRange(_culture.Select(x => $"{TripPreference.CulturePrefix}.{x}".ToLower()));
+        list.AddRange(_entertainment.Select(x => $"{TripPreference.EntertainmentPrefix}.{x}".ToLower()));
+        list.AddRange(_placeTypes.Select(x => $"{TripPreference.PlaceTypePrefix}.{x}".ToLower()));
+
+        return list.Distinct().ToList().AsReadOnly();
+    }
 }

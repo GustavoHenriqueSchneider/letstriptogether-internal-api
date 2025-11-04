@@ -33,13 +33,14 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
     }
     
     public async Task<(IEnumerable<Destination> data, int hits)> GetNotVotedByUserInGroupAsync(
-        Guid userId, Guid groupId, int pageNumber = 1, int pageSize = 10)
+        Guid userId, Guid groupId, IEnumerable<string> groupPreferences, int pageNumber = 1, int pageSize = 10)
     {
         var data = await _dbSet
             .AsNoTracking()
-            .Where(x =>
-                !x.GroupMemberVotes.Any(v => 
-                    v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
+            .Include(x => x.Attractions)
+            .Where(x => !x.GroupMemberVotes.Any(v => 
+                            v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
+            .Where(x => x.Attractions.Any(d => groupPreferences.Contains(d.Category)))
             .OrderByDescending(d => d.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -47,9 +48,9 @@ public class DestinationRepository : BaseRepository<Destination>, IDestinationRe
 
         var hits = await _dbSet
             .AsNoTracking()
-            .Where(x =>
-                !x.GroupMemberVotes.Any(v => 
-                    v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
+            .Where(x => !x.GroupMemberVotes.Any(v => 
+                v.GroupMember.GroupId == groupId && v.GroupMember.UserId == userId))
+            .Where(x => x.Attractions.Any(d => groupPreferences.Contains(d.Category)))
             .CountAsync();
 
         return (data, hits);

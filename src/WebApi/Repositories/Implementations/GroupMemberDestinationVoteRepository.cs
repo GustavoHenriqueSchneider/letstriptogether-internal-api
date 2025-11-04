@@ -61,4 +61,11 @@ public class GroupMemberDestinationVoteRepository
         return await _dbSet
             .AnyAsync(x => x.GroupMemberId == memberId && x.DestinationId == destinationId);
     }
+    
+    public async Task<GroupMemberDestinationVote?> GetByMemberAndDestinationAsync(Guid memberId, Guid destinationId)
+    {
+        return await _dbSet
+            .SingleOrDefaultAsync(x => x.GroupMemberId == memberId 
+                                       && x.DestinationId == destinationId);
+    }
 }

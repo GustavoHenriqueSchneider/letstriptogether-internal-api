@@ -19,6 +19,7 @@ public class GroupDestinationVoteController(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IUserRepository userRepository,
     IDestinationRepository destinationRepository,
+    IGroupMatchRepository groupMatchRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
@@ -34,15 +35,13 @@ public class GroupDestinationVoteController(
         }
 
         var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
-
         if (groupMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
-        if (group is null)
+        var existsGroup = await groupRepository.ExistsByIdAsync(groupId);
+        if (!existsGroup)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
@@ -64,9 +63,32 @@ public class GroupDestinationVoteController(
         }
 
         var vote = new GroupMemberDestinationVote(groupMember.Id, request.DestinationId, request.IsApproved);
-
         await groupMemberDestinationVoteRepository.AddAsync(vote);
         await unitOfWork.SaveAsync();
+
+        if (!vote.IsApproved)
+        {
+            return Ok(new VoteAtDestinationForGroupIdResponse { Id = vote.Id });
+        }
+
+        var group = await groupRepository.GetGroupWithMembersVotesAndMatchesAsync(groupId);
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+        
+        try
+        {
+            var match = group.CreateMatch(request.DestinationId);
+            await groupMatchRepository.AddAsync(match);
+            await unitOfWork.SaveAsync();
+                
+            // TODO: criar service de notificação
+        }
+        catch
+        {
+            // purposed ignored
+        }
 
         return Ok(new VoteAtDestinationForGroupIdResponse { Id = vote.Id });
     }
@@ -84,15 +106,13 @@ public class GroupDestinationVoteController(
         }
 
         var groupMember = user.GroupMemberships.SingleOrDefault(m => m.GroupId == groupId);
-
         if (groupMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
-
-        if (group is null)
+        var existsGroup = await groupRepository.ExistsByIdAsync(groupId);
+        if (!existsGroup)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
@@ -108,11 +128,42 @@ public class GroupDestinationVoteController(
         {
             return BadRequest(new ErrorResponse("You are not a owner of this vote."));
         }
+        
+        var match = await groupMatchRepository.GetByGroupAndDestinationAsync(groupId, vote.DestinationId);
+        if (match is not null)
+        {
+            return BadRequest(new ErrorResponse("There is already a match with this vote, you can not change it."));
+        }
 
         vote.SetApproved(request.IsApproved);
+        
         groupMemberDestinationVoteRepository.Update(vote);
         await unitOfWork.SaveAsync();
 
+        if (!vote.IsApproved)
+        {
+            return NoContent();
+        }
+        
+        var group = await groupRepository.GetGroupWithMembersVotesAndMatchesAsync(groupId);
+        if (group is null)
+        {
+            return NotFound(new ErrorResponse("Group not found."));
+        }
+            
+        try
+        {
+            match = group.CreateMatch(vote.DestinationId);
+            await groupMatchRepository.AddAsync(match);
+            await unitOfWork.SaveAsync();
+            
+            // TODO: criar service de notificação
+        }
+        catch
+        {
+            // purposed ignored
+        }
+        
         return NoContent();
     }
 

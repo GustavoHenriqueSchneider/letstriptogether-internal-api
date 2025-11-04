@@ -25,6 +25,26 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
                 .ThenInclude(x => x.User)
             .SingleOrDefaultAsync(g => g.Id == groupId);
     }
+    
+    public async Task<Group?> GetGroupWithMembersAndMatchesAsync(Guid groupId)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(g => g.Members)
+            .ThenInclude(x => x.User)
+            .Include(x => x.Matches)
+            .SingleOrDefaultAsync(g => g.Id == groupId);
+    }
+    
+    public async Task<Group?> GetGroupWithMembersVotesAndMatchesAsync(Guid groupId)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Include(g => g.Members)
+                .ThenInclude(x => x.Votes)
+            .Include(x => x.Matches)
+            .SingleOrDefaultAsync(g => g.Id == groupId);
+    }
 
     public async Task<Group?> GetGroupWithMembersPreferencesAsync(Guid groupId)
     {

@@ -16,6 +16,7 @@ public class GroupMatchController(
     IGroupRepository groupRepository,
     IApplicationUserContext currentUser,
     IUserRepository userRepository,
+    IGroupMemberDestinationVoteRepository groupDestinationVoteRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpGet]
@@ -54,7 +55,7 @@ public class GroupMatchController(
                 Id = x.Id,
                 CreatedAt = x.CreatedAt
             }),
-            Hits = hits > 0 ? hits - 1 : hits
+            Hits = hits
         });
     }
 
@@ -104,36 +105,43 @@ public class GroupMatchController(
         [FromRoute] Guid matchId)
     {
         var currentUserId = currentUser.GetId();
-
         if (!await userRepository.ExistsByIdAsync(currentUserId))
         {
             return NotFound(new ErrorResponse("User not found."));
         }
 
-        var group = await groupRepository.GetGroupWithMatchesAsync(groupId);
-
+        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupId);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
         }
 
-        var isMember = await groupRepository.IsGroupMemberByUserIdAsync(groupId, currentUserId);
-
-        if (!isMember)
+        var groupMember = group.Members.SingleOrDefault(x => x.UserId == currentUserId);
+        if (groupMember is null)
         {
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
 
         var matchToRemove = group.Matches.SingleOrDefault(m => m.Id == matchId);
-
         if (matchToRemove is null)
         {
             return NotFound(new ErrorResponse("The match was not found for this group."));
         }
-
+        
+        var vote = await groupDestinationVoteRepository.GetByMemberAndDestinationAsync(
+            groupMember.Id, matchToRemove.DestinationId);
+        
+        if (vote is null)
+        {
+            return NotFound(new ErrorResponse("The vote was not found."));
+        }
+        
+        vote.SetApproved(false);
+        
         groupMatchRepository.Remove(matchToRemove);
+        groupDestinationVoteRepository.Update(vote);
+        
         await unitOfWork.SaveAsync();
-
         return NoContent();
     }
 }
