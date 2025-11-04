@@ -35,4 +35,17 @@ public class GroupMatchRepository : BaseRepository<GroupMatch>, IGroupMatchRepos
 
         return (data, hits);
     }
+
+    public async Task<GroupMatch?> GetByGroupAndDestinationAsync(Guid groupId, Guid destinationId)
+    {
+        return await _dbSet
+            .SingleOrDefaultAsync(x => x.GroupId == groupId && x.DestinationId == destinationId);
+    }
+
+    public async Task<IEnumerable<GroupMatch>> GetAllMatchesByGroupAsync(Guid groupId)
+    {
+        return await _dbSet
+            .Where(x => x.GroupId == groupId)
+            .ToListAsync();
+    }
 }

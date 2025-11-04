@@ -27,8 +27,8 @@ public class InvitationController(
     IGroupRepository groupRepository,
     IGroupMemberRepository groupMemberRepository,
     ITokenService tokenService,
-    IGroupPreferenceRepository groupPreferenceRepository
-    ): ControllerBase
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupMatchRepository groupMatchRepository): ControllerBase
 {
     [HttpPost("accept")]
     public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationRequest request)
@@ -94,7 +94,7 @@ public class InvitationController(
             return Conflict(new ErrorResponse("You have already answered this invitation."));
         }
 
-        var group = await groupRepository.GetGroupWithMembersAsync(groupInvitation.GroupId);
+        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupInvitation.GroupId);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));

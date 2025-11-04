@@ -25,6 +25,7 @@ public class GroupController(
     IGroupPreferenceRepository groupPreferenceRepository,
     IGroupMemberRepository groupMemberRepository,
     IDestinationRepository destinationRepository,
+    IGroupMatchRepository groupMatchRepository,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]
@@ -227,6 +228,12 @@ public class GroupController(
 
         group.RemoveMember(currentUserMember);
         
+        if (group.Members.Count == 1)
+        {
+            var matches = await groupMatchRepository.GetAllMatchesByGroupAsync(groupId);
+            groupMatchRepository.RemoveRange(matches);
+        }
+        
         groupRepository.Update(group);
         groupMemberRepository.Remove(currentUserMember);
         groupPreferenceRepository.Update(group.Preferences);
@@ -245,7 +252,7 @@ public class GroupController(
             return NotFound(new ErrorResponse("User not found."));
         }
         
-        var group = await groupRepository.GetGroupWithMembersAsync(groupId);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(groupId);
         if (group is null)
         {
             return NotFound(new ErrorResponse("Group not found."));
@@ -257,8 +264,10 @@ public class GroupController(
             return BadRequest(new ErrorResponse("You are not a member of this group."));
         }
         
+        var groupPreferences = group.Preferences.ToList();
+        
         var (destinations, hits) = await destinationRepository.GetNotVotedByUserInGroupAsync(
-            currentUserId, groupId, pageNumber, pageSize);
+            currentUserId, groupId, groupPreferences, pageNumber, pageSize);
 
         return Ok(new GetAllNotVotedDestinationsForGroupResponse
         {

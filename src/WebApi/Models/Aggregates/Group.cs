@@ -30,7 +30,7 @@ public class Group : TrackableEntity
         TripExpectedDate = tripExpectedDate;
     }
 
-    public bool HasMember(GroupMember member)
+    private bool HasMember(GroupMember member)
     {
         return _members.Contains(member);
     }
@@ -75,6 +75,44 @@ public class Group : TrackableEntity
         _members.Remove(member);
         UpdatePreferences();
     }
+    
+    private bool HasMatch(GroupMatch match)
+    {
+        return _matches.Contains(match);
+    }
+
+    public GroupMatch CreateMatch(Guid destinationId)
+    {
+        if (_members.Count <= 1)
+        {
+            throw new InvalidOperationException("It is not possible to create a group match with only one member.");
+        }
+
+        var membersAgree = _members.All(member =>
+        {
+            var vote = member.Votes.SingleOrDefault(vote => vote.DestinationId == destinationId);
+            return vote is not null && vote.IsApproved;
+        });
+
+        if (!membersAgree)
+        {
+            throw new InvalidOperationException("Not all group members agreed with the informed destination.");
+        }
+
+        var match = new GroupMatch
+        {
+            GroupId = Id,
+            DestinationId = destinationId
+        };
+
+        if (HasMatch(match))
+        {
+            throw new InvalidOperationException("This match is already included on the group.");
+        }
+        
+        _matches.Add(match);
+        return match;
+    }
 
     public GroupPreference UpdatePreferences()
     {
@@ -99,7 +137,6 @@ public class Group : TrackableEntity
             culturePreferences.ToHashSet(), entertainmentPreferences.ToHashSet(), placeTypes.ToHashSet());
 
         Preferences.Update(newPreferences);
-
         return Preferences;
     }
 
