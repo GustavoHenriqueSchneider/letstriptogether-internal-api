@@ -2,10 +2,9 @@ using LetsTripTogether.InternalApi.WebApi;
 
 await Host
     .CreateDefaultBuilder(args)
-    .ConfigureWebHostDefaults(builder =>
+    .ConfigureWebHostDefaults(webBuilder =>
     {
-        builder.UseStartup<Startup>();
-        builder.ConfigureAppConfiguration(configBuilder => configBuilder.Build());
+        webBuilder.UseStartup<Startup>();
     })
     .Build()
     .RunAsync();

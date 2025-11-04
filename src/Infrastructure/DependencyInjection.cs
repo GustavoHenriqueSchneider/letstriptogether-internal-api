@@ -50,15 +50,17 @@ public static class DependencyInjection
 
     public static void RegisterApplicationAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.Get<JsonWebTokenSettings>()!;
-        
+        var jwtSettings = configuration
+            .GetRequiredSection(nameof(JsonWebTokenSettings))
+            .Get<JsonWebTokenSettings>()!;
+
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = false,

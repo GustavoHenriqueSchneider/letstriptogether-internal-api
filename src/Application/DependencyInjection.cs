@@ -1,7 +1,9 @@
 using System.Reflection;
 using FluentValidation;
+using LetsTripTogether.InternalApi.Application.Common.Behaviours;
 using LetsTripTogether.InternalApi.Application.Common.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,8 +25,8 @@ public static class DependencyInjection
         {
             configuration.RegisterServicesFromAssembly(assembly);
 
-            //configuration.AddOpenBehavior(typeof(UnhandledExceptionBehaviour<,>));
-            //configuration.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+            configuration.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+            configuration.AddOpenBehavior(typeof(UnhandledExceptionBehaviour<,>));
             mediator?.Invoke(configuration);
         });
 
