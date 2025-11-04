@@ -1,3 +1,4 @@
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
@@ -20,15 +21,14 @@ namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 [Route("api/v{version:apiVersion}/invitations")]
 public class InvitationController(
     IUnitOfWork unitOfWork,
-    IApplicationUserContext currentUser,
+    IApplicationUserContextExtensions currentUser,
     IUserRepository userRepository,
     IGroupInvitationRepository groupInvitationRepository,
     IUserGroupInvitationRepository userGroupInvitationRepository,
     IGroupRepository groupRepository,
     IGroupMemberRepository groupMemberRepository,
     ITokenService tokenService,
-    IGroupPreferenceRepository groupPreferenceRepository,
-    IGroupMatchRepository groupMatchRepository): ControllerBase
+    IGroupPreferenceRepository groupPreferenceRepository): ControllerBase
 {
     [HttpPost("accept")]
     public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationRequest request, CancellationToken cancellationToken)

@@ -2,7 +2,7 @@
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Persistence.Repositories.Users;
+namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
 
 public class UserRoleRepository
     : BaseRepository<UserRole>, IUserRoleRepository

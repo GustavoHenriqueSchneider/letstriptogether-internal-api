@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using LetsTripTogether.InternalApi.Application.Common.Extensions;
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.Common.Policies;
 using LetsTripTogether.InternalApi.Application.Helpers;
@@ -32,7 +33,8 @@ public class AuthController(
     IUserRepository userRepository,
     IRoleRepository roleRepository,
     IUnitOfWork unitOfWork,
-    IApplicationUserContext currentUser) : ControllerBase
+    IHttpContextExtensions httpContextExtensions,
+    IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpPost("email/send")]
     [AllowAnonymous]
@@ -260,7 +262,7 @@ public class AuthController(
         var key = KeyHelper.UserResetPassword(user.Id);
         var storedResetPasswordToken = await redisService.GetAsync(key);
 
-        if (storedResetPasswordToken is null || storedResetPasswordToken != HttpContext.GetBearerToken())
+        if (storedResetPasswordToken is null || storedResetPasswordToken != httpContextExtensions.GetBearerToken())
         {
             return Unauthorized(new ErrorResponse("Invalid reset password token."));
         }

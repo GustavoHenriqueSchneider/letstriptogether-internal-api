@@ -2,13 +2,12 @@
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
+using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
+using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using LetsTripTogether.InternalApi.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore.Migrations;
-using WebApi.Models.Aggregates;
-using WebApi.Models.Enums;
-using WebApi.Models.ValueObjects;
-using WebApi.Models.ValueObjects.TripPreferences;
-using WebApi.Security;
 
 #nullable disable
 
@@ -30,8 +29,8 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "Name", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { defaultRoleId, Role.User, DateTime.UtcNow, DateTime.UtcNow },
-                    { adminRoleId, Role.Admin, DateTime.UtcNow, DateTime.UtcNow }
+                    { defaultRoleId, Roles.User, DateTime.UtcNow, DateTime.UtcNow },
+                    { adminRoleId, Roles.Admin, DateTime.UtcNow, DateTime.UtcNow }
                 });
 
             // settings users data
@@ -50,11 +49,11 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "Name", "Email", "PasswordHash", "IsAnonymous", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { userId, "Example User", $"{Role.User}@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
-                    { adminId, "Admin", $"{Role.Admin}@letstriptogether.com", adminPassword, false, DateTime.UtcNow, DateTime.UtcNow },
-                    { randomUser1, "User 1", $"{Role.User}1@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
-                    { randomUser2, "User 2", $"{Role.User}2@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
-                    { randomUser3, "User 3", $"{Role.User}3@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow }
+                    { userId, "Example User", $"{Roles.User}@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { adminId, "Admin", $"{Roles.Admin}@letstriptogether.com", adminPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { randomUser1, "User 1", $"{Roles.User}1@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { randomUser2, "User 2", $"{Roles.User}2@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow },
+                    { randomUser3, "User 3", $"{Roles.User}3@letstriptogether.com", userPassword, false, DateTime.UtcNow, DateTime.UtcNow }
                 });
 
             migrationBuilder.InsertData(

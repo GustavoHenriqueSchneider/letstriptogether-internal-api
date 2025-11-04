@@ -4,7 +4,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Persistence.Repositories.Groups;
+namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 
 public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroupInvitationRepository
 {

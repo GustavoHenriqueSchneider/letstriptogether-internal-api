@@ -1,3 +1,4 @@
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
@@ -15,7 +16,7 @@ namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 [Authorize]
 [Route("api/v{version:apiVersion}/groups/{groupId:guid}/destination-votes")]
 public class GroupDestinationVoteController(
-    IApplicationUserContext currentUser,
+    IApplicationUserContextExtensions currentUser,
     IGroupRepository groupRepository,
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IUserRepository userRepository,

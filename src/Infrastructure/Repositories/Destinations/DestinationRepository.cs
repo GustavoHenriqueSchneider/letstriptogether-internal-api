@@ -3,7 +3,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entiti
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Persistence.Repositories.Destinations;
+namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
 
 public class DestinationRepository : BaseRepository<Destination>, IDestinationRepository
 {

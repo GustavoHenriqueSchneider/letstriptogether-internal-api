@@ -3,7 +3,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Persistence.Repositories.Roles;
+namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 
 public class RoleRepository : BaseRepository<Role>, IRoleRepository
 {

@@ -1,9 +1,11 @@
 ﻿using System.Security.Claims;
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Domain.Security;
 
 namespace LetsTripTogether.InternalApi.Application.Common.Extensions;
 
-public class ApplicationUserContextExtensions(ClaimsPrincipal principal)
+public class ApplicationUserContextExtensions(ClaimsPrincipal principal) 
+    : IApplicationUserContextExtensions
 {
     public Guid GetId()
     {

@@ -3,7 +3,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Persistence.Repositories.Users;
+namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
 
 public class UserRepository : BaseRepository<User>, IUserRepository
 {

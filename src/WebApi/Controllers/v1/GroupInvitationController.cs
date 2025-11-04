@@ -1,3 +1,4 @@
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
@@ -17,12 +18,9 @@ namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 public class GroupInvitationController(
     IGroupRepository groupRepository,
     IGroupInvitationRepository groupInvitationRepository,
-    IUserGroupInvitationRepository userGroupInvitationRepository,
-    IApplicationUserContext currentUser,
+    IApplicationUserContextExtensions currentUser,
     IUserRepository userRepository,
-    IGroupMemberRepository groupMemberRepository,
     ITokenService tokenService,
-    IRedisService redisService,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpPost]

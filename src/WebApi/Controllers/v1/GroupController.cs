@@ -1,3 +1,4 @@
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
@@ -22,7 +23,7 @@ namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 [Route("api/v{version:apiVersion}/groups")]
 public class GroupController(
     IGroupRepository groupRepository,
-    IApplicationUserContext currentUser,
+    IApplicationUserContextExtensions currentUser,
     IUserRepository userRepository,
     IGroupPreferenceRepository groupPreferenceRepository,
     IGroupMemberRepository groupMemberRepository,

@@ -1,6 +1,8 @@
 using System.Reflection;
 using FluentValidation;
 using LetsTripTogether.InternalApi.Application.Common.Extensions;
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LetsTripTogether.InternalApi.Application;
@@ -27,6 +29,14 @@ public static class DependencyInjection
         });
 
         services.AddHttpContextAccessor();
-        services.AddTransient<HttpContextExtensions>();
+        services.AddTransient<IHttpContextExtensions, HttpContextExtensions>();
+        
+        services.AddScoped<IApplicationUserContextExtensions>(provider =>
+        {
+            var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+            var principal = httpContextAccessor.HttpContext?.User 
+                ?? throw new InvalidOperationException("HttpContext or User is not available");
+            return new ApplicationUserContextExtensions(principal);
+        });
     }
 }

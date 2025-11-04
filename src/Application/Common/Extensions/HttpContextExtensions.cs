@@ -1,8 +1,9 @@
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using Microsoft.AspNetCore.Http;
 
 namespace LetsTripTogether.InternalApi.Application.Common.Extensions;
 
-public class HttpContextExtensions(IHttpContextAccessor httpContextAccessor)
+public class HttpContextExtensions(IHttpContextAccessor httpContextAccessor) : IHttpContextExtensions
 {
     public string? GetBearerToken()
     {

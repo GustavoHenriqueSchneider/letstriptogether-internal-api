@@ -1,3 +1,4 @@
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.Helpers;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
@@ -21,7 +22,7 @@ namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 [Route("api/v{version:apiVersion}/users/me")]
 public class UserController(
     IUnitOfWork unitOfWork,
-    IApplicationUserContext currentUser,
+    IApplicationUserContextExtensions currentUser,
     IUserRepository userRepository,
     IGroupMemberRepository groupMemberRepository,
     IUserGroupInvitationRepository userGroupInvitationRepository,

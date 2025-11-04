@@ -2,7 +2,7 @@
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Persistence.Repositories;
+namespace LetsTripTogether.InternalApi.Infrastructure.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {
