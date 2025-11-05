@@ -1,10 +1,9 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-
-using MediatR;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Query.AdminGetUserById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
 
 public class AdminGetUserByIdHandler : IRequestHandler<AdminGetUserByIdQuery, AdminGetUserByIdResponse>
 {

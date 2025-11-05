@@ -1,4 +1,5 @@
 using FluentValidation;
+using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.UpdateCurrentUser;
 
@@ -7,11 +8,10 @@ public class UpdateCurrentUserValidator : AbstractValidator<UpdateCurrentUserCom
     public UpdateCurrentUserValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
 
-        // TODO: nao pode ser string vazia quando informado no body
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is required")
-            .MaximumLength(150).WithMessage("Name must not exceed 150 characters");
+            .NotEmpty()
+            .MaximumLength(UserModel.NameMaxLength);
     }
 }

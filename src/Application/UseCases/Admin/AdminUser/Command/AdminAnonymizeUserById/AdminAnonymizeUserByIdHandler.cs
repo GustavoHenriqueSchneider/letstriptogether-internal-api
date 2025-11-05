@@ -1,13 +1,12 @@
+using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.Helpers;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using LetsTripTogether.InternalApi.Domain.Common;
-
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminAnonymizeUserById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
 public class AdminAnonymizeUserByIdHandler : IRequestHandler<AdminAnonymizeUserByIdCommand>
 {

@@ -1,12 +1,11 @@
+using LetsTripTogether.InternalApi.Application.Common.Exceptions;
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.Helpers;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using LetsTripTogether.InternalApi.Domain.Common;
-
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminDeleteUserById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
 
 public class AdminDeleteUserByIdHandler : IRequestHandler<AdminDeleteUserByIdCommand>
 {

@@ -1,15 +1,15 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminGroupMember.Query.AdminGetGroupMemberById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 
 public class AdminGetGroupMemberByIdValidator : AbstractValidator<AdminGetGroupMemberByIdQuery>
 {
     public AdminGetGroupMemberByIdValidator()
     {
         RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("GroupId is required");
+            .NotEmpty();
 
         RuleFor(x => x.MemberId)
-            .NotEmpty().WithMessage("MemberId is required");
+            .NotEmpty();
     }
 }

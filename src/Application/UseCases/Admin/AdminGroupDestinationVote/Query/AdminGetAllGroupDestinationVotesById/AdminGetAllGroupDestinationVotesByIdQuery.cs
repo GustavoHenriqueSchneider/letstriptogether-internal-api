@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
 
 public class AdminGetAllGroupDestinationVotesByIdQuery : IRequest<AdminGetAllGroupDestinationVotesByIdResponse>
 {

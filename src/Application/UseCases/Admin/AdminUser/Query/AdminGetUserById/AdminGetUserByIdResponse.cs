@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Query.AdminGetUserById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
 
 public class AdminGetUserByIdResponse
 {

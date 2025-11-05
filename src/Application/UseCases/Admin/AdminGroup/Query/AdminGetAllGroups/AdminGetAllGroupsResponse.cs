@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminGroup.Query.AdminGetAllGroups;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
 
 public class AdminGetAllGroupsResponse
 {

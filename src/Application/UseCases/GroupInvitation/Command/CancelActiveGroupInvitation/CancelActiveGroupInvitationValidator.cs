@@ -7,9 +7,9 @@ public class CancelActiveGroupInvitationValidator : AbstractValidator<CancelActi
     public CancelActiveGroupInvitationValidator()
     {
         RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("GroupId is required");
+            .NotEmpty();
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
     }
 }

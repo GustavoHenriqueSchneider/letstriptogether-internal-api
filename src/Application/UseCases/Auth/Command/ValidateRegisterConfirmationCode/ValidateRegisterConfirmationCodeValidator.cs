@@ -1,4 +1,6 @@
 using FluentValidation;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 
@@ -6,14 +8,17 @@ public class ValidateRegisterConfirmationCodeValidator : AbstractValidator<Valid
 {
     public ValidateRegisterConfirmationCodeValidator()
     {
-        // TODO : validar codigo entre 100000 e 999999
         RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Code is required");
+            .NotEmpty()
+            .Must(x => int.Parse(x) > 99999).WithMessage("Code must be greater than to 99999")
+            .Must(x => int.Parse(x) < 1000000).WithMessage("Code must be less than to 1000000");
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required");
+            .NotEmpty()
+            .SetValidator(new EmailValidator());
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is required");
+            .NotEmpty()
+            .MaximumLength(UserModel.NameMaxLength);
     }
 }

@@ -1,4 +1,5 @@
 using FluentValidation;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.SetCurrentUserPreferences;
 
@@ -7,21 +8,25 @@ public class SetCurrentUserPreferencesValidator : AbstractValidator<SetCurrentUs
     public SetCurrentUserPreferencesValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
 
         RuleFor(x => x.LikesCommercial)
-            .NotNull().WithMessage("Likes commercial preference is required.");
+            .NotNull();
 
         RuleFor(x => x.Food)
-            .NotNull().WithMessage("Food preferences are required.");
+            .NotEmpty()
+            .SetValidator(new FoodPreferencesValidator());
 
         RuleFor(x => x.Culture)
-            .NotNull().WithMessage("Culture preferences are required.");
+            .NotEmpty()
+            .SetValidator(new CulturePreferencesValidator());
 
         RuleFor(x => x.Entertainment)
-            .NotNull().WithMessage("Entertainment preferences are required.");
+            .NotEmpty()
+            .SetValidator(new EntertainmentPreferencesValidator());
 
         RuleFor(x => x.PlaceTypes)
-            .NotNull().WithMessage("Place types are required.");
+            .NotEmpty()
+            .SetValidator(new PlaceTypePreferencesValidator());
     }
 }

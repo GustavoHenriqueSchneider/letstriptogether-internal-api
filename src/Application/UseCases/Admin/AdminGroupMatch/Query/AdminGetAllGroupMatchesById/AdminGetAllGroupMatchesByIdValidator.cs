@@ -1,18 +1,18 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
 
 public class AdminGetAllGroupMatchesByIdValidator : AbstractValidator<AdminGetAllGroupMatchesByIdQuery>
 {
     public AdminGetAllGroupMatchesByIdValidator()
     {
         RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("GroupId is required");
+            .NotEmpty();
 
         RuleFor(x => x.PageNumber)
-            .GreaterThan(0).WithMessage("PageNumber must be greater than 0");
+            .GreaterThan(0);
 
         RuleFor(x => x.PageSize)
-            .GreaterThan(0).WithMessage("PageSize must be greater than 0");
+            .GreaterThan(0);
     }
 }

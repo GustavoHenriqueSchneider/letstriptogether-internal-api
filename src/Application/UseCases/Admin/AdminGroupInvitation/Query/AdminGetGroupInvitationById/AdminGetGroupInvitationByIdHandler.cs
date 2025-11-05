@@ -1,9 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-
-using MediatR;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
+using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
 
 public class AdminGetGroupInvitationByIdHandler : IRequestHandler<AdminGetGroupInvitationByIdQuery, AdminGetGroupInvitationByIdResponse>
 {

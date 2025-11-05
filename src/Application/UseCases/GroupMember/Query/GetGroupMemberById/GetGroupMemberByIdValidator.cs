@@ -7,12 +7,12 @@ public class GetGroupMemberByIdValidator : AbstractValidator<GetGroupMemberByIdQ
     public GetGroupMemberByIdValidator()
     {
         RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("GroupId is required");
+            .NotEmpty();
 
         RuleFor(x => x.MemberId)
-            .NotEmpty().WithMessage("MemberId is required");
+            .NotEmpty();
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
     }
 }

@@ -7,6 +7,6 @@ public class AnonymizeCurrentUserValidator : AbstractValidator<AnonymizeCurrentU
     public AnonymizeCurrentUserValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
     }
 }

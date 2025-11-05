@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminCreateUser;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserResponse
 {

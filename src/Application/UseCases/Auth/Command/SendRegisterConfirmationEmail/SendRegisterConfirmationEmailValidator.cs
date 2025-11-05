@@ -1,4 +1,6 @@
 using FluentValidation;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 
@@ -7,12 +9,11 @@ public class SendRegisterConfirmationEmailValidator : AbstractValidator<SendRegi
     public SendRegisterConfirmationEmailValidator()
     {
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is required")
-            .MaximumLength(150).WithMessage("Name must not exceed 150 characters");
+            .NotEmpty()
+            .MaximumLength(UserModel.NameMaxLength);
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .MaximumLength(254).WithMessage("Email must not exceed 254 characters")
-            .EmailAddress().WithMessage("Invalid email format");
+            .NotEmpty()
+            .SetValidator(new EmailValidator());
     }
 }

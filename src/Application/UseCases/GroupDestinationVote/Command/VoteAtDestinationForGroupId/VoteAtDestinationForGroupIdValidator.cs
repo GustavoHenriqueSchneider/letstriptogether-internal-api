@@ -7,12 +7,15 @@ public class VoteAtDestinationForGroupIdValidator : AbstractValidator<VoteAtDest
     public VoteAtDestinationForGroupIdValidator()
     {
         RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("GroupId is required");
+            .NotEmpty();
 
         RuleFor(x => x.DestinationId)
-            .NotEmpty().WithMessage("DestinationId is required");
+            .NotEmpty();
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
+        
+        RuleFor(x => x.IsApproved)
+            .NotNull();
     }
 }

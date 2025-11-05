@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public class AdminSetUserPreferencesByUserIdCommand : IRequest
 {

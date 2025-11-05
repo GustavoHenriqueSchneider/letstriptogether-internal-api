@@ -1,24 +1,32 @@
 using FluentValidation;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public class AdminSetUserPreferencesByUserIdValidator : AbstractValidator<AdminSetUserPreferencesByUserIdCommand>
 {
     public AdminSetUserPreferencesByUserIdValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
+        
+        RuleFor(x => x.LikesCommercial)
+            .NotNull();
 
         RuleFor(x => x.Food)
-            .NotNull().WithMessage("Food preferences are required.");
+            .NotEmpty()
+            .SetValidator(new FoodPreferencesValidator());
 
         RuleFor(x => x.Culture)
-            .NotNull().WithMessage("Culture preferences are required.");
+            .NotEmpty()
+            .SetValidator(new CulturePreferencesValidator());
 
         RuleFor(x => x.Entertainment)
-            .NotNull().WithMessage("Entertainment preferences are required.");
+            .NotEmpty()
+            .SetValidator(new EntertainmentPreferencesValidator());
 
         RuleFor(x => x.PlaceTypes)
-            .NotNull().WithMessage("Place types are required.");
+            .NotEmpty()
+            .SetValidator(new PlaceTypePreferencesValidator());
     }
 }

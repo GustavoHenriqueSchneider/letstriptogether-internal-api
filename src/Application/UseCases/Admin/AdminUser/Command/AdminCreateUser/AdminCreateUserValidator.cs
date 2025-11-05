@@ -1,24 +1,22 @@
 using FluentValidation;
+using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminCreateUser;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserValidator : AbstractValidator<AdminCreateUserCommand>
 {
     public AdminCreateUserValidator()
     {
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is required")
-            .MaximumLength(150).WithMessage("Name must not exceed 150 characters");
+            .NotEmpty()
+            .MaximumLength(UserModel.NameMaxLength);
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .MaximumLength(254).WithMessage("Email must not exceed 254 characters")
-            .EmailAddress().WithMessage("Invalid email format");
-
-        // TODO: verificar regras de senha
+            .NotEmpty()
+            .SetValidator(new EmailValidator());
+        
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required")
-            .MinimumLength(8).WithMessage("Password must be at least 8 characters")
-            .MaximumLength(30).WithMessage("Password must not exceed 30 characters");
+            .NotEmpty()
+            .SetValidator(new PasswordValidator());
     }
 }

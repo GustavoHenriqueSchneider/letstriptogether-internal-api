@@ -6,6 +6,11 @@ namespace LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 
 public class User : TrackableEntity
 {
+    public const int NameMaxLength = 150;
+    public const int EmailMaxLength = 254;
+    public const int PasswordMinLength = 8;
+    public const int PasswordMaxLength = 30;
+    
     public string Name { get; private set; } = null!;
     public string Email { get; private set; } = null!;
     public string PasswordHash { get; private set; } = null!;

@@ -6,6 +6,8 @@ namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities
 
 public class Group : TrackableEntity
 {
+    public const int NameMaxLength = 30;
+    
     public string Name { get; private set; } = null!;
 
     private DateTime _tripExpectedDate;

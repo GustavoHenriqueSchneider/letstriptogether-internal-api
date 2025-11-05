@@ -1,7 +1,7 @@
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Query.AdminGetAllUsers;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
 
 public class AdminGetAllUsersHandler : IRequestHandler<AdminGetAllUsersQuery, AdminGetAllUsersResponse>
 {

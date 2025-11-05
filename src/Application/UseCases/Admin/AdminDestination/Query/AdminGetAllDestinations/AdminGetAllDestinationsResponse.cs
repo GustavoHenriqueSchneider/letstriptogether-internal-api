@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminDestination.Query.AdminGetAllDestinations;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 
 public class AdminGetAllDestinationsResponse
 {

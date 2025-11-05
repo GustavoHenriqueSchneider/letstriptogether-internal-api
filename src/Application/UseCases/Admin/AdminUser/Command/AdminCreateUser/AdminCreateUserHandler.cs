@@ -1,12 +1,12 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
-using LetsTripTogether.InternalApi.Domain.Common;
-using MediatR;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+using LetsTripTogether.InternalApi.Domain.Common;
+using MediatR;
+using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminUser.Command.AdminCreateUser;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserHandler : IRequestHandler<AdminCreateUserCommand, AdminCreateUserResponse>
 {

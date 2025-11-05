@@ -7,9 +7,9 @@ public class AcceptInvitationValidator : AbstractValidator<AcceptInvitationComma
     public AcceptInvitationValidator()
     {
         RuleFor(x => x.Token)
-            .NotEmpty().WithMessage("Token is required");
+            .NotEmpty();
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
     }
 }

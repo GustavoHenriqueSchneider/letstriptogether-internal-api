@@ -7,9 +7,9 @@ public class CreateGroupInvitationValidator : AbstractValidator<CreateGroupInvit
     public CreateGroupInvitationValidator()
     {
         RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("GroupId is required");
+            .NotEmpty();
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
     }
 }

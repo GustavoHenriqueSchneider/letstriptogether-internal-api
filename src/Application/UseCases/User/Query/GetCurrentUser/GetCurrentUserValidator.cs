@@ -7,6 +7,6 @@ public class GetCurrentUserValidator : AbstractValidator<GetCurrentUserQuery>
     public GetCurrentUserValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required");
+            .NotEmpty();
     }
 }

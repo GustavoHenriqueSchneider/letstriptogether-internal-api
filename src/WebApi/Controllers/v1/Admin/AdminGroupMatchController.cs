@@ -1,6 +1,6 @@
 using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Application.UseCases.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
-using LetsTripTogether.InternalApi.Application.UseCases.AdminGroupMatch.Query.AdminGetGroupMatchById;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

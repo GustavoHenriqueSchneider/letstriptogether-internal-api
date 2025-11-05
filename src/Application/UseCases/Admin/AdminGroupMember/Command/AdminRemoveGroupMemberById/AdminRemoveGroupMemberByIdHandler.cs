@@ -1,10 +1,9 @@
+using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Domain.Common;
-
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 
 public class AdminRemoveGroupMemberByIdHandler : IRequestHandler<AdminRemoveGroupMemberByIdCommand>
 {

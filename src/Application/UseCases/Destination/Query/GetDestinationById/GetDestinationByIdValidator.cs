@@ -7,6 +7,6 @@ public class GetDestinationByIdValidator : AbstractValidator<GetDestinationByIdQ
     public GetDestinationByIdValidator()
     {
         RuleFor(x => x.DestinationId)
-            .NotEmpty().WithMessage("DestinationId is required");
+            .NotEmpty();
     }
 }
