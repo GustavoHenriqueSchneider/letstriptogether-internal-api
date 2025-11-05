@@ -1,7 +1,7 @@
 using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
+using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
 

@@ -1,5 +1,4 @@
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using MediatR;
 using ValidationException = LetsTripTogether.InternalApi.Application.Common.Exceptions.ValidationException;
 
@@ -41,12 +40,11 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         }
         
         var errors = failures
-            .GroupBy(e => e.PropertyName)
+            .GroupBy(e => e.PropertyName ?? string.Empty)
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(e => e.ErrorMessage).ToArray());
 
         throw new ValidationException(errors);
-
     }
 }

@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 
@@ -15,7 +15,7 @@ public class GroupMemberDestinationVoteRepository
     {
         return await _dbSet
             .Include(x => x.GroupMember)
-                .ThenInclude(x => x.Group)
+            .ThenInclude(x => x.Group)
             .Where(x => x.GroupMember.GroupId == groupId)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
     }

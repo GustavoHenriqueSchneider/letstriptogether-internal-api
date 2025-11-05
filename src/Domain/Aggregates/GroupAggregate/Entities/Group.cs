@@ -1,5 +1,6 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
+using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
 
@@ -49,7 +50,7 @@ public class Group : TrackableEntity
         
         if (HasMember(member))
         {
-            throw new InvalidOperationException("This member is already included on the group.");
+            throw new DomainBusinessRuleException("This member is already included on the group.");
         }
 
         _members.Add(member);
@@ -88,7 +89,7 @@ public class Group : TrackableEntity
     {
         if (_members.Count <= 1)
         {
-            throw new InvalidOperationException("It is not possible to create a group match with only one member.");
+            throw new DomainBusinessRuleException("It is not possible to create a group match with only one member.");
         }
 
         var membersAgree = _members.All(member =>
@@ -99,7 +100,7 @@ public class Group : TrackableEntity
 
         if (!membersAgree)
         {
-            throw new InvalidOperationException("Not all group members agreed with the informed destination.");
+            throw new DomainBusinessRuleException("Not all group members agreed with the informed destination.");
         }
 
         var match = new GroupMatch
@@ -110,7 +111,7 @@ public class Group : TrackableEntity
 
         if (HasMatch(match))
         {
-            throw new InvalidOperationException("This match is already included on the group.");
+            throw new DomainBusinessRuleException("This match is already included on the group.");
         }
         
         _matches.Add(match);

@@ -1,4 +1,4 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
 

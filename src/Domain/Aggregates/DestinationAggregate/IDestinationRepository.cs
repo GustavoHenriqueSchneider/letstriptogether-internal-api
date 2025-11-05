@@ -1,5 +1,5 @@
+﻿using LetsTripTogether.InternalApi.Domain.Common;
 using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
 
 namespace LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
 

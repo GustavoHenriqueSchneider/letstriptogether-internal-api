@@ -1,64 +1,45 @@
 using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Infrastructure.DTOs.Responses;
-using LetsTripTogether.InternalApi.Infrastructure.DTOs.Responses.Admin.GroupMemberDestinationVote;
+using LetsTripTogether.InternalApi.Application.UseCases.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
+using LetsTripTogether.InternalApi.Application.UseCases.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
 
+// TODO: colocar tag de versionamento e descricoes para swagger
+
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
 [Route("api/v{version:apiVersion}/admin/groups/{groupId:guid}/destination-votes")]
-public class AdminGroupDestinationVoteController(
-    IGroupRepository groupRepository,
-    IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository) : ControllerBase
+public class AdminGroupDestinationVoteController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> AdminGetAllGroupDestinationVotesById(
         [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var (votes, hits) = 
-            await groupMemberDestinationVoteRepository.GetByGroupIdAsync(groupId, 
-                pageNumber, pageSize, cancellationToken);
-
-        return Ok(new AdminGetAllGroupDestinationVotesByIdResponse
+        var query = new AdminGetAllGroupDestinationVotesByIdQuery
         {
-            Data = votes.Select(x => new AdminGetAllGroupDestinationVotesByIdResponseData
-            {
-                Id = x.Id,
-                CreatedAt = x.CreatedAt
-            }),
-            Hits = hits
-        });
+            GroupId = groupId,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
+        var response = await mediator.Send(query, cancellationToken);
+        return Ok(response);
     }
 
     [HttpGet("{destinationVoteId:guid}")]
     public async Task<IActionResult> AdminGetGroupDestinationVoteById(
         [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId, CancellationToken cancellationToken)
     {
-        var groupExists = await groupRepository.ExistsByIdAsync(groupId, cancellationToken);
-
-        if (!groupExists)
+        var query = new AdminGetGroupDestinationVoteByIdQuery
         {
-            return NotFound(new ErrorResponse("Group not found."));
-        }
+            GroupId = groupId,
+            DestinationVoteId = destinationVoteId
+        };
 
-        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(groupId, 
-            destinationVoteId, cancellationToken);
-
-        if (vote is null)
-        {
-            return NotFound(new ErrorResponse("Group member destination vote not found."));
-        }
-
-        return Ok(new AdminGetGroupDestinationVoteByIdResponse
-        {
-            MemberId = vote.GroupMemberId,
-            DestinationId = vote.DestinationId,
-            IsApproved = vote.IsApproved,
-            CreatedAt = vote.CreatedAt,
-            UpdatedAt = vote.UpdatedAt
-        });
+        var response = await mediator.Send(query, cancellationToken);
+        return Ok(response);
     }
 }

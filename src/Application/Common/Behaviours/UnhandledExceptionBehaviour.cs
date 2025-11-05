@@ -26,7 +26,6 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         }
         catch (Exception ex)
         {
-            // Re-throw custom exceptions to be handled by ErrorController
             if (ex is BaseException or DomainBusinessRuleException)
             {
                 _logger.LogWarning(
@@ -36,7 +35,6 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
                 throw;
             }
 
-            // Log unhandled exceptions
             _logger.LogError(
                 ex,
                 "Unhandled exception in handler: {RequestType} - {Message}",

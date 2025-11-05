@@ -1,4 +1,6 @@
-﻿namespace LetsTripTogether.InternalApi.Domain.ValueObjects;
+﻿using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+
+namespace LetsTripTogether.InternalApi.Domain.ValueObjects;
 
 public class Step
 {
@@ -17,7 +19,7 @@ public class Step
     {
         if (!ValidSteps.Contains(step))
         {
-            throw new InvalidOperationException($"Invalid step: {step}");
+            throw new DomainBusinessRuleException($"Invalid step: {step}");
         }
 
         _step = step;

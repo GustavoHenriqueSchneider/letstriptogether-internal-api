@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+﻿using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+using System.Security.Cryptography;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Services;
 

@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+using System.Security.Claims;
 
 namespace LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 

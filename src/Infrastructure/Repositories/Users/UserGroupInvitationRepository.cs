@@ -1,4 +1,4 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;

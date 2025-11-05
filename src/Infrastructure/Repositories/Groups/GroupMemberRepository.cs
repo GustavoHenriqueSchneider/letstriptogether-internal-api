@@ -1,7 +1,7 @@
 using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 

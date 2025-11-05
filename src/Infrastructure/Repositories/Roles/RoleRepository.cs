@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
+using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 

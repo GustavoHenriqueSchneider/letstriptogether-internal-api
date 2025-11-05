@@ -1,3 +1,5 @@
+using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+
 namespace LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 
 public partial class TripPreference
@@ -18,7 +20,7 @@ public partial class TripPreference
 
         if (prefix is null)
         {
-            throw new InvalidOperationException($"Invalid preference for {nameof(TripPreference)}");
+            throw new DomainBusinessRuleException($"Invalid preference for {nameof(TripPreference)}");
         }
 
         _category = prefix switch
@@ -27,7 +29,7 @@ public partial class TripPreference
             EntertainmentPrefix => new Entertainment(preference),
             FoodPrefix => new Food(preference),
             PlaceTypePrefix => new PlaceType(preference),
-            _ => throw new InvalidOperationException($"Invalid prefix {prefix} for preference")
+            _ => throw new DomainBusinessRuleException($"Invalid prefix {prefix} for preference")
         };
 
         _category = _category.ToLower();

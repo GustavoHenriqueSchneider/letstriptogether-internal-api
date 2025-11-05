@@ -21,7 +21,7 @@ public class ErrorController : ControllerBase
 
         var problemDetails = new ProblemDetails
         {
-            Instance = exceptionHandlerPathFeature?.Path
+            Instance = exceptionHandlerPathFeature?.Path ?? string.Empty
         };
 
         switch (exception)
@@ -31,7 +31,6 @@ public class ErrorController : ControllerBase
                 problemDetails.Title = baseException.Title ?? "An error occurred";
                 problemDetails.Detail = baseException.Message;
 
-                // Handle ValidationException specially to include errors dictionary
                 if (exception is ValidationException validationException && validationException.Errors.Any())
                 {
                     problemDetails.Extensions["errors"] = validationException.Errors;

@@ -1,4 +1,4 @@
-﻿using System.Net.Mail;
+using System.Net.Mail;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Services;

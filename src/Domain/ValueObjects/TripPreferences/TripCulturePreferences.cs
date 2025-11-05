@@ -1,3 +1,5 @@
+using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+
 namespace LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 
 public partial class TripPreference
@@ -42,7 +44,7 @@ public partial class TripPreference
                 x.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
 
             _preference = preference.Key?.ToLower()
-                          ?? throw new InvalidOperationException($"Invalid culture preference: {preferenceValue}");
+                          ?? throw new DomainBusinessRuleException($"Invalid culture preference: {preferenceValue}");
         }
 
         public override string ToString() => _preference;

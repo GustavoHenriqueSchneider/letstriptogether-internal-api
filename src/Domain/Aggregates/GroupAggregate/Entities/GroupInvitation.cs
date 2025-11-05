@@ -1,6 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
+using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
 
@@ -34,9 +35,9 @@ public class GroupInvitation : TrackableEntity
         {
             GroupInvitationStatus.Active => Status = GroupInvitationStatus.Expired,
             GroupInvitationStatus.Cancelled => 
-                throw new InvalidOperationException("It is not possible to expire a cancelled group invitation."),
+                throw new DomainBusinessRuleException("It is not possible to expire a cancelled group invitation."),
             GroupInvitationStatus.Expired => 
-                throw new InvalidOperationException("It is not possible to expire a already expired group invitation."),
+                throw new DomainBusinessRuleException("It is not possible to expire a already expired group invitation."),
             _ => throw new ArgumentOutOfRangeException($"Invalid status {Status} for group invitation")
         };
     }
@@ -47,9 +48,9 @@ public class GroupInvitation : TrackableEntity
         {
             GroupInvitationStatus.Active => Status = GroupInvitationStatus.Cancelled,
             GroupInvitationStatus.Cancelled => 
-                throw new InvalidOperationException("It is not possible to cancel a already cancelled group invitation."),
+                throw new DomainBusinessRuleException("It is not possible to cancel a already cancelled group invitation."),
             GroupInvitationStatus.Expired => 
-                throw new InvalidOperationException("It is not possible to cancel a expired group invitation."),
+                throw new DomainBusinessRuleException("It is not possible to cancel a expired group invitation."),
             _ => throw new ArgumentOutOfRangeException($"Invalid status {Status} for group invitation")
         };
     }
@@ -76,7 +77,7 @@ public class GroupInvitation : TrackableEntity
         
         if (HasAnswer(answer))
         {
-            throw new InvalidOperationException("This answer is already included on the invitation.");
+            throw new DomainBusinessRuleException("This answer is already included on the invitation.");
         }
 
         _answeredBy.Add(answer);

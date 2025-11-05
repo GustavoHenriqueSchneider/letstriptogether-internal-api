@@ -1,6 +1,6 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
+using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
 

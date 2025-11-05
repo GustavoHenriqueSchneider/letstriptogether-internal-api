@@ -2,7 +2,7 @@ namespace LetsTripTogether.InternalApi.Domain.Common.Exceptions;
 
 public class DomainBusinessRuleException : Exception
 {
-    public int StatusCode { get; } = 422; // Unprocessable Entity
+    public int StatusCode { get; } = 422;
     
     public string? Title { get; }
 

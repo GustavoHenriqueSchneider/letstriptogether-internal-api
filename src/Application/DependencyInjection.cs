@@ -3,7 +3,6 @@ using FluentValidation;
 using LetsTripTogether.InternalApi.Application.Common.Behaviours;
 using LetsTripTogether.InternalApi.Application.Common.Extensions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
