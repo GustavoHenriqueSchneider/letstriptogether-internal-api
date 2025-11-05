@@ -24,8 +24,8 @@ public static class DependencyInjection
         {
             configuration.RegisterServicesFromAssembly(assembly);
 
-            configuration.AddOpenBehavior(typeof(ValidationBehaviour<,>));
             configuration.AddOpenBehavior(typeof(UnhandledExceptionBehaviour<,>));
+            configuration.AddOpenBehavior(typeof(ValidationBehaviour<,>));
             mediator?.Invoke(configuration);
         });
 

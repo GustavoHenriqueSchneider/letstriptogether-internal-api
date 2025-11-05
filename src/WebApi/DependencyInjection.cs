@@ -69,7 +69,6 @@ public static class DependencyInjection
             })
             .AddFluentValidationRulesToSwagger();
         
-        // Resolve IApiVersionDescriptionProvider para gerar documentos Swagger para cada vers?o
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
     }
 }
@@ -92,13 +91,7 @@ internal class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                 new OpenApiInfo
                 {
                     Title = "LetsTripTogether Internal API",
-                    Version = description.ApiVersion.ToString(),
-                    Description = $"API interna do LetsTripTogether - Vers?o {description.ApiVersion}",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "LetsTripTogether",
-                        Email = "support@letstriptogether.com"
-                    }
+                    Version = description.ApiVersion.ToString()
                 });
         }
     }

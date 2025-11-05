@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -102,11 +102,9 @@ namespace WebApi.Migrations
                         new List<string>{ new TripPreference.PlaceType(TripPreference.PlaceType.Park), new TripPreference.PlaceType(TripPreference.PlaceType.Mountain) },
                         DateTime.UtcNow, null },
                 });
-
-            // setting destinations
-            // O recurso esta embutido no assembly WebApi, nao no assembly de migrations
-            var assembly = typeof(Destination).Assembly;
-            var resourceName = "WebApi.Dataset.cities_with_attractions.json";
+            
+            var assembly = typeof(PasswordHashService).Assembly;
+            var resourceName = "LetsTripTogether.InternalApi.Infrastructure.Dataset.cities_with_attractions.json";
             
             string jsonContent;
             using (var stream = assembly.GetManifestResourceStream(resourceName))

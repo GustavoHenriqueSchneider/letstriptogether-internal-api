@@ -8,32 +8,18 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.CreateGroup;
 
-public class CreateGroupHandler : IRequestHandler<CreateGroupCommand, CreateGroupResponse>
+public class CreateGroupHandler(
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupRepository groupRepository,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<CreateGroupCommand, CreateGroupResponse>
 {
-    private readonly IGroupMemberRepository _groupMemberRepository;
-    private readonly IGroupPreferenceRepository _groupPreferenceRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public CreateGroupHandler(
-        IGroupMemberRepository groupMemberRepository,
-        IGroupPreferenceRepository groupPreferenceRepository,
-        IGroupRepository groupRepository,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _groupMemberRepository = groupMemberRepository;
-        _groupPreferenceRepository = groupPreferenceRepository;
-        _groupRepository = groupRepository;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task<CreateGroupResponse> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var user = await _userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -51,11 +37,11 @@ public class CreateGroupHandler : IRequestHandler<CreateGroupCommand, CreateGrou
         var groupMember = group.AddMember(user, isOwner: true);
         var groupPreferences = group.UpdatePreferences(user.Preferences);
 
-        await _groupRepository.AddAsync(group, cancellationToken);
-        await _groupMemberRepository.AddAsync(groupMember, cancellationToken);
-        await _groupPreferenceRepository.AddAsync(groupPreferences, cancellationToken);
+        await groupRepository.AddAsync(group, cancellationToken);
+        await groupMemberRepository.AddAsync(groupMember, cancellationToken);
+        await groupPreferenceRepository.AddAsync(groupPreferences, cancellationToken);
 
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
         return new CreateGroupResponse { Id = group.Id };
     }
 }

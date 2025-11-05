@@ -9,11 +9,9 @@ public class LoginValidator : AbstractValidator<LoginCommand>
     public LoginValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty()
             .SetValidator(new EmailValidator());
 
         RuleFor(x => x.Password)
-            .NotEmpty()
             .SetValidator(new PasswordValidator());
     }
 }

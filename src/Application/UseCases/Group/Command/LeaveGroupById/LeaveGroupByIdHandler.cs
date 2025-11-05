@@ -7,40 +7,24 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
 
-public class LeaveGroupByIdHandler : IRequestHandler<LeaveGroupByIdCommand>
+public class LeaveGroupByIdHandler(
+    IGroupMatchRepository groupMatchRepository,
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupRepository groupRepository,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<LeaveGroupByIdCommand>
 {
-    private readonly IGroupMatchRepository _groupMatchRepository;
-    private readonly IGroupMemberRepository _groupMemberRepository;
-    private readonly IGroupPreferenceRepository _groupPreferenceRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public LeaveGroupByIdHandler(
-        IGroupMatchRepository groupMatchRepository,
-        IGroupMemberRepository groupMemberRepository,
-        IGroupPreferenceRepository groupPreferenceRepository,
-        IGroupRepository groupRepository,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _groupMatchRepository = groupMatchRepository;
-        _groupMemberRepository = groupMemberRepository;
-        _groupPreferenceRepository = groupPreferenceRepository;
-        _groupRepository = groupRepository;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(LeaveGroupByIdCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        if (!await _userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             throw new NotFoundException("User not found.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersPreferencesAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(request.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -61,14 +45,14 @@ public class LeaveGroupByIdHandler : IRequestHandler<LeaveGroupByIdCommand>
         
         if (group.Members.Count == 1)
         {
-            var matches = await _groupMatchRepository.GetAllMatchesByGroupAsync(request.GroupId, cancellationToken);
-            _groupMatchRepository.RemoveRange(matches);
+            var matches = await groupMatchRepository.GetAllMatchesByGroupAsync(request.GroupId, cancellationToken);
+            groupMatchRepository.RemoveRange(matches);
         }
         
-        _groupRepository.Update(group);
-        _groupMemberRepository.Remove(currentUserMember);
-        _groupPreferenceRepository.Update(group.Preferences);
+        groupRepository.Update(group);
+        groupMemberRepository.Remove(currentUserMember);
+        groupPreferenceRepository.Update(group.Preferences);
         
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

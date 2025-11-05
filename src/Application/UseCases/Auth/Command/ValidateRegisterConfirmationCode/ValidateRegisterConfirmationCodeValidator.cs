@@ -14,7 +14,6 @@ public class ValidateRegisterConfirmationCodeValidator : AbstractValidator<Valid
             .Must(x => int.Parse(x) < 1000000).WithMessage("Code must be less than to 1000000");
 
         RuleFor(x => x.Email)
-            .NotEmpty()
             .SetValidator(new EmailValidator());
 
         RuleFor(x => x.Name)

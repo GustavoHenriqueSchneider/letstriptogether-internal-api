@@ -1,22 +1,15 @@
 using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
-
 using MediatR;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Destination.Query.GetDestinationById;
 
-public class GetDestinationByIdHandler : IRequestHandler<GetDestinationByIdQuery, GetDestinationByIdResponse>
+public class GetDestinationByIdHandler(IDestinationRepository destinationRepository)
+    : IRequestHandler<GetDestinationByIdQuery, GetDestinationByIdResponse>
 {
-    private readonly IDestinationRepository _destinationRepository;
-
-    public GetDestinationByIdHandler(IDestinationRepository destinationRepository)
-    {
-        _destinationRepository = destinationRepository;
-    }
-
     public async Task<GetDestinationByIdResponse> Handle(GetDestinationByIdQuery request, CancellationToken cancellationToken)
     {
-        var destination = await _destinationRepository.GetByIdAsync(request.DestinationId, cancellationToken);
+        var destination = await destinationRepository.GetByIdAsync(request.DestinationId, cancellationToken);
 
         if (destination is null)
         {

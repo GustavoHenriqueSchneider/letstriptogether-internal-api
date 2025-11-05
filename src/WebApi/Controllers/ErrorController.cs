@@ -2,11 +2,13 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace LetsTripTogether.InternalApi.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorController : ControllerBase
 {
     [HttpGet]

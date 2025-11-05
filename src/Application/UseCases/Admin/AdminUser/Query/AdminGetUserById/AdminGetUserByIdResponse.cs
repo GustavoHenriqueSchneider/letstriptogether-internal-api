@@ -2,8 +2,8 @@ namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Quer
 
 public class AdminGetUserByIdResponse
 {
-    public string Name { get; set; } = null!;
-    public string Email { get; set; } = null!;
+    public string Name { get; init; } = null!;
+    public string Email { get; init; } = null!;
     public AdminGetUserByIdPreferenceResponse? Preferences { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }

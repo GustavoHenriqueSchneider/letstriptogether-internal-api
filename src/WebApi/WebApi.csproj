@@ -14,6 +14,10 @@
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="6.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
         <PackageReference Include="System.Text.Encodings.Web" Version="9.0.9" />

@@ -8,7 +8,6 @@ public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
     public ResetPasswordValidator()
     {
         RuleFor(x => x.Password)
-            .NotEmpty()
             .SetValidator(new PasswordValidator());
 
         RuleFor(x => x.UserId)

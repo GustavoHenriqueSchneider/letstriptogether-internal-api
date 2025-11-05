@@ -7,32 +7,22 @@ using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToken;
 
-public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenResponse>
+public class RefreshTokenHandler(
+    IRedisService redisService,
+    ITokenService tokenService,
+    IUserRepository userRepository)
+    : IRequestHandler<RefreshTokenCommand, RefreshTokenResponse>
 {
-    private readonly IRedisService _redisService;
-    private readonly ITokenService _tokenService;
-    private readonly IUserRepository _userRepository;
-
-    public RefreshTokenHandler(
-        IRedisService redisService,
-        ITokenService tokenService,
-        IUserRepository userRepository)
-    {
-        _redisService = redisService;
-        _tokenService = tokenService;
-        _userRepository = userRepository;
-    }
-
     public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var (isValid, claims) = _tokenService.ValidateRefreshToken(request.RefreshToken);
+        var (isValid, claims) = tokenService.ValidateRefreshToken(request.RefreshToken);
 
         if (!isValid)
         {
             throw new UnauthorizedException("Invalid refresh token.");
         }
 
-        var (isExpired, refreshTokenExpiresIn) = _tokenService.IsTokenExpired(request.RefreshToken);
+        var (isExpired, refreshTokenExpiresIn) = tokenService.IsTokenExpired(request.RefreshToken);
 
         if (isExpired)
         {
@@ -47,24 +37,24 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshT
         }
 
         var key = KeyHelper.UserRefreshToken(userId);
-        var storedRefreshToken = await _redisService.GetAsync(key);
+        var storedRefreshToken = await redisService.GetAsync(key);
 
         if (storedRefreshToken is null || storedRefreshToken != request.RefreshToken)
         {
             throw new UnauthorizedException("Invalid refresh token.");
         }
 
-        var user = await _userRepository.GetUserWithRolesByIdAsync(userId, cancellationToken);
+        var user = await userRepository.GetUserWithRolesByIdAsync(userId, cancellationToken);
 
         if (user is null)
         {
             throw new NotFoundException("User not found.");
         }
 
-        var (accessToken, refreshToken) = _tokenService.GenerateTokens(user, refreshTokenExpiresIn);
+        var (accessToken, refreshToken) = tokenService.GenerateTokens(user, refreshTokenExpiresIn);
         var ttlInSeconds = (int)(refreshTokenExpiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
-        await _redisService.SetAsync(key, refreshToken, ttlInSeconds);
+        await redisService.SetAsync(key, refreshToken, ttlInSeconds);
 
         return new RefreshTokenResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
