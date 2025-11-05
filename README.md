@@ -1,16 +1,21 @@
 # lets-trip-together-internal-api
 
-para subir o docker compose
+para interromper os containers do dockercompose e apagar volumes respectivos
+``` powershell
+docker compose down -v
+```
+
+para subir os containers do dockercompose de forma livre do console
 ``` powershell
 docker compose up -d
 ```
 
 para criar migration do ef
 ``` powershell
-dotnet ef migrations add <NomeMigration>
+dotnet ef migrations add <NomeMigration> --project .\src\Infrastructure\ --startup-project .\src\WebApi\
 ```
 
 para atualizar migrations do ef no container
 ``` powershell
-dotnet ef database update
+dotnet ef database update --project .\src\Infrastructure\ --startup-project .\src\WebApi\
 ```

@@ -1,0 +1,17 @@
+namespace LetsTripTogether.InternalApi.Application.UseCases.Destination.Query.GetDestinationById;
+
+public class DestinationAttractionModel
+{
+    public string Name { get; init; } = null!;
+    public string Description { get; init; } = null!;
+    public string Category { get; init; } = null!;
+}
+
+public class GetDestinationByIdResponse
+{
+    public string Place { get; init; } = null!;
+    public string Description { get; init; } = null!;
+    public IEnumerable<DestinationAttractionModel> Attractions { get; init; } = [];
+    public DateTime CreatedAt { get; init; }
+    public DateTime? UpdatedAt { get; init; }
+}

@@ -1,0 +1,53 @@
+using System.Collections.ObjectModel;
+using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+using LetsTripTogether.InternalApi.Domain.Common;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
+
+namespace LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
+
+public class Destination : TrackableEntity
+{
+    public string Address { get; init; } = null!;
+    public string Description { get; init; } = null!;
+
+    private readonly List<GroupMatch> _groupMatches = [];
+    public IReadOnlyCollection<GroupMatch> GroupMatches => _groupMatches.AsReadOnly();
+
+    private readonly List<GroupMemberDestinationVote> _groupMemberVotes = [];
+    public IReadOnlyCollection<GroupMemberDestinationVote> GroupMemberVotes => _groupMemberVotes.AsReadOnly();
+
+    private readonly List<DestinationAttraction> _attractions = [];
+    public IReadOnlyCollection<DestinationAttraction> Attractions => _attractions.AsReadOnly();
+    
+    private Destination() { }
+
+    public bool HasCommercialCategory() => _attractions.Any(a => 
+        a.Category.Equals(TripPreference.Shopping, StringComparison.OrdinalIgnoreCase));
+    
+    public IReadOnlyCollection<string> GetFoodCategories() => 
+        GetReadonlyCategoryList(_attractions, TripPreference.FoodPrefix);
+    
+    public IReadOnlyCollection<string> GetCultureCategories() => 
+        GetReadonlyCategoryList(_attractions, TripPreference.CulturePrefix);
+    
+    public IReadOnlyCollection<string> GetEntertainmentCategories() => 
+        GetReadonlyCategoryList(_attractions, TripPreference.EntertainmentPrefix);
+    
+    public IReadOnlyCollection<string> GetPlaceTypes() => 
+        GetReadonlyCategoryList(_attractions, TripPreference.PlaceTypePrefix);
+
+    private static ReadOnlyCollection<string> GetReadonlyCategoryList(List<DestinationAttraction> list, string prefix)
+    {
+        return list
+            .Where(a =>
+            {
+                var categoryPrefix = a.Category.Split('.').First();
+                return categoryPrefix.Equals(prefix, StringComparison.OrdinalIgnoreCase);
+            })
+            .Select(a => a.Category)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList()
+            .AsReadOnly();
+    }
+}

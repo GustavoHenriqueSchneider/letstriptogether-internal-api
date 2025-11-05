@@ -1,0 +1,16 @@
+using FluentValidation;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+
+namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Login;
+
+public class LoginValidator : AbstractValidator<LoginCommand>
+{
+    public LoginValidator()
+    {
+        RuleFor(x => x.Email)
+            .SetValidator(new EmailValidator());
+
+        RuleFor(x => x.Password)
+            .SetValidator(new PasswordValidator());
+    }
+}
