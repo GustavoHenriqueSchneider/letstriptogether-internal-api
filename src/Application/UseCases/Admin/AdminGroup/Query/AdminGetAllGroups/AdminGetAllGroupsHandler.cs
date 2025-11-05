@@ -3,18 +3,12 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
 
-public class AdminGetAllGroupsHandler : IRequestHandler<AdminGetAllGroupsQuery, AdminGetAllGroupsResponse>
+public class AdminGetAllGroupsHandler(IGroupRepository groupRepository)
+    : IRequestHandler<AdminGetAllGroupsQuery, AdminGetAllGroupsResponse>
 {
-    private readonly IGroupRepository _groupRepository;
-
-    public AdminGetAllGroupsHandler(IGroupRepository groupRepository)
-    {
-        _groupRepository = groupRepository;
-    }
-
     public async Task<AdminGetAllGroupsResponse> Handle(AdminGetAllGroupsQuery request, CancellationToken cancellationToken)
     {
-        var (groups, hits) = await _groupRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
+        var (groups, hits) = await groupRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
 
         return new AdminGetAllGroupsResponse
         {

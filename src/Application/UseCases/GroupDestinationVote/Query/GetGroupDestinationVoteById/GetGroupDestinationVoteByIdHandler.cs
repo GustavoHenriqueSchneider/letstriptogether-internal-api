@@ -6,26 +6,16 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupDestinationVoteById;
 
-public class GetGroupDestinationVoteByIdHandler : IRequestHandler<GetGroupDestinationVoteByIdQuery, GetGroupDestinationVoteByIdResponse>
+public class GetGroupDestinationVoteByIdHandler(
+    IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
+    IGroupRepository groupRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<GetGroupDestinationVoteByIdQuery, GetGroupDestinationVoteByIdResponse>
 {
-    private readonly IGroupMemberDestinationVoteRepository _groupMemberDestinationVoteRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUserRepository _userRepository;
-
-    public GetGroupDestinationVoteByIdHandler(
-        IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
-        IGroupRepository groupRepository,
-        IUserRepository userRepository)
-    {
-        _groupMemberDestinationVoteRepository = groupMemberDestinationVoteRepository;
-        _groupRepository = groupRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task<GetGroupDestinationVoteByIdResponse> Handle(GetGroupDestinationVoteByIdQuery request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var user = await _userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -39,14 +29,14 @@ public class GetGroupDestinationVoteByIdHandler : IRequestHandler<GetGroupDestin
             throw new BadRequestException("You are not a member of this group.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
 
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
         }
 
-        var vote = await _groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(request.GroupId,
+        var vote = await groupMemberDestinationVoteRepository.GetByIdWithRelationsAsync(request.GroupId,
             request.DestinationVoteId, cancellationToken);
 
         if (vote is null)

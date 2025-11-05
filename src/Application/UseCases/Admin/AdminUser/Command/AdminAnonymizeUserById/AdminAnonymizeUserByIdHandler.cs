@@ -8,50 +8,34 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
-public class AdminAnonymizeUserByIdHandler : IRequestHandler<AdminAnonymizeUserByIdCommand>
+public class AdminAnonymizeUserByIdHandler(
+    IGroupMemberRepository groupMemberRepository,
+    IRedisService redisService,
+    IUnitOfWork unitOfWork,
+    IUserGroupInvitationRepository userGroupInvitationRepository,
+    IUserRepository userRepository,
+    IUserRoleRepository userRoleRepository)
+    : IRequestHandler<AdminAnonymizeUserByIdCommand>
 {
-    private readonly IGroupMemberRepository _groupMemberRepository;
-    private readonly IRedisService _redisService;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserGroupInvitationRepository _userGroupInvitationRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IUserRoleRepository _userRoleRepository;
-
-    public AdminAnonymizeUserByIdHandler(
-        IGroupMemberRepository groupMemberRepository,
-        IRedisService redisService,
-        IUnitOfWork unitOfWork,
-        IUserGroupInvitationRepository userGroupInvitationRepository,
-        IUserRepository userRepository,
-        IUserRoleRepository userRoleRepository)
-    {
-        _groupMemberRepository = groupMemberRepository;
-        _redisService = redisService;
-        _unitOfWork = unitOfWork;
-        _userGroupInvitationRepository = userGroupInvitationRepository;
-        _userRepository = userRepository;
-        _userRoleRepository = userRoleRepository;
-    }
-
     public async Task Handle(AdminAnonymizeUserByIdCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserWithRelationshipsByIdAsync(request.UserId, cancellationToken);
+        var user = await userRepository.GetUserWithRelationshipsByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {
             throw new NotFoundException("User not found.");
         }
 
-        _groupMemberRepository.RemoveRange(user.GroupMemberships);
-        _userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
-        _userRoleRepository.RemoveRange(user.UserRoles);
+        groupMemberRepository.RemoveRange(user.GroupMemberships);
+        userGroupInvitationRepository.RemoveRange(user.AcceptedInvitations);
+        userRoleRepository.RemoveRange(user.UserRoles);
 
         user.Anonymize();
 
-        _userRepository.Update(user);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync(cancellationToken);
 
         var key = KeyHelper.UserRefreshToken(user.Id);
-        await _redisService.DeleteAsync(key);
+        await redisService.DeleteAsync(key);
     }
 }

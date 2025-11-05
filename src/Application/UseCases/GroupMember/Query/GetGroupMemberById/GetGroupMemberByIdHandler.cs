@@ -6,23 +6,15 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetGroupMemberById;
 
-public class GetGroupMemberByIdHandler : IRequestHandler<GetGroupMemberByIdQuery, GetGroupMemberByIdResponse>
+public class GetGroupMemberByIdHandler(
+    IGroupRepository groupRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<GetGroupMemberByIdQuery, GetGroupMemberByIdResponse>
 {
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUserRepository _userRepository;
-
-    public GetGroupMemberByIdHandler(
-        IGroupRepository groupRepository,
-        IUserRepository userRepository)
-    {
-        _groupRepository = groupRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task<GetGroupMemberByIdResponse> Handle(GetGroupMemberByIdQuery request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var user = await _userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -36,7 +28,7 @@ public class GetGroupMemberByIdHandler : IRequestHandler<GetGroupMemberByIdQuery
             throw new BadRequestException("You are not a member of this group.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
 
         if (group is null)
         {

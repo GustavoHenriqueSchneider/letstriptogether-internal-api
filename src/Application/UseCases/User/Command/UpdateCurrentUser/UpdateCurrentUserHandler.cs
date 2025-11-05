@@ -6,22 +6,13 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.UpdateCurrentUser;
 
-public class UpdateCurrentUserHandler : IRequestHandler<UpdateCurrentUserCommand>
+public class UpdateCurrentUserHandler(
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository) : IRequestHandler<UpdateCurrentUserCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public UpdateCurrentUserHandler(
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(UpdateCurrentUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -30,7 +21,7 @@ public class UpdateCurrentUserHandler : IRequestHandler<UpdateCurrentUserCommand
 
         user.Update(request.Name);
 
-        _userRepository.Update(user);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        userRepository.Update(user);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

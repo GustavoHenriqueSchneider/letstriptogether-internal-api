@@ -5,18 +5,12 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.User.Query.GetCurrentUser;
 
-public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>
+public class GetCurrentUserHandler(IUserRepository userRepository)
+    : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>
 {
-    private readonly IUserRepository _userRepository;
-
-    public GetCurrentUserHandler(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
-
     public async Task<GetCurrentUserResponse> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdWithPreferencesAsync(request.UserId, cancellationToken);
+        var user = await userRepository.GetByIdWithPreferencesAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {

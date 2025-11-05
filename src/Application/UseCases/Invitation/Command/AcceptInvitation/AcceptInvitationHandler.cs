@@ -10,41 +10,21 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.AcceptInvitation;
 
-public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
+public class AcceptInvitationHandler(
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupRepository groupRepository,
+    IGroupInvitationRepository groupInvitationRepository,
+    ITokenService tokenService,
+    IUnitOfWork unitOfWork,
+    IUserGroupInvitationRepository userGroupInvitationRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<AcceptInvitationCommand>
 {
-    private readonly IGroupMemberRepository _groupMemberRepository;
-    private readonly IGroupPreferenceRepository _groupPreferenceRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IGroupInvitationRepository _groupInvitationRepository;
-    private readonly ITokenService _tokenService;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserGroupInvitationRepository _userGroupInvitationRepository;
-    private readonly IUserRepository _userRepository;
-
-    public AcceptInvitationHandler(
-        IGroupMemberRepository groupMemberRepository,
-        IGroupPreferenceRepository groupPreferenceRepository,
-        IGroupRepository groupRepository,
-        IGroupInvitationRepository groupInvitationRepository,
-        ITokenService tokenService,
-        IUnitOfWork unitOfWork,
-        IUserGroupInvitationRepository userGroupInvitationRepository,
-        IUserRepository userRepository)
-    {
-        _groupMemberRepository = groupMemberRepository;
-        _groupPreferenceRepository = groupPreferenceRepository;
-        _groupRepository = groupRepository;
-        _groupInvitationRepository = groupInvitationRepository;
-        _tokenService = tokenService;
-        _unitOfWork = unitOfWork;
-        _userGroupInvitationRepository = userGroupInvitationRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(AcceptInvitationCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var user = await _userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
         
         if (user is null)
         {
@@ -58,14 +38,14 @@ public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
         
         _ = new UserPreference(user.Preferences);
 
-        var (isValid, id) = _tokenService.ValidateInvitationToken(request.Token);
+        var (isValid, id) = tokenService.ValidateInvitationToken(request.Token);
 
         if (!isValid)
         {
             throw new UnauthorizedException("Invalid invitation token.");
         }
 
-        var (isExpired, _) = _tokenService.IsTokenExpired(request.Token);
+        var (isExpired, _) = tokenService.IsTokenExpired(request.Token);
 
         if (isExpired)
         {
@@ -77,7 +57,7 @@ public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
             throw new NotFoundException("Invitation not found.");
         }
         
-        var groupInvitation = await _groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId, cancellationToken);
+        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId, cancellationToken);
         if (groupInvitation is null)
         {
             throw new NotFoundException("Invitation not found.");
@@ -92,8 +72,8 @@ public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
         {
             groupInvitation.Expire();
             
-            _groupInvitationRepository.Update(groupInvitation);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            groupInvitationRepository.Update(groupInvitation);
+            await unitOfWork.SaveAsync(cancellationToken);
             
             throw new BadRequestException("Invitation is not active.");
         }
@@ -104,7 +84,7 @@ public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
             throw new ConflictException("You have already answered this invitation.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAndMatchesAsync(groupInvitation.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(groupInvitation.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -119,11 +99,11 @@ public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
         var invitationAnswer = groupInvitation.AddAnswer(currentUserId, isAccepted: true);
         var groupMember = group.AddMember(user, false);
         
-        await _userGroupInvitationRepository.AddAsync(invitationAnswer, cancellationToken);
-        await _groupMemberRepository.AddAsync(groupMember, cancellationToken);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await userGroupInvitationRepository.AddAsync(invitationAnswer, cancellationToken);
+        await groupMemberRepository.AddAsync(groupMember, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
         
-        var groupToUpdate = await _groupRepository.GetGroupWithMembersPreferencesAsync(group.Id, cancellationToken);
+        var groupToUpdate = await groupRepository.GetGroupWithMembersPreferencesAsync(group.Id, cancellationToken);
         if (groupToUpdate is null)
         {
             throw new NotFoundException("Group not found.");
@@ -131,9 +111,9 @@ public class AcceptInvitationHandler : IRequestHandler<AcceptInvitationCommand>
         
         groupToUpdate.UpdatePreferences();
         
-        _groupRepository.Update(groupToUpdate);
-        _groupPreferenceRepository.Update(groupToUpdate.Preferences);
+        groupRepository.Update(groupToUpdate);
+        groupPreferenceRepository.Update(groupToUpdate.Preferences);
 
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

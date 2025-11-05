@@ -8,34 +8,22 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
 
-public class CancelActiveGroupInvitationHandler : IRequestHandler<CancelActiveGroupInvitationCommand>
+public class CancelActiveGroupInvitationHandler(
+    IGroupInvitationRepository groupInvitationRepository,
+    IGroupRepository groupRepository,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<CancelActiveGroupInvitationCommand>
 {
-    private readonly IGroupInvitationRepository _groupInvitationRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public CancelActiveGroupInvitationHandler(
-        IGroupInvitationRepository groupInvitationRepository,
-        IGroupRepository groupRepository,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _groupInvitationRepository = groupInvitationRepository;
-        _groupRepository = groupRepository;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(CancelActiveGroupInvitationCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        if (!await _userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             throw new NotFoundException("User not found.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -53,7 +41,7 @@ public class CancelActiveGroupInvitationHandler : IRequestHandler<CancelActiveGr
         }
 
         var activeInvitation = 
-            await _groupInvitationRepository.GetByGroupAndStatusAsync(request.GroupId, GroupInvitationStatus.Active, cancellationToken);
+            await groupInvitationRepository.GetByGroupAndStatusAsync(request.GroupId, GroupInvitationStatus.Active, cancellationToken);
         
         if (activeInvitation is null)
         {
@@ -61,8 +49,8 @@ public class CancelActiveGroupInvitationHandler : IRequestHandler<CancelActiveGr
         }
 
         activeInvitation.Cancel();
-        _groupInvitationRepository.Update(activeInvitation);
+        groupInvitationRepository.Update(activeInvitation);
         
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

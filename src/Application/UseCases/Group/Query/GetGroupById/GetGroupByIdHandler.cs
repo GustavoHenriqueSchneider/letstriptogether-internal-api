@@ -5,22 +5,14 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroupById;
 
-public class GetGroupByIdHandler : IRequestHandler<GetGroupByIdQuery, GetGroupByIdResponse>
+public class GetGroupByIdHandler(
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupRepository groupRepository)
+    : IRequestHandler<GetGroupByIdQuery, GetGroupByIdResponse>
 {
-    private readonly IGroupPreferenceRepository _groupPreferenceRepository;
-    private readonly IGroupRepository _groupRepository;
-
-    public GetGroupByIdHandler(
-        IGroupPreferenceRepository groupPreferenceRepository,
-        IGroupRepository groupRepository)
-    {
-        _groupPreferenceRepository = groupPreferenceRepository;
-        _groupRepository = groupRepository;
-    }
-
     public async Task<GetGroupByIdResponse> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
 
         if (group is null)
         {
@@ -34,7 +26,7 @@ public class GetGroupByIdHandler : IRequestHandler<GetGroupByIdQuery, GetGroupBy
             throw new BadRequestException("You are not a member of this group.");
         }
 
-        var groupPreferences = await _groupPreferenceRepository.GetByGroupIdAsync(request.GroupId, cancellationToken)
+        var groupPreferences = await groupPreferenceRepository.GetByGroupIdAsync(request.GroupId, cancellationToken)
             ?? throw new InvalidOperationException("Invalid preferences");
 
         return new GetGroupByIdResponse

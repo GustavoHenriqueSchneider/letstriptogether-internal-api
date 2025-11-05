@@ -6,40 +6,30 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
 
-public class GetAllGroupMatchesByIdHandler : IRequestHandler<GetAllGroupMatchesByIdQuery, GetAllGroupMatchesByIdResponse>
+public class GetAllGroupMatchesByIdHandler(
+    IGroupMatchRepository groupMatchRepository,
+    IGroupRepository groupRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<GetAllGroupMatchesByIdQuery, GetAllGroupMatchesByIdResponse>
 {
-    private readonly IGroupMatchRepository _groupMatchRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUserRepository _userRepository;
-
-    public GetAllGroupMatchesByIdHandler(
-        IGroupMatchRepository groupMatchRepository,
-        IGroupRepository groupRepository,
-        IUserRepository userRepository)
-    {
-        _groupMatchRepository = groupMatchRepository;
-        _groupRepository = groupRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task<GetAllGroupMatchesByIdResponse> Handle(GetAllGroupMatchesByIdQuery request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var existsUser = await _userRepository.ExistsByIdAsync(currentUserId, cancellationToken);
+        var existsUser = await userRepository.ExistsByIdAsync(currentUserId, cancellationToken);
 
         if (!existsUser)
         {
             throw new NotFoundException("User not found.");
         }
 
-        var groupExists = await _groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
+        var groupExists = await groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
 
         if (!groupExists)
         {
             throw new NotFoundException("Group not found.");
         }
 
-        var isGroupMember = await _groupRepository.IsGroupMemberByUserIdAsync(request.GroupId, currentUserId, cancellationToken);
+        var isGroupMember = await groupRepository.IsGroupMemberByUserIdAsync(request.GroupId, currentUserId, cancellationToken);
 
         if (!isGroupMember)
         {
@@ -47,7 +37,7 @@ public class GetAllGroupMatchesByIdHandler : IRequestHandler<GetAllGroupMatchesB
         }
 
         var (groupMatches, hits) =
-            await _groupMatchRepository.GetByGroupIdAsync(request.GroupId, request.PageNumber, request.PageSize, cancellationToken);
+            await groupMatchRepository.GetByGroupIdAsync(request.GroupId, request.PageNumber, request.PageSize, cancellationToken);
 
         return new GetAllGroupMatchesByIdResponse
         {

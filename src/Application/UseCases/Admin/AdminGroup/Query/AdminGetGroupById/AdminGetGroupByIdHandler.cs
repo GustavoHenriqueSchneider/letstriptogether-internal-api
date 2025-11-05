@@ -5,18 +5,12 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
 
-public class AdminGetGroupByIdHandler : IRequestHandler<AdminGetGroupByIdQuery, AdminGetGroupByIdResponse>
+public class AdminGetGroupByIdHandler(IGroupRepository groupRepository)
+    : IRequestHandler<AdminGetGroupByIdQuery, AdminGetGroupByIdResponse>
 {
-    private readonly IGroupRepository _groupRepository;
-
-    public AdminGetGroupByIdHandler(IGroupRepository groupRepository)
-    {
-        _groupRepository = groupRepository;
-    }
-
     public async Task<AdminGetGroupByIdResponse> Handle(AdminGetGroupByIdQuery request, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.GetGroupWithPreferencesAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithPreferencesAsync(request.GroupId, cancellationToken);
 
         if (group is null)
         {

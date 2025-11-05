@@ -6,26 +6,16 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
 
-public class GetOtherGroupMembersByIdHandler : IRequestHandler<GetOtherGroupMembersByIdQuery, GetOtherGroupMembersByIdResponse>
+public class GetOtherGroupMembersByIdHandler(
+    IGroupMemberRepository groupMemberRepository,
+    IGroupRepository groupRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<GetOtherGroupMembersByIdQuery, GetOtherGroupMembersByIdResponse>
 {
-    private readonly IGroupMemberRepository _groupMemberRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUserRepository _userRepository;
-
-    public GetOtherGroupMembersByIdHandler(
-        IGroupMemberRepository groupMemberRepository,
-        IGroupRepository groupRepository,
-        IUserRepository userRepository)
-    {
-        _groupMemberRepository = groupMemberRepository;
-        _groupRepository = groupRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task<GetOtherGroupMembersByIdResponse> Handle(GetOtherGroupMembersByIdQuery request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var user = await _userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
+        var user = await userRepository.GetUserWithGroupMembershipsAsync(currentUserId, cancellationToken);
 
         if (user is null)
         {
@@ -39,7 +29,7 @@ public class GetOtherGroupMembersByIdHandler : IRequestHandler<GetOtherGroupMemb
             throw new BadRequestException("You are not a member of this group.");
         }
 
-        var groupExists = await _groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
+        var groupExists = await groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -47,7 +37,7 @@ public class GetOtherGroupMembersByIdHandler : IRequestHandler<GetOtherGroupMemb
         }
 
         var (groupMembers, hits) = 
-            await _groupMemberRepository.GetAllByGroupIdAsync(request.GroupId, request.PageNumber, request.PageSize, cancellationToken);
+            await groupMemberRepository.GetAllByGroupIdAsync(request.GroupId, request.PageNumber, request.PageSize, cancellationToken);
 
         return new GetOtherGroupMembersByIdResponse
         {

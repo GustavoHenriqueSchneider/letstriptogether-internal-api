@@ -10,37 +10,23 @@ using GroupInvitationModel = LetsTripTogether.InternalApi.Domain.Aggregates.Grou
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
 
-public class CreateGroupInvitationHandler : IRequestHandler<CreateGroupInvitationCommand, CreateGroupInvitationResponse>
+public class CreateGroupInvitationHandler(
+    IGroupInvitationRepository groupInvitationRepository,
+    IGroupRepository groupRepository,
+    ITokenService tokenService,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<CreateGroupInvitationCommand, CreateGroupInvitationResponse>
 {
-    private readonly IGroupInvitationRepository _groupInvitationRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly ITokenService _tokenService;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public CreateGroupInvitationHandler(
-        IGroupInvitationRepository groupInvitationRepository,
-        IGroupRepository groupRepository,
-        ITokenService tokenService,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _groupInvitationRepository = groupInvitationRepository;
-        _groupRepository = groupRepository;
-        _tokenService = tokenService;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task<CreateGroupInvitationResponse> Handle(CreateGroupInvitationCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        if (!await _userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             throw new NotFoundException("User not found.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -60,22 +46,22 @@ public class CreateGroupInvitationHandler : IRequestHandler<CreateGroupInvitatio
         GroupInvitationModel groupInvitation;
         
         var existingInvitation = 
-            await _groupInvitationRepository.GetByGroupAndStatusAsync(request.GroupId, GroupInvitationStatus.Active, cancellationToken);
+            await groupInvitationRepository.GetByGroupAndStatusAsync(request.GroupId, GroupInvitationStatus.Active, cancellationToken);
         
         if (existingInvitation is not null)
         {
             groupInvitation = existingInvitation.Copy();
-            _groupInvitationRepository.Update(existingInvitation);
+            groupInvitationRepository.Update(existingInvitation);
         }
         else
         {
             groupInvitation = new GroupInvitationModel(request.GroupId);
         }
 
-        await _groupInvitationRepository.AddAsync(groupInvitation, cancellationToken);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await groupInvitationRepository.AddAsync(groupInvitation, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
         
-        var invitationToken = _tokenService.GenerateInvitationToken(groupInvitation.Id);
+        var invitationToken = tokenService.GenerateInvitationToken(groupInvitation.Id);
 
         return new CreateGroupInvitationResponse { Token = invitationToken };
     }

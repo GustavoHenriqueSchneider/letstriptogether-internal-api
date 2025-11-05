@@ -3,18 +3,12 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
 
-public class AdminGetAllUsersHandler : IRequestHandler<AdminGetAllUsersQuery, AdminGetAllUsersResponse>
+public class AdminGetAllUsersHandler(IUserRepository userRepository)
+    : IRequestHandler<AdminGetAllUsersQuery, AdminGetAllUsersResponse>
 {
-    private readonly IUserRepository _userRepository;
-
-    public AdminGetAllUsersHandler(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
-
     public async Task<AdminGetAllUsersResponse> Handle(AdminGetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var (users, hits) = await _userRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
+        var (users, hits) = await userRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
 
         return new AdminGetAllUsersResponse
         {

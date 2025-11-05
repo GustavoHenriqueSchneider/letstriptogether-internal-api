@@ -1,6 +1,5 @@
 using FluentValidation;
 using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 

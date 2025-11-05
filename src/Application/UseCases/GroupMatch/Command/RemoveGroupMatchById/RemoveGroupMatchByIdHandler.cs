@@ -7,37 +7,23 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
 
-public class RemoveGroupMatchByIdHandler : IRequestHandler<RemoveGroupMatchByIdCommand>
+public class RemoveGroupMatchByIdHandler(
+    IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
+    IGroupMatchRepository groupMatchRepository,
+    IGroupRepository groupRepository,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<RemoveGroupMatchByIdCommand>
 {
-    private readonly IGroupMemberDestinationVoteRepository _groupMemberDestinationVoteRepository;
-    private readonly IGroupMatchRepository _groupMatchRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public RemoveGroupMatchByIdHandler(
-        IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
-        IGroupMatchRepository groupMatchRepository,
-        IGroupRepository groupRepository,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _groupMemberDestinationVoteRepository = groupMemberDestinationVoteRepository;
-        _groupMatchRepository = groupMatchRepository;
-        _groupRepository = groupRepository;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(RemoveGroupMatchByIdCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        if (!await _userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             throw new NotFoundException("User not found.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAndMatchesAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAndMatchesAsync(request.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -55,7 +41,7 @@ public class RemoveGroupMatchByIdHandler : IRequestHandler<RemoveGroupMatchByIdC
             throw new NotFoundException("The match was not found for this group.");
         }
         
-        var vote = await _groupMemberDestinationVoteRepository.GetByMemberAndDestinationAsync(
+        var vote = await groupMemberDestinationVoteRepository.GetByMemberAndDestinationAsync(
             groupMember.Id, matchToRemove.DestinationId, cancellationToken);
         
         if (vote is null)
@@ -65,9 +51,9 @@ public class RemoveGroupMatchByIdHandler : IRequestHandler<RemoveGroupMatchByIdC
         
         vote.SetApproved(false);
         
-        _groupMatchRepository.Remove(matchToRemove);
-        _groupMemberDestinationVoteRepository.Update(vote);
+        groupMatchRepository.Remove(matchToRemove);
+        groupMemberDestinationVoteRepository.Update(vote);
         
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

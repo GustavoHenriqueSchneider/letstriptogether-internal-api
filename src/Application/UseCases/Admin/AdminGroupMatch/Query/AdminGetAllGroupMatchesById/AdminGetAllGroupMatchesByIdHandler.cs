@@ -4,22 +4,14 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
 
-public class AdminGetAllGroupMatchesByIdHandler : IRequestHandler<AdminGetAllGroupMatchesByIdQuery, AdminGetAllGroupMatchesByIdResponse>
+public class AdminGetAllGroupMatchesByIdHandler(
+    IGroupMatchRepository groupMatchRepository,
+    IGroupRepository groupRepository)
+    : IRequestHandler<AdminGetAllGroupMatchesByIdQuery, AdminGetAllGroupMatchesByIdResponse>
 {
-    private readonly IGroupMatchRepository _groupMatchRepository;
-    private readonly IGroupRepository _groupRepository;
-
-    public AdminGetAllGroupMatchesByIdHandler(
-        IGroupMatchRepository groupMatchRepository,
-        IGroupRepository groupRepository)
-    {
-        _groupMatchRepository = groupMatchRepository;
-        _groupRepository = groupRepository;
-    }
-
     public async Task<AdminGetAllGroupMatchesByIdResponse> Handle(AdminGetAllGroupMatchesByIdQuery request, CancellationToken cancellationToken)
     {
-        var groupExists = await _groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
+        var groupExists = await groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
 
         if (!groupExists)
         {
@@ -27,7 +19,7 @@ public class AdminGetAllGroupMatchesByIdHandler : IRequestHandler<AdminGetAllGro
         }
 
         var (groupMatches, hits) = 
-            await _groupMatchRepository.GetByGroupIdAsync(request.GroupId, request.PageNumber, request.PageSize, cancellationToken);
+            await groupMatchRepository.GetByGroupIdAsync(request.GroupId, request.PageNumber, request.PageSize, cancellationToken);
 
         return new AdminGetAllGroupMatchesByIdResponse
         {

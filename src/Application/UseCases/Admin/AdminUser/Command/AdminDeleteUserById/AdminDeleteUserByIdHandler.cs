@@ -7,25 +7,15 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
 
-public class AdminDeleteUserByIdHandler : IRequestHandler<AdminDeleteUserByIdCommand>
+public class AdminDeleteUserByIdHandler(
+    IRedisService redisService,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<AdminDeleteUserByIdCommand>
 {
-    private readonly IRedisService _redisService;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public AdminDeleteUserByIdHandler(
-        IRedisService redisService,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _redisService = redisService;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(AdminDeleteUserByIdCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -33,10 +23,10 @@ public class AdminDeleteUserByIdHandler : IRequestHandler<AdminDeleteUserByIdCom
         }
 
         var key = KeyHelper.UserRefreshToken(user.Id);
-        await _redisService.DeleteAsync(key);
+        await redisService.DeleteAsync(key);
 
         // TODO: parou de funcionar
-        _userRepository.Remove(user);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        userRepository.Remove(user);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

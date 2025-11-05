@@ -8,25 +8,15 @@ using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.DeleteCurrentUser;
 
-public class DeleteCurrentUserHandler : IRequestHandler<DeleteCurrentUserCommand>
+public class DeleteCurrentUserHandler(
+    IRedisService redisService,
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository)
+    : IRequestHandler<DeleteCurrentUserCommand>
 {
-    private readonly IRedisService _redisService;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
-
-    public DeleteCurrentUserHandler(
-        IRedisService redisService,
-        IUnitOfWork unitOfWork,
-        IUserRepository userRepository)
-    {
-        _redisService = redisService;
-        _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(DeleteCurrentUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -34,10 +24,10 @@ public class DeleteCurrentUserHandler : IRequestHandler<DeleteCurrentUserCommand
         }
 
         // TODO: parou de funcionar
-        _userRepository.Remove(user);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        userRepository.Remove(user);
+        await unitOfWork.SaveAsync(cancellationToken);
 
         var key = KeyHelper.UserRefreshToken(user.Id);
-        await _redisService.DeleteAsync(key);
+        await redisService.DeleteAsync(key);
     }
 }

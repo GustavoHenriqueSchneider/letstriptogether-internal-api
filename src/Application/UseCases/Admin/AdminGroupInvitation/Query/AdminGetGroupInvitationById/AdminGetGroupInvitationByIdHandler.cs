@@ -4,29 +4,21 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
 
-public class AdminGetGroupInvitationByIdHandler : IRequestHandler<AdminGetGroupInvitationByIdQuery, AdminGetGroupInvitationByIdResponse>
+public class AdminGetGroupInvitationByIdHandler(
+    IGroupInvitationRepository groupInvitationRepository,
+    IGroupRepository groupRepository)
+    : IRequestHandler<AdminGetGroupInvitationByIdQuery, AdminGetGroupInvitationByIdResponse>
 {
-    private readonly IGroupInvitationRepository _groupInvitationRepository;
-    private readonly IGroupRepository _groupRepository;
-
-    public AdminGetGroupInvitationByIdHandler(
-        IGroupInvitationRepository groupInvitationRepository,
-        IGroupRepository groupRepository)
-    {
-        _groupInvitationRepository = groupInvitationRepository;
-        _groupRepository = groupRepository;
-    }
-
     public async Task<AdminGetGroupInvitationByIdResponse> Handle(AdminGetGroupInvitationByIdQuery request, CancellationToken cancellationToken)
     {
-        var groupExists = await _groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
+        var groupExists = await groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
 
         if (!groupExists)
         {
             throw new NotFoundException("Group not found.");
         }
 
-        var invitation = await _groupInvitationRepository.GetByIdAsync(request.InvitationId, cancellationToken);
+        var invitation = await groupInvitationRepository.GetByIdAsync(request.InvitationId, cancellationToken);
 
         if (invitation is null)
         {

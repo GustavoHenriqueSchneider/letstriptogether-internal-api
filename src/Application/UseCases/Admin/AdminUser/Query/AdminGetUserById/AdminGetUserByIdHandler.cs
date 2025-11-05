@@ -5,18 +5,12 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
 
-public class AdminGetUserByIdHandler : IRequestHandler<AdminGetUserByIdQuery, AdminGetUserByIdResponse>
+public class AdminGetUserByIdHandler(IUserRepository userRepository)
+    : IRequestHandler<AdminGetUserByIdQuery, AdminGetUserByIdResponse>
 {
-    private readonly IUserRepository _userRepository;
-
-    public AdminGetUserByIdHandler(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
-
     public async Task<AdminGetUserByIdResponse> Handle(AdminGetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdWithPreferencesAsync(request.UserId, cancellationToken);
+        var user = await userRepository.GetByIdWithPreferencesAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {

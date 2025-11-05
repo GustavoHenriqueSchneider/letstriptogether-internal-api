@@ -7,31 +7,21 @@ using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 
-public class GetNotVotedDestinationsByMemberOnGroupHandler : IRequestHandler<GetNotVotedDestinationsByMemberOnGroupQuery, GetNotVotedDestinationsByMemberOnGroupResponse>
+public class GetNotVotedDestinationsByMemberOnGroupHandler(
+    IDestinationRepository destinationRepository,
+    IGroupRepository groupRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<GetNotVotedDestinationsByMemberOnGroupQuery, GetNotVotedDestinationsByMemberOnGroupResponse>
 {
-    private readonly IDestinationRepository _destinationRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUserRepository _userRepository;
-
-    public GetNotVotedDestinationsByMemberOnGroupHandler(
-        IDestinationRepository destinationRepository,
-        IGroupRepository groupRepository,
-        IUserRepository userRepository)
-    {
-        _destinationRepository = destinationRepository;
-        _groupRepository = groupRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task<GetNotVotedDestinationsByMemberOnGroupResponse> Handle(GetNotVotedDestinationsByMemberOnGroupQuery request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        if (!await _userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
+        if (!await userRepository.ExistsByIdAsync(currentUserId, cancellationToken))
         {
             throw new NotFoundException("User not found.");
         }
         
-        var group = await _groupRepository.GetGroupWithMembersPreferencesAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(request.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -45,7 +35,7 @@ public class GetNotVotedDestinationsByMemberOnGroupHandler : IRequestHandler<Get
         
         var groupPreferences = group.Preferences.ToList();
         
-        var (destinations, hits) = await _destinationRepository.GetNotVotedByUserInGroupAsync(
+        var (destinations, hits) = await destinationRepository.GetNotVotedByUserInGroupAsync(
             currentUserId, request.GroupId, groupPreferences, request.PageNumber, request.PageSize, cancellationToken);
 
         return new GetNotVotedDestinationsByMemberOnGroupResponse

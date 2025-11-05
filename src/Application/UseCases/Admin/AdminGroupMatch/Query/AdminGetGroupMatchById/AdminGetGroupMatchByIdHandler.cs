@@ -4,18 +4,12 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 
-public class AdminGetGroupMatchByIdHandler : IRequestHandler<AdminGetGroupMatchByIdQuery, AdminGetGroupMatchByIdResponse>
+public class AdminGetGroupMatchByIdHandler(IGroupRepository groupRepository)
+    : IRequestHandler<AdminGetGroupMatchByIdQuery, AdminGetGroupMatchByIdResponse>
 {
-    private readonly IGroupRepository _groupRepository;
-
-    public AdminGetGroupMatchByIdHandler(IGroupRepository groupRepository)
-    {
-        _groupRepository = groupRepository;
-    }
-
     public async Task<AdminGetGroupMatchByIdResponse> Handle(AdminGetGroupMatchByIdQuery request, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.GetGroupWithMatchesAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMatchesAsync(request.GroupId, cancellationToken);
 
         if (group is null)
         {

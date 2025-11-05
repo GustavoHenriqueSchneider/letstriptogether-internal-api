@@ -5,28 +5,16 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 
-public class AdminRemoveGroupMemberByIdHandler : IRequestHandler<AdminRemoveGroupMemberByIdCommand>
+public class AdminRemoveGroupMemberByIdHandler(
+    IGroupMemberRepository groupMemberRepository,
+    IGroupPreferenceRepository groupPreferenceRepository,
+    IGroupRepository groupRepository,
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<AdminRemoveGroupMemberByIdCommand>
 {
-    private readonly IGroupMemberRepository _groupMemberRepository;
-    private readonly IGroupPreferenceRepository _groupPreferenceRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public AdminRemoveGroupMemberByIdHandler(
-        IGroupMemberRepository groupMemberRepository,
-        IGroupPreferenceRepository groupPreferenceRepository,
-        IGroupRepository groupRepository,
-        IUnitOfWork unitOfWork)
-    {
-        _groupMemberRepository = groupMemberRepository;
-        _groupPreferenceRepository = groupPreferenceRepository;
-        _groupRepository = groupRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task Handle(AdminRemoveGroupMemberByIdCommand request, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.GetGroupWithMembersPreferencesAsync(request.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersPreferencesAsync(request.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -45,10 +33,10 @@ public class AdminRemoveGroupMemberByIdHandler : IRequestHandler<AdminRemoveGrou
 
         group.RemoveMember(userToRemove);
         
-        _groupRepository.Update(group);
-        _groupMemberRepository.Remove(userToRemove);
-        _groupPreferenceRepository.Update(group.Preferences);
+        groupRepository.Update(group);
+        groupMemberRepository.Remove(userToRemove);
+        groupPreferenceRepository.Update(group.Preferences);
         
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

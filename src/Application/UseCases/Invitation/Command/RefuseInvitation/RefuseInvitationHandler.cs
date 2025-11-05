@@ -9,35 +9,19 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.RefuseInvitation;
 
-public class RefuseInvitationHandler : IRequestHandler<RefuseInvitationCommand>
+public class RefuseInvitationHandler(
+    IGroupInvitationRepository groupInvitationRepository,
+    IGroupRepository groupRepository,
+    ITokenService tokenService,
+    IUnitOfWork unitOfWork,
+    IUserGroupInvitationRepository userGroupInvitationRepository,
+    IUserRepository userRepository)
+    : IRequestHandler<RefuseInvitationCommand>
 {
-    private readonly IGroupInvitationRepository _groupInvitationRepository;
-    private readonly IGroupRepository _groupRepository;
-    private readonly ITokenService _tokenService;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserGroupInvitationRepository _userGroupInvitationRepository;
-    private readonly IUserRepository _userRepository;
-
-    public RefuseInvitationHandler(
-        IGroupInvitationRepository groupInvitationRepository,
-        IGroupRepository groupRepository,
-        ITokenService tokenService,
-        IUnitOfWork unitOfWork,
-        IUserGroupInvitationRepository userGroupInvitationRepository,
-        IUserRepository userRepository)
-    {
-        _groupInvitationRepository = groupInvitationRepository;
-        _groupRepository = groupRepository;
-        _tokenService = tokenService;
-        _unitOfWork = unitOfWork;
-        _userGroupInvitationRepository = userGroupInvitationRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(RefuseInvitationCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = request.UserId;
-        var user = await _userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
+        var user = await userRepository.GetByIdWithPreferencesAsync(currentUserId, cancellationToken);
         
         if (user is null)
         {
@@ -49,14 +33,14 @@ public class RefuseInvitationHandler : IRequestHandler<RefuseInvitationCommand>
             throw new BadRequestException("User has not filled any preferences yet.");
         }
 
-        var (isValid, id) = _tokenService.ValidateInvitationToken(request.Token);
+        var (isValid, id) = tokenService.ValidateInvitationToken(request.Token);
 
         if (!isValid)
         {
             throw new UnauthorizedException("Invalid invitation token.");
         }
 
-        var (isExpired, _) = _tokenService.IsTokenExpired(request.Token);
+        var (isExpired, _) = tokenService.IsTokenExpired(request.Token);
 
         if (isExpired)
         {
@@ -68,7 +52,7 @@ public class RefuseInvitationHandler : IRequestHandler<RefuseInvitationCommand>
             throw new NotFoundException("Invitation not found.");
         }
         
-        var groupInvitation = await _groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId, cancellationToken);
+        var groupInvitation = await groupInvitationRepository.GetByIdWithAnsweredByAsync(invitationId, cancellationToken);
         if (groupInvitation is null)
         {
             throw new NotFoundException("Invitation not found.");
@@ -83,8 +67,8 @@ public class RefuseInvitationHandler : IRequestHandler<RefuseInvitationCommand>
         {
             groupInvitation.Expire();
             
-            _groupInvitationRepository.Update(groupInvitation);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            groupInvitationRepository.Update(groupInvitation);
+            await unitOfWork.SaveAsync(cancellationToken);
             
             throw new BadRequestException("Invitation is not active.");
         }
@@ -95,7 +79,7 @@ public class RefuseInvitationHandler : IRequestHandler<RefuseInvitationCommand>
             throw new ConflictException("You have already answered this invitation.");
         }
 
-        var group = await _groupRepository.GetGroupWithMembersAsync(groupInvitation.GroupId, cancellationToken);
+        var group = await groupRepository.GetGroupWithMembersAsync(groupInvitation.GroupId, cancellationToken);
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
@@ -109,7 +93,7 @@ public class RefuseInvitationHandler : IRequestHandler<RefuseInvitationCommand>
         
         var invitationAnswer = groupInvitation.AddAnswer(currentUserId, isAccepted: false);
         
-        await _userGroupInvitationRepository.AddAsync(invitationAnswer, cancellationToken);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await userGroupInvitationRepository.AddAsync(invitationAnswer, cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }
