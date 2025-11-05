@@ -37,14 +37,13 @@ public class AuthController(
     public async Task<IActionResult> ValidateRegisterConfirmationCode(
         [FromBody] ValidateRegisterConfirmationCodeCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new ValidateRegisterConfirmationCodeCommand
+        command = command with
         {
-            Code = command.Code,
             Email = currentUser.GetEmail(),
             Name = currentUser.GetName()
         };
 
-        var response = await mediator.Send(commandWithContext, cancellationToken);
+        var response = await mediator.Send(command, cancellationToken);
         return Ok(response);
     }
 
@@ -97,14 +96,13 @@ public class AuthController(
     [Authorize(Policy = Policies.ResetPassword)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new ResetPasswordCommand
+        command = command with
         {
-            Password = command.Password,
             UserId = currentUser.GetId(),
             BearerToken = httpContextExtensions.GetBearerToken() ?? string.Empty
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return NoContent();
     }
 }

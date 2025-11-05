@@ -2,7 +2,7 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.UpdateGroupById;
 
-public class UpdateGroupByIdCommand : IRequest
+public record UpdateGroupByIdCommand : IRequest
 {
     public Guid GroupId { get; init; }
     public Guid UserId { get; init; }

@@ -35,13 +35,12 @@ public class UserController(
     public async Task<IActionResult> UpdateCurrentUser(
         [FromBody] UpdateCurrentUserCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new UpdateCurrentUserCommand
+        command = command with
         {
-            UserId = currentUser.GetId(),
-            Name = command.Name ?? string.Empty
+            UserId = currentUser.GetId()
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
@@ -73,17 +72,12 @@ public class UserController(
     public async Task<IActionResult> SetCurrentUserPreferences(
         [FromBody] SetCurrentUserPreferencesCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new SetCurrentUserPreferencesCommand
+        command = command with
         {
-            UserId = currentUser.GetId(),
-            LikesCommercial = command.LikesCommercial,
-            Food = command.Food,
-            Culture = command.Culture,
-            Entertainment = command.Entertainment,
-            PlaceTypes = command.PlaceTypes
+            UserId = currentUser.GetId()
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return NoContent();
     }
 }

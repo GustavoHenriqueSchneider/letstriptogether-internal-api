@@ -2,7 +2,7 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
-public class AdminSetUserPreferencesByUserIdCommand : IRequest
+public record AdminSetUserPreferencesByUserIdCommand : IRequest
 {
     public Guid UserId { get; init; }
     public bool LikesCommercial { get; init; }

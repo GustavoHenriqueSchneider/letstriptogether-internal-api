@@ -19,26 +19,24 @@ public class InvitationController(
     [HttpPost("accept")]
     public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new AcceptInvitationCommand
+        command = command with
         {
-            Token = command.Token,
             UserId = currentUser.GetId()
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return Ok();
     }
 
     [HttpPost("refuse")]
     public async Task<IActionResult> RefuseInvitation([FromBody] RefuseInvitationCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new RefuseInvitationCommand
+        command = command with
         {
-            Token = command.Token,
             UserId = currentUser.GetId()
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return Ok();
     }
 }

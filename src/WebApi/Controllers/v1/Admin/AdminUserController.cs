@@ -56,13 +56,12 @@ public class AdminUserController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid userId, 
         [FromBody] AdminUpdateUserByIdCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new AdminUpdateUserByIdCommand
+        command = command with
         {
-            UserId = userId,
-            Name = command.Name
+            UserId = userId
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
@@ -94,17 +93,12 @@ public class AdminUserController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> AdminSetUserPreferencesByUserId([FromRoute] Guid userId, 
         [FromBody] AdminSetUserPreferencesByUserIdCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new AdminSetUserPreferencesByUserIdCommand
+        command = command with
         {
-            UserId = userId,
-            LikesCommercial = command.LikesCommercial,
-            Food = command.Food,
-            Culture = command.Culture,
-            Entertainment = command.Entertainment,
-            PlaceTypes = command.PlaceTypes
+            UserId = userId
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return NoContent();
     }
 }

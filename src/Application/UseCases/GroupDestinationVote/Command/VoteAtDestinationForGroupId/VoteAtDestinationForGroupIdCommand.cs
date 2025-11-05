@@ -2,7 +2,7 @@ using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
 
-public class VoteAtDestinationForGroupIdCommand : IRequest<VoteAtDestinationForGroupIdResponse>
+public record VoteAtDestinationForGroupIdCommand : IRequest<VoteAtDestinationForGroupIdResponse>
 {
     public Guid GroupId { get; init; }
     public Guid DestinationId { get; init; }

@@ -22,15 +22,13 @@ public class GroupDestinationVoteController(
     public async Task<IActionResult> VoteAtDestinationForGroupId([FromRoute] Guid groupId,
         [FromBody] VoteAtDestinationForGroupIdCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new VoteAtDestinationForGroupIdCommand
+        command = command with
         {
             GroupId = groupId,
-            DestinationId = command.DestinationId,
-            IsApproved = command.IsApproved,
             UserId = currentUser.GetId()
         };
 
-        var response = await mediator.Send(commandWithContext, cancellationToken);
+        var response = await mediator.Send(command, cancellationToken);
         return Ok(response);
     }
 
@@ -38,15 +36,14 @@ public class GroupDestinationVoteController(
     public async Task<IActionResult> UpdateDestinationVoteById([FromRoute] Guid groupId, 
         [FromRoute] Guid destinationVoteId, [FromBody] UpdateDestinationVoteByIdCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new UpdateDestinationVoteByIdCommand
+        command = command with
         {
             GroupId = groupId,
             DestinationVoteId = destinationVoteId,
-            IsApproved = command.IsApproved,
             UserId = currentUser.GetId()
         };
 
-        await mediator.Send(commandWithContext, cancellationToken);
+        await mediator.Send(command, cancellationToken);
         return NoContent();
     }
 

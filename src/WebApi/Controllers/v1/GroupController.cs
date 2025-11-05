@@ -24,14 +24,12 @@ public class GroupController(
     [HttpPost]
     public async Task<IActionResult> CreateGroup([FromBody] CreateGroupCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new CreateGroupCommand
+        command = command with
         {
-            UserId = currentUser.GetId(),
-            Name = command.Name,
-            TripExpectedDate = command.TripExpectedDate
+            UserId = currentUser.GetId()
         };
 
-        var response = await mediator.Send(commandWithContext, cancellationToken);
+        var response = await mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(CreateGroup), response);
     }
 
@@ -67,12 +65,10 @@ public class GroupController(
     public async Task<IActionResult> UpdateGroupById([FromRoute] Guid groupId, 
         [FromBody] UpdateGroupByIdCommand command, CancellationToken cancellationToken)
     {
-        var commandWithContext = new UpdateGroupByIdCommand
+        command = command with
         {
             GroupId = groupId,
-            UserId = currentUser.GetId(),
-            Name = command.Name,
-            TripExpectedDate = command.TripExpectedDate
+            UserId = currentUser.GetId()
         };
 
         await mediator.Send(command, cancellationToken);
