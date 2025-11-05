@@ -53,8 +53,5 @@ public class AdminAnonymizeUserByIdHandler : IRequestHandler<AdminAnonymizeUserB
 
         var key = KeyHelper.UserRefreshToken(user.Id);
         await _redisService.DeleteAsync(key);
-
-        // TODO: registrar log de auditoria da anonimiza??o do usu?rio
-        // TODO: criar entrada na tabela DataDeletionAudit com motivo, timestamp e dados removidos
     }
 }
