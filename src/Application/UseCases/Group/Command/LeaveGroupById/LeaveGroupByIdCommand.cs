@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
@@ -5,5 +6,5 @@ namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveG
 public class LeaveGroupByIdCommand : IRequest
 {
     public Guid GroupId { get; init; }
-    public Guid UserId { get; init; }
+    [JsonIgnore] public Guid UserId { get; init; }
 }

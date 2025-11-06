@@ -100,10 +100,22 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public void Remove(T entity)
     {
+        var entry = _dbSet.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            var trackedEntity = _dbSet.Find(entity.Id);
+            if (trackedEntity != null)
+            {
+                _dbSet.Remove(trackedEntity);
+                return;
+            }
+        }
+        
         _dbSet.Remove(entity);
     }
+    
     public void RemoveRange(IEnumerable<T> entityList)
     {
-        _dbSet.RemoveRange(entityList);
+        entityList.ToList().ForEach(Remove);
     }
 }

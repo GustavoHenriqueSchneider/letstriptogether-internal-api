@@ -51,6 +51,12 @@ public class AuthController(
     [Authorize(Policy = Policies.RegisterSetPassword)]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken cancellationToken)
     {
+        command = command with
+        {
+            Email = currentUser.GetEmail(),
+            Name = currentUser.GetName()
+        };
+        
         var response = await mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(Register), response);
     }

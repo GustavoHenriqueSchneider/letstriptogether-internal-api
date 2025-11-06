@@ -19,3 +19,8 @@ para atualizar migrations do ef no container
 ``` powershell
 dotnet ef database update --project .\src\Infrastructure\ --startup-project .\src\WebApi\
 ```
+
+para rodar todos testes
+```
+dotnet test tests/Application.UnitTests/Application.UnitTests.csproj tests/Infrastructure.UnitTests/Infrastructure.UnitTests.csproj tests/WebApi.UnitTests/WebApi.UnitTests.csproj --verbosity normal
+```
