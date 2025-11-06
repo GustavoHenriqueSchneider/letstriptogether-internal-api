@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 

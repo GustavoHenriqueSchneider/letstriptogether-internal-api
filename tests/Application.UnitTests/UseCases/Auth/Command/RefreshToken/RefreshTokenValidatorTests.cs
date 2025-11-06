@@ -16,12 +16,12 @@ public class RefreshTokenValidatorTests
     }
 
     [Test]
-    public void Validate_WithValidToken_ShouldReturnValid()
+    public void Validate_WithValidCommand_ShouldReturnValid()
     {
         // Arrange
         var command = new RefreshTokenCommand
         {
-            RefreshToken = "valid-refresh-token"
+            RefreshToken = "valid-token"
         };
 
         // Act

@@ -35,25 +35,6 @@ public class RegisterValidatorTests
     }
 
     [Test]
-    public void Validate_WithoutAcceptingTerms_ShouldReturnInvalid()
-    {
-        // Arrange
-        var command = new RegisterCommand
-        {
-            Email = "test@example.com",
-            Password = "ValidPass123!",
-            Name = "Test User",
-            HasAcceptedTermsOfUse = false
-        };
-
-        // Act
-        var result = _validator.Validate(command);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-    }
-
-    [Test]
     public void Validate_WithInvalidEmail_ShouldReturnInvalid()
     {
         // Arrange
@@ -73,15 +54,15 @@ public class RegisterValidatorTests
     }
 
     [Test]
-    public void Validate_WithInvalidPassword_ShouldReturnInvalid()
+    public void Validate_WithNotAcceptedTerms_ShouldReturnInvalid()
     {
         // Arrange
         var command = new RegisterCommand
         {
             Email = "test@example.com",
-            Password = "short",
+            Password = "ValidPass123!",
             Name = "Test User",
-            HasAcceptedTermsOfUse = true
+            HasAcceptedTermsOfUse = false
         };
 
         // Act

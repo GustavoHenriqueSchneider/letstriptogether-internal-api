@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Http;

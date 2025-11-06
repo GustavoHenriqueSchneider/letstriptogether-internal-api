@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using NUnit.Framework;

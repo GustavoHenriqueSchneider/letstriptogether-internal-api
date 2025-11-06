@@ -71,7 +71,7 @@ public class LoginHandlerTests : TestBase
         var password = TestDataHelper.GenerateValidPassword();
         var passwordHash = _passwordHashService.HashPassword(password);
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new User(userName, email, passwordHash, role);
+        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -119,7 +119,7 @@ public class LoginHandlerTests : TestBase
         var correctPassword = TestDataHelper.GenerateValidPassword();
         var passwordHash = _passwordHashService.HashPassword(correctPassword);
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new User(userName, email, passwordHash, role);
+        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 

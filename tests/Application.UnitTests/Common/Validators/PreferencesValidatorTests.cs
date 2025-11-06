@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Validators;
 using NUnit.Framework;
