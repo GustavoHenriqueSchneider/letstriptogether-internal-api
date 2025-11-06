@@ -53,6 +53,48 @@ public class GroupInvitationTests : TestBase
     }
 
     [Test]
+    public void Cancel_WithActiveStatus_ShouldSetStatusToCancelled()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var invitation = new GroupInvitation(groupId);
+
+        // Act
+        invitation.Cancel();
+
+        // Assert
+        invitation.Status.Should().Be(GroupInvitationStatus.Cancelled);
+    }
+
+    [Test]
+    public void Cancel_WithCancelledStatus_ShouldThrowException()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var invitation = new GroupInvitation(groupId);
+        invitation.Cancel();
+
+        // Act & Assert
+        var act = () => invitation.Cancel();
+        act.Should().Throw<DomainBusinessRuleException>()
+            .WithMessage("It is not possible to cancel a already cancelled group invitation.");
+    }
+
+    [Test]
+    public void Cancel_WithExpiredStatus_ShouldThrowException()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var invitation = new GroupInvitation(groupId);
+        invitation.Expire();
+
+        // Act & Assert
+        var act = () => invitation.Cancel();
+        act.Should().Throw<DomainBusinessRuleException>()
+            .WithMessage("It is not possible to cancel a expired group invitation.");
+    }
+
+    [Test]
     public void Copy_WithActiveInvitation_ShouldCancelOriginalAndCreateNew()
     {
         // Arrange

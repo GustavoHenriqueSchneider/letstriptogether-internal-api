@@ -6,6 +6,7 @@ using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToke
 using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Register;
 using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RequestResetPassword;
 using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ResetPassword;
+using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
@@ -177,6 +178,32 @@ public class AuthControllerTests
         // Assert
         result.Should().BeOfType<NoContentResult>();
         _mediatorMock.Verify(x => x.Send(It.Is<ResetPasswordCommand>(c => c.UserId == userId && c.BearerToken == bearerToken), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task SendRegisterConfirmationEmail_WithValidCommand_ShouldReturnOk()
+    {
+        // Arrange
+        var command = new SendRegisterConfirmationEmailCommand
+        {
+            Email = "test@example.com",
+            Name = "Test User"
+        };
+        
+        var response = new SendRegisterConfirmationEmailResponse
+        {
+            Token = "confirmation-token"
+        };
+
+        _mediatorMock.Setup(x => x.Send(command, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+
+        // Act
+        var result = await _controller.SendRegisterConfirmationEmail(command, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        _mediatorMock.Verify(x => x.Send(command, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

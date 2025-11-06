@@ -38,7 +38,7 @@ public class Group : TrackableEntity
 
     private bool HasMember(GroupMember member)
     {
-        return _members.Contains(member);
+        return _members.Any(x => x.UserId == member.UserId);
     }
 
     public GroupMember AddMember(User user, bool isOwner)
@@ -84,7 +84,7 @@ public class Group : TrackableEntity
     
     public bool HasMatch(GroupMatch match)
     {
-        return _matches.Contains(match);
+        return _matches.Any(x => x.DestinationId == match.DestinationId);
     }
 
     public GroupMatch CreateMatch(Guid destinationId)

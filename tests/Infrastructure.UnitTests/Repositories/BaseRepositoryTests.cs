@@ -114,7 +114,7 @@ public class BaseRepositoryTests : TestBase
     public async Task Update_WithEntity_ShouldUpdateInDatabase()
     {
         // Arrange
-        var role = new Role { Name = $"up{Guid.NewGuid().ToString()[..12]}" };
+        var role = new Role { Name = $"up{Guid.NewGuid().ToString()[..11]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -126,6 +126,75 @@ public class BaseRepositoryTests : TestBase
         // Assert
         var updated = await _repository.GetByIdAsync(role.Id, CancellationToken.None);
         updated.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task Update_WithDetachedEntity_ShouldAttachAndUpdate()
+    {
+        // Arrange
+        var role = new Role { Name = $"det{Guid.NewGuid().ToString()[..8]}" };
+        await _repository.AddAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        // Detach entity
+        DbContext.Entry(role).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+
+        // Modify entity
+        var newName = $"upd{Guid.NewGuid().ToString()[..8]}";
+        role.GetType().GetProperty("Name")!.SetValue(role, newName);
+
+        // Act
+        _repository.Update(role);
+        await DbContext.SaveChangesAsync();
+
+        // Assert
+        var updated = await _repository.GetByIdAsync(role.Id, CancellationToken.None);
+        updated.Should().NotBeNull();
+        updated!.Name.Should().Be(newName);
+    }
+
+    [Test]
+    public async Task Update_WithDetachedEntityFoundInContext_ShouldUpdateTrackedEntity()
+    {
+        // Arrange
+        var role = new Role { Name = $"trac{Guid.NewGuid().ToString()[..8]}" };
+        await _repository.AddAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        // Create a new instance with same ID (simulating detached entity)
+        var detachedRole = new Role();
+        typeof(Role).GetProperty("Id")!.SetValue(detachedRole, role.Id);
+        typeof(Role).GetProperty("Name")!.SetValue(detachedRole, $"newName{Guid.NewGuid().ToString()[..8]}");
+
+        // Act
+        _repository.Update(detachedRole);
+        await DbContext.SaveChangesAsync();
+
+        // Assert
+        var updated = await _repository.GetByIdAsync(role.Id, CancellationToken.None);
+        updated.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task Update_WithTrackedEntity_ShouldUpdateState()
+    {
+        // Arrange
+        var role = new Role { Name = $"tracked{Guid.NewGuid().ToString()[..8]}" };
+        await _repository.AddAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        // Entity is already tracked
+        var newName = $"mod{Guid.NewGuid().ToString()[..8]}";
+        role.GetType().GetProperty("Name")!.SetValue(role, newName);
+
+        // Act
+        _repository.Update(role);
+        await DbContext.SaveChangesAsync();
+
+        // Assert
+        var updated = await _repository.GetByIdAsync(role.Id, CancellationToken.None);
+        updated.Should().NotBeNull();
+        updated!.Name.Should().Be(newName);
     }
 
     [Test]
