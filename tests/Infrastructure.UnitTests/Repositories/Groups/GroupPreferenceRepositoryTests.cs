@@ -40,10 +40,15 @@ public class GroupPreferenceRepositoryTests : TestBase
     public async Task GetByGroupIdAsync_WithExistingGroup_ShouldReturnPreferences()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());

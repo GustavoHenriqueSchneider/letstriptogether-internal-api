@@ -56,7 +56,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();
@@ -83,9 +83,10 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.Food.Should().HaveCount(command.Food.Count);
-        updatedUser.Preferences!.Culture.Should().HaveCount(command.Culture.Count);
-        updatedUser.Preferences!.Entertainment.Should().HaveCount(command.Entertainment.Count);
-        updatedUser.Preferences!.PlaceTypes.Should().HaveCount(command.PlaceTypes.Count);
+        updatedUser.Preferences!.LikesCommercial.Should().Be(command.LikesCommercial);
+        updatedUser.Preferences!.Food.Should().BeEquivalentTo(command.Food);
+        updatedUser.Preferences!.Culture.Should().BeEquivalentTo(command.Culture);
+        updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(command.Entertainment);
+        updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(command.PlaceTypes);
     }
 }

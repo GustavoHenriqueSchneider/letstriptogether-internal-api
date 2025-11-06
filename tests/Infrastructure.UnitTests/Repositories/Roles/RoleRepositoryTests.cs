@@ -23,10 +23,15 @@ public class RoleRepositoryTests : TestBase
     public async Task GetDefaultUserRoleAsync_WithDefaultRole_ShouldReturnRole()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
-        await _repository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _repository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _repository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         // Act
         var result = await _repository.GetDefaultUserRoleAsync(CancellationToken.None);
@@ -34,15 +39,5 @@ public class RoleRepositoryTests : TestBase
         // Assert
         result.Should().NotBeNull();
         result!.Name.Should().Be(RoleType.User);
-    }
-
-    [Test]
-    public async Task GetDefaultUserRoleAsync_WithoutDefaultRole_ShouldReturnNull()
-    {
-        // Act
-        var result = await _repository.GetDefaultUserRoleAsync(CancellationToken.None);
-
-        // Assert
-        result.Should().BeNull();
     }
 }

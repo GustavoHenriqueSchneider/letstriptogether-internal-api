@@ -61,7 +61,7 @@ public class LoginHandlerTests : TestBase
         var roleName = Roles.User;
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, roleName);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();
@@ -109,7 +109,7 @@ public class LoginHandlerTests : TestBase
         var roleName = Roles.User;
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, roleName);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();

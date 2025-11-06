@@ -57,7 +57,7 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();
@@ -84,7 +84,11 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.Food.Should().HaveCount(2);
+        updatedUser.Preferences!.LikesCommercial.Should().Be(command.LikesCommercial);
+        updatedUser.Preferences!.Food.Should().BeEquivalentTo(command.Food);
+        updatedUser.Preferences!.Culture.Should().BeEquivalentTo(command.Culture);
+        updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(command.Entertainment);
+        updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(command.PlaceTypes);
     }
 
     [Test]
@@ -93,7 +97,7 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();
@@ -128,10 +132,10 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
         {
             UserId = user.Id,
             LikesCommercial = false,
-            Food = new List<string> { "French", "Japanese" },
-            Culture = new List<string> { "Theaters" },
-            Entertainment = new List<string> { "Concerts" },
-            PlaceTypes = new List<string> { "City" }
+            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            Culture = new List<string> { new TripPreference(TripPreference.Culture.Education) },
+            Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Tour) },
+            PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Trail) }
         };
 
         // Act

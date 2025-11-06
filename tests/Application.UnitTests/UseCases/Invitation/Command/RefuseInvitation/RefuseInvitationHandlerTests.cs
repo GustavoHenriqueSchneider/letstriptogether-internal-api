@@ -27,6 +27,7 @@ public class RefuseInvitationHandlerTests : TestBase
     private UserGroupInvitationRepository _userGroupInvitationRepository = null!;
     private UserRepository _userRepository = null!;
     private RoleRepository _roleRepository = null!;
+    private UserPreferenceRepository _userPreferenceRepository = null!;
     private IPasswordHashService _passwordHashService = null!;
 
     [SetUp]
@@ -41,6 +42,7 @@ public class RefuseInvitationHandlerTests : TestBase
         _userGroupInvitationRepository = new UserGroupInvitationRepository(DbContext);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
+        _userPreferenceRepository = new UserPreferenceRepository(DbContext);
         
         var tokenServiceMock = new Mock<ITokenService>();
         tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
@@ -64,7 +66,7 @@ public class RefuseInvitationHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
@@ -82,7 +84,7 @@ public class RefuseInvitationHandlerTests : TestBase
 
         var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(userPrefs);
-        _userRepository.Update(user);
+        await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();

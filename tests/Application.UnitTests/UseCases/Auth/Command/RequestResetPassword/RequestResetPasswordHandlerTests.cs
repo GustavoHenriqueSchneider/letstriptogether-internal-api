@@ -52,8 +52,10 @@ public class RequestResetPasswordHandlerTests : TestBase
         {
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
-            AccessTokenValidityInMinutes = 60,
-            RefreshTokenValidityInMinutes = 1440
+            AccessTokenValidityInMinutes = 10,
+            RefreshTokenValidityInMinutes = 10,
+            InvitationTokenValidityInMinutes = 10,
+            ResetPasswordTokenValidityInMinutes = 10
         };
         
         _tokenService = new TokenService(Microsoft.Extensions.Options.Options.Create(jwtSettings), new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler());
@@ -67,7 +69,7 @@ public class RequestResetPasswordHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();

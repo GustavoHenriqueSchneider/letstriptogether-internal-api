@@ -36,10 +36,15 @@ public class UserPreferenceRepositoryTests : TestBase
     public async Task AddAsync_WithNewPreference_ShouldAddPreference()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
@@ -65,17 +70,26 @@ public class UserPreferenceRepositoryTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.Food.Should().HaveCount(1);
+        updatedUser.Preferences!.LikesCommercial.Should().Be(preferences.LikesCommercial);
+        updatedUser.Preferences!.Food.Should().BeEquivalentTo(preferences.Food);
+        updatedUser.Preferences!.Culture.Should().BeEquivalentTo(preferences.Culture);
+        updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(preferences.Entertainment);
+        updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(preferences.PlaceTypes);
     }
 
     [Test]
     public async Task AddOrUpdateAsync_WithExistingPreference_ShouldUpdatePreference()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
@@ -99,9 +113,9 @@ public class UserPreferenceRepositoryTests : TestBase
         var preferences2 = new UserPreference(
             likesCommercial: false,
             food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
-            culture: new List<string> { "Theaters" },
-            entertainment: new List<string> { "Concerts" },
-            placeTypes: new List<string> { "City" });
+            culture: new List<string> { new TripPreference(TripPreference.Culture.Historical) },
+            entertainment: new List<string> { TripPreference.Entertainment.Park },
+            placeTypes: new List<string> { TripPreference.PlaceType.Rural });
         
         user.SetPreferences(preferences2);
         _userRepository.Update(user);
@@ -115,7 +129,10 @@ public class UserPreferenceRepositoryTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.Food.Should().HaveCount(2);
-        updatedUser.Preferences.LikesCommercial.Should().BeFalse();
+        updatedUser.Preferences!.LikesCommercial.Should().Be(preferences2.LikesCommercial);
+        updatedUser.Preferences!.Food.Should().BeEquivalentTo(preferences2.Food);
+        updatedUser.Preferences!.Culture.Should().BeEquivalentTo(preferences2.Culture);
+        updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(preferences2.Entertainment);
+        updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(preferences2.PlaceTypes);
     }
 }

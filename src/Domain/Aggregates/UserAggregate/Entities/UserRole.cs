@@ -12,10 +12,9 @@ public class UserRole : TrackableEntity
 
     private UserRole() { }
 
-    public UserRole(Guid userId, Role role)
+    public UserRole(Guid userId, Guid roleId)
     {
         UserId = userId;
-        RoleId = role.Id;
-        Role = role;
+        RoleId = roleId;
     }
 }

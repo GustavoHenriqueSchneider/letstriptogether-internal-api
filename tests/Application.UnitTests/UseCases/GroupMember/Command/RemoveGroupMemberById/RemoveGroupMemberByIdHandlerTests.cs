@@ -25,6 +25,7 @@ public class RemoveGroupMemberByIdHandlerTests : TestBase
     private GroupRepository _groupRepository = null!;
     private UserRepository _userRepository = null!;
     private RoleRepository _roleRepository = null!;
+    private UserPreferenceRepository _userPreferenceRepository = null!;
     private IPasswordHashService _passwordHashService = null!;
 
     [SetUp]
@@ -39,6 +40,7 @@ public class RemoveGroupMemberByIdHandlerTests : TestBase
         _groupRepository = new GroupRepository(DbContext);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
+        _userPreferenceRepository = new UserPreferenceRepository(DbContext);
         
         _handler = new RemoveGroupMemberByIdHandler(
             _groupMemberRepository,
@@ -54,7 +56,7 @@ public class RemoveGroupMemberByIdHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
@@ -74,18 +76,20 @@ public class RemoveGroupMemberByIdHandlerTests : TestBase
         var memberPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
         owner.SetPreferences(ownerPrefs);
         member.SetPreferences(memberPrefs);
-        _userRepository.Update(owner);
-        _userRepository.Update(member);
+        await _userPreferenceRepository.AddOrUpdateAsync(owner.Preferences!, CancellationToken.None);
+        await _userPreferenceRepository.AddOrUpdateAsync(member.Preferences!, CancellationToken.None);
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
-        group.AddMember(owner, isOwner: true);
-        group.AddMember(member, isOwner: false);
+        var groupMember1 = group.AddMember(owner, isOwner: true);
+        var groupMember2 = group.AddMember(member, isOwner: false);
         group.UpdatePreferences(ownerPrefs);
         
         await _groupRepository.AddAsync(group, CancellationToken.None);
         var groupPrefs = group.Preferences;
-        await _groupPreferenceRepository.AddAsync(groupPrefs, CancellationToken.None);
+        await _groupPreferenceRepository.AddOrUpdateAsync(groupPrefs, CancellationToken.None);
+        await _groupMemberRepository.AddAsync(groupMember1, CancellationToken.None);
+        await _groupMemberRepository.AddAsync(groupMember2, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var memberToRemove = group.Members.First(m => m.UserId == member.Id);
@@ -112,7 +116,7 @@ public class RemoveGroupMemberByIdHandlerTests : TestBase
         // Arrange
         var role = new Role();
         typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var ownerEmail = TestDataHelper.GenerateRandomEmail();

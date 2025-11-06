@@ -27,10 +27,15 @@ public class UserRepositoryTests : TestBase
     public async Task ExistsByEmailAsync_WithExistingEmail_ShouldReturnTrue()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var userName = TestDataHelper.GenerateRandomName();
@@ -59,30 +64,42 @@ public class UserRepositoryTests : TestBase
     public async Task GetByEmailAsync_WithExistingEmail_ShouldReturnUser()
     {
         // Arrange
-        var role = new Role { Name = "User" };
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
 
-        var user = new User("Test User", "test@example.com", "hash", role);
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
+
+        var randomEmail = $"test{Guid.NewGuid().ToString()[..8]}@example.com";
+        var user = new User("Test User", randomEmail, "hash", role);
         await _repository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         // Act
-        var result = await _repository.GetByEmailAsync("test@example.com", CancellationToken.None);
+        var result = await _repository.GetByEmailAsync(randomEmail, CancellationToken.None);
 
         // Assert
         result.Should().NotBeNull();
-        result!.Email.Should().Be("test@example.com");
+        result!.Email.Should().Be(randomEmail);
     }
 
     [Test]
     public async Task GetUserWithRolesByEmailAsync_WithExistingEmail_ShouldReturnUserWithRoles()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var userName = TestDataHelper.GenerateRandomName();

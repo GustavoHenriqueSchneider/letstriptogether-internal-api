@@ -37,10 +37,15 @@ public class GroupMemberRepositoryTests : TestBase
     public async Task GetAllByGroupIdAsync_WithMembers_ShouldReturnPaginatedResults()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new Group(groupName, DateTime.UtcNow.AddDays(30));
@@ -70,10 +75,15 @@ public class GroupMemberRepositoryTests : TestBase
     public async Task GetAllByUserIdAsync_WithGroups_ShouldReturnMemberships()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());

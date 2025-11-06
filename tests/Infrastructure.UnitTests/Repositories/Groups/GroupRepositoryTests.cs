@@ -31,9 +31,15 @@ public class GroupRepositoryTests : TestBase
     public async Task GetGroupWithMembersAsync_WithGroupId_ShouldReturnGroupWithMembers()
     {
         // Arrange
-        var role = new Role { Name = "User" };
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var user = new User("Test User", "test@example.com", "hash", role);
         await _userRepository.AddAsync(user, CancellationToken.None);
@@ -54,10 +60,15 @@ public class GroupRepositoryTests : TestBase
     public async Task IsGroupMemberByUserIdAsync_WithMember_ShouldReturnTrue()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var userName = TestDataHelper.GenerateRandomName();

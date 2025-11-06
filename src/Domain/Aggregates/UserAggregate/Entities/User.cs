@@ -75,6 +75,6 @@ public class User : TrackableEntity
             return;
         }
 
-        _userRoles.Add(new UserRole(Id, role));
+        _userRoles.Add(new UserRole(Id, role.Id));
     }
 }

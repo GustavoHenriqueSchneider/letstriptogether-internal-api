@@ -13,4 +13,9 @@ public class RoleRepository : BaseRepository<Role>, IRoleRepository
     { 
         return await _dbSet.SingleOrDefaultAsync(r => r.Name == Domain.Security.Roles.User, cancellationToken);
     }
+
+    public async Task<Role?> GetByNameAsync(string roleName, CancellationToken cancellationToken)
+    {
+        return await _dbSet.SingleOrDefaultAsync(x => x.Name.ToLower() == roleName.ToLower(), cancellationToken);
+    }
 }

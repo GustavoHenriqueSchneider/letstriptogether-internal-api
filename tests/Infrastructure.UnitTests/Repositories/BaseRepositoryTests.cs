@@ -38,7 +38,7 @@ public class BaseRepositoryTests : TestBase
     public async Task GetByIdAsync_WithExistingId_ShouldReturnEntity()
     {
         // Arrange
-        var role = new Role { Name = "TestRole" };
+        var role = new Role { Name = $"Role{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -67,7 +67,7 @@ public class BaseRepositoryTests : TestBase
     public async Task ExistsByIdAsync_WithExistingId_ShouldReturnTrue()
     {
         // Arrange
-        var role = new Role { Name = "TestRole" };
+        var role = new Role { Name = $"Role{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -114,12 +114,12 @@ public class BaseRepositoryTests : TestBase
     public async Task Update_WithEntity_ShouldUpdateInDatabase()
     {
         // Arrange
-        var role = new Role { Name = "OriginalName" };
+        var role = new Role { Name = $"Role{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         // Act
-        role.GetType().GetProperty("Name")!.SetValue(role, "UpdatedName");
+        role.GetType().GetProperty("Name")!.SetValue(role, $"2Role{Guid.NewGuid().ToString()[..7]}");
         _repository.Update(role);
         await DbContext.SaveChangesAsync();
 

@@ -33,10 +33,25 @@ public class UserRoleRepositoryTests : TestBase
     public async Task AddAsync_WithValidUserRole_ShouldAdd()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
+        
+        var role2 = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.Admin, CancellationToken.None);
+
+        if (role2 is null)
+        {
+            role2 = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role2, LetsTripTogether.InternalApi.Domain.Security.Roles.Admin);
+            await _roleRepository.AddAsync(role2, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
@@ -44,10 +59,8 @@ public class UserRoleRepositoryTests : TestBase
         var user = new User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
-
-        var userRole = new UserRole(user.Id, role);
-        typeof(UserRole).GetProperty("UserId")!.SetValue(userRole, user.Id);
-        typeof(UserRole).GetProperty("RoleId")!.SetValue(userRole, role.Id);
+        
+        var userRole = new UserRole(user.Id, role2.Id);
 
         // Act
         await _repository.AddAsync(userRole, CancellationToken.None);
@@ -62,10 +75,25 @@ public class UserRoleRepositoryTests : TestBase
     public async Task Remove_WithValidUserRole_ShouldRemove()
     {
         // Arrange
-        var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        await _roleRepository.AddAsync(role, CancellationToken.None);
-        await DbContext.SaveChangesAsync();
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
+        
+        var role2 = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.Admin, CancellationToken.None);
+
+        if (role2 is null)
+        {
+            role2 = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role2, LetsTripTogether.InternalApi.Domain.Security.Roles.Admin);
+            await _roleRepository.AddAsync(role2, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
@@ -74,9 +102,7 @@ public class UserRoleRepositoryTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userRole = new UserRole(user.Id, role);
-        typeof(UserRole).GetProperty("UserId")!.SetValue(userRole, user.Id);
-        typeof(UserRole).GetProperty("RoleId")!.SetValue(userRole, role.Id);
+        var userRole = new UserRole(user.Id, role2.Id);
         await _repository.AddAsync(userRole, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
