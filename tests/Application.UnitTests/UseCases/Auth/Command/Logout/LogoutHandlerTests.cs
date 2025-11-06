@@ -1,4 +1,5 @@
 using Application.UnitTests.Common;
+using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Logout;
 using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
@@ -68,13 +69,13 @@ public class LogoutHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUserId_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUserId_ShouldThrowNotFoundException()
     {
         // Arrange
         var command = new LogoutCommand { UserId = TestDataHelper.GenerateRandomGuid() };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

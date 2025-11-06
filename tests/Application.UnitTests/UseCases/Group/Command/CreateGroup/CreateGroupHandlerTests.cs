@@ -65,16 +65,16 @@ public class CreateGroupHandlerTests : TestBase
 
         var preferences = new UserPreference(
             likesCommercial: true,
-            food: new List<string> { "Italian" },
-            culture: new List<string> { "Museums" },
-            entertainment: new List<string> { "Nightlife" },
-            placeTypes: new List<string> { "Beach" });
+            food: new List<string> { "restaurant" },
+            culture: new List<string> { "museum" },
+            entertainment: new List<string> { "attraction" },
+            placeTypes: new List<string> { "beach" });
         
         user.SetPreferences(preferences);
         _userRepository.Update(user);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var command = new CreateGroupCommand
         {
             UserId = user.Id,
@@ -95,7 +95,7 @@ public class CreateGroupHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUserId_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUserId_ShouldThrowNotFoundException()
     {
         // Arrange
         var command = new CreateGroupCommand
@@ -106,8 +106,8 @@ public class CreateGroupHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 
     [Test]
@@ -134,7 +134,7 @@ public class CreateGroupHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
     }
 }

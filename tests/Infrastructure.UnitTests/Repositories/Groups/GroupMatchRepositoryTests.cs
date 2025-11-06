@@ -69,14 +69,10 @@ public class GroupMatchRepositoryTests : TestBase
             await _destinationRepository.AddAsync(destination, CancellationToken.None);
             await DbContext.SaveChangesAsync();
             
-            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch
-            {
-                GroupId = group.Id,
-                DestinationId = destination.Id
-            };
+            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
             typeof(GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
             typeof(GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
-            await _repository.AddAsync(match, CancellationToken.None);
+            await DbContext.Set<GroupMatch>().AddAsync(match, CancellationToken.None);
         }
         await DbContext.SaveChangesAsync();
 
@@ -168,14 +164,10 @@ public class GroupMatchRepositoryTests : TestBase
             await _destinationRepository.AddAsync(destination, CancellationToken.None);
             await DbContext.SaveChangesAsync();
             
-            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch
-            {
-                GroupId = group.Id,
-                DestinationId = destination.Id
-            };
+            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
             typeof(GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
             typeof(GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
-            await _repository.AddAsync(match, CancellationToken.None);
+            await DbContext.Set<GroupMatch>().AddAsync(match, CancellationToken.None);
         }
         await DbContext.SaveChangesAsync();
 

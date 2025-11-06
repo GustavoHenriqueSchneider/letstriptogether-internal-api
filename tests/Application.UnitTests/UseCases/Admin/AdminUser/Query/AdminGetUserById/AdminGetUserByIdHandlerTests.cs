@@ -75,7 +75,7 @@ public class AdminGetUserByIdHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUser_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUser_ShouldThrowNotFoundException()
     {
         // Arrange
         var query = new AdminGetUserByIdQuery
@@ -84,7 +84,7 @@ public class AdminGetUserByIdHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(query, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

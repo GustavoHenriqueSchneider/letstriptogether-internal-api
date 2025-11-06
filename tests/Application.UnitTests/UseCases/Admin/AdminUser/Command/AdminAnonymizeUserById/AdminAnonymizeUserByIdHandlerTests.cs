@@ -81,6 +81,7 @@ public class AdminAnonymizeUserByIdHandlerTests : TestBase
         // Assert
         var anonymizedUser = await _userRepository.GetByIdAsync(user.Id, CancellationToken.None);
         anonymizedUser.Should().NotBeNull();
-        anonymizedUser!.Email.Should().Contain("anonymized");
+        anonymizedUser!.Email.Should().Contain("anon_");
+        anonymizedUser!.IsAnonymous.Should().BeTrue();
     }
 }

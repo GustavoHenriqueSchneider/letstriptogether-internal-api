@@ -143,7 +143,7 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUser_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUser_ShouldThrowNotFoundException()
     {
         // Arrange
         var command = new SetCurrentUserPreferencesCommand
@@ -157,7 +157,7 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

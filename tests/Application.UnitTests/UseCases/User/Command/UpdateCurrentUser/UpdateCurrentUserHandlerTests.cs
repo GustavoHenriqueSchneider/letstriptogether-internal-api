@@ -67,7 +67,7 @@ public class UpdateCurrentUserHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUserId_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUserId_ShouldThrowNotFoundException()
     {
         // Arrange
         var command = new UpdateCurrentUserCommand
@@ -77,7 +77,7 @@ public class UpdateCurrentUserHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

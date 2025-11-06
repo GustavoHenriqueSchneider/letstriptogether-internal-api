@@ -68,7 +68,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidCode_ShouldThrowBadRequestException()
+    public async Task Handle_WithInvalidCode_ShouldThrowBadRequestException()
     {
         // Arrange
         var email = TestDataHelper.GenerateRandomEmail();
@@ -90,12 +90,12 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
     }
 
     [Test]
-    public void Handle_WithNonExistentCode_ShouldThrowBadRequestException()
+    public async Task Handle_WithNonExistentCode_ShouldThrowBadRequestException()
     {
         // Arrange
         var email = TestDataHelper.GenerateRandomEmail();
@@ -115,7 +115,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
     }
 }

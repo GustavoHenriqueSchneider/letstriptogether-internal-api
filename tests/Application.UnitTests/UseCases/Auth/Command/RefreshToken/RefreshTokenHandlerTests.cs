@@ -86,7 +86,7 @@ public class RefreshTokenHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidRefreshToken_ShouldThrowUnauthorizedException()
+    public async Task Handle_WithInvalidRefreshToken_ShouldThrowUnauthorizedException()
     {
         // Arrange
         var redisServiceMock = new Mock<IRedisService>();
@@ -98,8 +98,8 @@ public class RefreshTokenHandlerTests : TestBase
         var command = new RefreshTokenCommand { RefreshToken = "invalid-token" };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
     }
 
     [Test]
@@ -131,7 +131,7 @@ public class RefreshTokenHandlerTests : TestBase
         var command = new RefreshTokenCommand { RefreshToken = refreshToken };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
     }
 }

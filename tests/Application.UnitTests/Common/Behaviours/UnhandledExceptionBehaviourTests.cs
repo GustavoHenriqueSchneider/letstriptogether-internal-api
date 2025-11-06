@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Behaviours;
 using LetsTripTogether.InternalApi.Application.Common.Exceptions;
@@ -42,7 +39,7 @@ public class UnhandledExceptionBehaviourTests
     }
 
     [Test]
-    public void Handle_WithBaseException_ShouldLogWarningAndRethrow()
+    public async Task Handle_WithBaseException_ShouldLogWarningAndRethrow()
     {
         // Arrange
         var loggerMock = new Mock<ILogger<UnhandledExceptionBehaviour<TestRequest, TestResponse>>>();
@@ -52,10 +49,9 @@ public class UnhandledExceptionBehaviourTests
         RequestHandlerDelegate<TestResponse> next = () => throw exception;
 
         // Act & Assert
-        var thrownException = Assert.ThrowsAsync<BadRequestException>(async () =>
-            await behaviour.Handle(request, next, CancellationToken.None));
-
-        thrownException.Should().Be(exception);
+        Func<Task<TestResponse>> act = async () => await behaviour.Handle(request, next, CancellationToken.None);
+        var thrownException = await act.Should().ThrowAsync<BadRequestException>();
+        thrownException.Which.Should().Be(exception);
         loggerMock.Verify(
             x => x.Log(
                 LogLevel.Warning,
@@ -67,7 +63,7 @@ public class UnhandledExceptionBehaviourTests
     }
 
     [Test]
-    public void Handle_WithDomainBusinessRuleException_ShouldLogWarningAndRethrow()
+    public async Task Handle_WithDomainBusinessRuleException_ShouldLogWarningAndRethrow()
     {
         // Arrange
         var loggerMock = new Mock<ILogger<UnhandledExceptionBehaviour<TestRequest, TestResponse>>>();
@@ -77,14 +73,13 @@ public class UnhandledExceptionBehaviourTests
         RequestHandlerDelegate<TestResponse> next = () => throw exception;
 
         // Act & Assert
-        var thrownException = Assert.ThrowsAsync<DomainBusinessRuleException>(async () =>
-            await behaviour.Handle(request, next, CancellationToken.None));
-
-        thrownException.Should().Be(exception);
+        Func<Task<TestResponse>> act = async () => await behaviour.Handle(request, next, CancellationToken.None);
+        var thrownException = await act.Should().ThrowAsync<DomainBusinessRuleException>();
+        thrownException.Which.Should().Be(exception);
     }
 
     [Test]
-    public void Handle_WithGenericException_ShouldLogErrorAndRethrow()
+    public async Task Handle_WithGenericException_ShouldLogErrorAndRethrow()
     {
         // Arrange
         var loggerMock = new Mock<ILogger<UnhandledExceptionBehaviour<TestRequest, TestResponse>>>();
@@ -94,10 +89,9 @@ public class UnhandledExceptionBehaviourTests
         RequestHandlerDelegate<TestResponse> next = () => throw exception;
 
         // Act & Assert
-        var thrownException = Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await behaviour.Handle(request, next, CancellationToken.None));
-
-        thrownException.Should().Be(exception);
+        Func<Task<TestResponse>> act = async () => await behaviour.Handle(request, next, CancellationToken.None);
+        var thrownException = await act.Should().ThrowAsync<InvalidOperationException>();
+        thrownException.Which.Should().Be(exception);
         loggerMock.Verify(
             x => x.Log(
                 LogLevel.Error,

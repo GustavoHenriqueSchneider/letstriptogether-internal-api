@@ -1,5 +1,3 @@
-using System;
-
 namespace Application.UnitTests.Common;
 
 public static class TestDataHelper
@@ -22,5 +20,14 @@ public static class TestDataHelper
     public static Guid GenerateRandomGuid()
     {
         return Guid.NewGuid();
+    }
+
+    public static string GenerateRandomGroupName()
+    {
+        // Group.NameMaxLength = 30, so we need to keep it short
+        // "G" + GUID (32 chars) = 33 chars, too long
+        // Use first 28 chars of GUID to stay within limit
+        var guidPart = Guid.NewGuid().ToString("N")[..28];
+        return $"G{guidPart}";
     }
 }

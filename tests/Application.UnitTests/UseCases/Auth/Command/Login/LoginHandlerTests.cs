@@ -1,12 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading;
-using System.Threading.Tasks;
 using Application.UnitTests.Common;
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Login;
 using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Security;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
@@ -91,7 +88,7 @@ public class LoginHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidEmail_ShouldThrowUnauthorizedException()
+    public async Task Handle_WithInvalidEmail_ShouldThrowUnauthorizedException()
     {
         // Arrange
         var command = new LoginCommand
@@ -101,8 +98,8 @@ public class LoginHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
     }
 
     [Test]
@@ -130,7 +127,7 @@ public class LoginHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
     }
 }

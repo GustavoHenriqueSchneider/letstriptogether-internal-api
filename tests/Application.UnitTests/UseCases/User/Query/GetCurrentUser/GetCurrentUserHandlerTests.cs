@@ -60,14 +60,14 @@ public class GetCurrentUserHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUserId_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUserId_ShouldThrowNotFoundException()
     {
         // Arrange
         var query = new GetCurrentUserQuery { UserId = TestDataHelper.GenerateRandomGuid() };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(query, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 
     [Test]

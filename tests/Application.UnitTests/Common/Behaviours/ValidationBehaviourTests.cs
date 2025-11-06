@@ -48,7 +48,7 @@ public class ValidationBehaviourTests
     }
 
     [Test]
-    public void Handle_WithInvalidRequest_ShouldThrowValidationException()
+    public async Task Handle_WithInvalidRequest_ShouldThrowValidationException()
     {
         // Arrange
         var validator = new TestRequestValidator();
@@ -58,8 +58,8 @@ public class ValidationBehaviourTests
         RequestHandlerDelegate<TestResponse> next = () => Task.FromResult(new TestResponse());
 
         // Act & Assert
-        Assert.ThrowsAsync<ValidationException>(async () =>
-            await behaviour.Handle(request, next, CancellationToken.None));
+        Func<Task<TestResponse>> act = async () => await behaviour.Handle(request, next, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.ValidationException>();
     }
 
     [Test]

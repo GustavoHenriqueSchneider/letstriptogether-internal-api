@@ -91,7 +91,7 @@ public class ResetPasswordHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidUserId_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUserId_ShouldThrowNotFoundException()
     {
         // Arrange
         var redisServiceMock = new Mock<IRedisService>();
@@ -106,8 +106,8 @@ public class ResetPasswordHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 
     [Test]
@@ -140,7 +140,7 @@ public class ResetPasswordHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
     }
 }

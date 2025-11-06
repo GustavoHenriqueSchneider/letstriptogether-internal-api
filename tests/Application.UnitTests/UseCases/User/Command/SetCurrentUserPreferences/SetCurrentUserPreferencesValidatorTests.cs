@@ -23,10 +23,10 @@ public class SetCurrentUserPreferencesValidatorTests
         {
             UserId = Guid.NewGuid(),
             LikesCommercial = true,
-            Food = new List<string> { "Italian" },
-            Culture = new List<string> { "Museums" },
-            Entertainment = new List<string> { "Nightlife" },
-            PlaceTypes = new List<string> { "Beach" }
+            Food = new List<string> { "restaurant" },
+            Culture = new List<string> { "museum" },
+            Entertainment = new List<string> { "attraction" },
+            PlaceTypes = new List<string> { "beach" }
         };
 
         // Act

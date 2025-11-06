@@ -71,6 +71,7 @@ public class AdminRemoveGroupMemberByIdHandlerTests : TestBase
         var ownerPrefs = new UserPreference(true, new List<string> { "Italian" }, new List<string>(), new List<string>(), new List<string>());
         owner.SetPreferences(ownerPrefs);
         _userRepository.Update(owner);
+        await DbContext.SaveChangesAsync();
 
         var groupName = $"Test Group {Guid.NewGuid():N}";
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));

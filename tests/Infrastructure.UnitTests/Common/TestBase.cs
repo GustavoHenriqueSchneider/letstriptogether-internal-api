@@ -10,7 +10,7 @@ public abstract class TestBase : IDisposable
 
     protected TestBase()
     {
-        _connectionString = "Host=localhost;Port=5432;Database=letstriptogether_test;Username=postgres;Password=postgres";
+        _connectionString = "Host=localhost;Port=5432;Database=letstriptogether_test;Username=admin;Password=root";
         
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(_connectionString)

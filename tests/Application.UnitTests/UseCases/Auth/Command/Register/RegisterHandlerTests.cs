@@ -63,7 +63,7 @@ public class RegisterHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithoutAcceptingTerms_ShouldThrowBadRequestException()
+    public async Task Handle_WithoutAcceptingTerms_ShouldThrowBadRequestException()
     {
         // Arrange
         var command = new RegisterCommand
@@ -75,8 +75,8 @@ public class RegisterHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
     }
 
     [Test]
@@ -104,12 +104,12 @@ public class RegisterHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.ConflictException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.ConflictException>();
     }
 
     [Test]
-    public void Handle_WithoutDefaultRole_ShouldThrowNotFoundException()
+    public async Task Handle_WithoutDefaultRole_ShouldThrowNotFoundException()
     {
         // Arrange
         var command = new RegisterCommand
@@ -121,7 +121,7 @@ public class RegisterHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

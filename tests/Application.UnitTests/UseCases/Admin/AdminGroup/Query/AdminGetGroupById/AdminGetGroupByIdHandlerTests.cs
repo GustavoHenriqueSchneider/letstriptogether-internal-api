@@ -89,7 +89,7 @@ public class AdminGetGroupByIdHandlerTests : TestBase
     }
 
     [Test]
-    public void Handle_WithInvalidGroup_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidGroup_ShouldThrowNotFoundException()
     {
         // Arrange
         var query = new AdminGetGroupByIdQuery
@@ -98,7 +98,7 @@ public class AdminGetGroupByIdHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(query, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

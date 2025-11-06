@@ -68,14 +68,10 @@ public class GetAllGroupMatchesByIdHandlerTests : TestBase
             await DbContext.Set<LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination>().AddAsync(destination, CancellationToken.None);
             await DbContext.SaveChangesAsync();
             
-            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch
-            {
-                GroupId = group.Id,
-                DestinationId = destination.Id
-            };
+            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
             typeof(LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
             typeof(LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
-            await _groupMatchRepository.AddAsync(match, CancellationToken.None);
+            await DbContext.Set<LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch>().AddAsync(match, CancellationToken.None);
         }
         await DbContext.SaveChangesAsync();
 
@@ -133,7 +129,7 @@ public class GetAllGroupMatchesByIdHandlerTests : TestBase
         };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>(async () =>
-            await _handler.Handle(query, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
     }
 }

@@ -87,18 +87,19 @@ public class AnonymizeCurrentUserHandlerTests : TestBase
         // Assert
         var updatedUser = await _userRepository.GetByIdAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
-        updatedUser!.Email.Should().Contain("anonymous");
+        updatedUser!.Email.Should().Contain("anon_");
+        updatedUser!.Email.Should().Contain("@deleted.local");
         redisServiceMock.Verify(x => x.DeleteAsync(It.IsAny<string>()), Times.Once);
     }
 
     [Test]
-    public void Handle_WithInvalidUserId_ShouldThrowNotFoundException()
+    public async Task Handle_WithInvalidUserId_ShouldThrowNotFoundException()
     {
         // Arrange
         var command = new AnonymizeCurrentUserCommand { UserId = TestDataHelper.GenerateRandomGuid() };
 
         // Act & Assert
-        Assert.ThrowsAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>(async () =>
-            await _handler.Handle(command, CancellationToken.None));
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
     }
 }

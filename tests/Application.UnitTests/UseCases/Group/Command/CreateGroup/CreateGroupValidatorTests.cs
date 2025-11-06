@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.CreateGroup;
 using NUnit.Framework;
