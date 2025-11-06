@@ -26,6 +26,10 @@ tests/Application.UnitTests/bin
 tests/Application.UnitTests/obj
 tests/Application.UnitTests/Application.UnitTests.csproj.user
 
+tests/Domain.UnitTests/bin
+tests/Domain.UnitTests/obj
+tests/Domain.UnitTests/Domain.UnitTests.csproj.user
+
 tests/Infrastructure.UnitTests/bin
 tests/Infrastructure.UnitTests/obj
 tests/Infrastructure.UnitTests/Infrastructure.UnitTests.csproj.user

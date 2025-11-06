@@ -1,15 +1,15 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{FCB21C55-7EAF-4A38-AE6A-29AA76D2BABC}"
-    ProjectSection(SolutionItems) = preProject
-        .gitignore = .gitignore
-        docker-compose.yml = docker-compose.yml
-        global.json = global.json
-        README.md = README.md
-    EndProjectSection
+				ProjectSection(SolutionItems) = preProject
+								.gitignore = .gitignore
+								docker-compose.yml = docker-compose.yml
+								global.json = global.json
+								README.md = README.md
+				EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4800D6BD-BC11-4F34-B6E5-57796CBDE382}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.UnitTests", "tests\Infrastructure.UnitTests\Infrastructure.UnitTests.csproj", "{97A16343-D7A1-43BF-95A6-2E54CF4F80C5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.UnitTests", "tests\WebApi.UnitTests\WebApi.UnitTests.csproj", "{FA541665-D661-442D-9E7E-9F987EF4A1B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.UnitTests", "tests\Domain.UnitTests\Domain.UnitTests.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{FA541665-D661-442D-9E7E-9F987EF4A1B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA541665-D661-442D-9E7E-9F987EF4A1B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA541665-D661-442D-9E7E-9F987EF4A1B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +84,6 @@ Global
 		{BE82CC23-5448-4CB4-8C31-A545EF961684} = {914F677F-73EE-499D-87ED-D145FC2F4203}
 		{97A16343-D7A1-43BF-95A6-2E54CF4F80C5} = {914F677F-73EE-499D-87ED-D145FC2F4203}
 		{FA541665-D661-442D-9E7E-9F987EF4A1B2} = {914F677F-73EE-499D-87ED-D145FC2F4203}
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890} = {914F677F-73EE-499D-87ED-D145FC2F4203}
 	EndGlobalSection
 EndGlobal

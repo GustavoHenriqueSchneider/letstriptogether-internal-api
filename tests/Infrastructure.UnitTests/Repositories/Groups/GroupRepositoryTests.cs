@@ -41,7 +41,7 @@ public class GroupRepositoryTests : TestBase
             await DbContext.SaveChangesAsync();
         }
 
-        var user = new User("Test User", "test@example.com", "hash", role);
+        var user = new User("Test User", TestDataHelper.GenerateRandomEmail(), "hash", role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 

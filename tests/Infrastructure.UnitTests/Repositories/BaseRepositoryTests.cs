@@ -97,7 +97,7 @@ public class BaseRepositoryTests : TestBase
         // Arrange
         for (int i = 0; i < 15; i++)
         {
-            var role = new Role { Name = $"Role{i}" };
+            var role = new Role { Name = $"Role{Guid.NewGuid().ToString()[..11]}" };
             await _repository.AddAsync(role, CancellationToken.None);
         }
         await DbContext.SaveChangesAsync();
@@ -114,12 +114,12 @@ public class BaseRepositoryTests : TestBase
     public async Task Update_WithEntity_ShouldUpdateInDatabase()
     {
         // Arrange
-        var role = new Role { Name = $"Role{Guid.NewGuid().ToString()[..8]}" };
+        var role = new Role { Name = $"up{Guid.NewGuid().ToString()[..12]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         // Act
-        role.GetType().GetProperty("Name")!.SetValue(role, $"2Role{Guid.NewGuid().ToString()[..7]}");
+        role.GetType().GetProperty("Name")!.SetValue(role, $"2up{Guid.NewGuid().ToString()[..9]}");
         _repository.Update(role);
         await DbContext.SaveChangesAsync();
 
@@ -133,7 +133,7 @@ public class BaseRepositoryTests : TestBase
     {
         // Arrange
         var role = new Role();
-        typeof(Role).GetProperty("Name")!.SetValue(role, $"Test{Guid.NewGuid().ToString()[..10]}");
+        typeof(Role).GetProperty("Name")!.SetValue(role, $"new{Guid.NewGuid().ToString()[..10]}");
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -144,5 +144,47 @@ public class BaseRepositoryTests : TestBase
         // Assert
         var exists = await _repository.ExistsByIdAsync(role.Id, CancellationToken.None);
         exists.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task AddRangeAsync_WithEntities_ShouldAddAllToDatabase()
+    {
+        // Arrange
+        var roles = new List<Role>();
+        for (int i = 0; i < 5; i++)
+        {
+            var role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, $"Test{i}{Guid.NewGuid().ToString()[..8]}");
+            roles.Add(role);
+        }
+
+        // Act
+        await _repository.AddRangeAsync(roles, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        // Assert
+        foreach (var role in roles)
+        {
+            var exists = await _repository.ExistsByIdAsync(role.Id, CancellationToken.None);
+            exists.Should().BeTrue();
+        }
+    }
+
+    [Test]
+    public async Task GetHitsAsync_WithEntities_ShouldReturnCount()
+    {
+        // Arrange
+        for (int i = 0; i < 5; i++)
+        {
+            var role = new Role { Name = $"Role{Guid.NewGuid().ToString()[..8]}" };
+            await _repository.AddAsync(role, CancellationToken.None);
+        }
+        await DbContext.SaveChangesAsync();
+
+        // Act
+        var hits = await _repository.GetHitsAsync(CancellationToken.None);
+
+        // Assert
+        hits.Should().BeGreaterOrEqualTo(5);
     }
 }

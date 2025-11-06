@@ -187,4 +187,217 @@ public class AcceptInvitationHandlerTests : TestBase
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
         await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
     }
+
+    [Test]
+    public async Task Handle_WithExpiredToken_ShouldThrowUnauthorizedException()
+    {
+        // Arrange
+        var role = new Role();
+        typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var email = TestDataHelper.GenerateRandomEmail();
+        var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var userName = TestDataHelper.GenerateRandomName();
+        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        await _userRepository.AddAsync(user, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var prefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        user.SetPreferences(prefs);
+        await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var tokenServiceMock = new Mock<ITokenService>();
+        tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
+            .Returns((true, Guid.NewGuid().ToString()));
+        tokenServiceMock.Setup(x => x.IsTokenExpired(It.IsAny<string>()))
+            .Returns((true, DateTime.UtcNow.AddDays(-1)));
+        _tokenService = tokenServiceMock.Object;
+        
+        _handler = new AcceptInvitationHandler(
+            _groupMemberRepository,
+            _groupPreferenceRepository,
+            _groupRepository,
+            _groupInvitationRepository,
+            _tokenService,
+            _unitOfWork,
+            _userGroupInvitationRepository,
+            _userRepository);
+
+        var command = new AcceptInvitationCommand
+        {
+            UserId = user.Id,
+            Token = "expired-token"
+        };
+
+        // Act & Assert
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
+    }
+
+    [Test]
+    public async Task Handle_WithUserWithoutPreferences_ShouldThrowBadRequestException()
+    {
+        // Arrange
+        var role = new Role();
+        typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var email = TestDataHelper.GenerateRandomEmail();
+        var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var userName = TestDataHelper.GenerateRandomName();
+        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        await _userRepository.AddAsync(user, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var command = new AcceptInvitationCommand
+        {
+            UserId = user.Id,
+            Token = "test-token"
+        };
+
+        // Act & Assert
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>()
+            .WithMessage("User has not filled any preferences yet.");
+    }
+
+    [Test]
+    public async Task Handle_WithNonExistentUser_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var command = new AcceptInvitationCommand
+        {
+            UserId = Guid.NewGuid(),
+            Token = "test-token"
+        };
+
+        // Act & Assert
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>()
+            .WithMessage("User not found.");
+    }
+
+    [Test]
+    public async Task Handle_WithExpiredInvitation_ShouldThrowBadRequestException()
+    {
+        // Arrange
+        var role = new Role();
+        typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var ownerEmail = TestDataHelper.GenerateRandomEmail();
+        var ownerPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var ownerName = TestDataHelper.GenerateRandomName();
+        var owner = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
+        await _userRepository.AddAsync(owner, CancellationToken.None);
+        
+        var userEmail = TestDataHelper.GenerateRandomEmail();
+        var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var userName = TestDataHelper.GenerateRandomName();
+        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        await _userRepository.AddAsync(user, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        user.SetPreferences(userPrefs);
+        await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var groupName = TestDataHelper.GenerateRandomGroupName();
+        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        group.AddMember(owner, isOwner: true);
+        await _groupRepository.AddAsync(group, CancellationToken.None);
+        
+        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        // Set expiration date to past using reflection
+        var expirationDateField = typeof(LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation)
+            .GetField("_expirationDate", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        expirationDateField!.SetValue(invitation, DateTime.UtcNow.AddDays(-1));
+        
+        await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var tokenServiceMock = new Mock<ITokenService>();
+        tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
+            .Returns((true, invitation.Id.ToString()));
+        tokenServiceMock.Setup(x => x.IsTokenExpired(It.IsAny<string>()))
+            .Returns((false, DateTime.UtcNow.AddDays(1)));
+        _tokenService = tokenServiceMock.Object;
+        
+        _handler = new AcceptInvitationHandler(
+            _groupMemberRepository,
+            _groupPreferenceRepository,
+            _groupRepository,
+            _groupInvitationRepository,
+            _tokenService,
+            _unitOfWork,
+            _userGroupInvitationRepository,
+            _userRepository);
+
+        var command = new AcceptInvitationCommand
+        {
+            UserId = user.Id,
+            Token = "test-token"
+        };
+
+        // Act & Assert
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>()
+            .WithMessage("Invitation is not active.");
+    }
+
+    [Test]
+    public async Task Handle_WithInvalidInvitationId_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var role = new Role();
+        typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
+        await _roleRepository.AddOrUpdateAsync(role, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var email = TestDataHelper.GenerateRandomEmail();
+        var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var userName = TestDataHelper.GenerateRandomName();
+        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        await _userRepository.AddAsync(user, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var prefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        user.SetPreferences(prefs);
+        await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var tokenServiceMock = new Mock<ITokenService>();
+        tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
+            .Returns((true, "invalid-guid"));
+        tokenServiceMock.Setup(x => x.IsTokenExpired(It.IsAny<string>()))
+            .Returns((false, DateTime.UtcNow.AddDays(1)));
+        _tokenService = tokenServiceMock.Object;
+        
+        _handler = new AcceptInvitationHandler(
+            _groupMemberRepository,
+            _groupPreferenceRepository,
+            _groupRepository,
+            _groupInvitationRepository,
+            _tokenService,
+            _unitOfWork,
+            _userGroupInvitationRepository,
+            _userRepository);
+
+        var command = new AcceptInvitationCommand
+        {
+            UserId = user.Id,
+            Token = "test-token"
+        };
+
+        // Act & Assert
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>()
+            .WithMessage("Invitation not found.");
+    }
 }

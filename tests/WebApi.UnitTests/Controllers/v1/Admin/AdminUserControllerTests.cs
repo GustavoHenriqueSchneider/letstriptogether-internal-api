@@ -1,5 +1,8 @@
 using FluentAssertions;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
 using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
 using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
 using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
@@ -97,5 +100,67 @@ public class AdminUserControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
+    }
+
+    [Test]
+    public async Task AdminDeleteUserById_WithValidUserId_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        _mediatorMock.Setup(x => x.Send(
+            It.Is<AdminDeleteUserByIdCommand>(c => c.UserId == userId),
+            It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.AdminDeleteUserById(userId, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<AdminDeleteUserByIdCommand>(c => c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task AdminAnonymizeUserById_WithValidUserId_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        _mediatorMock.Setup(x => x.Send(
+            It.Is<AdminAnonymizeUserByIdCommand>(c => c.UserId == userId),
+            It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.AdminAnonymizeUserById(userId, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<AdminAnonymizeUserByIdCommand>(c => c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task AdminSetUserPreferencesByUserId_WithValidCommand_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var command = new AdminSetUserPreferencesByUserIdCommand
+        {
+            Food = new List<string> { "food.restaurant" },
+            Culture = new List<string> { "culture.museum" }
+        };
+
+        _mediatorMock.Setup(x => x.Send(
+            It.Is<AdminSetUserPreferencesByUserIdCommand>(c => c.UserId == userId),
+            It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.AdminSetUserPreferencesByUserId(userId, command, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<AdminSetUserPreferencesByUserIdCommand>(c => c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

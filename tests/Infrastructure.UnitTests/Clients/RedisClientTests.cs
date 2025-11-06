@@ -8,11 +8,10 @@ namespace Infrastructure.UnitTests.Clients;
 public class RedisClientTests
 {
     [Test]
-    [Ignore("This test requires a real Redis connection. This should be an integration test, not a unit test.")]
-    public void Constructor_WithValidConnectionString_ShouldCreateClient()
+    public void Constructor_WithConnectionString_ShouldSetDatabaseProperty()
     {
         // Arrange
-        const string connectionString = "localhost:6379";
+        const string connectionString = "localhost:6379,password=admin";
 
         // Act
         var client = new RedisClient(connectionString);
@@ -20,5 +19,22 @@ public class RedisClientTests
         // Assert
         client.Should().NotBeNull();
         client.Database.Should().NotBeNull();
+        // Verify Database property is accessible
+        var database = client.Database;
+        database.Should().NotBeNull();
+    }
+
+    [Test]
+    public void Database_Property_ShouldBeAccessible()
+    {
+        // Arrange
+        const string connectionString = "localhost:6379,password=admin";
+        var client = new RedisClient(connectionString);
+
+        // Act
+        var database = client.Database;
+
+        // Assert
+        database.Should().NotBeNull();
     }
 }

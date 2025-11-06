@@ -92,6 +92,45 @@ public class CulturePreferencesValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
     }
+
+    [Test]
+    public void Validate_WithInvalidPreference_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new[] { "invalid.culture.preference" };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithEmptyStringInCollection_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new[] { "" };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithNullInCollection_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new string[] { null! };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
 }
 
 [TestFixture]
@@ -130,6 +169,45 @@ public class EntertainmentPreferencesValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
     }
+
+    [Test]
+    public void Validate_WithInvalidPreference_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new[] { "invalid.entertainment.preference" };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithEmptyStringInCollection_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new[] { "" };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithNullInCollection_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new string[] { null! };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
 }
 
 [TestFixture]
@@ -161,6 +239,45 @@ public class PlaceTypePreferencesValidatorTests
     {
         // Arrange
         var preferences = Array.Empty<string>();
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithInvalidPreference_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new[] { "invalid.placetype.preference" };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithEmptyStringInCollection_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new[] { "" };
+
+        // Act
+        var result = _validator.Validate(preferences);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void Validate_WithNullInCollection_ShouldReturnInvalid()
+    {
+        // Arrange
+        var preferences = new string[] { null! };
 
         // Act
         var result = _validator.Validate(preferences);

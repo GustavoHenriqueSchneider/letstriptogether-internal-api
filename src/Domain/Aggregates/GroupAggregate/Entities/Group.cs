@@ -82,7 +82,7 @@ public class Group : TrackableEntity
         UpdatePreferences();
     }
     
-    private bool HasMatch(GroupMatch match)
+    public bool HasMatch(GroupMatch match)
     {
         return _matches.Contains(match);
     }

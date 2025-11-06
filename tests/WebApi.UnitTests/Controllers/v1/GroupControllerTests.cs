@@ -1,7 +1,12 @@
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.CreateGroup;
+using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.DeleteGroupById;
+using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
+using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.UpdateGroupById;
 using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetAllGroups;
+using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroupById;
+using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -69,5 +74,109 @@ public class GroupControllerTests
 
         // Assert
         result.Should().BeOfType<CreatedAtActionResult>();
+    }
+
+    [Test]
+    public async Task GetGroupById_WithValidGroupId_ShouldReturnOk()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var groupId = Guid.NewGuid();
+        _currentUserMock.Setup(x => x.GetId()).Returns(userId);
+        
+        var response = new GetGroupByIdResponse();
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<GetGroupByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+
+        // Act
+        var result = await _controller.GetGroupById(groupId, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<GetGroupByIdQuery>(q => q.GroupId == groupId && q.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task UpdateGroupById_WithValidCommand_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var groupId = Guid.NewGuid();
+        _currentUserMock.Setup(x => x.GetId()).Returns(userId);
+        
+        var command = new UpdateGroupByIdCommand
+        {
+            Name = "Updated Group Name"
+        };
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<UpdateGroupByIdCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.UpdateGroupById(groupId, command, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<UpdateGroupByIdCommand>(c => c.GroupId == groupId && c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task DeleteGroupById_WithValidGroupId_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var groupId = Guid.NewGuid();
+        _currentUserMock.Setup(x => x.GetId()).Returns(userId);
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<DeleteGroupByIdCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.DeleteGroupById(groupId, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<DeleteGroupByIdCommand>(c => c.GroupId == groupId && c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task LeaveGroupById_WithValidGroupId_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var groupId = Guid.NewGuid();
+        _currentUserMock.Setup(x => x.GetId()).Returns(userId);
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<LeaveGroupByIdCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.LeaveGroupById(groupId, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<LeaveGroupByIdCommand>(c => c.GroupId == groupId && c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task GetNotVotedDestinationsByMemberOnGroup_WithValidParameters_ShouldReturnOk()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var groupId = Guid.NewGuid();
+        _currentUserMock.Setup(x => x.GetId()).Returns(userId);
+        
+        var response = new GetNotVotedDestinationsByMemberOnGroupResponse();
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<GetNotVotedDestinationsByMemberOnGroupQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+
+        // Act
+        var result = await _controller.GetNotVotedDestinationsByMemberOnGroup(groupId, 1, 10, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<GetNotVotedDestinationsByMemberOnGroupQuery>(q => q.GroupId == groupId && q.UserId == userId && q.PageNumber == 1 && q.PageSize == 10), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

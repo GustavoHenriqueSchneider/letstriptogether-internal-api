@@ -192,4 +192,91 @@ public class GroupMatchRepositoryTests : TestBase
         // Assert
         result.Should().HaveCount(3);
     }
+
+    [Test]
+    public async Task GetByIdWithRelationsAsync_WithMatch_ShouldReturnMatchWithGroup()
+    {
+        // Arrange
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
+
+        var email = TestDataHelper.GenerateRandomEmail();
+        var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var userName = TestDataHelper.GenerateRandomName();
+        var user = new User(userName, email, passwordHash, role);
+        await _userRepository.AddAsync(user, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var groupName = TestDataHelper.GenerateRandomGroupName();
+        var group = new Group(groupName, DateTime.UtcNow.AddDays(30));
+        group.AddMember(user, isOwner: true);
+        await _groupRepository.AddAsync(group, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        {
+            Address = "Test Address",
+            Description = "Test Description"
+        };
+        await _destinationRepository.AddAsync(destination, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
+        typeof(GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
+        typeof(GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
+        await _repository.AddAsync(match, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        // Act
+        var result = await _repository.GetByIdWithRelationsAsync(group.Id, match.Id, CancellationToken.None);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Id.Should().Be(match.Id);
+        result.Group.Should().NotBeNull();
+        result.Group.Id.Should().Be(group.Id);
+    }
+
+    [Test]
+    public async Task GetByIdWithRelationsAsync_WithNonExistentMatch_ShouldReturnNull()
+    {
+        // Arrange
+        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+
+        if (role is null)
+        {
+            role = new Role();
+            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            await _roleRepository.AddAsync(role, CancellationToken.None);
+            await DbContext.SaveChangesAsync();
+        }
+
+        var email = TestDataHelper.GenerateRandomEmail();
+        var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
+        var userName = TestDataHelper.GenerateRandomName();
+        var user = new User(userName, email, passwordHash, role);
+        await _userRepository.AddAsync(user, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var groupName = TestDataHelper.GenerateRandomGroupName();
+        var group = new Group(groupName, DateTime.UtcNow.AddDays(30));
+        group.AddMember(user, isOwner: true);
+        await _groupRepository.AddAsync(group, CancellationToken.None);
+        await DbContext.SaveChangesAsync();
+
+        var nonExistentMatchId = Guid.NewGuid();
+
+        // Act
+        var result = await _repository.GetByIdWithRelationsAsync(group.Id, nonExistentMatchId, CancellationToken.None);
+
+        // Assert
+        result.Should().BeNull();
+    }
 }

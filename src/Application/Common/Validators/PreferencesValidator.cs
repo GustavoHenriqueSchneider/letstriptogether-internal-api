@@ -8,19 +8,11 @@ public class FoodPreferencesValidator : AbstractValidator<IEnumerable<string>>
     public FoodPreferencesValidator()
     {
         RuleFor(x => x)
-            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
+            
+        RuleForEach(x => x)
             .NotEmpty()
-            .ForEach(x =>
-            {
-                x.ChildRules(preference =>
-                {
-                    preference.RuleFor(y => y)
-                        .Cascade(CascadeMode.Stop)
-                        .NotEmpty()
-                        .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.")
-                        .When(y => !string.IsNullOrEmpty(y));
-                });
-            });
+            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)
@@ -42,19 +34,11 @@ public class CulturePreferencesValidator : AbstractValidator<IEnumerable<string>
     public CulturePreferencesValidator()
     {
         RuleFor(x => x)
-            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
+            
+        RuleForEach(x => x)
             .NotEmpty()
-            .ForEach(x =>
-            {
-                x.ChildRules(preference =>
-                {
-                    preference.RuleFor(y => y)
-                        .Cascade(CascadeMode.Stop)
-                        .NotEmpty()
-                        .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.")
-                        .When(y => !string.IsNullOrEmpty(y));
-                });
-            });
+            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)
@@ -76,19 +60,11 @@ public class EntertainmentPreferencesValidator : AbstractValidator<IEnumerable<s
     public EntertainmentPreferencesValidator()
     {
         RuleFor(x => x)
-            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
+            
+        RuleForEach(x => x)
             .NotEmpty()
-            .ForEach(x =>
-            {
-                x.ChildRules(preference =>
-                {
-                    preference.RuleFor(y => y)
-                        .Cascade(CascadeMode.Stop)
-                        .NotEmpty()
-                        .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.")
-                        .When(y => !string.IsNullOrEmpty(y));
-                });
-            });
+            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)
@@ -110,19 +86,11 @@ public class PlaceTypePreferencesValidator : AbstractValidator<IEnumerable<strin
     public PlaceTypePreferencesValidator()
     {
         RuleFor(x => x)
-            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
+            
+        RuleForEach(x => x)
             .NotEmpty()
-            .ForEach(x =>
-            {
-                x.ChildRules(preference =>
-                {
-                    preference.RuleFor(y => y)
-                        .Cascade(CascadeMode.Stop)
-                        .NotEmpty()
-                        .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.")
-                        .When(y => !string.IsNullOrEmpty(y));
-                });
-            });
+            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)

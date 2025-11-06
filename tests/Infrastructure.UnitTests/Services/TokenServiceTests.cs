@@ -136,4 +136,49 @@ public class TokenServiceTests
         isExpired.Should().BeFalse();
         expiresIn.Should().NotBeNull();
     }
+
+    [Test]
+    public void ValidateInvitationToken_WithValidToken_ShouldReturnTrue()
+    {
+        // Arrange
+        var invitationId = Guid.NewGuid();
+        var token = _service.GenerateInvitationToken(invitationId);
+
+        // Act
+        var (isValid, returnedInvitationId) = _service.ValidateInvitationToken(token);
+
+        // Assert
+        isValid.Should().BeTrue();
+        returnedInvitationId.Should().Be(invitationId.ToString());
+    }
+
+    [Test]
+    public void ValidateInvitationToken_WithInvalidToken_ShouldReturnFalse()
+    {
+        // Arrange
+        const string invalidToken = "invalid.token.here";
+
+        // Act
+        var (isValid, invitationId) = _service.ValidateInvitationToken(invalidToken);
+
+        // Assert
+        isValid.Should().BeFalse();
+        invitationId.Should().BeNull();
+    }
+
+    [Test]
+    public void ValidateInvitationToken_WithRefreshToken_ShouldReturnFalse()
+    {
+        // Arrange
+        var role = new Role { Name = Roles.User };
+        var user = new User("Test User", "test@example.com", "hash", role);
+        var (_, refreshToken) = _service.GenerateTokens(user);
+
+        // Act
+        var (isValid, invitationId) = _service.ValidateInvitationToken(refreshToken);
+
+        // Assert
+        isValid.Should().BeFalse();
+        invitationId.Should().BeNull();
+    }
 }
