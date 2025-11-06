@@ -10,5 +10,5 @@ public class Role : TrackableEntity
     private readonly List<UserRole> _userRoles = [];
     public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 
-    private Role() { }
+    public Role() { }
 }

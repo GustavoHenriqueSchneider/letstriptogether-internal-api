@@ -1,7 +1,7 @@
 using FluentValidation;
 using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+namespace LetsTripTogether.InternalApi.Application.Common.Validators;
 
 public class FoodPreferencesValidator : AbstractValidator<IEnumerable<string>>
 {

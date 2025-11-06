@@ -1,5 +1,5 @@
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using LetsTripTogether.InternalApi.Application.Common.Validators;
 using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
