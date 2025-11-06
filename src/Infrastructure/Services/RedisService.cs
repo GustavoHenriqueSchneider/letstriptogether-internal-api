@@ -1,9 +1,9 @@
-﻿using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 using LetsTripTogether.InternalApi.Infrastructure.Clients;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Services;
 
-public class RedisService(RedisClient redisClient) : IRedisService
+public class RedisService(IRedisClient redisClient) : IRedisService
 {
     public async Task<string?> GetAsync(string key)
     {

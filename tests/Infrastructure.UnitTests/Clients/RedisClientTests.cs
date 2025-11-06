@@ -8,6 +8,7 @@ namespace Infrastructure.UnitTests.Clients;
 public class RedisClientTests
 {
     [Test]
+    [Ignore("This test requires a real Redis connection. This should be an integration test, not a unit test.")]
     public void Constructor_WithValidConnectionString_ShouldCreateClient()
     {
         // Arrange

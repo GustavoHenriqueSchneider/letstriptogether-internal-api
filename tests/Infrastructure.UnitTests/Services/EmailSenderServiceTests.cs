@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using LetsTripTogether.InternalApi.Infrastructure.Clients;
 using LetsTripTogether.InternalApi.Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
@@ -9,12 +10,12 @@ namespace Infrastructure.UnitTests.Services;
 public class EmailSenderServiceTests
 {
     private EmailSenderService _service = null!;
-    private Mock<SmtpClient> _smtpClientMock = null!;
+    private Mock<ISmtpClient> _smtpClientMock = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _smtpClientMock = new Mock<SmtpClient>();
+        _smtpClientMock = new Mock<ISmtpClient>();
         _service = new EmailSenderService(_smtpClientMock.Object);
     }
 

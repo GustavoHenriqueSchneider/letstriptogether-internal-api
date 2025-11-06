@@ -11,14 +11,14 @@ namespace Infrastructure.UnitTests.Services;
 public class RedisServiceTests
 {
     private RedisService _service = null!;
-    private Mock<RedisClient> _redisClientMock = null!;
+    private Mock<IRedisClient> _redisClientMock = null!;
     private Mock<IDatabase> _databaseMock = null!;
 
     [SetUp]
     public void SetUp()
     {
         _databaseMock = new Mock<IDatabase>();
-        _redisClientMock = new Mock<RedisClient>("localhost:6379");
+        _redisClientMock = new Mock<IRedisClient>();
         _redisClientMock.Setup(x => x.Database).Returns(_databaseMock.Object);
         
         _service = new RedisService(_redisClientMock.Object);
@@ -30,14 +30,16 @@ public class RedisServiceTests
         // Arrange
         const string key = "test-key";
         const string value = "test-value";
+        var redisValue = (RedisValue)value;
         _databaseMock.Setup(x => x.StringGetAsync(key, It.IsAny<CommandFlags>()))
-            .ReturnsAsync(value);
+            .ReturnsAsync(redisValue);
 
         // Act
         var result = await _service.GetAsync(key);
 
         // Assert
         result.Should().Be(value);
+        _databaseMock.Verify(x => x.StringGetAsync(key, It.IsAny<CommandFlags>()), Times.Once);
     }
 
     [Test]
@@ -48,7 +50,13 @@ public class RedisServiceTests
         const string value = "test-value";
         const int ttlSeconds = 60;
 
-        _databaseMock.Setup(x => x.StringSetAsync(key, value, It.IsAny<TimeSpan?>(), It.IsAny<When>(), It.IsAny<CommandFlags>()))
+        _databaseMock.Setup(x => x.StringSetAsync(
+                It.Is<RedisKey>(k => k == key),
+                It.Is<RedisValue>(v => v == value),
+                It.Is<TimeSpan?>(ts => ts.HasValue && ts.Value.TotalSeconds == ttlSeconds),
+                It.IsAny<bool>(),
+                It.IsAny<When>(),
+                It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
@@ -56,9 +64,10 @@ public class RedisServiceTests
 
         // Assert
         _databaseMock.Verify(x => x.StringSetAsync(
-            key, 
-            value, 
-            It.Is<TimeSpan>(ts => ts.TotalSeconds == ttlSeconds),
+            It.Is<RedisKey>(k => k == key),
+            It.Is<RedisValue>(v => v == value),
+            It.Is<TimeSpan?>(ts => ts.HasValue && ts.Value.TotalSeconds == ttlSeconds),
+            It.IsAny<bool>(),
             It.IsAny<When>(),
             It.IsAny<CommandFlags>()), Times.Once);
     }

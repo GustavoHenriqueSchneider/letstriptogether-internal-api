@@ -130,7 +130,7 @@ public static class DependencyInjection
 
     private static void AddClients(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<RedisClient>(_ =>
+        services.AddSingleton<IRedisClient>(_ =>
         {
             var redisConnection = configuration.GetConnectionString("Redis") 
                                   ?? throw new InvalidOperationException("Connection string 'Redis' is missing.");
@@ -138,19 +138,21 @@ public static class DependencyInjection
             return new RedisClient(redisConnection);
         });
         
-        services.AddTransient<SmtpClient>(_ =>
+        services.AddTransient<ISmtpClient>(_ =>
         {
             var emailSettings = configuration
                 .GetRequiredSection(nameof(EmailSettings))
                 .Get<EmailSettings>()!;
 
-            return new SmtpClient
+            var smtpClient = new SmtpClient
             {
                 Host = emailSettings.SmtpServer,
                 Port = emailSettings.Port,
                 Credentials = new NetworkCredential(emailSettings.Username, emailSettings.Password),
                 EnableSsl = emailSettings.EnableSsl
             };
+
+            return new SmtpClientWrapper(smtpClient);
         });
     }
 

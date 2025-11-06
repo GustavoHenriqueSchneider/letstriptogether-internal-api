@@ -105,7 +105,7 @@ public class TokenService : ITokenService
 
         foreach (var userRole in user.UserRoles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            claims.Add(new Claim(ClaimTypes.Role, userRole.Role?.Name ?? string.Empty));
         }
 
         var expiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenValidityInMinutes);
