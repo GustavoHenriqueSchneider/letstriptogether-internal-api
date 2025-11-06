@@ -56,7 +56,7 @@ public class GetGroupDestinationVoteByIdHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
@@ -113,7 +113,7 @@ public class GetGroupDestinationVoteByIdHandlerTests : TestBase
         await _userRepository.AddAsync(member, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         group.AddMember(member, isOwner: false);

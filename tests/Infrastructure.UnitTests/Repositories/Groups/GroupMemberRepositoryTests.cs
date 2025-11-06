@@ -42,7 +42,7 @@ public class GroupMemberRepositoryTests : TestBase
         await _roleRepository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new Group(groupName, DateTime.UtcNow.AddDays(30));
         
         for (int i = 0; i < 5; i++)
@@ -82,10 +82,10 @@ public class GroupMemberRepositoryTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var group1 = new Group($"Group 1 {Guid.NewGuid():N}", DateTime.UtcNow.AddDays(30));
+        var group1 = new Group($"Group 1 {Guid.NewGuid().ToString()[..8]}", DateTime.UtcNow.AddDays(30));
         group1.AddMember(user, isOwner: true);
         
-        var group2 = new Group($"Group 2 {Guid.NewGuid():N}", DateTime.UtcNow.AddDays(30));
+        var group2 = new Group($"Group 2 {Guid.NewGuid().ToString()[..8]}", DateTime.UtcNow.AddDays(30));
         group2.AddMember(user, isOwner: false);
         
         await _groupRepository.AddAsync(group1, CancellationToken.None);

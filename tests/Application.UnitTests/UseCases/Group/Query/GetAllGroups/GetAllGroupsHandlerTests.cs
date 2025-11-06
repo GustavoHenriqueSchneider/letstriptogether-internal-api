@@ -52,7 +52,7 @@ public class GetAllGroupsHandlerTests : TestBase
 
         for (int i = 0; i < 5; i++)
         {
-            var groupName = $"Group {i} {Guid.NewGuid():N}";
+            var groupName = $"Group {i} {Guid.NewGuid().ToString()[..10]}.";
             var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30 + i));
             group.AddMember(user, isOwner: i == 0);
             await _groupRepository.AddAsync(group, CancellationToken.None);

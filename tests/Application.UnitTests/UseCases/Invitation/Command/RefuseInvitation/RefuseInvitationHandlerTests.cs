@@ -6,6 +6,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
 using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
@@ -79,12 +80,12 @@ public class RefuseInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userPrefs = new UserPreference(true, new List<string> { "Brazilian" }, new List<string>(), new List<string>(), new List<string>());
+        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(userPrefs);
         _userRepository.Update(user);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);

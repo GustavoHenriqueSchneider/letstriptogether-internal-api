@@ -12,11 +12,11 @@ namespace Application.UnitTests.Common.Behaviours;
 [TestFixture]
 public class UnhandledExceptionBehaviourTests
 {
-    private class TestRequest : IRequest<TestResponse>
+    public class TestRequest : IRequest<TestResponse>
     {
     }
 
-    private class TestResponse
+    public class TestResponse
     {
         public string Result { get; set; } = string.Empty;
     }

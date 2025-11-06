@@ -99,6 +99,6 @@ public class AdminGroupMemberControllerTests
         var result = await _controller.AdminRemoveGroupMemberById(groupId, memberId, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<OkResult>();
+        result.Should().BeOfType<NoContentResult>();
     }
 }

@@ -6,6 +6,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
 using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
@@ -25,6 +26,7 @@ public class CreateGroupHandlerTests : TestBase
     private UserRepository _userRepository = null!;
     private RoleRepository _roleRepository = null!;
     private IPasswordHashService _passwordHashService = null!;
+    private UserPreferenceRepository _userPreferenceRepository = null!;
 
     [SetUp]
     public async Task SetUp()
@@ -38,6 +40,7 @@ public class CreateGroupHandlerTests : TestBase
         _groupRepository = new GroupRepository(DbContext);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
+        _userPreferenceRepository = new UserPreferenceRepository(DbContext);
         
         _handler = new CreateGroupHandler(
             _groupMemberRepository,
@@ -65,13 +68,13 @@ public class CreateGroupHandlerTests : TestBase
 
         var preferences = new UserPreference(
             likesCommercial: true,
-            food: new List<string> { "restaurant" },
-            culture: new List<string> { "museum" },
-            entertainment: new List<string> { "attraction" },
-            placeTypes: new List<string> { "beach" });
+            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
+            entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
+            placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });
         
         user.SetPreferences(preferences);
-        _userRepository.Update(user);
+        await _userPreferenceRepository.AddAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
@@ -101,7 +104,7 @@ public class CreateGroupHandlerTests : TestBase
         var command = new CreateGroupCommand
         {
             UserId = TestDataHelper.GenerateRandomGuid(),
-            Name = $"Test Group {Guid.NewGuid():N}",
+            Name = TestDataHelper.GenerateRandomGroupName(),
             TripExpectedDate = DateTime.UtcNow.AddDays(30)
         };
 
@@ -129,7 +132,7 @@ public class CreateGroupHandlerTests : TestBase
         var command = new CreateGroupCommand
         {
             UserId = user.Id,
-            Name = $"Test Group {Guid.NewGuid():N}",
+            Name = TestDataHelper.GenerateRandomGroupName(),
             TripExpectedDate = DateTime.UtcNow.AddDays(30)
         };
 

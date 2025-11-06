@@ -5,6 +5,7 @@ using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.
 using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
 using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
@@ -69,10 +70,10 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         {
             UserId = user.Id,
             LikesCommercial = true,
-            Food = new List<string> { "Italian", "Brazilian" },
-            Culture = new List<string> { "Museums" },
-            Entertainment = new List<string> { "Nightlife" },
-            PlaceTypes = new List<string> { "Beach", "Mountain" }
+            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            Culture = new List<string> { new TripPreference(TripPreference.Culture.Museum) },
+            Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
+            PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Beach), "mountain" }
         };
 
         // Act
@@ -82,6 +83,9 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.Food.Should().HaveCount(2);
+        updatedUser.Preferences!.Food.Should().HaveCount(command.Food.Count);
+        updatedUser.Preferences!.Culture.Should().HaveCount(command.Culture.Count);
+        updatedUser.Preferences!.Entertainment.Should().HaveCount(command.Entertainment.Count);
+        updatedUser.Preferences!.PlaceTypes.Should().HaveCount(command.PlaceTypes.Count);
     }
 }

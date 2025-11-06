@@ -6,6 +6,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
 using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
@@ -25,6 +26,7 @@ public class AdminRemoveGroupMemberByIdHandlerTests : TestBase
     private UserRepository _userRepository = null!;
     private RoleRepository _roleRepository = null!;
     private IPasswordHashService _passwordHashService = null!;
+    private UserPreferenceRepository _userPreferenceRepository = null!;
 
     [SetUp]
     public async Task SetUp()
@@ -38,6 +40,7 @@ public class AdminRemoveGroupMemberByIdHandlerTests : TestBase
         _groupRepository = new GroupRepository(DbContext);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
+        _userPreferenceRepository = new UserPreferenceRepository(DbContext);
         
         _handler = new AdminRemoveGroupMemberByIdHandler(
             _groupMemberRepository,
@@ -68,12 +71,12 @@ public class AdminRemoveGroupMemberByIdHandlerTests : TestBase
         await _userRepository.AddAsync(member, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var ownerPrefs = new UserPreference(true, new List<string> { "Italian" }, new List<string>(), new List<string>(), new List<string>());
+        var ownerPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
         owner.SetPreferences(ownerPrefs);
-        _userRepository.Update(owner);
+        await _userPreferenceRepository.AddAsync(owner.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         group.AddMember(member, isOwner: false);

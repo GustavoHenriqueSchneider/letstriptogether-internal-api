@@ -96,6 +96,6 @@ public class AdminUserControllerTests
         var result = await _controller.AdminUpdateUserById(userId, command, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<OkResult>();
+        result.Should().BeOfType<NoContentResult>();
     }
 }

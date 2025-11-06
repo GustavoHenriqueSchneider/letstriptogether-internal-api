@@ -64,7 +64,7 @@ public class GetOtherGroupMembersByIdHandlerTests : TestBase
         await _userRepository.AddAsync(member2, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         group.AddMember(member1, isOwner: false);
@@ -111,7 +111,7 @@ public class GetOtherGroupMembersByIdHandlerTests : TestBase
         await _userRepository.AddAsync(nonMember, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);

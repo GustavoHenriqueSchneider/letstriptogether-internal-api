@@ -1,5 +1,6 @@
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.Common.Validators;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Application.UnitTests.Common.Validators;
@@ -19,7 +20,7 @@ public class FoodPreferencesValidatorTests
     public void Validate_WithValidPreferences_ShouldReturnValid()
     {
         // Arrange
-        var preferences = new[] { "Italian", "Mexican" };
+        var preferences = new List<string> { new TripPreference(TripPreference.Food.Restaurant) };
 
         // Act
         var result = _validator.Validate(preferences);
@@ -70,7 +71,7 @@ public class CulturePreferencesValidatorTests
     public void Validate_WithValidPreferences_ShouldReturnValid()
     {
         // Arrange
-        var preferences = new[] { "Museums", "Art Galleries" };
+        var preferences = new[] { TripPreference.Culture.Museum, "monument" };
 
         // Act
         var result = _validator.Validate(preferences);
@@ -108,7 +109,7 @@ public class EntertainmentPreferencesValidatorTests
     public void Validate_WithValidPreferences_ShouldReturnValid()
     {
         // Arrange
-        var preferences = new[] { "Nightlife", "Concerts" };
+        var preferences = new[] { new TripPreference(TripPreference.Entertainment.Attraction), "park" };
 
         // Act
         var result = _validator.Validate(preferences);
@@ -146,7 +147,7 @@ public class PlaceTypePreferencesValidatorTests
     public void Validate_WithValidPreferences_ShouldReturnValid()
     {
         // Arrange
-        var preferences = new[] { "Beach", "Mountain" };
+        var preferences = new[] { new TripPreference(TripPreference.PlaceType.Beach), "mountain" };
 
         // Act
         var result = _validator.Validate(preferences);

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using LetsTripTogether.InternalApi.Application.UseCases.User.Command.SetCurrentUserPreferences;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Application.UnitTests.UseCases.User.Command.SetCurrentUserPreferences;
@@ -23,10 +24,10 @@ public class SetCurrentUserPreferencesValidatorTests
         {
             UserId = Guid.NewGuid(),
             LikesCommercial = true,
-            Food = new List<string> { "restaurant" },
-            Culture = new List<string> { "museum" },
-            Entertainment = new List<string> { "attraction" },
-            PlaceTypes = new List<string> { "beach" }
+            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            Culture = new List<string> { new TripPreference(TripPreference.Culture.Museum) },
+            Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
+            PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Beach) }
         };
 
         // Act

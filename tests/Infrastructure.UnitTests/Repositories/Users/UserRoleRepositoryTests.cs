@@ -45,7 +45,7 @@ public class UserRoleRepositoryTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userRole = new UserRole(user.Id, role.Id);
+        var userRole = new UserRole(user.Id, role);
         typeof(UserRole).GetProperty("UserId")!.SetValue(userRole, user.Id);
         typeof(UserRole).GetProperty("RoleId")!.SetValue(userRole, role.Id);
 
@@ -74,7 +74,7 @@ public class UserRoleRepositoryTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userRole = new UserRole(user.Id, role.Id);
+        var userRole = new UserRole(user.Id, role);
         typeof(UserRole).GetProperty("UserId")!.SetValue(userRole, user.Id);
         typeof(UserRole).GetProperty("RoleId")!.SetValue(userRole, role.Id);
         await _repository.AddAsync(userRole, CancellationToken.None);

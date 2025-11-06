@@ -68,25 +68,13 @@ public class User : TrackableEntity
         PasswordHash = passwordHash;
     }
 
-    public void AddRole(Role role)
+    private void AddRole(Role role)
     {
         if (_userRoles.Any(ur => ur.RoleId == role.Id))
         {
             return;
         }
 
-        _userRoles.Add(new UserRole(Id, role.Id));
-    }
-
-    public void RemoveRole(Guid roleId)
-    {
-        var userRole = _userRoles.FirstOrDefault(ur => ur.RoleId == roleId);
-
-        if (userRole is null)
-        {
-            return;
-        }
-
-        _userRoles.Remove(userRole);
+        _userRoles.Add(new UserRole(Id, role));
     }
 }

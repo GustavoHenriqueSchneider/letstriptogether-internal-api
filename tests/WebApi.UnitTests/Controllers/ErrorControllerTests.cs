@@ -83,7 +83,7 @@ public class ErrorControllerTests
         // Assert
         result.Should().BeOfType<ObjectResult>();
         var objectResult = result as ObjectResult;
-        objectResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        objectResult!.StatusCode.Should().Be(StatusCodes.Status422UnprocessableEntity);
     }
 
     [Test]

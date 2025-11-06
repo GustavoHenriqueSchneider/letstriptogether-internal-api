@@ -6,6 +6,7 @@ using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 using LetsTripTogether.InternalApi.Domain.Common;
 using LetsTripTogether.InternalApi.Domain.Security;
+using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
@@ -70,10 +71,10 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
         {
             UserId = user.Id,
             LikesCommercial = true,
-            Food = new List<string> { "Italian", "Brazilian" },
-            Culture = new List<string> { "Museums" },
-            Entertainment = new List<string> { "Nightlife" },
-            PlaceTypes = new List<string> { "Beach", "Mountain" }
+            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            Culture = new List<string> { new TripPreference(TripPreference.Culture.Museum) },
+            Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
+            PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Beach), "mountain" }
         };
 
         // Act
@@ -104,16 +105,16 @@ public class SetCurrentUserPreferencesHandlerTests : TestBase
 
         var preferences = new UserPreference(
             likesCommercial: true,
-            food: new List<string> { "Italian" },
-            culture: new List<string> { "Museums" },
-            entertainment: new List<string> { "Nightlife" },
-            placeTypes: new List<string> { "Beach" });
+            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
+            entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
+            placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });
         
         user.SetPreferences(preferences);
-        _userRepository.Update(user);
+        await _userPreferenceRepository.AddAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var groupName = $"Test Group {Guid.NewGuid():N}";
+        var groupName = TestDataHelper.GenerateRandomGroupName();
         var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         group.UpdatePreferences(preferences);

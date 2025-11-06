@@ -52,7 +52,8 @@ public class AdminGetAllGroupsHandlerTests : TestBase
 
         for (int i = 0; i < 15; i++)
         {
-            var groupName = $"Group {i} {Guid.NewGuid():N}";
+            var guidPart = Guid.NewGuid().ToString("N");
+            var groupName = $"G{i}{guidPart}".Substring(0, Math.Min(30, $"G{i}{guidPart}".Length));
             var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30 + i));
             group.AddMember(user, isOwner: true);
             await _groupRepository.AddAsync(group, CancellationToken.None);

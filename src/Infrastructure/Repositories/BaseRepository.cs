@@ -68,34 +68,44 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public void Update(T entity)
     {
-        // TODO: fazer atualizar o status das entidades filhas se houver modificação
         entity.SetUpdateAt();
         
         var entry = _dbSet.Entry(entity);
         if (entry.State == EntityState.Detached)
         {
+            var trackedEntity = _dbSet.Find(entity.Id);
+            if (trackedEntity != null)
+            {
+                var trackedEntry = _dbSet.Entry(trackedEntity);
+                trackedEntry.CurrentValues.SetValues(entity);
+                trackedEntry.State = EntityState.Modified;
+                return;
+            }
+            
             try
             {
                 _dbSet.Attach(entity);
+                entry.State = EntityState.Modified;
             }
             catch (InvalidOperationException)
             {
-                var trackedEntity = _dbSet.Find(entity.Id);
-                if (trackedEntity is null)
+                // Entity might be tracked in a different way, try to update by ID
+                var existingEntity = _dbSet.Local.FirstOrDefault(e => e.Id == entity.Id);
+                if (existingEntity != null)
                 {
-                    throw;
+                    var existingEntry = _dbSet.Entry(existingEntity);
+                    existingEntry.CurrentValues.SetValues(entity);
+                    existingEntry.State = EntityState.Modified;
+                    return;
                 }
                 
-                var trackedEntry = _dbSet.Entry(trackedEntity);
-                
-                trackedEntry.CurrentValues.SetValues(entity);
-                trackedEntry.State = EntityState.Modified;
-                
-                return;
+                throw;
             }
         }
-        
-        entry.State = EntityState.Modified;
+        else
+        {
+            entry.State = EntityState.Modified;
+        }
     }
 
     public void Remove(T entity)
@@ -103,11 +113,30 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
         var entry = _dbSet.Entry(entity);
         if (entry.State == EntityState.Detached)
         {
-            var trackedEntity = _dbSet.Find(entity.Id);
-            if (trackedEntity != null)
+            // Try to find tracked entity by Id (works for single key entities)
+            // For composite key entities, we need to check if already tracked differently
+            try
             {
-                _dbSet.Remove(trackedEntity);
-                return;
+                var trackedEntity = _dbSet.Find(entity.Id);
+                if (trackedEntity != null)
+                {
+                    _dbSet.Remove(trackedEntity);
+                    return;
+                }
+            }
+            catch (ArgumentException)
+            {
+                // Entity has composite key, Find() won't work with just Id
+                // Check if entity is already tracked by comparing with existing tracked entities
+                var trackedEntities = _dbSet.Local.Where(e => e.Id == entity.Id).ToList();
+                if (trackedEntities.Any())
+                {
+                    foreach (var tracked in trackedEntities)
+                    {
+                        _dbSet.Remove(tracked);
+                    }
+                    return;
+                }
             }
         }
         

@@ -69,15 +69,13 @@ public class EmailValidatorTests
     }
 
     [Test]
-    public void Validate_WithNullEmail_ShouldReturnInvalid()
+    public void Validate_WithNullEmail_ShouldThrowArgumentNullException()
     {
         // Arrange
         string? email = null;
 
-        // Act
-        var result = _validator.Validate(email!);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
+        // Act & Assert
+        Action act = () => _validator.Validate(email!);
+        act.Should().Throw<ArgumentNullException>();
     }
 }

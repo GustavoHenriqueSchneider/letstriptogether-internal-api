@@ -14,6 +14,9 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.HasKey(r => r.Id);
 
+        builder.HasIndex(x => x.Name)
+            .IsUnique();
+        
         builder.Property(r => r.Id)
             .IsRequired();
 

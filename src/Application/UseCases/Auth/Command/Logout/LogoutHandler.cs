@@ -23,7 +23,5 @@ public class LogoutHandler(
 
         var key = KeyHelper.UserRefreshToken(userId);
         await redisService.DeleteAsync(key);
-
-        // TODO: fazer logica pra travar accesstoken usado no logout enquanto ainda nao expirar
     }
 }
