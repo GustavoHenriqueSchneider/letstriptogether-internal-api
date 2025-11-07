@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroupById;
@@ -5,5 +6,5 @@ namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroup
 public class GetGroupByIdQuery : IRequest<GetGroupByIdResponse>
 {
     public Guid GroupId { get; init; }
-    public Guid UserId { get; init; }
+    [JsonIgnore] public Guid UserId { get; init; }
 }

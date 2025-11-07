@@ -14,7 +14,7 @@ using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateReg
 
 namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 
-// TODO: colocar tag de versionamento e descricoes para swagger
+// TODO: descricoes para swagger
 
 [ApiController]
 [Route("api/v{version:apiVersion}/auth")]
@@ -51,6 +51,12 @@ public class AuthController(
     [Authorize(Policy = Policies.RegisterSetPassword)]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken cancellationToken)
     {
+        command = command with
+        {
+            Email = currentUser.GetEmail(),
+            Name = currentUser.GetName()
+        };
+        
         var response = await mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(Register), response);
     }

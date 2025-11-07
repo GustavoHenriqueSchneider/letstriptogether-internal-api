@@ -10,5 +10,5 @@ public class DestinationAttraction : TrackableEntity
     public string Description { get; init; } = null!;
     public string Category { get; init; } = null!;
     
-    private DestinationAttraction() { }
+    public DestinationAttraction() { }
 }

@@ -111,7 +111,6 @@ namespace WebApi.Migrations
             {
                 if (stream == null)
                 {
-                    // Listar recursos disponiveis para debug
                     var availableResources = assembly.GetManifestResourceNames();
                     throw new InvalidOperationException(
                         $"Embedded resource '{resourceName}' not found. " +
@@ -148,7 +147,7 @@ namespace WebApi.Migrations
                     (DateTime?)null
                 });
                 
-                // Processar atracoes
+                // setting destination attractions
                 if (cityElement.TryGetProperty("attractions", out var attractionsElement) && attractionsElement.ValueKind == JsonValueKind.Array)
                 {
                     foreach (var attractionElement in attractionsElement.EnumerateArray())
@@ -179,11 +178,11 @@ namespace WebApi.Migrations
                 var valuesArray = new object[destinationRows.Count, 5];
                 for (int i = 0; i < destinationRows.Count; i++)
                 {
-                    valuesArray[i, 0] = destinationRows[i][0]; // Id
-                    valuesArray[i, 1] = destinationRows[i][1]; // Address
-                    valuesArray[i, 2] = destinationRows[i][2]; // Description
-                    valuesArray[i, 3] = destinationRows[i][3]; // CreatedAt
-                    valuesArray[i, 4] = destinationRows[i][4]; // UpdatedAt
+                    valuesArray[i, 0] = destinationRows[i][0];
+                    valuesArray[i, 1] = destinationRows[i][1];
+                    valuesArray[i, 2] = destinationRows[i][2];
+                    valuesArray[i, 3] = destinationRows[i][3];
+                    valuesArray[i, 4] = destinationRows[i][4];
                 }
                 
                 migrationBuilder.InsertData(

@@ -1,8 +1,8 @@
-﻿using StackExchange.Redis;
+using StackExchange.Redis;
 
 namespace LetsTripTogether.InternalApi.Infrastructure.Clients;
 
-public class RedisClient
+public class RedisClient : IRedisClient
 {
     public IDatabase Database { get; private set; }
 

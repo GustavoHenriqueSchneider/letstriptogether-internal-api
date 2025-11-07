@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 
-// TODO: colocar tag de versionamento e descricoes para swagger
+// TODO: descricoes para swagger
 
 [ApiController]
 [Authorize]

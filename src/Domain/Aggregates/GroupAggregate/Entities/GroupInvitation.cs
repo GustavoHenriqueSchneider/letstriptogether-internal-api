@@ -63,7 +63,7 @@ public class GroupInvitation : TrackableEntity
     
     private bool HasAnswer(UserGroupInvitation answer)
     {
-        return _answeredBy.Contains(answer);
+        return _answeredBy.Any(x => x.UserId == answer.UserId);
     }
 
     public UserGroupInvitation AddAnswer(Guid userId, bool isAccepted)

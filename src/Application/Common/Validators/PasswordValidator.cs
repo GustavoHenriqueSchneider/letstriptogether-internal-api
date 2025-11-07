@@ -1,7 +1,7 @@
 using FluentValidation;
 using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+namespace LetsTripTogether.InternalApi.Application.Common.Validators;
 
 public class PasswordValidator : AbstractValidator<string>
 {

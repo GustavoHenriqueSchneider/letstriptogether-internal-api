@@ -12,7 +12,7 @@ using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedD
 
 namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 
-// TODO: colocar tag de versionamento e descricoes para swagger
+// TODO: descricoes para swagger
 
 [ApiController]
 [Authorize]

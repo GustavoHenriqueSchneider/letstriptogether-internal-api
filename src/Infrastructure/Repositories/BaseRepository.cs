@@ -68,42 +68,78 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 
     public void Update(T entity)
     {
-        // TODO: fazer atualizar o status das entidades filhas se houver modificação
         entity.SetUpdateAt();
         
         var entry = _dbSet.Entry(entity);
         if (entry.State == EntityState.Detached)
         {
+            var trackedEntity = _dbSet.Find(entity.Id);
+            if (trackedEntity != null)
+            {
+                var trackedEntry = _dbSet.Entry(trackedEntity);
+                trackedEntry.CurrentValues.SetValues(entity);
+                trackedEntry.State = EntityState.Modified;
+                return;
+            }
+            
             try
             {
                 _dbSet.Attach(entity);
+                entry.State = EntityState.Modified;
             }
             catch (InvalidOperationException)
             {
-                var trackedEntity = _dbSet.Find(entity.Id);
-                if (trackedEntity is null)
+                var existingEntity = _dbSet.Local.FirstOrDefault(e => e.Id == entity.Id);
+                if (existingEntity != null)
                 {
-                    throw;
+                    var existingEntry = _dbSet.Entry(existingEntity);
+                    existingEntry.CurrentValues.SetValues(entity);
+                    existingEntry.State = EntityState.Modified;
+                    return;
                 }
                 
-                var trackedEntry = _dbSet.Entry(trackedEntity);
-                
-                trackedEntry.CurrentValues.SetValues(entity);
-                trackedEntry.State = EntityState.Modified;
-                
-                return;
+                throw;
             }
         }
-        
-        entry.State = EntityState.Modified;
+        else
+        {
+            entry.State = EntityState.Modified;
+        }
     }
 
     public void Remove(T entity)
     {
+        var entry = _dbSet.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            try
+            {
+                var trackedEntity = _dbSet.Find(entity.Id);
+                if (trackedEntity != null)
+                {
+                    _dbSet.Remove(trackedEntity);
+                    return;
+                }
+            }
+            catch (ArgumentException)
+            {
+                var trackedEntities = _dbSet.Local.Where(e => e.Id == entity.Id).ToList();
+                if (trackedEntities.Any())
+                {
+                    foreach (var tracked in trackedEntities)
+                    {
+                        _dbSet.Remove(tracked);
+                    }
+                    return;
+                }
+            }
+        }
+        
         _dbSet.Remove(entity);
     }
+    
     public void RemoveRange(IEnumerable<T> entityList)
     {
-        _dbSet.RemoveRange(entityList);
+        entityList.ToList().ForEach(Remove);
     }
 }

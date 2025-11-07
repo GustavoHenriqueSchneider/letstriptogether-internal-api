@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
@@ -5,7 +6,7 @@ namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.Get
 public class GetAllGroupMatchesByIdQuery : IRequest<GetAllGroupMatchesByIdResponse>
 {
     public Guid GroupId { get; init; }
-    public Guid UserId { get; init; }
+    [JsonIgnore] public Guid UserId { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }

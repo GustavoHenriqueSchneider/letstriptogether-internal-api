@@ -19,7 +19,7 @@ public class Destination : TrackableEntity
     private readonly List<DestinationAttraction> _attractions = [];
     public IReadOnlyCollection<DestinationAttraction> Attractions => _attractions.AsReadOnly();
     
-    private Destination() { }
+    public Destination() { }
 
     public bool HasCommercialCategory() => _attractions.Any(a => 
         a.Category.Equals(TripPreference.Shopping, StringComparison.OrdinalIgnoreCase));

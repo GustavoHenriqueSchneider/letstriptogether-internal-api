@@ -1,5 +1,5 @@
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using LetsTripTogether.InternalApi.Application.Common.Validators;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.SetCurrentUserPreferences;
 

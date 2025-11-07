@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MediatR;
 
 namespace LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.AcceptInvitation;
@@ -5,5 +6,5 @@ namespace LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.A
 public record AcceptInvitationCommand : IRequest
 {
     public string Token { get; init; } = null!;
-    public Guid UserId { get; init; }
+    [JsonIgnore] public Guid UserId { get; init; }
 }
