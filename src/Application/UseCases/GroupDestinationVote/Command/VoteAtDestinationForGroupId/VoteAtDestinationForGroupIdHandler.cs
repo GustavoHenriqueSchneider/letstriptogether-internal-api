@@ -34,12 +34,6 @@ public class VoteAtDestinationForGroupIdHandler(
             throw new BadRequestException("You are not a member of this group.");
         }
 
-        var existsGroup = await groupRepository.ExistsByIdAsync(request.GroupId, cancellationToken);
-        if (!existsGroup)
-        {
-            throw new NotFoundException("Group not found.");
-        }
-
         var destinationExists = await destinationRepository.ExistsByIdAsync(request.DestinationId, cancellationToken);
 
         if (!destinationExists)

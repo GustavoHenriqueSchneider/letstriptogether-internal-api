@@ -146,12 +146,7 @@ public class TokenService : ITokenService
             var claims = _tokenHandler.ValidateToken(refreshToken, validationParameters, out _);
             var tokenType = claims.FindFirstValue(Claims.TokenType);
 
-            if (tokenType is null || tokenType != TokenTypes.Refresh)
-            {
-                return (false, null);
-            }
-
-            return (true, claims);
+            return tokenType is not TokenTypes.Refresh ? (false, null) : (true, claims);
         }
         catch
         {

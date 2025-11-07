@@ -1,0 +1,18 @@
+using FluentAssertions;
+using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
+using NUnit.Framework;
+
+namespace Application.Tests.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
+
+[TestFixture]
+public class AdminGetGroupDestinationVoteByIdValidatorTests
+{
+    private AdminGetGroupDestinationVoteByIdValidator _validator = null!;
+    [SetUp] public void SetUp() => _validator = new AdminGetGroupDestinationVoteByIdValidator();
+    [Test]
+    public void Validate_WithValidQuery_ShouldReturnValid()
+    {
+        var query = new AdminGetGroupDestinationVoteByIdQuery { GroupId = Guid.NewGuid(), DestinationVoteId = Guid.NewGuid() };
+        _validator.Validate(query).IsValid.Should().BeTrue();
+    }
+}

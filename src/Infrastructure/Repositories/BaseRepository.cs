@@ -89,7 +89,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
             }
             catch (InvalidOperationException)
             {
-                // Entity might be tracked in a different way, try to update by ID
                 var existingEntity = _dbSet.Local.FirstOrDefault(e => e.Id == entity.Id);
                 if (existingEntity != null)
                 {
@@ -113,8 +112,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
         var entry = _dbSet.Entry(entity);
         if (entry.State == EntityState.Detached)
         {
-            // Try to find tracked entity by Id (works for single key entities)
-            // For composite key entities, we need to check if already tracked differently
             try
             {
                 var trackedEntity = _dbSet.Find(entity.Id);
@@ -126,8 +123,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
             }
             catch (ArgumentException)
             {
-                // Entity has composite key, Find() won't work with just Id
-                // Check if entity is already tracked by comparing with existing tracked entities
                 var trackedEntities = _dbSet.Local.Where(e => e.Id == entity.Id).ToList();
                 if (trackedEntities.Any())
                 {

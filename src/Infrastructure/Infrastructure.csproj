@@ -2,8 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>LetsTripTogether.InternalApi.Infrastructure</RootNamespace>
-        <AssemblyName>LetsTripTogether.InternalApi.Infrastructure</AssemblyName>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
