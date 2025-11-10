@@ -1,4 +1,4 @@
-using LetsTripTogether.InternalApi.WebApi;
+using WebApi;
 
 await Host
     .CreateDefaultBuilder(args)

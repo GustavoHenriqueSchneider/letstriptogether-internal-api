@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
+namespace Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 
 public class ValidateRegisterConfirmationCodeResponse
 {

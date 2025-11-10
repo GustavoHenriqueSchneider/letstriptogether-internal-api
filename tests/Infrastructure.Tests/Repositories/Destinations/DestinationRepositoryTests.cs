@@ -1,7 +1,7 @@
+using Domain.Aggregates.DestinationAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Destinations;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Repositories.Destinations;
@@ -24,7 +24,7 @@ public class DestinationRepositoryTests : TestBase
         // Arrange
         for (int i = 0; i < 15; i++)
         {
-            var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+            var destination = new Destination
             {
                 Address = $"Address {i}",
                 Description = $"Description {i}"
@@ -45,7 +45,7 @@ public class DestinationRepositoryTests : TestBase
     public async Task GetByIdAsync_WithDestination_ShouldReturnDestinationWithAttractions()
     {
         // Arrange
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Destination
         {
             Address = "Test Address",
             Description = "Test Description"

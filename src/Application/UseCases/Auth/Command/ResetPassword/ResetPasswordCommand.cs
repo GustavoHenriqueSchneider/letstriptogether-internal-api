@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ResetPassword;
+namespace Application.UseCases.Auth.Command.ResetPassword;
 
 public record ResetPasswordCommand : IRequest
 {

@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Logout;
+namespace Application.UseCases.Auth.Command.Logout;
 
 public class LogoutCommand : IRequest
 {

@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.DeleteCurrentUser;
+namespace Application.UseCases.User.Command.DeleteCurrentUser;
 
 public class DeleteCurrentUserCommand : IRequest
 {

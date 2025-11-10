@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
+﻿using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
+namespace Domain.Aggregates.RoleAggregate.Entities;
 
 public class Role : TrackableEntity
 {

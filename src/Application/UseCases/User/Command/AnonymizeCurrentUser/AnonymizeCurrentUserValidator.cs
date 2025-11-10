@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.AnonymizeCurrentUser;
+namespace Application.UseCases.User.Command.AnonymizeCurrentUser;
 
 public class AnonymizeCurrentUserValidator : AbstractValidator<AnonymizeCurrentUserCommand>
 {

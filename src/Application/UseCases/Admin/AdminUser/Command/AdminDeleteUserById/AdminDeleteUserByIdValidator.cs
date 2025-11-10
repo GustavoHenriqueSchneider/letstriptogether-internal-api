@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
 
 public class AdminDeleteUserByIdValidator : AbstractValidator<AdminDeleteUserByIdCommand>
 {

@@ -1,16 +1,17 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Common;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Destinations;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
@@ -55,12 +56,12 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
     public async Task Handle_WithValidData_ShouldCreateVote()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -68,17 +69,17 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -111,12 +112,12 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
     public async Task Handle_WithDuplicateVote_ShouldThrowConflictException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -124,17 +125,17 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -157,7 +158,7 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.ConflictException>();
+        await act.Should().ThrowAsync<ConflictException>();
     }
 
     [Test]
@@ -174,7 +175,7 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>()
+        await act.Should().ThrowAsync<NotFoundException>()
             .WithMessage("User not found.");
     }
 
@@ -182,12 +183,12 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
     public async Task Handle_WithUserNotMemberOfGroup_ShouldThrowBadRequestException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -195,16 +196,16 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -222,7 +223,7 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>()
+        await act.Should().ThrowAsync<BadRequestException>()
             .WithMessage("You are not a member of this group.");
     }
 
@@ -230,12 +231,12 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
     public async Task Handle_WithNonExistentDestination_ShouldThrowNotFoundException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -243,12 +244,12 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -263,7 +264,7 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>()
+        await act.Should().ThrowAsync<NotFoundException>()
             .WithMessage("Destination not found.");
     }
 
@@ -271,12 +272,12 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
     public async Task Handle_WithIsApprovedFalse_ShouldNotCreateMatch()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -284,17 +285,17 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
         {
             Address = "Test Address",
             Description = "Test Description"

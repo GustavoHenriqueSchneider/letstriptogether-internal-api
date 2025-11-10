@@ -1,5 +1,5 @@
+using Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;

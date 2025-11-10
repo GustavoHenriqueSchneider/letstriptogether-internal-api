@@ -1,8 +1,11 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
 using Application.Tests.Common;
+using Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Configurations;
+using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
 
@@ -23,7 +26,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
             .Returns(Task.CompletedTask);
         _redisService = redisServiceMock.Object;
         
-        var jwtSettings = new LetsTripTogether.InternalApi.Infrastructure.Configurations.JsonWebTokenSettings
+        var jwtSettings = new JsonWebTokenSettings
         {
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
@@ -43,7 +46,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var name = TestDataHelper.GenerateRandomName();
         var code = "123456";
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.RegisterEmailConfirmation(email);
+        var key = KeyHelper.RegisterEmailConfirmation(email);
 
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync(code);
@@ -75,7 +78,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
         var name = TestDataHelper.GenerateRandomName();
         var storedCode = "123456";
         var providedCode = "654321";
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.RegisterEmailConfirmation(email);
+        var key = KeyHelper.RegisterEmailConfirmation(email);
 
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync(storedCode);
@@ -91,7 +94,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
+        await act.Should().ThrowAsync<BadRequestException>();
     }
 
     [Test]
@@ -100,7 +103,7 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
         // Arrange
         var email = TestDataHelper.GenerateRandomEmail();
         var name = TestDataHelper.GenerateRandomName();
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.RegisterEmailConfirmation(email);
+        var key = KeyHelper.RegisterEmailConfirmation(email);
 
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync((string?)null);
@@ -116,6 +119,6 @@ public class ValidateRegisterConfirmationCodeHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>();
+        await act.Should().ThrowAsync<BadRequestException>();
     }
 }

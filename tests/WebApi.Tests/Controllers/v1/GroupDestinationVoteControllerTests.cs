@@ -1,14 +1,14 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
+using Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+using Application.UseCases.GroupDestinationVote.Query.GetGroupDestinationVoteById;
+using Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupDestinationVoteById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

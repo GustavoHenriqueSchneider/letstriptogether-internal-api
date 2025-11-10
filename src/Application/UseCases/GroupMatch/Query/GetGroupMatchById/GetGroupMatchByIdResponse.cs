@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetGroupMatchById;
+namespace Application.UseCases.GroupMatch.Query.GetGroupMatchById;
 
 public class GetGroupMatchByIdResponse
 {

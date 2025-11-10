@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
+namespace Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
 
 public class RemoveGroupMemberByIdCommand : IRequest
 {

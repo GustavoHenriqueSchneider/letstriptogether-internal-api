@@ -1,13 +1,13 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
+using Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+using Application.UseCases.GroupDestinationVote.Query.GetGroupDestinationVoteById;
+using Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupDestinationVoteById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
+namespace WebApi.Controllers.v1;
 
 // TODO: descricoes para swagger
 
@@ -33,8 +33,18 @@ public class GroupDestinationVoteController(
     }
 
     [HttpPut("{destinationVoteId:guid}")]
-    public async Task<IActionResult> UpdateDestinationVoteById([FromRoute] Guid groupId, 
-        [FromRoute] Guid destinationVoteId, [FromBody] UpdateDestinationVoteByIdCommand command, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Atualizar Voto em Destino",
+        Description = "Atualiza um voto existente do usuário autenticado em um destino do grupo.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateDestinationVoteById(
+        [FromRoute] Guid groupId, 
+        [FromRoute] Guid destinationVoteId, 
+        [FromBody] UpdateDestinationVoteByIdCommand command, 
+        CancellationToken cancellationToken)
     {
         command = command with
         {
@@ -64,8 +74,17 @@ public class GroupDestinationVoteController(
     }
 
     [HttpGet("{destinationVoteId:guid}")]
+    [SwaggerOperation(
+        Summary = "Obter Voto em Destino por ID",
+        Description = "Retorna os detalhes de um voto específico em destino do grupo.")]
+    [ProducesResponseType(typeof(GetGroupDestinationVoteByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGroupDestinationVoteById(
-        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId, CancellationToken cancellationToken)
+        [FromRoute] Guid groupId, 
+        [FromRoute] Guid destinationVoteId, 
+        CancellationToken cancellationToken)
     {
         var query = new GetGroupDestinationVoteByIdQuery
         {

@@ -1,8 +1,8 @@
-﻿using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
+﻿using Domain.Common;
+using Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Repositories;
+namespace Infrastructure.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : TrackableEntity
 {

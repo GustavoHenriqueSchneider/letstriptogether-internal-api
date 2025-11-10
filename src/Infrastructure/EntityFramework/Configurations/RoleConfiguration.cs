@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Configurations;
+namespace Infrastructure.EntityFramework.Configurations;
 
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {

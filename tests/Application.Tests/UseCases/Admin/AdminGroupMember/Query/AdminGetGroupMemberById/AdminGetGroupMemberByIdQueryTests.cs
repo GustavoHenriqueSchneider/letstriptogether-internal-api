@@ -1,5 +1,5 @@
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;

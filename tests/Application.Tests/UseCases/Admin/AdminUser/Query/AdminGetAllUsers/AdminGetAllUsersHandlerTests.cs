@@ -1,12 +1,12 @@
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
@@ -35,12 +35,12 @@ public class AdminGetAllUsersHandlerTests : TestBase
     public async Task Handle_WithUsers_ShouldReturnPaginatedResults()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -50,7 +50,7 @@ public class AdminGetAllUsersHandlerTests : TestBase
             var email = TestDataHelper.GenerateRandomEmail();
             var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
             var userName = TestDataHelper.GenerateRandomName();
-            var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+            var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
             await _userRepository.AddAsync(user, CancellationToken.None);
         }
         await DbContext.SaveChangesAsync();

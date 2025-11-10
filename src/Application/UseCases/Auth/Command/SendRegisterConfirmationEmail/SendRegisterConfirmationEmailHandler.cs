@@ -1,13 +1,13 @@
 using System.Security.Claims;
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Domain.ValueObjects;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
+using Domain.Security;
+using Domain.ValueObjects;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+namespace Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 
 public class SendRegisterConfirmationEmailHandler(
     IEmailSenderService emailSenderService,

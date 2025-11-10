@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
+using Application.Common.Policies;
+using Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
+using Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
+namespace WebApi.Controllers.v1.Admin;
 
 // TODO: descricoes para swagger
 
@@ -29,7 +29,16 @@ public class AdminGroupController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{groupId:guid}")]
-    public async Task<IActionResult> AdminGetGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Obter Grupo por ID (Admin)",
+        Description = "Retorna os detalhes de um grupo específico. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetGroupByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AdminGetGroupById(
+        [FromRoute] Guid groupId, 
+        CancellationToken cancellationToken)
     {
         var query = new AdminGetGroupByIdQuery
         {

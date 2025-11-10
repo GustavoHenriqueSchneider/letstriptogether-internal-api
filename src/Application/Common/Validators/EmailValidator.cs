@@ -1,7 +1,7 @@
 using FluentValidation;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.Common.Validators;
+namespace Application.Common.Validators;
 
 public class EmailValidator : AbstractValidator<string>
 {

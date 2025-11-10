@@ -1,10 +1,10 @@
+using Application.UseCases.Destination.Query.GetDestinationById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Destination.Query.GetDestinationById;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

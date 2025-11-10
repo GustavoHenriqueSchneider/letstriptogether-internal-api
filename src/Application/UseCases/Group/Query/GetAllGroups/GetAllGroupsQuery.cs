@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetAllGroups;
+namespace Application.UseCases.Group.Query.GetAllGroups;
 
 public class GetAllGroupsQuery : IRequest<GetAllGroupsResponse>
 {

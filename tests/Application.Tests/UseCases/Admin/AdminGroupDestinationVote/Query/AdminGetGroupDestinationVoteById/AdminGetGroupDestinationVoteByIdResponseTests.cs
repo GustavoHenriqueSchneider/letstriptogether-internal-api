@@ -1,5 +1,5 @@
+using Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;

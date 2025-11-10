@@ -1,12 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
-
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.DeleteCurrentUser;
+namespace Application.UseCases.User.Command.DeleteCurrentUser;
 
 public class DeleteCurrentUserHandler(
     IRedisService redisService,
@@ -22,8 +21,7 @@ public class DeleteCurrentUserHandler(
         {
             throw new NotFoundException("User not found.");
         }
-
-        // TODO: parou de funcionar
+        
         userRepository.Remove(user);
         await unitOfWork.SaveAsync(cancellationToken);
 

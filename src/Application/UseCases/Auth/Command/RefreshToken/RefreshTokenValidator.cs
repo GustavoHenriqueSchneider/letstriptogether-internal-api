@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToken;
+namespace Application.UseCases.Auth.Command.RefreshToken;
 
 public class RefreshTokenValidator : AbstractValidator<RefreshTokenCommand>
 {

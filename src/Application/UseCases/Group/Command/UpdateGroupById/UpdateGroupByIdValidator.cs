@@ -1,7 +1,7 @@
 using FluentValidation;
-using GroupModel = LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group;
+using GroupModel = Domain.Aggregates.GroupAggregate.Entities.Group;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.UpdateGroupById;
+namespace Application.UseCases.Group.Command.UpdateGroupById;
 
 public class UpdateGroupByIdValidator : AbstractValidator<UpdateGroupByIdCommand>
 {

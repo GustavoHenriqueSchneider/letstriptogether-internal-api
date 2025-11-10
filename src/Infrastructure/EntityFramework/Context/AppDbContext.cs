@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Domain.Aggregates.DestinationAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
+namespace Infrastructure.EntityFramework.Context;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IUnitOfWork
 {

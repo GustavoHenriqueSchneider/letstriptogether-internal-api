@@ -1,5 +1,5 @@
+using Application.UseCases.Auth.Command.Logout;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Logout;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Auth.Command.Logout;

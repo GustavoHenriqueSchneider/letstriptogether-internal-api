@@ -1,6 +1,6 @@
-﻿using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+﻿using Domain.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Domain.ValueObjects;
+namespace Domain.ValueObjects;
 
 public class Step
 {

@@ -1,4 +1,4 @@
-﻿namespace LetsTripTogether.InternalApi.Domain.Common;
+﻿namespace Domain.Common;
 
 public class TrackableEntity
 {

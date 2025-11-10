@@ -1,7 +1,7 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
+using Domain.Aggregates.DestinationAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+namespace Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 
 public class AdminGetAllDestinationsHandler(IDestinationRepository destinationRepository)
     : IRequestHandler<AdminGetAllDestinationsQuery, AdminGetAllDestinationsResponse>

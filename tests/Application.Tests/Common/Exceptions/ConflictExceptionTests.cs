@@ -1,5 +1,5 @@
+using Application.Common.Exceptions;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 

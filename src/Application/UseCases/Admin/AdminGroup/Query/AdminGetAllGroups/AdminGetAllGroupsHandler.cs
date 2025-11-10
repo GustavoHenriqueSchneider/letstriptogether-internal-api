@@ -1,7 +1,7 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
+namespace Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
 
 public class AdminGetAllGroupsHandler(IGroupRepository groupRepository)
     : IRequestHandler<AdminGetAllGroupsQuery, AdminGetAllGroupsResponse>

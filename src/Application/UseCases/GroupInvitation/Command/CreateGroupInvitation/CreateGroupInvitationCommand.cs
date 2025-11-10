@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationCommand : IRequest<CreateGroupInvitationResponse>
 {

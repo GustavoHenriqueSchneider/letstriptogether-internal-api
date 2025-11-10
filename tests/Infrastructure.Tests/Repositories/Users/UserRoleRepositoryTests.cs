@@ -1,11 +1,11 @@
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Repositories.Users;
@@ -33,22 +33,22 @@ public class UserRoleRepositoryTests : TestBase
     public async Task AddAsync_WithValidUserRole_ShouldAdd()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
         
-        var role2 = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.Admin, CancellationToken.None);
+        var role2 = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.Admin, CancellationToken.None);
 
         if (role2 is null)
         {
             role2 = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role2, LetsTripTogether.InternalApi.Domain.Security.Roles.Admin);
+            typeof(Role).GetProperty("Name")!.SetValue(role2, global::Domain.Security.Roles.Admin);
             await _roleRepository.AddAsync(role2, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -75,22 +75,22 @@ public class UserRoleRepositoryTests : TestBase
     public async Task Remove_WithValidUserRole_ShouldRemove()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
         
-        var role2 = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.Admin, CancellationToken.None);
+        var role2 = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.Admin, CancellationToken.None);
 
         if (role2 is null)
         {
             role2 = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role2, LetsTripTogether.InternalApi.Domain.Security.Roles.Admin);
+            typeof(Role).GetProperty("Name")!.SetValue(role2, global::Domain.Security.Roles.Admin);
             await _roleRepository.AddAsync(role2, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }

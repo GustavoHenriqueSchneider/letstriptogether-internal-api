@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
 public class AdminAnonymizeUserByIdValidator : AbstractValidator<AdminAnonymizeUserByIdCommand>
 {

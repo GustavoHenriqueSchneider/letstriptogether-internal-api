@@ -1,11 +1,10 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
-
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
+namespace Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
 
 public class RemoveGroupMemberByIdHandler(
     IGroupMemberRepository groupMemberRepository,

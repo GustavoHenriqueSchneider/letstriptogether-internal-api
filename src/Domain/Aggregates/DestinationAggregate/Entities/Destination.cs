@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Common;
+using Domain.ValueObjects.TripPreferences;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
+namespace Domain.Aggregates.DestinationAggregate.Entities;
 
 public class Destination : TrackableEntity
 {

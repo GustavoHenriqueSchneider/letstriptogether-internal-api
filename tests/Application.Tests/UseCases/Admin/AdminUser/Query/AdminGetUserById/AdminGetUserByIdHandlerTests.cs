@@ -1,14 +1,15 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Security;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminUser.Query.AdminGetUserById;
@@ -39,12 +40,12 @@ public class AdminGetUserByIdHandlerTests : TestBase
     public async Task Handle_WithValidUser_ShouldReturnUser()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -52,7 +53,7 @@ public class AdminGetUserByIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -93,6 +94,6 @@ public class AdminGetUserByIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }

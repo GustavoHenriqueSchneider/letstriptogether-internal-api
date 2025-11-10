@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
 
 public class CancelActiveGroupInvitationCommand : IRequest
 {

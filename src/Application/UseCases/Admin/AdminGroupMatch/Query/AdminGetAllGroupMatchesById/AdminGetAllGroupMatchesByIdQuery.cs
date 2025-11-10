@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+namespace Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
 
 public class AdminGetAllGroupMatchesByIdQuery : IRequest<AdminGetAllGroupMatchesByIdResponse>
 {

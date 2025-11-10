@@ -1,8 +1,8 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
+﻿using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Common;
+using Domain.ValueObjects.TripPreferences;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+namespace Domain.Aggregates.UserAggregate.Entities;
 
 public class UserPreference : TrackableEntity
 {

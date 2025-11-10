@@ -1,13 +1,13 @@
-using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
+using Application.Common.Policies;
+using Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
+namespace WebApi.Controllers.v1.Admin;
 
 // TODO: descricoes para swagger
 
@@ -46,8 +46,17 @@ public class AdminGroupMemberController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{memberId:guid}")]
-    public async Task<IActionResult> AdminRemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid memberId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Remover Membro do Grupo (Admin)",
+        Description = "Remove um membro de um grupo. Requer permissões de administrador.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AdminRemoveGroupMemberById(
+        [FromRoute] Guid groupId,
+        [FromRoute] Guid memberId, 
+        CancellationToken cancellationToken)
     {
         var command = new AdminRemoveGroupMemberByIdCommand
         {
@@ -60,8 +69,19 @@ public class AdminGroupMemberController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{memberId:guid}/destination-votes")]
-    public async Task<IActionResult> AdminGetGroupMemberAllDestinationVotesById([FromRoute] Guid groupId,
-        [FromRoute] Guid memberId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    [SwaggerOperation(
+        Summary = "Listar Todos os Votos em Destinos do Membro (Admin)",
+        Description = "Retorna uma lista paginada de todos os votos em destinos de um membro específico em um grupo. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetGroupMemberAllDestinationVotesByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AdminGetGroupMemberAllDestinationVotesById(
+        [FromRoute] Guid groupId,
+        [FromRoute] Guid memberId, 
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         var query = new AdminGetGroupMemberAllDestinationVotesByIdQuery
         {

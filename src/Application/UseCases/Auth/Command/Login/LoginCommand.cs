@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Login;
+namespace Application.UseCases.Auth.Command.Login;
 
 public class LoginCommand : IRequest<LoginResponse>
 {

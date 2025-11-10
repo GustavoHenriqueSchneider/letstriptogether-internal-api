@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
 public class AdminAnonymizeUserByIdCommand : IRequest
 {

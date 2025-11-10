@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
+namespace Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
 
 public class GetOtherGroupMembersByIdResponse
 {

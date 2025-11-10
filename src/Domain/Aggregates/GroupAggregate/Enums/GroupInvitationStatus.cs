@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
+namespace Domain.Aggregates.GroupAggregate.Enums;
 
 public enum GroupInvitationStatus
 {

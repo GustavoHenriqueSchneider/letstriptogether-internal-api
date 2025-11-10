@@ -1,5 +1,5 @@
+using Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;

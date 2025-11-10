@@ -1,14 +1,13 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
-
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate.Enums;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
-using GroupInvitationModel = LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation;
+using GroupInvitationModel = Domain.Aggregates.GroupAggregate.Entities.GroupInvitation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationHandler(
     IGroupInvitationRepository groupInvitationRepository,

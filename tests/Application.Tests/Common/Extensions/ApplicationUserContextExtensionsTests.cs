@@ -1,7 +1,7 @@
 using System.Security.Claims;
+using Application.Common.Extensions;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Extensions;
-using LetsTripTogether.InternalApi.Domain.Security;
 using NUnit.Framework;
 
 namespace Application.Tests.Common.Extensions;

@@ -1,10 +1,10 @@
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
 using System.Reflection;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common.Exceptions;
+using Domain.Security;
 using Infrastructure.Tests.Common;
 using NUnit.Framework;
 

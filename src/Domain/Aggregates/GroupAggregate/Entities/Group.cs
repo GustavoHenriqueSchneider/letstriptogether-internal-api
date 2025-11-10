@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
+using Domain.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+namespace Domain.Aggregates.GroupAggregate.Entities;
 
 public class Group : TrackableEntity
 {

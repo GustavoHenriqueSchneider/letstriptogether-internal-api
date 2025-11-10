@@ -1,5 +1,5 @@
+using Application.UseCases.User.Query.GetCurrentUser;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Query.GetCurrentUser;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.User.Query.GetCurrentUser;

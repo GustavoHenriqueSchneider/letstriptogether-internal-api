@@ -1,12 +1,12 @@
+using Application.Common.Exceptions;
+using Domain.Common.Exceptions;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
-using LetsTripTogether.InternalApi.WebApi.Controllers;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers;
 
 namespace WebApi.Tests.Controllers;
 

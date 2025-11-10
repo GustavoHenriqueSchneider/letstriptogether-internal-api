@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+namespace Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 
 public class AdminRemoveGroupMemberByIdValidator : AbstractValidator<AdminRemoveGroupMemberByIdCommand>
 {

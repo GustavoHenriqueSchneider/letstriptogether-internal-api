@@ -1,6 +1,6 @@
+using Application.UseCases.User.Command.SetCurrentUserPreferences;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.SetCurrentUserPreferences;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.User.Command.SetCurrentUserPreferences;

@@ -1,13 +1,13 @@
+using Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
+using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1.Admin;
 
 namespace WebApi.Tests.Controllers.v1.Admin;
 

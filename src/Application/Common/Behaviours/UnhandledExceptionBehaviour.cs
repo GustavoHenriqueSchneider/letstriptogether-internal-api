@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+using Application.Common.Exceptions;
+using Domain.Common.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace LetsTripTogether.InternalApi.Application.Common.Behaviours;
+namespace Application.Common.Behaviours;
 
 public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

@@ -1,5 +1,5 @@
+using Domain.Aggregates.RoleAggregate.Entities;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
 using NUnit.Framework;
 
 namespace Domain.Tests.Aggregates.RoleAggregate;

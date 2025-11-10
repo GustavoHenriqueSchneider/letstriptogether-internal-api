@@ -1,6 +1,6 @@
 using StackExchange.Redis;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Clients;
+namespace Infrastructure.Clients;
 
 public class RedisClient : IRedisClient
 {

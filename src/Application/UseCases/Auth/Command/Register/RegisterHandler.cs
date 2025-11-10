@@ -1,12 +1,12 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.RoleAggregate;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Register;
+namespace Application.UseCases.Auth.Command.Register;
 
 public class RegisterHandler(
     IPasswordHashService passwordHashService,

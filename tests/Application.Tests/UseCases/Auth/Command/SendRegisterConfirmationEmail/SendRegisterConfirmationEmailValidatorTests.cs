@@ -1,5 +1,5 @@
+using Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Auth.Command.SendRegisterConfirmationEmail;

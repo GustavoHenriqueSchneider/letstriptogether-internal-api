@@ -1,9 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroupById;
+namespace Application.UseCases.Group.Query.GetGroupById;
 
 public class GetGroupByIdHandler(
     IGroupPreferenceRepository groupPreferenceRepository,

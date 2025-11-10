@@ -1,6 +1,6 @@
+using Application.Common.Validators;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Application.Tests.Common.Validators;

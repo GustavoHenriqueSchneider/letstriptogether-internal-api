@@ -1,19 +1,18 @@
 using System.IdentityModel.Tokens.Jwt;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.Invitation.Command.RefuseInvitation;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
+using Domain.Security;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.RefuseInvitation;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -69,12 +68,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithValidInvitation_ShouldRefuse()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -82,13 +81,13 @@ public class RefuseInvitationHandlerTests : TestBase
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
         var ownerPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var ownerName = TestDataHelper.GenerateRandomName();
-        var owner = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
+        var owner = new Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
         await _userRepository.AddAsync(owner, CancellationToken.None);
         
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -98,11 +97,11 @@ public class RefuseInvitationHandlerTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -158,12 +157,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithUserWithoutPreferences_ShouldThrowBadRequestException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -171,7 +170,7 @@ public class RefuseInvitationHandlerTests : TestBase
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -193,12 +192,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithInvalidToken_ShouldThrowUnauthorizedException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -206,7 +205,7 @@ public class RefuseInvitationHandlerTests : TestBase
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -246,12 +245,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithExpiredToken_ShouldThrowUnauthorizedException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -259,7 +258,7 @@ public class RefuseInvitationHandlerTests : TestBase
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -301,12 +300,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithInvalidInvitationId_ShouldThrowNotFoundException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -314,7 +313,7 @@ public class RefuseInvitationHandlerTests : TestBase
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -356,12 +355,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithNonExistentInvitation_ShouldThrowNotFoundException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -369,7 +368,7 @@ public class RefuseInvitationHandlerTests : TestBase
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -412,12 +411,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithInactiveInvitation_ShouldThrowBadRequestException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -425,13 +424,13 @@ public class RefuseInvitationHandlerTests : TestBase
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
         var ownerPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var ownerName = TestDataHelper.GenerateRandomName();
-        var owner = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
+        var owner = new Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
         await _userRepository.AddAsync(owner, CancellationToken.None);
         
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -441,11 +440,11 @@ public class RefuseInvitationHandlerTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
         invitation.Cancel();
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -483,12 +482,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithExpiredInvitation_ShouldThrowBadRequestException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -496,13 +495,13 @@ public class RefuseInvitationHandlerTests : TestBase
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
         var ownerPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var ownerName = TestDataHelper.GenerateRandomName();
-        var owner = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
+        var owner = new Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
         await _userRepository.AddAsync(owner, CancellationToken.None);
         
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -512,12 +511,12 @@ public class RefuseInvitationHandlerTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
-        typeof(LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation).GetProperty("ExpirationDate")!.SetValue(invitation, DateTime.UtcNow.AddDays(-1));
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        typeof(Domain.Aggregates.GroupAggregate.Entities.GroupInvitation).GetProperty("ExpirationDate")!.SetValue(invitation, DateTime.UtcNow.AddDays(-1));
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -554,12 +553,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithAlreadyAnsweredInvitation_ShouldThrowConflictException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -567,13 +566,13 @@ public class RefuseInvitationHandlerTests : TestBase
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
         var ownerPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var ownerName = TestDataHelper.GenerateRandomName();
-        var owner = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
+        var owner = new Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
         await _userRepository.AddAsync(owner, CancellationToken.None);
         
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -583,11 +582,11 @@ public class RefuseInvitationHandlerTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
         invitation.AddAnswer(user.Id, isAccepted: false);
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -625,12 +624,12 @@ public class RefuseInvitationHandlerTests : TestBase
     public async Task Handle_WithAlreadyMember_ShouldThrowBadRequestException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -638,13 +637,13 @@ public class RefuseInvitationHandlerTests : TestBase
         var ownerEmail = TestDataHelper.GenerateRandomEmail();
         var ownerPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var ownerName = TestDataHelper.GenerateRandomName();
-        var owner = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
+        var owner = new Domain.Aggregates.UserAggregate.Entities.User(ownerName, ownerEmail, ownerPasswordHash, role);
         await _userRepository.AddAsync(owner, CancellationToken.None);
         
         var userEmail = TestDataHelper.GenerateRandomEmail();
         var userPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, userEmail, userPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -654,12 +653,12 @@ public class RefuseInvitationHandlerTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(owner, isOwner: true);
         group.AddMember(user, isOwner: false);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 

@@ -1,12 +1,11 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
-
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate.Enums;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
 
 public class CancelActiveGroupInvitationHandler(
     IGroupInvitationRepository groupInvitationRepository,

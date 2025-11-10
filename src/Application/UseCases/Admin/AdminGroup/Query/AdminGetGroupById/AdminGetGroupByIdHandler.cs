@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate.Entities;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
+namespace Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
 
 public class AdminGetGroupByIdHandler(IGroupRepository groupRepository)
     : IRequestHandler<AdminGetGroupByIdQuery, AdminGetGroupByIdResponse>

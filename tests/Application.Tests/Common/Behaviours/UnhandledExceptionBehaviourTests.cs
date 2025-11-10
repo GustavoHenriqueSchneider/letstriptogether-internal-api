@@ -1,7 +1,7 @@
+using Application.Common.Behaviours;
+using Application.Common.Exceptions;
+using Domain.Common.Exceptions;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Behaviours;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;

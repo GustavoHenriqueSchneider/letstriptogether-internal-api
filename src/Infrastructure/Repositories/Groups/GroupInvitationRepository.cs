@@ -1,10 +1,10 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Enums;
+using Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
+namespace Infrastructure.Repositories.Groups;
 
 public class GroupInvitationRepository : BaseRepository<GroupInvitation>, IGroupInvitationRepository
 {

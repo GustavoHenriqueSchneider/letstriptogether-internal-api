@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
+﻿using Domain.Aggregates.DestinationAggregate.Entities;
+using Domain.Common;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
+namespace Domain.Aggregates.DestinationAggregate;
 
 public interface IDestinationRepository : IBaseRepository<Destination>
 {

@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
 
 public class AdminUpdateUserByIdHandler(
     IUnitOfWork unitOfWork,

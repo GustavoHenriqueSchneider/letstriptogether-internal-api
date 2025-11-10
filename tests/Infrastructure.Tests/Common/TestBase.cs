@@ -1,4 +1,4 @@
-using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
+using Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Tests.Common;

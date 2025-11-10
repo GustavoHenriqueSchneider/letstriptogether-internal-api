@@ -1,4 +1,4 @@
-﻿namespace LetsTripTogether.InternalApi.Application.Common.Policies;
+﻿namespace Application.Common.Policies;
 
 public class Policies
 {

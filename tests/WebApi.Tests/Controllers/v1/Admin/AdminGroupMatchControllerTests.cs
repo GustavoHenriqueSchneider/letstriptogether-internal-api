@@ -1,11 +1,11 @@
+using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1.Admin;
 
 namespace WebApi.Tests.Controllers.v1.Admin;
 

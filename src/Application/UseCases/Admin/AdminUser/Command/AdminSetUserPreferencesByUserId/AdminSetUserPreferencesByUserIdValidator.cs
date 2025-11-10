@@ -1,7 +1,7 @@
+using Application.Common.Validators;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public class AdminSetUserPreferencesByUserIdValidator : AbstractValidator<AdminSetUserPreferencesByUserIdCommand>
 {

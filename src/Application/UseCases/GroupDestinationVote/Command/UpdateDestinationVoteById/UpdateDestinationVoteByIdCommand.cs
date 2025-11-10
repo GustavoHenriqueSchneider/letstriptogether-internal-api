@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
+namespace Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
 
 public record UpdateDestinationVoteByIdCommand : IRequest
 {

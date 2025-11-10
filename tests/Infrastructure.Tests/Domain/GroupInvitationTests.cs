@@ -1,8 +1,8 @@
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Enums;
+using Domain.Common.Exceptions;
 using FluentAssertions;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Domain;

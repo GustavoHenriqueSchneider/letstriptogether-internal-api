@@ -1,6 +1,6 @@
+using Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;

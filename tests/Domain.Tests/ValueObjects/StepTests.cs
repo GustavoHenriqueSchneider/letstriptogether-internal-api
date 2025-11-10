@@ -1,6 +1,6 @@
+using Domain.Common.Exceptions;
+using Domain.ValueObjects;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.ValueObjects;
 using NUnit.Framework;
 
 namespace Domain.Tests.ValueObjects;

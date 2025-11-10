@@ -1,15 +1,15 @@
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.DestinationAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Destinations;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Repositories.Groups;
@@ -43,12 +43,12 @@ public class GroupMemberDestinationVoteRepositoryTests : TestBase
     public async Task ExistsByGroupMemberDestinationVoteByIdsAsync_WithExistingVote_ShouldReturnTrue()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -66,7 +66,7 @@ public class GroupMemberDestinationVoteRepositoryTests : TestBase
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -91,12 +91,12 @@ public class GroupMemberDestinationVoteRepositoryTests : TestBase
     public async Task GetByMemberIdAsync_WithVotes_ShouldReturnPaginatedResults()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -118,7 +118,7 @@ public class GroupMemberDestinationVoteRepositoryTests : TestBase
         
         for (int i = 0; i < 5; i++)
         {
-            var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+            var destination = new Destination
             {
                 Address = $"Address {i}",
                 Description = $"Description {i}"

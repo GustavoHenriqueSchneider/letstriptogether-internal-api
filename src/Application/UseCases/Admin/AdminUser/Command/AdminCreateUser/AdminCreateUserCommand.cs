@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserCommand : IRequest<AdminCreateUserResponse>
 {

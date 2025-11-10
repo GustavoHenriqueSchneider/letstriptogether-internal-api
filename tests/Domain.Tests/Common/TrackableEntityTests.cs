@@ -1,5 +1,5 @@
+using Domain.Common;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Common;
 using NUnit.Framework;
 
 namespace Domain.Tests.Common;

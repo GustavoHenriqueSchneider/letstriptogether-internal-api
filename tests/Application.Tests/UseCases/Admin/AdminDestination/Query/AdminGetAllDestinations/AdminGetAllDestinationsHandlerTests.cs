@@ -1,7 +1,7 @@
 using Application.Tests.Common;
+using Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
+using Infrastructure.Repositories.Destinations;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
@@ -27,7 +27,7 @@ public class AdminGetAllDestinationsHandlerTests : TestBase
         // Arrange
         for (int i = 0; i < 15; i++)
         {
-            var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+            var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
             {
                 Address = $"Address {i}",
                 Description = $"Description {i}"

@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Query.GetCurrentUser;
+namespace Application.UseCases.User.Query.GetCurrentUser;
 
 public class GetCurrentUserValidator : AbstractValidator<GetCurrentUserQuery>
 {

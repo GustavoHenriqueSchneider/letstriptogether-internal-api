@@ -4,12 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{FCB21C55-7EAF-4A38-AE6A-29AA76D2BABC}"
-				ProjectSection(SolutionItems) = preProject
-								.gitignore = .gitignore
-								docker-compose.yml = docker-compose.yml
-								global.json = global.json
-								README.md = README.md
-				EndProjectSection
+    ProjectSection(SolutionItems) = preProject
+        .gitignore = .gitignore
+        docker-compose.yml = docker-compose.yml
+        global.json = global.json
+        README.md = README.md
+    EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4800D6BD-BC11-4F34-B6E5-57796CBDE382}"
 EndProject

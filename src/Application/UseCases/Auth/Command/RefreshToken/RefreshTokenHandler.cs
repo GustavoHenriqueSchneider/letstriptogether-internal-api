@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Security;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
+using Domain.Security;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToken;
+namespace Application.UseCases.Auth.Command.RefreshToken;
 
 public class RefreshTokenHandler(
     IRedisService redisService,

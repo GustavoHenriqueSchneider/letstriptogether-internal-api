@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.CreateGroup;
+namespace Application.UseCases.Group.Command.CreateGroup;
 
 public record CreateGroupCommand : IRequest<CreateGroupResponse>
 {

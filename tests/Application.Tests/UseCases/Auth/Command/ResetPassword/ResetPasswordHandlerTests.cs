@@ -1,13 +1,16 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
 using Application.Tests.Common;
+using Application.UseCases.Auth.Command.ResetPassword;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Common;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ResetPassword;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Configurations;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
 
@@ -34,7 +37,7 @@ public class ResetPasswordHandlerTests : TestBase
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
         
-        var jwtSettings = new LetsTripTogether.InternalApi.Infrastructure.Configurations.JsonWebTokenSettings
+        var jwtSettings = new JsonWebTokenSettings
         {
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
@@ -53,12 +56,12 @@ public class ResetPasswordHandlerTests : TestBase
     public async Task Handle_WithValidToken_ShouldResetPassword()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -66,12 +69,12 @@ public class ResetPasswordHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var oldPasswordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, oldPasswordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, oldPasswordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var resetToken = _tokenService.GenerateResetPasswordToken(user.Id);
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.UserResetPassword(user.Id);
+        var key = KeyHelper.UserResetPassword(user.Id);
 
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync(resetToken);
@@ -114,19 +117,19 @@ public class ResetPasswordHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 
     [Test]
     public async Task Handle_WithInvalidToken_ShouldThrowUnauthorizedException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -134,11 +137,11 @@ public class ResetPasswordHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.UserResetPassword(user.Id);
+        var key = KeyHelper.UserResetPassword(user.Id);
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync((string?)null);
         _redisService = redisServiceMock.Object;
@@ -153,6 +156,6 @@ public class ResetPasswordHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
+        await act.Should().ThrowAsync<UnauthorizedException>();
     }
 }

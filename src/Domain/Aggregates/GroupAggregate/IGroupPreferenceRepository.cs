@@ -1,7 +1,7 @@
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Common;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
+namespace Domain.Aggregates.GroupAggregate;
 
 public interface IGroupPreferenceRepository : IBaseRepository<GroupPreference>
 {

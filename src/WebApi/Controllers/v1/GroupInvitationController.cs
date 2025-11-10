@@ -1,14 +1,13 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+using Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+using Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
+using Swashbuckle.AspNetCore.Annotations;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
-
-// TODO: descricoes para swagger
+namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Authorize]
@@ -18,7 +17,16 @@ public class GroupInvitationController(
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateGroupInvitation([FromRoute] Guid groupId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Criar Convite de Grupo",
+        Description = "Cria um novo convite para o grupo especificado. Apenas o proprietário do grupo pode criar convites.")]
+    [ProducesResponseType(typeof(CreateGroupInvitationResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateGroupInvitation(
+        [FromRoute] Guid groupId, 
+        CancellationToken cancellationToken)
     {
         var command = new CreateGroupInvitationCommand
         {
@@ -44,7 +52,16 @@ public class GroupInvitationController(
     }
 
     [HttpPatch("cancel")]
-    public async Task<IActionResult> CancelActiveGroupInvitation([FromRoute] Guid groupId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Cancelar Convite Ativo do Grupo",
+        Description = "Cancela o convite ativo do grupo especificado. Apenas o proprietário do grupo pode cancelar convites.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CancelActiveGroupInvitation(
+        [FromRoute] Guid groupId, 
+        CancellationToken cancellationToken)
     {
         var command = new CancelActiveGroupInvitationCommand
         {

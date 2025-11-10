@@ -1,12 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
-
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ResetPassword;
+namespace Application.UseCases.Auth.Command.ResetPassword;
 
 public class ResetPasswordHandler(
     IPasswordHashService passwordHashService,

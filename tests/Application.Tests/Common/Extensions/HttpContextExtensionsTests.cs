@@ -1,5 +1,5 @@
+using Application.Common.Extensions;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Extensions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;

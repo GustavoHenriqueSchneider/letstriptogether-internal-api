@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
+namespace Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
 
 public class GetAllGroupMatchesByIdQuery : IRequest<GetAllGroupMatchesByIdResponse>
 {

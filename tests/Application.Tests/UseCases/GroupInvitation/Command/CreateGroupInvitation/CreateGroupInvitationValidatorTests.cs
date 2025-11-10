@@ -1,5 +1,5 @@
+using Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupInvitation.Command.CreateGroupInvitation;

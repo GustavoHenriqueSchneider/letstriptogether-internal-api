@@ -1,18 +1,18 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.Auth.Command.Login;
+using Application.UseCases.Auth.Command.Logout;
+using Application.UseCases.Auth.Command.RefreshToken;
+using Application.UseCases.Auth.Command.Register;
+using Application.UseCases.Auth.Command.RequestResetPassword;
+using Application.UseCases.Auth.Command.ResetPassword;
+using Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+using Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Login;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Logout;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToken;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Register;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RequestResetPassword;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ResetPassword;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Domain.Security;
+using Application.Common.Interfaces.Extensions;
+using Domain.Security;
 
-namespace LetsTripTogether.InternalApi.Application.Common.Extensions;
+namespace Application.Common.Extensions;
 
 public class ApplicationUserContextExtensions(ClaimsPrincipal principal) 
     : IApplicationUserContextExtensions

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RequestResetPassword;
+namespace Application.UseCases.Auth.Command.RequestResetPassword;
 
 public class RequestResetPasswordCommand : IRequest
 {

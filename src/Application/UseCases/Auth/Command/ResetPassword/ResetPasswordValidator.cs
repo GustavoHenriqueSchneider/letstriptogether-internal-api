@@ -1,7 +1,7 @@
+using Application.Common.Validators;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ResetPassword;
+namespace Application.UseCases.Auth.Command.ResetPassword;
 
 public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
 {

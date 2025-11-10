@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+namespace Application.Common.Interfaces.Services;
 
 public interface IRedisService
 {

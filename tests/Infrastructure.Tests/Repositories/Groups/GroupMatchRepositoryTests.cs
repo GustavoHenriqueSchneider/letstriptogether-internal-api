@@ -1,15 +1,15 @@
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.DestinationAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Destinations;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Repositories.Groups;
@@ -41,12 +41,12 @@ public class GroupMatchRepositoryTests : TestBase
     public async Task GetByGroupIdAsync_WithMatches_ShouldReturnPaginatedResults()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -66,7 +66,7 @@ public class GroupMatchRepositoryTests : TestBase
 
         for (int i = 0; i < 5; i++)
         {
-            var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+            var destination = new Destination
             {
                 Address = $"Address {i}",
                 Description = $"Description {i}"
@@ -74,7 +74,7 @@ public class GroupMatchRepositoryTests : TestBase
             await _destinationRepository.AddAsync(destination, CancellationToken.None);
             await DbContext.SaveChangesAsync();
             
-            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
+            var match = new GroupMatch();
             typeof(GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
             typeof(GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
             await DbContext.Set<GroupMatch>().AddAsync(match, CancellationToken.None);
@@ -93,12 +93,12 @@ public class GroupMatchRepositoryTests : TestBase
     public async Task GetByGroupAndDestinationAsync_WithMatch_ShouldReturnMatch()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -116,7 +116,7 @@ public class GroupMatchRepositoryTests : TestBase
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -124,7 +124,7 @@ public class GroupMatchRepositoryTests : TestBase
         await _destinationRepository.AddAsync(destination, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch
+        var match = new GroupMatch
         {
             GroupId = group.Id,
             DestinationId = destination.Id
@@ -146,12 +146,12 @@ public class GroupMatchRepositoryTests : TestBase
     public async Task GetAllMatchesByGroupAsync_WithMatches_ShouldReturnAllMatches()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -171,7 +171,7 @@ public class GroupMatchRepositoryTests : TestBase
 
         for (int i = 0; i < 3; i++)
         {
-            var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+            var destination = new Destination
             {
                 Address = $"Address {i}",
                 Description = $"Description {i}"
@@ -179,7 +179,7 @@ public class GroupMatchRepositoryTests : TestBase
             await _destinationRepository.AddAsync(destination, CancellationToken.None);
             await DbContext.SaveChangesAsync();
             
-            var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
+            var match = new GroupMatch();
             typeof(GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
             typeof(GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
             await DbContext.Set<GroupMatch>().AddAsync(match, CancellationToken.None);
@@ -197,12 +197,12 @@ public class GroupMatchRepositoryTests : TestBase
     public async Task GetByIdWithRelationsAsync_WithMatch_ShouldReturnMatchWithGroup()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -220,7 +220,7 @@ public class GroupMatchRepositoryTests : TestBase
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -228,7 +228,7 @@ public class GroupMatchRepositoryTests : TestBase
         await _destinationRepository.AddAsync(destination, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var match = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch();
+        var match = new GroupMatch();
         typeof(GroupMatch).GetProperty("GroupId")!.SetValue(match, group.Id);
         typeof(GroupMatch).GetProperty("DestinationId")!.SetValue(match, destination.Id);
         await _repository.AddAsync(match, CancellationToken.None);
@@ -248,12 +248,12 @@ public class GroupMatchRepositoryTests : TestBase
     public async Task GetByIdWithRelationsAsync_WithNonExistentMatch_ShouldReturnNull()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }

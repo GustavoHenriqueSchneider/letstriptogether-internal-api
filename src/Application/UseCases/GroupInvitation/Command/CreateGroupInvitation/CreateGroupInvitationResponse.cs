@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationResponse
 {

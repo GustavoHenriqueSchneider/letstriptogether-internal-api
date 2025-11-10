@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.UserAggregate;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public class AdminSetUserPreferencesByUserIdHandler(
     IGroupMemberRepository groupMemberRepository,

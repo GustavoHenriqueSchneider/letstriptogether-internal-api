@@ -1,5 +1,5 @@
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Infrastructure.Configurations;
+using Infrastructure.Configurations;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Configurations;

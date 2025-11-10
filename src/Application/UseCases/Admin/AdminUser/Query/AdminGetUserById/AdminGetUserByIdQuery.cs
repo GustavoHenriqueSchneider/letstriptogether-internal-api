@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
+namespace Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
 
 public class AdminGetUserByIdQuery : IRequest<AdminGetUserByIdResponse>
 {

@@ -1,8 +1,8 @@
 using System.Net.Mail;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Infrastructure.Clients;
+using Application.Common.Interfaces.Services;
+using Infrastructure.Clients;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Services;
+namespace Infrastructure.Services;
 
 public class EmailSenderService(ISmtpClient smtpClient) : IEmailSenderService
 {

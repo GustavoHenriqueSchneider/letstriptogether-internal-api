@@ -1,13 +1,16 @@
 using System.IdentityModel.Tokens.Jwt;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
 using Application.Tests.Common;
+using Application.UseCases.Auth.Command.RefreshToken;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToken;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Configurations;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -31,7 +34,7 @@ public class RefreshTokenHandlerTests : TestBase
         
         _passwordHashService = new PasswordHashService();
         
-        var jwtSettings = new LetsTripTogether.InternalApi.Infrastructure.Configurations.JsonWebTokenSettings
+        var jwtSettings = new JsonWebTokenSettings
         {
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
@@ -50,12 +53,12 @@ public class RefreshTokenHandlerTests : TestBase
     public async Task Handle_WithValidRefreshToken_ShouldReturnNewTokens()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -64,12 +67,12 @@ public class RefreshTokenHandlerTests : TestBase
         var password = TestDataHelper.GenerateValidPassword();
         var passwordHash = _passwordHashService.HashPassword(password);
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var (accessToken, refreshToken) = _tokenService.GenerateTokens(user, DateTime.UtcNow.AddHours(24));
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.UserRefreshToken(user.Id);
+        var key = KeyHelper.UserRefreshToken(user.Id);
 
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync(refreshToken);
@@ -104,19 +107,19 @@ public class RefreshTokenHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
+        await act.Should().ThrowAsync<UnauthorizedException>();
     }
 
     [Test]
     public async Task Handle_WithMismatchedStoredToken_ShouldThrowUnauthorizedException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -125,12 +128,12 @@ public class RefreshTokenHandlerTests : TestBase
         var password = TestDataHelper.GenerateValidPassword();
         var passwordHash = _passwordHashService.HashPassword(password);
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var (_, refreshToken) = _tokenService.GenerateTokens(user, DateTime.UtcNow.AddHours(24));
-        var key = LetsTripTogether.InternalApi.Application.Helpers.KeyHelper.UserRefreshToken(user.Id);
+        var key = KeyHelper.UserRefreshToken(user.Id);
 
         var redisServiceMock = new Mock<IRedisService>();
         redisServiceMock.Setup(x => x.GetAsync(key)).ReturnsAsync("different-token");
@@ -142,6 +145,6 @@ public class RefreshTokenHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.UnauthorizedException>();
+        await act.Should().ThrowAsync<UnauthorizedException>();
     }
 }

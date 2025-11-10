@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
+namespace Application.UseCases.Group.Command.LeaveGroupById;
 
 public class LeaveGroupByIdCommand : IRequest
 {

@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
+using Application.Common.Policies;
+using Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
+using Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
+namespace WebApi.Controllers.v1.Admin;
 
 // TODO: descricoes para swagger
 
@@ -30,8 +30,17 @@ public class AdminGroupDestinationVoteController(IMediator mediator) : Controlle
     }
 
     [HttpGet("{destinationVoteId:guid}")]
+    [SwaggerOperation(
+        Summary = "Obter Voto em Destino do Grupo por ID (Admin)",
+        Description = "Retorna os detalhes de um voto específico em destino de um grupo. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetGroupDestinationVoteByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminGetGroupDestinationVoteById(
-        [FromRoute] Guid groupId, [FromRoute] Guid destinationVoteId, CancellationToken cancellationToken)
+        [FromRoute] Guid groupId, 
+        [FromRoute] Guid destinationVoteId, 
+        CancellationToken cancellationToken)
     {
         var query = new AdminGetGroupDestinationVoteByIdQuery
         {

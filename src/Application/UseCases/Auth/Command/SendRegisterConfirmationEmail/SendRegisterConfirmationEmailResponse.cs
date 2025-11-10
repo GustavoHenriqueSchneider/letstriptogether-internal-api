@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+namespace Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 
 public class SendRegisterConfirmationEmailResponse
 {

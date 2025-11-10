@@ -1,5 +1,5 @@
+using Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupMatch.Command.RemoveGroupMatchById;

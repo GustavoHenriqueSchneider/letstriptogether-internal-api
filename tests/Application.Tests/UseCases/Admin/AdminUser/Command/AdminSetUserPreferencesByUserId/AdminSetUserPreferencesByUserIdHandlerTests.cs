@@ -1,18 +1,17 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
+using Domain.Security;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
@@ -57,12 +56,12 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
     public async Task Handle_WithValidPreferences_ShouldUpdatePreferences()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -70,7 +69,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -124,12 +123,12 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
     public async Task Handle_WithUserInGroup_ShouldUpdateGroupPreferences()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -137,7 +136,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -155,7 +154,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
 
         // Create group with user as member
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         group.UpdatePreferences(initialPreferences);
         
@@ -192,12 +191,12 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
     public async Task Handle_WithUserInMultipleGroups_ShouldUpdateAllGroupPreferences()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -205,7 +204,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -223,7 +222,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
 
         // Create first group
         var group1Name = TestDataHelper.GenerateRandomGroupName();
-        var group1 = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(group1Name, DateTime.UtcNow.AddDays(30));
+        var group1 = new Domain.Aggregates.GroupAggregate.Entities.Group(group1Name, DateTime.UtcNow.AddDays(30));
         group1.AddMember(user, isOwner: true);
         group1.UpdatePreferences(initialPreferences);
         await _groupRepository.AddAsync(group1, CancellationToken.None);
@@ -232,7 +231,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
 
         // Create second group
         var group2Name = TestDataHelper.GenerateRandomGroupName();
-        var group2 = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(group2Name, DateTime.UtcNow.AddDays(30));
+        var group2 = new Domain.Aggregates.GroupAggregate.Entities.Group(group2Name, DateTime.UtcNow.AddDays(30));
         group2.AddMember(user, isOwner: false);
         group2.UpdatePreferences(initialPreferences);
         await _groupRepository.AddAsync(group2, CancellationToken.None);

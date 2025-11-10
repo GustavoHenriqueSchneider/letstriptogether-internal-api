@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+﻿using Application.Common.Interfaces.Services;
 using Crypt = BCrypt.Net.BCrypt;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Services;
+namespace Infrastructure.Services;
 
 public class PasswordHashService : IPasswordHashService
 {

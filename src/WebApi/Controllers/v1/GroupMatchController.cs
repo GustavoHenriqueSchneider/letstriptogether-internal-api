@@ -1,12 +1,12 @@
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetGroupMatchById;
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
+using Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
+using Application.UseCases.GroupMatch.Query.GetGroupMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
+namespace WebApi.Controllers.v1;
 
 // TODO: descricoes para swagger
 
@@ -49,8 +49,17 @@ public class GroupMatchController(
     }
 
     [HttpDelete("{matchId:guid}")]
-    public async Task<IActionResult> RemoveGroupMatchById([FromRoute] Guid groupId,
-        [FromRoute] Guid matchId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Remover Match do Grupo",
+        Description = "Remove um match do grupo. Apenas o proprietário do grupo pode remover matches.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoveGroupMatchById(
+        [FromRoute] Guid groupId,
+        [FromRoute] Guid matchId, 
+        CancellationToken cancellationToken)
     {
         var command = new RemoveGroupMatchByIdCommand
         {

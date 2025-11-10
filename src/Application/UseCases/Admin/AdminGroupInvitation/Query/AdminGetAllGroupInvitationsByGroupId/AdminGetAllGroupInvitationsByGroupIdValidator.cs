@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
+namespace Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
 
 public class AdminGetAllGroupInvitationsByGroupIdValidator : AbstractValidator<AdminGetAllGroupInvitationsByGroupIdQuery>
 {

@@ -1,12 +1,12 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
+using Application.UseCases.GroupMember.Query.GetGroupMemberById;
+using Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetGroupMemberById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
+namespace WebApi.Controllers.v1;
 
 // TODO: descricoes para swagger
 
@@ -49,8 +49,17 @@ public class GroupMemberController(
     }
 
     [HttpDelete("{memberId:guid}")]
-    public async Task<IActionResult> RemoveGroupMemberById([FromRoute] Guid groupId,
-        [FromRoute] Guid memberId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Remover Membro do Grupo",
+        Description = "Remove um membro do grupo. Apenas o proprietário do grupo pode remover membros.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoveGroupMemberById(
+        [FromRoute] Guid groupId,
+        [FromRoute] Guid memberId, 
+        CancellationToken cancellationToken)
     {
         var command = new RemoveGroupMemberByIdCommand
         {
