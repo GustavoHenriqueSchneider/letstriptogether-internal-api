@@ -12,12 +12,12 @@ docker compose up -d
 
 para criar migration do ef
 ``` powershell
-dotnet ef migrations add <NomeMigration> --project .\src\Infrastructure\ --startup-project .\src\WebApi\
+dotnet ef migrations add <NomeMigration> --project .\src\Infrastructure --startup-project .\src\WebApi
 ```
 
 para atualizar migrations do ef no container
 ``` powershell
-dotnet ef database update --project .\src\Infrastructure\ --startup-project .\src\WebApi\
+dotnet ef database update --project .\src\Infrastructure --startup-project .\src\WebApi
 ```
 
 para rodar todos testes

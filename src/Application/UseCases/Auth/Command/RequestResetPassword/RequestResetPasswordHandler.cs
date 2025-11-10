@@ -1,6 +1,7 @@
 using Application.Common.Interfaces.Services;
 using Application.Helpers;
 using Domain.Aggregates.UserAggregate;
+using Domain.Security;
 using MediatR;
 
 namespace Application.UseCases.Auth.Command.RequestResetPassword;
@@ -28,7 +29,16 @@ public class RequestResetPasswordHandler(
         var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         await redisService.SetAsync(key, resetPasswordToken, ttlInSeconds);
-        // TODO: tirar valor hard coded e criar templates de email
-        await emailSenderService.SendAsync(request.Email, "Reset Password", resetPasswordToken, cancellationToken);
+
+        var expiresInMinutes = (int)(expiresIn! - DateTime.UtcNow).Value.TotalMinutes;
+        var templateData = new Dictionary<string, string>
+        {
+            { "token", resetPasswordToken },
+            { "expiresIn", expiresInMinutes.ToString() },
+            { "email", request.Email }
+        };
+
+        await emailSenderService.SendAsync(request.Email, EmailTemplates.ResetPassword, 
+            templateData, cancellationToken);
     }
 }

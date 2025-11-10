@@ -103,7 +103,7 @@ namespace WebApi.Migrations
                 });
             
             var assembly = typeof(PasswordHashService).Assembly;
-            var resourceName = "LetsTripTogether.InternalApi.Infrastructure.Dataset.cities_with_attractions.json";
+            var resourceName = "Infrastructure.Dataset.cities_with_attractions.json";
             
             string jsonContent;
             using (var stream = assembly.GetManifestResourceStream(resourceName))

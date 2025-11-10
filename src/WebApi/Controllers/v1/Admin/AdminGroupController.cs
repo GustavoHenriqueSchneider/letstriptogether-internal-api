@@ -4,6 +4,7 @@ using Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1.Admin;
 

@@ -8,7 +8,6 @@ public class PasswordValidator : AbstractValidator<string>
     public PasswordValidator()
     {
         RuleFor(x => x)
-            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .MinimumLength(UserModel.PasswordMinLength)
             .MaximumLength(UserModel.PasswordMaxLength)

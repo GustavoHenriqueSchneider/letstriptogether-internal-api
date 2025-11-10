@@ -46,6 +46,9 @@ public static class DependencyInjection
     {
         var jwtSection = configuration.GetRequiredSection(nameof(JsonWebTokenSettings));
         services.Configure<JsonWebTokenSettings>(jwtSection);
+        
+        var emailTemplateSection = configuration.GetSection(nameof(EmailTemplateSettings));
+        services.Configure<EmailTemplateSettings>(emailTemplateSection);
     }
 
     public static void RegisterApplicationAuthentication(this IServiceCollection services, IConfiguration configuration)
@@ -161,8 +164,19 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHashService, PasswordHashService>();
         services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
         services.AddSingleton<ITokenService, TokenService>();
+        services.AddSingleton<IEmailTemplateService, EmailTemplateService>();
         
         services.AddScoped<IRedisService, RedisService>();
-        services.AddScoped<IEmailSenderService, EmailSenderService>();
+        services.AddScoped<IEmailSenderService>(sp =>
+        {
+            var emailSettings = configuration
+                .GetRequiredSection(nameof(EmailSettings))
+                .Get<EmailSettings>()!;
+
+            var smtpClient = sp.GetRequiredService<ISmtpClient>();
+            var templateService = sp.GetRequiredService<IEmailTemplateService>();
+            
+            return new EmailSenderService(emailSettings.From, smtpClient, templateService);
+        });
     }
 }

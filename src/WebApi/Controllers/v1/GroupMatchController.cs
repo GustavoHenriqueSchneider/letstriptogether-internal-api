@@ -5,6 +5,7 @@ using Application.UseCases.GroupMatch.Query.GetGroupMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1;
 

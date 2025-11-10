@@ -41,8 +41,17 @@ public class SendRegisterConfirmationEmailHandler(
 
         var code = randomCodeGeneratorService.Generate();
         await redisService.SetAsync(key, code, ttlInSeconds);
-        // TODO: tirar valor hard coded e criar templates de email
-        await emailSenderService.SendAsync(request.Email, "Email Confirmation", code, cancellationToken);
+
+        var expiresInMinutes = (int)(expiresIn! - DateTime.UtcNow).Value.TotalMinutes;
+        var templateData = new Dictionary<string, string>
+        {
+            { "code", code },
+            { "name", request.Name },
+            { "expiresIn", expiresInMinutes.ToString() },
+            { "email", email }
+        };
+
+        await emailSenderService.SendAsync(email, EmailTemplates.EmailConfirmation, templateData, cancellationToken);
 
         return new SendRegisterConfirmationEmailResponse { Token = token };
     }

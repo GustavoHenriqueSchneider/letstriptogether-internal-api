@@ -2,6 +2,7 @@
 
 public class EmailSettings
 {
+    public string From { get; init; } = null!;
     public string SmtpServer { get; init; } = null!;
     public int Port { get; init; }
     public string Username { get; init; } = null!;

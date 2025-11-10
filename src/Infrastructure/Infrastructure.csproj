@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Dataset\cities_with_attractions.json" />
+      <EmbeddedResource Include="Templates\**\*" />
     </ItemGroup>
 
     <ItemGroup>

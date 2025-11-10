@@ -8,7 +8,6 @@ public class EmailValidator : AbstractValidator<string>
     public EmailValidator()
     {
         RuleFor(x => x)
-            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .MaximumLength(UserModel.EmailMaxLength)
             .EmailAddress()
