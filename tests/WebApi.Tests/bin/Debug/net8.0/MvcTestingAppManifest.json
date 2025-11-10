@@ -1,6 +1,0 @@
-{
-  "Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Arquivos e Programas\\UMC\\pfc\\letstriptogether-internal-api\\src\\Application",
-  "Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Arquivos e Programas\\UMC\\pfc\\letstriptogether-internal-api\\src\\Domain",
-  "Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Arquivos e Programas\\UMC\\pfc\\letstriptogether-internal-api\\src\\Infrastructure",
-  "WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Arquivos e Programas\\UMC\\pfc\\letstriptogether-internal-api\\src\\WebApi"
-}
