@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RequestResetPassword;
+namespace Application.UseCases.Auth.Command.RequestResetPassword;
 
 public class RequestResetPasswordHandler(
     IEmailSenderService emailSenderService,

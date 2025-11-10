@@ -1,6 +1,5 @@
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Domain.Tests.ValueObjects;

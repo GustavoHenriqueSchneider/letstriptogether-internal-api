@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
+namespace Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 
 public class GetGroupMemberAllDestinationVotesByIdQuery : IRequest<GetGroupMemberAllDestinationVotesByIdResponse>
 {

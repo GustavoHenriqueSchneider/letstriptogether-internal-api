@@ -1,5 +1,5 @@
+using Application.UseCases.Invitation.Command.AcceptInvitation;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.AcceptInvitation;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Invitation.Command.AcceptInvitation;

@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
+using Application.Common.Exceptions;
+using Domain.Aggregates.DestinationAggregate;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Destination.Query.GetDestinationById;
+namespace Application.UseCases.Destination.Query.GetDestinationById;
 
 public class GetDestinationByIdHandler(IDestinationRepository destinationRepository)
     : IRequestHandler<GetDestinationByIdQuery, GetDestinationByIdResponse>

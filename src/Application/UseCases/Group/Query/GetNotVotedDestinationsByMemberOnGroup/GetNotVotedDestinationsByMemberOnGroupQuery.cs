@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+namespace Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 
 public class GetNotVotedDestinationsByMemberOnGroupQuery : IRequest<GetNotVotedDestinationsByMemberOnGroupResponse>
 {

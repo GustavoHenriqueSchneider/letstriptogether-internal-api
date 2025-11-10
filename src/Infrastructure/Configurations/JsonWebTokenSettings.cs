@@ -1,4 +1,4 @@
-﻿namespace LetsTripTogether.InternalApi.Infrastructure.Configurations;
+﻿namespace Infrastructure.Configurations;
 
 public class JsonWebTokenSettings
 {

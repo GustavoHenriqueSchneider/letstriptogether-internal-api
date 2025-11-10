@@ -1,8 +1,14 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Configurations;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
 
@@ -16,14 +22,14 @@ public class SendRegisterConfirmationEmailHandlerTests : TestBase
     private IRandomCodeGeneratorService _randomCodeGeneratorService = null!;
     private IRedisService _redisService = null!;
     private ITokenService _tokenService = null!;
-    private LetsTripTogether.InternalApi.Infrastructure.Repositories.Users.UserRepository _userRepository = null!;
+    private UserRepository _userRepository = null!;
 
     [SetUp]
     public async Task SetUp()
     {
         await CleanDatabaseAsync();
         
-        _userRepository = new LetsTripTogether.InternalApi.Infrastructure.Repositories.Users.UserRepository(DbContext);
+        _userRepository = new UserRepository(DbContext);
         _randomCodeGeneratorService = new RandomCodeGeneratorService();
         
         var emailSenderServiceMock = new Mock<IEmailSenderService>();
@@ -43,7 +49,7 @@ public class SendRegisterConfirmationEmailHandlerTests : TestBase
             .Returns(Task.CompletedTask);
         _redisService = redisServiceMock.Object;
         
-        var jwtSettings = new LetsTripTogether.InternalApi.Infrastructure.Configurations.JsonWebTokenSettings
+        var jwtSettings = new JsonWebTokenSettings
         {
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
@@ -83,16 +89,16 @@ public class SendRegisterConfirmationEmailHandlerTests : TestBase
     public async Task Handle_WithExistingEmail_ShouldThrowConflictException()
     {
         // Arrange
-        var role = new LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities.Role();
-        typeof(LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities.Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
-        var roleRepository = new LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles.RoleRepository(DbContext);
+        var role = new Role();
+        typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
+        var roleRepository = new RoleRepository(DbContext);
         await roleRepository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = new PasswordHashService().HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -104,6 +110,6 @@ public class SendRegisterConfirmationEmailHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.ConflictException>();
+        await act.Should().ThrowAsync<ConflictException>();
     }
 }

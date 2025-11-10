@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
 
 public class GetActiveGroupInvitationQuery : IRequest<GetActiveGroupInvitationResponse>
 {

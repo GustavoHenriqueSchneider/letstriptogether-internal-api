@@ -1,5 +1,5 @@
+using Application.UseCases.Group.Query.GetAllGroups;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetAllGroups;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Group.Query.GetAllGroups;

@@ -22,5 +22,5 @@ dotnet ef database update --project .\src\Infrastructure\ --startup-project .\sr
 
 para rodar todos testes
 ```
-dotnet test tests/Application.UnitTests/Application.UnitTests.csproj tests/Infrastructure.UnitTests/Infrastructure.UnitTests.csproj tests/WebApi.UnitTests/WebApi.UnitTests.csproj --verbosity normal
+dotnet test tests/Application.Tests/Application.Tests.csproj tests/Infrastructure.Tests/Infrastructure.Tests.csproj tests/WebApi.Tests/WebApi.Tests.csproj --verbosity normal
 ```

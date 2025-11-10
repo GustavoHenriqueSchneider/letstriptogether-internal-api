@@ -1,17 +1,17 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.Group.Command.CreateGroup;
+using Application.UseCases.Group.Command.DeleteGroupById;
+using Application.UseCases.Group.Command.LeaveGroupById;
+using Application.UseCases.Group.Command.UpdateGroupById;
+using Application.UseCases.Group.Query.GetAllGroups;
+using Application.UseCases.Group.Query.GetGroupById;
+using Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.CreateGroup;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.DeleteGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.UpdateGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetAllGroups;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

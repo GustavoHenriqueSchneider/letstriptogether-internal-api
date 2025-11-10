@@ -1,7 +1,7 @@
+using Domain.Aggregates.RoleAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Repositories;

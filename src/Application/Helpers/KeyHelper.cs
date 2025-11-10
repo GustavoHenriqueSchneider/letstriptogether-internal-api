@@ -1,4 +1,4 @@
-﻿namespace LetsTripTogether.InternalApi.Application.Helpers;
+﻿namespace Application.Helpers;
 
 public static class KeyHelper
 {

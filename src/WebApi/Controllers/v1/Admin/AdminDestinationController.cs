@@ -1,12 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+using Application.Common.Policies;
+using Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
-
-// TODO: descricoes para swagger
+namespace WebApi.Controllers.v1.Admin;
 
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
@@ -14,8 +13,17 @@ namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
 public class AdminDestinationController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> AdminGetAllDestinations([FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    [SwaggerOperation(
+        Summary = "Listar Todos os Destinos (Admin)",
+        Description = "Retorna uma lista paginada de todos os destinos do sistema. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetAllDestinationsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> AdminGetAllDestinations(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         var query = new AdminGetAllDestinationsQuery
         {

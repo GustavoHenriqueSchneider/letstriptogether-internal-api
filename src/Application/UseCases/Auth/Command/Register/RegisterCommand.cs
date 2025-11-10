@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Register;
+namespace Application.UseCases.Auth.Command.Register;
 
 public record RegisterCommand : IRequest<RegisterResponse>
 {

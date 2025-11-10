@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
+namespace Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
 
 public class RemoveGroupMatchByIdValidator : AbstractValidator<RemoveGroupMatchByIdCommand>
 {

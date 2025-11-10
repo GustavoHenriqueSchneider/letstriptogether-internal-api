@@ -1,7 +1,7 @@
 using FluentAssertions;
-using LetsTripTogether.InternalApi.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
+using WebApi.Controllers;
 
 namespace WebApi.Tests.Controllers;
 

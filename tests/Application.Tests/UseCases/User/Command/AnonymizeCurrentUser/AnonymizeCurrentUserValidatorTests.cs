@@ -1,5 +1,5 @@
+using Application.UseCases.User.Command.AnonymizeCurrentUser;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.AnonymizeCurrentUser;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.User.Command.AnonymizeCurrentUser;

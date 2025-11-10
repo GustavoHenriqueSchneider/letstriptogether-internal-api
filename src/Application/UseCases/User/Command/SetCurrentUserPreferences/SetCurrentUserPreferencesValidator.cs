@@ -1,7 +1,7 @@
+using Application.Common.Validators;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.SetCurrentUserPreferences;
+namespace Application.UseCases.User.Command.SetCurrentUserPreferences;
 
 public class SetCurrentUserPreferencesValidator : AbstractValidator<SetCurrentUserPreferencesCommand>
 {

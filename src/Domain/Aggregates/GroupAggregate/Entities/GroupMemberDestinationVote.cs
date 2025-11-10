@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
+﻿using Domain.Aggregates.DestinationAggregate.Entities;
+using Domain.Common;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+namespace Domain.Aggregates.GroupAggregate.Entities;
 
 public class GroupMemberDestinationVote : TrackableEntity
 {

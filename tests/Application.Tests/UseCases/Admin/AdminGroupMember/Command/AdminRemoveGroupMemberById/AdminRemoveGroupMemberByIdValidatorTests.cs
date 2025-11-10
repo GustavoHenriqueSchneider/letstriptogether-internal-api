@@ -1,5 +1,5 @@
+using Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;

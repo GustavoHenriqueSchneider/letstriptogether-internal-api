@@ -1,7 +1,7 @@
+using Domain.Aggregates.DestinationAggregate.Entities;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Domain;

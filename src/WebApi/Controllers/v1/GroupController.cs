@@ -1,18 +1,17 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.Group.Command.CreateGroup;
+using Application.UseCases.Group.Command.DeleteGroupById;
+using Application.UseCases.Group.Command.LeaveGroupById;
+using Application.UseCases.Group.Command.UpdateGroupById;
+using Application.UseCases.Group.Query.GetAllGroups;
+using Application.UseCases.Group.Query.GetGroupById;
+using Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.CreateGroup;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.DeleteGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.UpdateGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetAllGroups;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetGroupById;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+using Swashbuckle.AspNetCore.Annotations;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
-
-// TODO: descricoes para swagger
+namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Authorize]
@@ -22,6 +21,13 @@ public class GroupController(
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Criar Grupo",
+        Description = "Cria um novo grupo de viagem associado ao usuário autenticado. O usuário deve ter preferências preenchidas para criar um grupo.")]
+    [ProducesResponseType(typeof(CreateGroupResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateGroup([FromBody] CreateGroupCommand command, CancellationToken cancellationToken)
     {
         command = command with
@@ -34,8 +40,16 @@ public class GroupController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllGroups([FromQuery] int pageNumber = 1, 
-        [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    [SwaggerOperation(
+        Summary = "Listar Todos os Grupos",
+        Description = "Retorna uma lista paginada de todos os grupos do usuário autenticado.")]
+    [ProducesResponseType(typeof(GetAllGroupsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetAllGroups(
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         var query = new GetAllGroupsQuery
         {
@@ -62,8 +76,17 @@ public class GroupController(
     }
 
     [HttpPut("{groupId:guid}")]
-    public async Task<IActionResult> UpdateGroupById([FromRoute] Guid groupId, 
-        [FromBody] UpdateGroupByIdCommand command, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Atualizar Grupo",
+        Description = "Atualiza as informações de um grupo existente. Apenas o proprietário do grupo pode atualizar.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateGroupById(
+        [FromRoute] Guid groupId, 
+        [FromBody] UpdateGroupByIdCommand command, 
+        CancellationToken cancellationToken)
     {
         command = command with
         {
@@ -102,8 +125,18 @@ public class GroupController(
     }
     
     [HttpGet("{groupId:guid}/destinations-not-voted")]
-    public async Task<IActionResult> GetNotVotedDestinationsByMemberOnGroup([FromRoute] Guid groupId,
-        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    [SwaggerOperation(
+        Summary = "Obter Destinos Não Votados",
+        Description = "Retorna uma lista paginada de destinos que o usuário ainda não votou no grupo especificado.")]
+    [ProducesResponseType(typeof(GetNotVotedDestinationsByMemberOnGroupResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetNotVotedDestinationsByMemberOnGroup(
+        [FromRoute] Guid groupId,
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         var query = new GetNotVotedDestinationsByMemberOnGroupQuery
         {

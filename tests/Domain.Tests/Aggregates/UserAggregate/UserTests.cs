@@ -1,7 +1,7 @@
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
 using NUnit.Framework;
 
 namespace Domain.Tests.Aggregates.UserAggregate;

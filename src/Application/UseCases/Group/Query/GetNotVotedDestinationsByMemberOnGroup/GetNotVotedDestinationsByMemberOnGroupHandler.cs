@@ -1,11 +1,10 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-
+using Application.Common.Exceptions;
+using Domain.Aggregates.DestinationAggregate;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.UserAggregate;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+namespace Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 
 public class GetNotVotedDestinationsByMemberOnGroupHandler(
     IDestinationRepository destinationRepository,

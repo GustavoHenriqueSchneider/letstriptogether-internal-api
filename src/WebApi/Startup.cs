@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Application;
-using LetsTripTogether.InternalApi.Infrastructure;
+using Application;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
-namespace LetsTripTogether.InternalApi.WebApi;
+namespace WebApi;
 
 public class Startup(IConfiguration configuration, IWebHostEnvironment environment)
 {

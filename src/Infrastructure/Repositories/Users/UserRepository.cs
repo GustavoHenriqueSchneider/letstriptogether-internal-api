@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Context;
+using Domain.Aggregates.UserAggregate;
+using Domain.Aggregates.UserAggregate.Entities;
+using Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
+namespace Infrastructure.Repositories.Users;
 
 public class UserRepository : BaseRepository<User>, IUserRepository
 {

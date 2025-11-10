@@ -1,15 +1,15 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.User.Command.AnonymizeCurrentUser;
+using Application.UseCases.User.Command.DeleteCurrentUser;
+using Application.UseCases.User.Command.SetCurrentUserPreferences;
+using Application.UseCases.User.Command.UpdateCurrentUser;
+using Application.UseCases.User.Query.GetCurrentUser;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.AnonymizeCurrentUser;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.DeleteCurrentUser;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.SetCurrentUserPreferences;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.UpdateCurrentUser;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Query.GetCurrentUser;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

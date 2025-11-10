@@ -1,13 +1,13 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+using Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+using Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

@@ -1,6 +1,6 @@
 using System.Net.Mail;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Infrastructure.Clients;
+using Infrastructure.Clients;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Clients;

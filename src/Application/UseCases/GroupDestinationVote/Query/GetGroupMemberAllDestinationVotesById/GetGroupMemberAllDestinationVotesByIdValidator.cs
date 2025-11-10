@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
+namespace Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 
 public class GetGroupMemberAllDestinationVotesByIdValidator : AbstractValidator<GetGroupMemberAllDestinationVotesByIdQuery>
 {

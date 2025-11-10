@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+namespace Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
 
 public class VoteAtDestinationForGroupIdResponse
 {

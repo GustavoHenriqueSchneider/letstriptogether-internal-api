@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
 
 public class AdminDeleteUserByIdHandler(
     IRedisService redisService,
@@ -24,8 +24,7 @@ public class AdminDeleteUserByIdHandler(
 
         var key = KeyHelper.UserRefreshToken(user.Id);
         await redisService.DeleteAsync(key);
-
-        // TODO: parou de funcionar
+        
         userRepository.Remove(user);
         await unitOfWork.SaveAsync(cancellationToken);
     }

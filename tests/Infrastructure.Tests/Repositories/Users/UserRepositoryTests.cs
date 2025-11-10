@@ -1,11 +1,11 @@
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
 using NUnit.Framework;
-using RoleType = LetsTripTogether.InternalApi.Domain.Security.Roles;
+using RoleType = Domain.Security.Roles;
 
 namespace Infrastructure.Tests.Repositories.Users;
 
@@ -27,12 +27,12 @@ public class UserRepositoryTests : TestBase
     public async Task ExistsByEmailAsync_WithExistingEmail_ShouldReturnTrue()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(RoleType.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -64,12 +64,12 @@ public class UserRepositoryTests : TestBase
     public async Task GetByEmailAsync_WithExistingEmail_ShouldReturnUser()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(RoleType.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -91,12 +91,12 @@ public class UserRepositoryTests : TestBase
     public async Task GetUserWithRolesByEmailAsync_WithExistingEmail_ShouldReturnUserWithRoles()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(RoleType.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }

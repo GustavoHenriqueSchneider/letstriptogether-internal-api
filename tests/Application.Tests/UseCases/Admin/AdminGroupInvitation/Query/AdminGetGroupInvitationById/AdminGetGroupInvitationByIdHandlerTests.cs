@@ -1,13 +1,14 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
@@ -40,12 +41,12 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
     public async Task Handle_WithValidInvitation_ShouldReturnInvitation()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -53,17 +54,17 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group.Id);
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -94,7 +95,7 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>()
+        await act.Should().ThrowAsync<NotFoundException>()
             .WithMessage("Group not found.");
     }
 
@@ -102,12 +103,12 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
     public async Task Handle_WithNonExistentInvitation_ShouldThrowNotFoundException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -115,12 +116,12 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName = TestDataHelper.GenerateRandomGroupName();
-        var group = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
+        var group = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName, DateTime.UtcNow.AddDays(30));
         group.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -133,7 +134,7 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>()
+        await act.Should().ThrowAsync<NotFoundException>()
             .WithMessage("Group invitation not found.");
     }
 
@@ -141,12 +142,12 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
     public async Task Handle_WithInvitationFromDifferentGroup_ShouldThrowBadRequestException()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -154,23 +155,23 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName1 = TestDataHelper.GenerateRandomGroupName();
-        var group1 = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName1, DateTime.UtcNow.AddDays(30));
+        var group1 = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName1, DateTime.UtcNow.AddDays(30));
         group1.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group1, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
         var groupName2 = TestDataHelper.GenerateRandomGroupName();
-        var group2 = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group(groupName2, DateTime.UtcNow.AddDays(30));
+        var group2 = new Domain.Aggregates.GroupAggregate.Entities.Group(groupName2, DateTime.UtcNow.AddDays(30));
         group2.AddMember(user, isOwner: true);
         await _groupRepository.AddAsync(group2, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var invitation = new LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group2.Id);
+        var invitation = new Domain.Aggregates.GroupAggregate.Entities.GroupInvitation(group2.Id);
         await _groupInvitationRepository.AddAsync(invitation, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -182,7 +183,7 @@ public class AdminGetGroupInvitationByIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.BadRequestException>()
+        await act.Should().ThrowAsync<BadRequestException>()
             .WithMessage("The invitation does not belong to this group.");
     }
 }

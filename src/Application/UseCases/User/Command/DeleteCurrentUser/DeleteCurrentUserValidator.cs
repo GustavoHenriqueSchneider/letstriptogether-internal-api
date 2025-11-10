@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.DeleteCurrentUser;
+namespace Application.UseCases.User.Command.DeleteCurrentUser;
 
 public class DeleteCurrentUserValidator : AbstractValidator<DeleteCurrentUserCommand>
 {

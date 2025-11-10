@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.GroupAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Configurations;
+namespace Infrastructure.EntityFramework.Configurations;
 
 public class GroupPreferenceConfiguration : IEntityTypeConfiguration<GroupPreference>
 {

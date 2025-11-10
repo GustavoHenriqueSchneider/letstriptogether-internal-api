@@ -1,5 +1,5 @@
+using Application.UseCases.User.Command.DeleteCurrentUser;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.DeleteCurrentUser;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.User.Command.DeleteCurrentUser;

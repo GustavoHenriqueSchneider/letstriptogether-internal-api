@@ -1,11 +1,12 @@
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RequestResetPassword;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Application.UseCases.Auth.Command.RequestResetPassword;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Security;
+using Infrastructure.Configurations;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
 
@@ -48,7 +49,7 @@ public class RequestResetPasswordHandlerTests : TestBase
             .Returns(Task.CompletedTask);
         _redisService = redisServiceMock.Object;
         
-        var jwtSettings = new LetsTripTogether.InternalApi.Infrastructure.Configurations.JsonWebTokenSettings
+        var jwtSettings = new JsonWebTokenSettings
         {
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
@@ -67,12 +68,12 @@ public class RequestResetPasswordHandlerTests : TestBase
     public async Task Handle_WithExistingEmail_ShouldSendEmailAndStoreToken()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -80,7 +81,7 @@ public class RequestResetPasswordHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var userName = TestDataHelper.GenerateRandomName();
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(userName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 

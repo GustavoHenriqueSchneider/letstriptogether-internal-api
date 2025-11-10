@@ -1,7 +1,7 @@
 using FluentValidation;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
 
 public class AdminUpdateUserByIdValidator : AbstractValidator<AdminUpdateUserByIdCommand>
 {

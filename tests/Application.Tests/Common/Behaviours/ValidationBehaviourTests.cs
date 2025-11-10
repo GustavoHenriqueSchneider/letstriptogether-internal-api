@@ -1,8 +1,9 @@
+using Application.Common.Behaviours;
 using FluentAssertions;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Behaviours;
 using MediatR;
 using NUnit.Framework;
+using ValidationException = Application.Common.Exceptions.ValidationException;
 
 namespace Application.Tests.Common.Behaviours;
 
@@ -59,7 +60,7 @@ public class ValidationBehaviourTests
 
         // Act & Assert
         Func<Task<TestResponse>> act = async () => await behaviour.Handle(request, next, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.ValidationException>();
+        await act.Should().ThrowAsync<ValidationException>();
     }
 
     [Test]

@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
+namespace Application.Common.Interfaces.Extensions;
 
 public interface IHttpContextExtensions
 {

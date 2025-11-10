@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.AcceptInvitation;
+namespace Application.UseCases.Invitation.Command.AcceptInvitation;
 
 public record AcceptInvitationCommand : IRequest
 {

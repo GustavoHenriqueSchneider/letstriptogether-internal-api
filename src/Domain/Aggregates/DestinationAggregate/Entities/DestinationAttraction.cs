@@ -1,6 +1,6 @@
-using LetsTripTogether.InternalApi.Domain.Common;
+using Domain.Common;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
+namespace Domain.Aggregates.DestinationAggregate.Entities;
 
 public class DestinationAttraction : TrackableEntity
 {

@@ -1,13 +1,13 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
+using Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
+using Application.UseCases.GroupMatch.Query.GetGroupMatchById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetGroupMatchById;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

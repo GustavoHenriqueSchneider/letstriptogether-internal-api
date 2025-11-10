@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.RefuseInvitation;
+namespace Application.UseCases.Invitation.Command.RefuseInvitation;
 
 public class RefuseInvitationValidator : AbstractValidator<RefuseInvitationCommand>
 {

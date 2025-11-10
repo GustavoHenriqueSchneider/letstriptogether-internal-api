@@ -1,5 +1,5 @@
+using Application.UseCases.Auth.Command.RefreshToken;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.RefreshToken;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Auth.Command.RefreshToken;

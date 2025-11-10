@@ -1,13 +1,12 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
-
+using Application.Common.Exceptions;
+using Domain.Aggregates.DestinationAggregate;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+namespace Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
 
 public class VoteAtDestinationForGroupIdHandler(
     IDestinationRepository destinationRepository,

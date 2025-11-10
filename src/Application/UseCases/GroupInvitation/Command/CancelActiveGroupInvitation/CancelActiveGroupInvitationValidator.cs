@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+namespace Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
 
 public class CancelActiveGroupInvitationValidator : AbstractValidator<CancelActiveGroupInvitationCommand>
 {

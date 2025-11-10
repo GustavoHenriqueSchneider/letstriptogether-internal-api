@@ -1,9 +1,8 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-
-namespace LetsTripTogether.InternalApi.Infrastructure.EntityFramework.Configurations;
+namespace Infrastructure.EntityFramework.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

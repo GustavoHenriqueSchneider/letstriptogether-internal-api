@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace LetsTripTogether.InternalApi.WebApi;
+namespace WebApi;
 
 public static class DependencyInjection
 {

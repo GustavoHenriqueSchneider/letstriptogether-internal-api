@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using Domain.Aggregates.UserAggregate.Entities;
 
-namespace LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
+namespace Application.Common.Interfaces.Services;
 
 public interface ITokenService
 {

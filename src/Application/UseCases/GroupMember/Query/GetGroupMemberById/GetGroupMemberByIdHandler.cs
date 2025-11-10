@@ -1,10 +1,9 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.UserAggregate;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetGroupMemberById;
+namespace Application.UseCases.GroupMember.Query.GetGroupMemberById;
 
 public class GetGroupMemberByIdHandler(
     IGroupRepository groupRepository,

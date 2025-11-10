@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+namespace Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 
 public class AdminGetAllDestinationsQuery : IRequest<AdminGetAllDestinationsResponse>
 {

@@ -2,11 +2,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
-using LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Enums;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Domain.Aggregates.GroupAggregate.Enums;
+using Domain.Security;
+using Domain.ValueObjects.TripPreferences;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

@@ -1,12 +1,12 @@
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.ValueObjects.TripPreferences;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Repositories.Users;
@@ -36,12 +36,12 @@ public class UserPreferenceRepositoryTests : TestBase
     public async Task AddAsync_WithNewPreference_ShouldAddPreference()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -81,12 +81,12 @@ public class UserPreferenceRepositoryTests : TestBase
     public async Task AddOrUpdateAsync_WithExistingPreference_ShouldUpdatePreference()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(global::Domain.Security.Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, global::Domain.Security.Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }

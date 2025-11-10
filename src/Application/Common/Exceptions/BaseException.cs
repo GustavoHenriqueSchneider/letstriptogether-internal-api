@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.Common.Exceptions;
+namespace Application.Common.Exceptions;
 
 public abstract class BaseException : Exception
 {

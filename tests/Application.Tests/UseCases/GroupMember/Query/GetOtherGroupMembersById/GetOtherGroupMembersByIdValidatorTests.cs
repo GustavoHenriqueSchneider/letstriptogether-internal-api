@@ -1,5 +1,5 @@
+using Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMember.Query.GetOtherGroupMembersById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupMember.Query.GetOtherGroupMembersById;

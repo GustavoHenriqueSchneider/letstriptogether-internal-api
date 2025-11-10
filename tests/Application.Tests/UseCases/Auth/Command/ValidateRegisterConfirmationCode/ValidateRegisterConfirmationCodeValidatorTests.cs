@@ -1,5 +1,5 @@
+using Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Auth.Command.ValidateRegisterConfirmationCode;

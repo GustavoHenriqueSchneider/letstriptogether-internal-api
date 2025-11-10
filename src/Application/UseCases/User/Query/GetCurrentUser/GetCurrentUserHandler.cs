@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+using Application.Common.Exceptions;
+using Domain.Aggregates.UserAggregate;
+using Domain.Aggregates.UserAggregate.Entities;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Query.GetCurrentUser;
+namespace Application.UseCases.User.Query.GetCurrentUser;
 
 public class GetCurrentUserHandler(IUserRepository userRepository)
     : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>

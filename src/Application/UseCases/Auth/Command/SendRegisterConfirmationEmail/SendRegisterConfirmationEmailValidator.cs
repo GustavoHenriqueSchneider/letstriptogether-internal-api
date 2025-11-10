@@ -1,8 +1,8 @@
+using Application.Common.Validators;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+namespace Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
 
 public class SendRegisterConfirmationEmailValidator : AbstractValidator<SendRegisterConfirmationEmailCommand>
 {

@@ -1,12 +1,12 @@
 using System.Reflection;
+using Application.Common.Behaviours;
+using Application.Common.Extensions;
+using Application.Common.Interfaces.Extensions;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Behaviours;
-using LetsTripTogether.InternalApi.Application.Common.Extensions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LetsTripTogether.InternalApi.Application;
+namespace Application;
 
 public static class DependencyInjection
 {

@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
+namespace Application.UseCases.Group.Command.LeaveGroupById;
 
 public class LeaveGroupByIdValidator : AbstractValidator<LeaveGroupByIdCommand>
 {

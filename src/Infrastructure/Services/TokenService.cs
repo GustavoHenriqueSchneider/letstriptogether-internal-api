@@ -1,15 +1,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Domain.ValueObjects;
-using LetsTripTogether.InternalApi.Infrastructure.Configurations;
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Security;
+using Domain.ValueObjects;
+using Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Services;
+namespace Infrastructure.Services;
 
 public class TokenService : ITokenService
 {

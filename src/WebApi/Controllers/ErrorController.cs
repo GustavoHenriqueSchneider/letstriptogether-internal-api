@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+using Application.Common.Exceptions;
+using Domain.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers;
+namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

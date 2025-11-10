@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Domain.Common.Exceptions;
+namespace Domain.Common.Exceptions;
 
 public class DomainBusinessRuleException : Exception
 {

@@ -1,8 +1,8 @@
+using Application.Common.Validators;
 using FluentValidation;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserValidator : AbstractValidator<AdminCreateUserCommand>
 {

@@ -1,5 +1,5 @@
+using Application.UseCases.Group.Command.LeaveGroupById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.LeaveGroupById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Group.Command.LeaveGroupById;

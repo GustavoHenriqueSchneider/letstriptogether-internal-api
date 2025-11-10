@@ -1,13 +1,13 @@
+using Domain.Aggregates.GroupAggregate.Entities;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Groups;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Groups;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
 using NUnit.Framework;
-using RoleType = LetsTripTogether.InternalApi.Domain.Security.Roles;
+using RoleType = Domain.Security.Roles;
 
 namespace Infrastructure.Tests.Repositories.Groups;
 
@@ -31,12 +31,12 @@ public class GroupRepositoryTests : TestBase
     public async Task GetGroupWithMembersAsync_WithGroupId_ShouldReturnGroupWithMembers()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(RoleType.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -60,12 +60,12 @@ public class GroupRepositoryTests : TestBase
     public async Task IsGroupMemberByUserIdAsync_WithMember_ShouldReturnTrue()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(RoleType.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }

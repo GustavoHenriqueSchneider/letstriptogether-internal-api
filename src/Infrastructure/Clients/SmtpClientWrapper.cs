@@ -1,6 +1,6 @@
 using System.Net.Mail;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Clients;
+namespace Infrastructure.Clients;
 
 public class SmtpClientWrapper : ISmtpClient
 {

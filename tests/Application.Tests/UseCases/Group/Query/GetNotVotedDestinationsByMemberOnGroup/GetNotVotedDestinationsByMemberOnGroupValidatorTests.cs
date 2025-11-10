@@ -1,5 +1,5 @@
+using Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;

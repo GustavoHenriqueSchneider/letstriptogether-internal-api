@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Policies;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
+using Application.Common.Policies;
+using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
+namespace WebApi.Controllers.v1.Admin;
 
 // TODO: descricoes para swagger
 
@@ -30,8 +30,17 @@ public class AdminGroupMatchController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{matchId:guid}")]
-    public async Task<IActionResult> AdminGetGroupMatchById([FromRoute] Guid groupId,
-        [FromRoute] Guid matchId, CancellationToken cancellationToken)
+    [SwaggerOperation(
+        Summary = "Obter Match do Grupo por ID (Admin)",
+        Description = "Retorna os detalhes de um match específico de um grupo. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetGroupMatchByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AdminGetGroupMatchById(
+        [FromRoute] Guid groupId,
+        [FromRoute] Guid matchId, 
+        CancellationToken cancellationToken)
     {
         var query = new AdminGetGroupMatchByIdQuery
         {

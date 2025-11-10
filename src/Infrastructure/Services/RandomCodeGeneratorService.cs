@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Infrastructure.Services;
+namespace Infrastructure.Services;
 
 public class RandomCodeGeneratorService : IRandomCodeGeneratorService
 {

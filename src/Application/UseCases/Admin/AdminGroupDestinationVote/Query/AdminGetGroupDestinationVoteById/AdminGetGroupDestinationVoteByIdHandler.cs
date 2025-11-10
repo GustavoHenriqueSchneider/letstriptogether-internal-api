@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
+namespace Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetGroupDestinationVoteById;
 
 public class AdminGetGroupDestinationVoteByIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,

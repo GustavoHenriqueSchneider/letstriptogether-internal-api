@@ -1,9 +1,9 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Common;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+namespace Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 
 public class AdminRemoveGroupMemberByIdHandler(
     IGroupMemberRepository groupMemberRepository,

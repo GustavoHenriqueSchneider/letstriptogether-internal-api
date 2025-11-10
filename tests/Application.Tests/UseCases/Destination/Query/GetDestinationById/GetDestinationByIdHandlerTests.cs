@@ -1,7 +1,9 @@
+using Application.Common.Exceptions;
 using Application.Tests.Common;
+using Application.UseCases.Destination.Query.GetDestinationById;
+using Domain.Aggregates.DestinationAggregate.Entities;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Destination.Query.GetDestinationById;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Destinations;
+using Infrastructure.Repositories.Destinations;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Destination.Query.GetDestinationById;
@@ -24,7 +26,7 @@ public class GetDestinationByIdHandlerTests : TestBase
     public async Task Handle_WithValidDestinationId_ShouldReturnDestination()
     {
         // Arrange
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -51,14 +53,14 @@ public class GetDestinationByIdHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 
     [Test]
     public async Task Handle_WithDestinationWithAttractions_ShouldMapAttractionsCorrectly()
     {
         // Arrange
-        var destination = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination
+        var destination = new Domain.Aggregates.DestinationAggregate.Entities.Destination
         {
             Address = "Test Address",
             Description = "Test Description"
@@ -66,7 +68,7 @@ public class GetDestinationByIdHandlerTests : TestBase
         await _repository.AddAsync(destination, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var attraction1 = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction
+        var attraction1 = new DestinationAttraction
         {
             DestinationId = destination.Id,
             Destination = destination,
@@ -74,7 +76,7 @@ public class GetDestinationByIdHandlerTests : TestBase
             Description = "Description 1",
             Category = "Food.Restaurant"
         };
-        var attraction2 = new LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction
+        var attraction2 = new DestinationAttraction
         {
             DestinationId = destination.Id,
             Destination = destination,
@@ -83,8 +85,8 @@ public class GetDestinationByIdHandlerTests : TestBase
             Category = "Culture.Museum"
         };
 
-        DbContext.Set<LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction>().Add(attraction1);
-        DbContext.Set<LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction>().Add(attraction2);
+        DbContext.Set<DestinationAttraction>().Add(attraction1);
+        DbContext.Set<DestinationAttraction>().Add(attraction2);
         await DbContext.SaveChangesAsync();
 
         var query = new GetDestinationByIdQuery { DestinationId = destination.Id };

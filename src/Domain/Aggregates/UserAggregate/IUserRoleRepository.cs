@@ -1,7 +1,7 @@
-﻿using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
+﻿using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Common;
 
-namespace LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+namespace Domain.Aggregates.UserAggregate;
 
 public interface IUserRoleRepository : IBaseRepository<UserRole>
 {

@@ -1,7 +1,7 @@
 using FluentValidation;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.User.Command.UpdateCurrentUser;
+namespace Application.UseCases.User.Command.UpdateCurrentUser;
 
 public class UpdateCurrentUserValidator : AbstractValidator<UpdateCurrentUserCommand>
 {

@@ -1,5 +1,5 @@
+using Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;

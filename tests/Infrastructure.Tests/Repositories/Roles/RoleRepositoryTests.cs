@@ -1,9 +1,9 @@
+using Domain.Aggregates.RoleAggregate.Entities;
 using FluentAssertions;
+using Infrastructure.Repositories.Roles;
 using Infrastructure.Tests.Common;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
 using NUnit.Framework;
-using RoleType = LetsTripTogether.InternalApi.Domain.Security.Roles;
+using RoleType = Domain.Security.Roles;
 
 namespace Infrastructure.Tests.Repositories.Roles;
 
@@ -23,12 +23,12 @@ public class RoleRepositoryTests : TestBase
     public async Task GetDefaultUserRoleAsync_WithDefaultRole_ShouldReturnRole()
     {
         // Arrange
-        var role = await _repository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _repository.GetByNameAsync(RoleType.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, RoleType.User);
             await _repository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }

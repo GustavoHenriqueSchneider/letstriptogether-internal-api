@@ -1,5 +1,5 @@
+using Application.UseCases.User.Command.UpdateCurrentUser;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.UpdateCurrentUser;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.User.Command.UpdateCurrentUser;

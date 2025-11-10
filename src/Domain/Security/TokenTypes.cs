@@ -1,4 +1,4 @@
-﻿namespace LetsTripTogether.InternalApi.Domain.Security;
+﻿namespace Domain.Security;
 
 public class TokenTypes
 {

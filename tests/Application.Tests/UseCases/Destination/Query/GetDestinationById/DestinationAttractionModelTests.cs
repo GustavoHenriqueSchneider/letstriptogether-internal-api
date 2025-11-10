@@ -1,5 +1,5 @@
+using Application.UseCases.Destination.Query.GetDestinationById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Destination.Query.GetDestinationById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Destination.Query.GetDestinationById;

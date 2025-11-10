@@ -1,5 +1,5 @@
+using Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupMatch.Query.GetAllGroupMatchesById;

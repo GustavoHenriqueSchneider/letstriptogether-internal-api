@@ -1,7 +1,7 @@
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
+namespace Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
 
 public class AdminGetAllGroupDestinationVotesByIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository)

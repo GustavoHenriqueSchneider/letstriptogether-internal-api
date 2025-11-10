@@ -1,12 +1,12 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Domain.Aggregates.RoleAggregate;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
-using UserModel = LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User;
+using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserHandler(
     IPasswordHashService passwordHashService,

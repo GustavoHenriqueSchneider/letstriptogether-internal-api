@@ -1,5 +1,5 @@
+using Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;

@@ -1,11 +1,11 @@
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.AcceptInvitation;
-using LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.RefuseInvitation;
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.Invitation.Command.AcceptInvitation;
+using Application.UseCases.Invitation.Command.RefuseInvitation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTripTogether.InternalApi.WebApi.Controllers.v1;
+namespace WebApi.Controllers.v1;
 
 // TODO: descricoes para swagger
 
@@ -29,6 +29,13 @@ public class InvitationController(
     }
 
     [HttpPost("refuse")]
+    [SwaggerOperation(
+        Summary = "Recusar Convite",
+        Description = "Recusa um convite de grupo, marcando o convite como recusado.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RefuseInvitation([FromBody] RefuseInvitationCommand command, CancellationToken cancellationToken)
     {
         command = command with

@@ -1,10 +1,10 @@
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.UserAggregate;
 using MediatR;
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Login;
+namespace Application.UseCases.Auth.Command.Login;
 
 public class LoginHandler(
     IPasswordHashService passwordHashService,

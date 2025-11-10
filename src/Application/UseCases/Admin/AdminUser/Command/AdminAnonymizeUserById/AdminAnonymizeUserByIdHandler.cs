@@ -1,12 +1,12 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.Helpers;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate;
-using LetsTripTogether.InternalApi.Domain.Common;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
+using Application.Helpers;
+using Domain.Aggregates.GroupAggregate;
+using Domain.Aggregates.UserAggregate;
+using Domain.Common;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+namespace Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
 public class AdminAnonymizeUserByIdHandler(
     IGroupMemberRepository groupMemberRepository,

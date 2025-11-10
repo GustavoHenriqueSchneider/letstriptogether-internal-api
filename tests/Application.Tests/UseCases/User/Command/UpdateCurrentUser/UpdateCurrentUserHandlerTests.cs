@@ -1,13 +1,14 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Application.Tests.Common;
+using Application.UseCases.User.Command.UpdateCurrentUser;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Common;
+using Domain.Security;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Services;
-using LetsTripTogether.InternalApi.Application.UseCases.User.Command.UpdateCurrentUser;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Common;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Roles;
-using LetsTripTogether.InternalApi.Infrastructure.Repositories.Users;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Repositories.Roles;
+using Infrastructure.Repositories.Users;
+using Infrastructure.Services;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.User.Command.UpdateCurrentUser;
@@ -38,12 +39,12 @@ public class UpdateCurrentUserHandlerTests : TestBase
     public async Task Handle_WithValidData_ShouldUpdateUser()
     {
         // Arrange
-        var role = await _roleRepository.GetByNameAsync(LetsTripTogether.InternalApi.Domain.Security.Roles.User, CancellationToken.None);
+        var role = await _roleRepository.GetByNameAsync(Roles.User, CancellationToken.None);
 
         if (role is null)
         {
             role = new Role();
-            typeof(Role).GetProperty("Name")!.SetValue(role, LetsTripTogether.InternalApi.Domain.Security.Roles.User);
+            typeof(Role).GetProperty("Name")!.SetValue(role, Roles.User);
             await _roleRepository.AddAsync(role, CancellationToken.None);
             await DbContext.SaveChangesAsync();
         }
@@ -51,7 +52,7 @@ public class UpdateCurrentUserHandlerTests : TestBase
         var email = TestDataHelper.GenerateRandomEmail();
         var passwordHash = _passwordHashService.HashPassword(TestDataHelper.GenerateValidPassword());
         var originalName = "Original Name";
-        var user = new LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User(originalName, email, passwordHash, role);
+        var user = new Domain.Aggregates.UserAggregate.Entities.User(originalName, email, passwordHash, role);
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
@@ -83,6 +84,6 @@ public class UpdateCurrentUserHandlerTests : TestBase
 
         // Act & Assert
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<LetsTripTogether.InternalApi.Application.Common.Exceptions.NotFoundException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }

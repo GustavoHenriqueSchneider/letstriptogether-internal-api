@@ -1,12 +1,12 @@
+using Application.Common.Interfaces.Extensions;
+using Application.UseCases.Invitation.Command.AcceptInvitation;
+using Application.UseCases.Invitation.Command.RefuseInvitation;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Interfaces.Extensions;
-using LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.AcceptInvitation;
-using LetsTripTogether.InternalApi.Application.UseCases.Invitation.Command.RefuseInvitation;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1;
 
 namespace WebApi.Tests.Controllers.v1;
 

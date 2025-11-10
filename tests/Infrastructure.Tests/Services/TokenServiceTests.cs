@@ -1,11 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Domain.Aggregates.RoleAggregate.Entities;
+using Domain.Aggregates.UserAggregate.Entities;
+using Domain.Security;
+using Domain.ValueObjects;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities;
-using LetsTripTogether.InternalApi.Domain.Security;
-using LetsTripTogether.InternalApi.Infrastructure.Configurations;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Configurations;
+using Infrastructure.Services;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
@@ -85,7 +86,7 @@ public class TokenServiceTests
         };
 
         // Act
-        var token = _service.GenerateRegisterTokenForStep(LetsTripTogether.InternalApi.Domain.ValueObjects.Step.ValidateEmail, claims);
+        var token = _service.GenerateRegisterTokenForStep(Step.ValidateEmail, claims);
 
         // Assert
         token.Should().NotBeNullOrEmpty();

@@ -1,5 +1,5 @@
+using Application.Common.Validators;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Common.Validators;
 using NUnit.Framework;
 
 namespace Application.Tests.Common.Validators;

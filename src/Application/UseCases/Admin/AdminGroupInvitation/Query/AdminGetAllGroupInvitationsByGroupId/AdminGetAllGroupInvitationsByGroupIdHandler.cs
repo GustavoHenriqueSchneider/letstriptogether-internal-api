@@ -1,8 +1,8 @@
-using LetsTripTogether.InternalApi.Application.Common.Exceptions;
-using LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate;
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
+namespace Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
 
 public class AdminGetAllGroupInvitationsByGroupIdHandler(
     IGroupInvitationRepository groupInvitationRepository,

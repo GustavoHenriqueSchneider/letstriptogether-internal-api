@@ -1,5 +1,5 @@
+using Application.Helpers;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.Helpers;
 using NUnit.Framework;
 
 namespace Application.Tests.Helpers;

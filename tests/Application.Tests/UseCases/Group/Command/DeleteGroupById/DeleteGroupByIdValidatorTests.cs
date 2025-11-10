@@ -1,5 +1,5 @@
+using Application.UseCases.Group.Command.DeleteGroupById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Group.Command.DeleteGroupById;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.Group.Command.DeleteGroupById;

@@ -1,6 +1,6 @@
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Infrastructure.Clients;
-using LetsTripTogether.InternalApi.Infrastructure.Services;
+using Infrastructure.Clients;
+using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
 using StackExchange.Redis;

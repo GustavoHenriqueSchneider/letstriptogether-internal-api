@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Login;
+namespace Application.UseCases.Auth.Command.Login;
 
 public class LoginResponse
 {

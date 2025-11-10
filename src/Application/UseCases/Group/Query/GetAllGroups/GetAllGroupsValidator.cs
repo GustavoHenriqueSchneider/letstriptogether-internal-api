@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace LetsTripTogether.InternalApi.Application.UseCases.Group.Query.GetAllGroups;
+namespace Application.UseCases.Group.Query.GetAllGroups;
 
 public class GetAllGroupsValidator : AbstractValidator<GetAllGroupsQuery>
 {

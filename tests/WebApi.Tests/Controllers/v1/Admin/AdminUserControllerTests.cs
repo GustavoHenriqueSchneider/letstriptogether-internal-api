@@ -1,16 +1,16 @@
+using Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+using Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+using Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+using Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+using Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
+using Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
 using FluentAssertions;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
-using LetsTripTogether.InternalApi.Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
-using LetsTripTogether.InternalApi.WebApi.Controllers.v1.Admin;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using WebApi.Controllers.v1.Admin;
 
 namespace WebApi.Tests.Controllers.v1.Admin;
 

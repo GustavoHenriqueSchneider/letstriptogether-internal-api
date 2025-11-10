@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Domain.Common;
+namespace Domain.Common;
 
 public interface IBaseRepository<T> where T : TrackableEntity
 {

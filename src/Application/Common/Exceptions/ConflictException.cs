@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace LetsTripTogether.InternalApi.Application.Common.Exceptions;
+namespace Application.Common.Exceptions;
 
 public class ConflictException : BaseException
 {

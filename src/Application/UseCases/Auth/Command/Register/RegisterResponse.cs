@@ -1,4 +1,4 @@
-namespace LetsTripTogether.InternalApi.Application.UseCases.Auth.Command.Register;
+namespace Application.UseCases.Auth.Command.Register;
 
 public class RegisterResponse
 {
