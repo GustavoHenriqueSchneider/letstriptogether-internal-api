@@ -6,6 +6,7 @@ using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Security;
 using Domain.ValueObjects;
 using Infrastructure.Configurations;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,12 +16,15 @@ public class TokenService : ITokenService
 {
     private readonly JsonWebTokenSettings _jwtSettings;
     private readonly JwtSecurityTokenHandler _tokenHandler;
+    private readonly ILogger<ITokenService> _logger;
     private readonly byte[] _key;
 
-    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings, JwtSecurityTokenHandler tokenHandler)
+    public TokenService(IOptions<JsonWebTokenSettings> jwtSettings, 
+        JwtSecurityTokenHandler tokenHandler, ILogger<ITokenService> logger)
     {
         _jwtSettings = jwtSettings.Value;
         _tokenHandler = tokenHandler;
+        _logger = logger;
 
         var key = _jwtSettings.SecretKey ?? throw new InvalidOperationException("Invalid secret key");
         _key = Encoding.UTF8.GetBytes(key);
@@ -196,8 +200,9 @@ public class TokenService : ITokenService
 
             return (isExpired, expiresIn);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogWarning(ex, "Erro ao verificar expiração do token");
             return (true, null);
         }
     }

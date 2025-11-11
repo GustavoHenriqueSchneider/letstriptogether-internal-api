@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Application.Common.Interfaces.Services;
 using Infrastructure.Configurations;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services;
@@ -13,13 +14,15 @@ public class EmailTemplateService : IEmailTemplateService
     private readonly Dictionary<string, string> _templatesConfig;
     private readonly EmailTemplateSettings _settings;
     private readonly Assembly _assembly;
+    private readonly ILogger<EmailTemplateService> _logger;
     private const string TemplatesNamespace = "Infrastructure.Templates.EmailTemplates";
     private const string TemplatesConfigFile = "templates.json";
 
-    public EmailTemplateService(IOptions<EmailTemplateSettings> settings)
+    public EmailTemplateService(IOptions<EmailTemplateSettings> settings, ILogger<EmailTemplateService> logger)
     {
         _settings = settings.Value;
         _assembly = Assembly.GetExecutingAssembly();
+        _logger = logger;
         _templatesConfig = LoadTemplatesConfig();
     }
 
@@ -79,6 +82,8 @@ public class EmailTemplateService : IEmailTemplateService
         if (stream is null)
         {
             var availableResources = _assembly.GetManifestResourceNames();
+            _logger.LogError("Recurso embutido '{ResourceName}' não encontrado. Recursos disponíveis: {AvailableResources}", 
+                resourceName, string.Join(", ", availableResources));
             throw new FileNotFoundException(
                 $"Recurso embutido '{resourceName}' não encontrado.");
         }

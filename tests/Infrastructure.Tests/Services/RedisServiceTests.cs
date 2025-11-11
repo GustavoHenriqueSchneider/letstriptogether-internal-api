@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Infrastructure.Clients;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using StackExchange.Redis;
@@ -21,7 +22,8 @@ public class RedisServiceTests
         _redisClientMock = new Mock<IRedisClient>();
         _redisClientMock.Setup(x => x.Database).Returns(_databaseMock.Object);
         
-        _service = new RedisService(_redisClientMock.Object);
+        var loggerMock = new Mock<ILogger<RedisService>>();
+        _service = new RedisService(_redisClientMock.Object, loggerMock.Object);
     }
 
     [Test]

@@ -2,6 +2,7 @@ using System.Net.Mail;
 using Application.Common.Interfaces.Services;
 using Infrastructure.Clients;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -20,7 +21,8 @@ public class EmailSenderServiceTests
         var from = "example@example.com";
         _smtpClientMock = new Mock<ISmtpClient>();
         _templateServiceMock = new Mock<IEmailTemplateService>();
-        _service = new EmailSenderService(from, _smtpClientMock.Object, _templateServiceMock.Object);
+        var loggerMock = new Mock<ILogger<EmailSenderService>>();
+        _service = new EmailSenderService(from, _smtpClientMock.Object, _templateServiceMock.Object, loggerMock.Object);
     }
 
     [Test]

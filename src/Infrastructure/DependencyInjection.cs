@@ -21,9 +21,12 @@ using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure;
@@ -31,9 +34,9 @@ namespace Infrastructure;
 public static class DependencyInjection
 {
     public static IServiceCollection RegisterApplicationExternalDependencies(
-        this IServiceCollection services, IConfiguration configuration)
+        this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment? environment = null)
     {
-        services.AddDbContext(configuration);
+        services.AddDbContext(configuration, environment);
         services.AddRepositories();
         
         services.AddClients(configuration);
@@ -104,14 +107,21 @@ public static class DependencyInjection
         services.AddTransient<JwtSecurityTokenHandler>();
     }
 
-    private static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    private static void AddDbContext(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment? environment)
     {
+        var isProduction = environment?.IsProduction() ?? false;
+        
         services.AddDbContext<IUnitOfWork, AppDbContext>(options =>
         {
             var postgresConnection = configuration.GetConnectionString("Postgres") 
                                      ?? throw new InvalidOperationException("Connection string 'Postgres' is missing.");
 
             options.UseNpgsql(postgresConnection);
+            
+            if (isProduction)
+            {
+                options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddFilter("", LogLevel.None)));
+            }
         });
     }
 
@@ -133,20 +143,23 @@ public static class DependencyInjection
 
     private static void AddClients(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IRedisClient>(_ =>
+        services.AddSingleton<IRedisClient>(sp =>
         {
             var redisConnection = configuration.GetConnectionString("Redis") 
                                   ?? throw new InvalidOperationException("Connection string 'Redis' is missing.");
 
-            return new RedisClient(redisConnection);
+            var logger = sp.GetRequiredService<ILogger<RedisClient>>();
+            return new RedisClient(redisConnection, logger);
         });
         
-        services.AddTransient<ISmtpClient>(_ =>
+        services.AddTransient<ISmtpClient>(sp =>
         {
             var emailSettings = configuration
                 .GetRequiredSection(nameof(EmailSettings))
                 .Get<EmailSettings>()!;
 
+            var logger = sp.GetRequiredService<ILogger<SmtpClientWrapper>>();
+            
             var smtpClient = new SmtpClient
             {
                 Host = emailSettings.SmtpServer,
@@ -155,7 +168,7 @@ public static class DependencyInjection
                 EnableSsl = emailSettings.EnableSsl
             };
 
-            return new SmtpClientWrapper(smtpClient);
+            return new SmtpClientWrapper(smtpClient, logger);
         });
     }
 
@@ -175,8 +188,9 @@ public static class DependencyInjection
 
             var smtpClient = sp.GetRequiredService<ISmtpClient>();
             var templateService = sp.GetRequiredService<IEmailTemplateService>();
+            var logger = sp.GetRequiredService<ILogger<EmailSenderService>>();
             
-            return new EmailSenderService(emailSettings.From, smtpClient, templateService);
+            return new EmailSenderService(emailSettings.From, smtpClient, templateService, logger);
         });
     }
 }

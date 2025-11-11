@@ -1,7 +1,9 @@
 using System.Text.Json;
 using Infrastructure.Configurations;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Services;
@@ -31,7 +33,8 @@ public class EmailTemplateServiceTests
         };
 
         var options = Options.Create(_settings);
-        _service = new EmailTemplateService(options);
+        var loggerMock = new Mock<ILogger<EmailTemplateService>>();
+        _service = new EmailTemplateService(options, loggerMock.Object);
     }
 
     [Test]

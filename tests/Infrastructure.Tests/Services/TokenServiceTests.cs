@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Application.Common.Interfaces.Services;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Security;
@@ -7,7 +8,9 @@ using Domain.ValueObjects;
 using FluentAssertions;
 using Infrastructure.Configurations;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Services;
@@ -31,7 +34,8 @@ public class TokenServiceTests
             InvitationTokenValidityInMinutes = 1440
         };
 
-        _service = new TokenService(Options.Create(_jwtSettings), new JwtSecurityTokenHandler());
+        var loggerMock = new Mock<ILogger<ITokenService>>();
+        _service = new TokenService(Options.Create(_jwtSettings), new JwtSecurityTokenHandler(), loggerMock.Object);
     }
 
     [Test]

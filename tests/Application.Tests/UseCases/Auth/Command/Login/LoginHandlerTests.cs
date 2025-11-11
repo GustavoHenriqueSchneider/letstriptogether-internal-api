@@ -10,6 +10,7 @@ using Infrastructure.Configurations;
 using Infrastructure.Repositories.Roles;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -49,7 +50,8 @@ public class LoginHandlerTests : TestBase
             RefreshTokenValidityInMinutes = 1440
         };
         
-        _tokenService = new TokenService(Options.Create(jwtSettings), new JwtSecurityTokenHandler());
+        var loggerMock = new Mock<ILogger<ITokenService>>();
+        _tokenService = new TokenService(Options.Create(jwtSettings), new JwtSecurityTokenHandler(), loggerMock.Object);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
         

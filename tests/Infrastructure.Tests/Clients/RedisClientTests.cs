@@ -1,5 +1,7 @@
 using FluentAssertions;
 using Infrastructure.Clients;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Clients;
@@ -12,9 +14,10 @@ public class RedisClientTests
     {
         // Arrange
         const string connectionString = "localhost:6379,password=admin";
+        var loggerMock = new Mock<ILogger<RedisClient>>();
 
         // Act
-        var client = new RedisClient(connectionString);
+        var client = new RedisClient(connectionString, loggerMock.Object);
 
         // Assert
         client.Should().NotBeNull();
@@ -28,7 +31,8 @@ public class RedisClientTests
     {
         // Arrange
         const string connectionString = "localhost:6379,password=admin";
-        var client = new RedisClient(connectionString);
+        var loggerMock = new Mock<ILogger<RedisClient>>();
+        var client = new RedisClient(connectionString, loggerMock.Object);
 
         // Act
         var database = client.Database;

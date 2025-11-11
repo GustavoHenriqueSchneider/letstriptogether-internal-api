@@ -1,6 +1,8 @@
 using System.Net.Mail;
 using FluentAssertions;
 using Infrastructure.Clients;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 
 namespace Infrastructure.Tests.Clients;
@@ -13,9 +15,10 @@ public class SmtpClientWrapperTests
     {
         // Arrange
         using var smtpClient = new SmtpClient();
+        var loggerMock = new Mock<ILogger<SmtpClientWrapper>>();
 
         // Act
-        var wrapper = new SmtpClientWrapper(smtpClient);
+        var wrapper = new SmtpClientWrapper(smtpClient, loggerMock.Object);
 
         // Assert
         wrapper.Should().NotBeNull();
@@ -33,7 +36,8 @@ public class SmtpClientWrapperTests
         
         Directory.CreateDirectory(smtpClient.PickupDirectoryLocation);
         
-        var wrapper = new SmtpClientWrapper(smtpClient);
+        var loggerMock = new Mock<ILogger<SmtpClientWrapper>>();
+        var wrapper = new SmtpClientWrapper(smtpClient, loggerMock.Object);
         using var message = new MailMessage("from@test.com", "to@test.com", "Subject", "Body");
         var cancellationToken = CancellationToken.None;
 

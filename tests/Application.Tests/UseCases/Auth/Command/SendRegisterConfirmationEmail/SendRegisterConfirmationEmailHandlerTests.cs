@@ -9,6 +9,7 @@ using Infrastructure.Configurations;
 using Infrastructure.Repositories.Roles;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -57,7 +58,8 @@ public class SendRegisterConfirmationEmailHandlerTests : TestBase
             RefreshTokenValidityInMinutes = 1440
         };
         
-        _tokenService = new TokenService(Microsoft.Extensions.Options.Options.Create(jwtSettings), new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler());
+        var loggerMock = new Mock<ILogger<ITokenService>>();
+        _tokenService = new TokenService(Microsoft.Extensions.Options.Options.Create(jwtSettings), new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler(), loggerMock.Object);
         
         _handler = new SendRegisterConfirmationEmailHandler(
             _emailSenderService, 

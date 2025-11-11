@@ -13,7 +13,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         services.RegisterApplicationConfigurations(configuration);
         services.RegisterApplicationAuthentication(configuration);
         services.RegisterApplicationAuthorization();
-        services.RegisterApplicationExternalDependencies(configuration);
+        services.RegisterApplicationExternalDependencies(configuration, environment);
         
         services.RegisterApplicationApiServices();
         
