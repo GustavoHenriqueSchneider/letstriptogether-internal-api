@@ -12,16 +12,16 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             line-height: 1.6;
-            color: #333333;
-            background-color: #f4f4f4;
+            color: #01001D;
+            background-color: #F8F9FA;
             padding: 20px;
         }
         .email-wrapper {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #ffffff;
+            background-color: #FFFFFF;
         }
         .container {
             padding: 40px 30px;
@@ -35,7 +35,7 @@
         .logo {
             font-size: 28px;
             font-weight: bold;
-            color: #007bff;
+            color: #0E0652;
             margin-bottom: 10px;
             text-decoration: none;
         }
@@ -49,12 +49,12 @@
         .greeting {
             font-size: 20px;
             font-weight: bold;
-            color: #007bff;
+            color: #0E0652;
             margin-bottom: 15px;
         }
         .code-container {
-            background-color: #f8f9fa;
-            border: 2px dashed #007bff;
+            background-color: #F8F9FA;
+            border: 2px dashed #0E0652;
             border-radius: 8px;
             padding: 25px;
             text-align: center;
@@ -63,7 +63,7 @@
         .code {
             font-size: 32px;
             font-weight: bold;
-            color: #007bff;
+            color: #0E0652;
             letter-spacing: 8px;
             font-family: 'Courier New', monospace;
         }
@@ -74,6 +74,7 @@
             margin: 20px 0;
             border-radius: 4px;
             font-size: 14px;
+            color: #01001D;
         }
         .warning strong {
             display: block;
@@ -84,7 +85,7 @@
             padding-top: 25px;
             border-top: 1px solid #e0e0e0;
             font-size: 12px;
-            color: #666666;
+            color: #6C757D;
             text-align: center;
         }
         .footer-links {
@@ -92,11 +93,12 @@
             line-height: 1.8;
         }
         .footer-links a {
-            color: #007bff;
+            color: #0E0652;
             text-decoration: none;
             margin: 0 8px;
         }
         .footer-links a:hover {
+            color: #130F61;
             text-decoration: underline;
         }
         .footer-info {
@@ -104,28 +106,30 @@
             padding-top: 15px;
             border-top: 1px solid #e0e0e0;
             font-size: 11px;
-            color: #999999;
+            color: #6C757D;
         }
         .lgpd-notice {
-            background-color: #e7f3ff;
-            border-left: 4px solid #007bff;
+            background-color: #F8F9FA;
+            border-left: 4px solid #0E0652;
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
             font-size: 13px;
+            color: #01001D;
         }
         .lgpd-notice strong {
             display: block;
             margin-bottom: 5px;
-            color: #0056b3;
+            color: #130F61;
         }
         .welcome-message {
-            background-color: #d4edda;
-            border-left: 4px solid #28a745;
+            background-color: #F8F9FA;
+            border-left: 4px solid #6496D8;
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
             font-size: 14px;
+            color: #01001D;
         }
         @media only screen and (max-width: 600px) {
             .container {
@@ -154,7 +158,7 @@
             </div>
             
             <div class="content">
-                <h1 style="font-size: 24px; margin-bottom: 20px; color: #333;">{{subject}}</h1>
+                <h1 style="font-size: 24px; margin-bottom: 20px; color: #01001D;">{{subject}}</h1>
                 
                 <p class="greeting">Olá, {{name}}!</p>
                 
@@ -178,7 +182,7 @@
                 
                 <div class="lgpd-notice">
                     <strong>🔒 Proteção de Dados Pessoais (LGPD)</strong>
-                    Ao confirmar seu email, você concorda com nossa <a href="{{privacyPolicyUrl}}" style="color: #0056b3;">Política de Privacidade</a> e <a href="{{termsOfUseUrl}}" style="color: #0056b3;">Termos de Uso</a>. Seus dados pessoais são tratados de acordo com a Lei Geral de Proteção de Dados (LGPD) e estão protegidos. Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento através do email <a href="mailto:{{companyEmail}}" style="color: #0056b3;">{{companyEmail}}</a>.
+                    Ao confirmar seu email, você concorda com nossa <a href="{{privacyPolicyUrl}}" style="color: #130F61;">Política de Privacidade</a> e <a href="{{termsOfUseUrl}}" style="color: #130F61;">Termos de Uso</a>. Seus dados pessoais são tratados de acordo com a Lei Geral de Proteção de Dados (LGPD) e estão protegidos. Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento através do email <a href="mailto:{{companyEmail}}" style="color: #130F61;">{{companyEmail}}</a>.
                 </div>
             </div>
             
@@ -193,7 +197,7 @@
                 </div>
                 
                 <div class="footer-info">
-                    <p>Dúvidas? Entre em contato: <a href="mailto:{{companyEmail}}" style="color: #007bff;">{{companyEmail}}</a></p>
+                    <p>Dúvidas? Entre em contato: <a href="mailto:{{companyEmail}}" style="color: #0E0652;">{{companyEmail}}</a></p>
                     <p style="margin-top: 10px;">&copy; {{currentYear}} {{companyName}}. Todos os direitos reservados.</p>
                     <p style="margin-top: 5px;">Este email foi enviado para {{email}}. Se você não criou uma conta, pode ignorar este email com segurança.</p>
                 </div>
