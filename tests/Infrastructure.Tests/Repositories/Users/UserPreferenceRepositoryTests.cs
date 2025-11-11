@@ -18,7 +18,6 @@ public class UserPreferenceRepositoryTests : TestBase
     private UserRepository _userRepository = null!;
     private RoleRepository _roleRepository = null!;
     private IPasswordHashService _passwordHashService = null!;
-    private UserPreferenceRepository _userPreferenceRepository = null!;
 
     [SetUp]
     public async Task SetUp()
@@ -29,7 +28,6 @@ public class UserPreferenceRepositoryTests : TestBase
         _repository = new UserPreferenceRepository(DbContext);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
-        _userPreferenceRepository = new UserPreferenceRepository(DbContext);
     }
 
     [Test]
@@ -55,10 +53,10 @@ public class UserPreferenceRepositoryTests : TestBase
 
         var preferences = new UserPreference(
             likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
-            culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
-            entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction), },
-            placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });
+            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Museum).ToString() },
+            entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Attraction).ToString() },
+            placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Beach).ToString() });
         
         user.SetPreferences(preferences);
 
@@ -100,10 +98,10 @@ public class UserPreferenceRepositoryTests : TestBase
 
         var preferences1 = new UserPreference(
             likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
-            culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
-            entertainment: new List<string> { TripPreference.Entertainment.Adventure },
-            placeTypes: new List<string> { TripPreference.PlaceType.Beach });
+            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Museum).ToString() },
+            entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Adventure).ToString() },
+            placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Beach).ToString() });
         
         user.SetPreferences(preferences1);
         _userRepository.Update(user);
@@ -112,10 +110,10 @@ public class UserPreferenceRepositoryTests : TestBase
 
         var preferences2 = new UserPreference(
             likesCommercial: false,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
-            culture: new List<string> { new TripPreference(TripPreference.Culture.Historical) },
-            entertainment: new List<string> { TripPreference.Entertainment.Park },
-            placeTypes: new List<string> { TripPreference.PlaceType.Rural });
+            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Historical).ToString() },
+            entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Park).ToString() },
+            placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Rural).ToString() });
         
         user.SetPreferences(preferences2);
         _userRepository.Update(user);

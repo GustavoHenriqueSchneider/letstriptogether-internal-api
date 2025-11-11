@@ -63,10 +63,10 @@ public class GroupPreferenceRepositoryTests : TestBase
         
         var preferences = new UserPreference(
             likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
-            culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
-            entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
-            placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });
+            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Museum).ToString() },
+            entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Attraction).ToString() },
+            placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Beach).ToString() });
         
         user.SetPreferences(preferences);
         await _userPreferenceRepository.AddAsync(user.Preferences!, CancellationToken.None);

@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using Application.Common.Interfaces.Services;
 using Infrastructure.Clients;
 using Infrastructure.Services;
 using Moq;
@@ -11,12 +12,15 @@ public class EmailSenderServiceTests
 {
     private EmailSenderService _service = null!;
     private Mock<ISmtpClient> _smtpClientMock = null!;
+    private Mock<IEmailTemplateService> _templateServiceMock = null!;
 
     [SetUp]
     public void SetUp()
     {
+        var from = "example@example.com";
         _smtpClientMock = new Mock<ISmtpClient>();
-        _service = new EmailSenderService(_smtpClientMock.Object);
+        _templateServiceMock = new Mock<IEmailTemplateService>();
+        _service = new EmailSenderService(from, _smtpClientMock.Object, _templateServiceMock.Object);
     }
 
     [Test]
@@ -24,18 +28,28 @@ public class EmailSenderServiceTests
     {
         // Arrange
         const string to = "test@example.com";
+        const string templateName = "email-confirmation";
         const string subject = "Test Subject";
-        const string body = "Test Body";
+        const string htmlBody = "<html><body>Test Body</body></html>";
+        var templateData = new Dictionary<string, string>
+        {
+            { "name", "Test User" },
+            { "code", "123456" }
+        };
+
+        _templateServiceMock.Setup(x => x.GetTemplateAsync(templateName, templateData))
+            .ReturnsAsync((subject, htmlBody));
 
         _smtpClientMock.Setup(x => x.SendMailAsync(It.IsAny<MailMessage>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act
-        await _service.SendAsync(to, subject, body, CancellationToken.None);
+        await _service.SendAsync(to, templateName, templateData, CancellationToken.None);
 
         // Assert
+        _templateServiceMock.Verify(x => x.GetTemplateAsync(templateName, templateData), Times.Once);
         _smtpClientMock.Verify(x => x.SendMailAsync(
-            It.Is<MailMessage>(m => m.To[0].Address == to && m.Subject == subject && m.Body == body),
+            It.Is<MailMessage>(m => m.To[0].Address == to && m.Subject == subject && m.Body == htmlBody && m.IsBodyHtml),
             It.IsAny<CancellationToken>()), Times.Once);
     }
 }

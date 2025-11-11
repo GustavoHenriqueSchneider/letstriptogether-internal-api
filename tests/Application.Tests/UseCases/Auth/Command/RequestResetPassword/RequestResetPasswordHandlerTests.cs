@@ -36,7 +36,7 @@ public class RequestResetPasswordHandlerTests : TestBase
         emailSenderServiceMock.Setup(x => x.SendAsync(
             It.IsAny<string>(), 
             It.IsAny<string>(), 
-            It.IsAny<string>(), 
+            It.IsAny<Dictionary<string, string>>(), 
             It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _emailSenderService = emailSenderServiceMock.Object;

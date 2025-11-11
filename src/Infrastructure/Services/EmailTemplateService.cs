@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services;
 
-internal class EmailTemplateService : IEmailTemplateService
+public class EmailTemplateService : IEmailTemplateService
 {
     private readonly Dictionary<string, string> _templatesConfig;
     private readonly EmailTemplateSettings _settings;
@@ -36,7 +36,7 @@ internal class EmailTemplateService : IEmailTemplateService
         
         var allData = new Dictionary<string, string>(data)
         {
-            { "subject", $"{subject} - {_settings.Company.Name}" },
+            { "subject", subject },
             { "companyName", _settings.Company.Name },
             { "companyEmail", _settings.Company.Contact },
             { "privacyPolicyUrl", _settings.Url.PrivacyPolicy },
@@ -46,7 +46,7 @@ internal class EmailTemplateService : IEmailTemplateService
         };
         
         var renderedContent = ReplacePlaceholders(templateContent, allData);
-        return (subject, renderedContent);
+        return (subject: $"{subject} - {_settings.Company.Name}", renderedContent);
     }
 
     private static string ReplacePlaceholders(string template, Dictionary<string, string> data)
