@@ -23,7 +23,7 @@ namespace WebApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.Destination", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace WebApi.Migrations
                     b.ToTable("Destinations", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,7 +87,7 @@ namespace WebApi.Migrations
                     b.ToTable("DestinationAttractions", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.Group", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace WebApi.Migrations
                     b.ToTable("Groups", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,7 +140,7 @@ namespace WebApi.Migrations
                     b.ToTable("GroupInvitations", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMatch", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +167,7 @@ namespace WebApi.Migrations
                     b.ToTable("GroupMatches", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -197,7 +197,7 @@ namespace WebApi.Migrations
                     b.ToTable("GroupMembers", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMemberDestinationVote", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMemberDestinationVote", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,7 +227,7 @@ namespace WebApi.Migrations
                     b.ToTable("GroupMemberDestinationVotes", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupPreference", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -273,7 +273,7 @@ namespace WebApi.Migrations
                     b.ToTable("GroupPreferences", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities.Role", b =>
+            modelBuilder.Entity("Domain.Aggregates.RoleAggregate.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -298,7 +298,7 @@ namespace WebApi.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -336,7 +336,7 @@ namespace WebApi.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserGroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserGroupInvitation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -366,7 +366,7 @@ namespace WebApi.Migrations
                     b.ToTable("UserGroupInvitations", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserPreference", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -412,7 +412,7 @@ namespace WebApi.Migrations
                     b.ToTable("UserPreferences", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserRole", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -436,9 +436,9 @@ namespace WebApi.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
+                    b.HasOne("Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
                         .WithMany("Attractions")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -447,9 +447,9 @@ namespace WebApi.Migrations
                     b.Navigation("Destination");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithMany("Invitations")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -458,15 +458,15 @@ namespace WebApi.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMatch", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMatch", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
+                    b.HasOne("Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
                         .WithMany("GroupMatches")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithMany("Matches")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -477,15 +477,15 @@ namespace WebApi.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithMany("GroupMemberships")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -496,15 +496,15 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMemberDestinationVote", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMemberDestinationVote", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
+                    b.HasOne("Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
                         .WithMany("GroupMemberVotes")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMember", "GroupMember")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.GroupMember", "GroupMember")
                         .WithMany("Votes")
                         .HasForeignKey("GroupMemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -515,26 +515,26 @@ namespace WebApi.Migrations
                     b.Navigation("GroupMember");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupPreference", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithOne("Preferences")
-                        .HasForeignKey("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupPreference", "GroupId")
+                        .HasForeignKey("Domain.Aggregates.GroupAggregate.Entities.GroupPreference", "GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserGroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserGroupInvitation", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", "GroupInvitation")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", "GroupInvitation")
                         .WithMany("AnsweredBy")
                         .HasForeignKey("GroupInvitationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithMany("AcceptedInvitations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -545,26 +545,26 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserPreference", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithOne("Preferences")
-                        .HasForeignKey("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserPreference", "UserId")
+                        .HasForeignKey("Domain.Aggregates.UserAggregate.Entities.UserPreference", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.UserRole", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserRole", b =>
                 {
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities.Role", "Role")
+                    b.HasOne("Domain.Aggregates.RoleAggregate.Entities.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -575,7 +575,7 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.DestinationAggregate.Entities.Destination", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.Destination", b =>
                 {
                     b.Navigation("Attractions");
 
@@ -584,7 +584,7 @@ namespace WebApi.Migrations
                     b.Navigation("GroupMemberVotes");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.Group", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.Group", b =>
                 {
                     b.Navigation("Invitations");
 
@@ -596,22 +596,22 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
                 {
                     b.Navigation("AnsweredBy");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
                 {
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.RoleAggregate.Entities.Role", b =>
+            modelBuilder.Entity("Domain.Aggregates.RoleAggregate.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("LetsTripTogether.InternalApi.Domain.Aggregates.UserAggregate.Entities.User", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.User", b =>
                 {
                     b.Navigation("AcceptedInvitations");
 

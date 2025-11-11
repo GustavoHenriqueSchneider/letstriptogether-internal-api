@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251102205035_AddExampleData")]
+    [Migration("20251111003605_AddExampleData")]
     partial class AddExampleData
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace WebApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.Destination", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.Destination", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,24 +34,26 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Destinations");
+                    b.ToTable("Destinations", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.DestinationAttraction", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,21 +61,24 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(35)
+                        .HasColumnType("character varying(35)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
 
                     b.Property<Guid>("DestinationId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(70)
+                        .HasColumnType("character varying(70)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -82,10 +87,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("DestinationId");
 
-                    b.ToTable("DestinationAttractions");
+                    b.ToTable("DestinationAttractions", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.Group", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.Group", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +101,8 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<DateTime>("TripExpectedDate")
                         .HasColumnType("timestamp with time zone");
@@ -106,10 +112,10 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,10 +140,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupInvitations");
+                    b.ToTable("GroupInvitations", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMatch", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMatch", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,10 +167,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupMatches");
+                    b.ToTable("GroupMatches", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMember", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,10 +197,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupMembers");
+                    b.ToTable("GroupMembers", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMemberDestinationVote", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMemberDestinationVote", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,10 +227,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("GroupMemberId");
 
-                    b.ToTable("GroupMemberDestinationVotes");
+                    b.ToTable("GroupMemberDestinationVotes", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupPreference", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,10 +273,10 @@ namespace WebApi.Migrations
                     b.HasIndex("GroupId")
                         .IsUnique();
 
-                    b.ToTable("GroupPreferences");
+                    b.ToTable("GroupPreferences", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.Role", b =>
+            modelBuilder.Entity("Domain.Aggregates.RoleAggregate.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -281,17 +287,21 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.User", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -302,28 +312,34 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
 
                     b.Property<bool>("IsAnonymous")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.UserGroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserGroupInvitation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -350,10 +366,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGroupInvitations");
+                    b.ToTable("UserGroupInvitations", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.UserPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserPreference", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,10 +412,10 @@ namespace WebApi.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserPreferences");
+                    b.ToTable("UserPreferences", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.UserRole", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -420,12 +436,12 @@ namespace WebApi.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.DestinationAttraction", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.DestinationAttraction", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Destination", "Destination")
+                    b.HasOne("Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
                         .WithMany("Attractions")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -434,9 +450,9 @@ namespace WebApi.Migrations
                     b.Navigation("Destination");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithMany("Invitations")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -445,15 +461,15 @@ namespace WebApi.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMatch", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMatch", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Destination", "Destination")
+                    b.HasOne("Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
                         .WithMany("GroupMatches")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Models.Aggregates.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithMany("Matches")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -464,15 +480,15 @@ namespace WebApi.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMember", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Models.Aggregates.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithMany("GroupMemberships")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,15 +499,15 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMemberDestinationVote", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMemberDestinationVote", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Destination", "Destination")
+                    b.HasOne("Domain.Aggregates.DestinationAggregate.Entities.Destination", "Destination")
                         .WithMany("GroupMemberVotes")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Models.Aggregates.GroupMember", "GroupMember")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.GroupMember", "GroupMember")
                         .WithMany("Votes")
                         .HasForeignKey("GroupMemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -502,26 +518,26 @@ namespace WebApi.Migrations
                     b.Navigation("GroupMember");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupPreference", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Group", "Group")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.Group", "Group")
                         .WithOne("Preferences")
-                        .HasForeignKey("WebApi.Models.Aggregates.GroupPreference", "GroupId")
+                        .HasForeignKey("Domain.Aggregates.GroupAggregate.Entities.GroupPreference", "GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.UserGroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserGroupInvitation", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.GroupInvitation", "GroupInvitation")
+                    b.HasOne("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", "GroupInvitation")
                         .WithMany("AnsweredBy")
                         .HasForeignKey("GroupInvitationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Models.Aggregates.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithMany("AcceptedInvitations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -532,26 +548,26 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.UserPreference", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserPreference", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithOne("Preferences")
-                        .HasForeignKey("WebApi.Models.Aggregates.UserPreference", "UserId")
+                        .HasForeignKey("Domain.Aggregates.UserAggregate.Entities.UserPreference", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.UserRole", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.UserRole", b =>
                 {
-                    b.HasOne("WebApi.Models.Aggregates.Role", "Role")
+                    b.HasOne("Domain.Aggregates.RoleAggregate.Entities.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Models.Aggregates.User", "User")
+                    b.HasOne("Domain.Aggregates.UserAggregate.Entities.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -562,7 +578,7 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.Destination", b =>
+            modelBuilder.Entity("Domain.Aggregates.DestinationAggregate.Entities.Destination", b =>
                 {
                     b.Navigation("Attractions");
 
@@ -571,7 +587,7 @@ namespace WebApi.Migrations
                     b.Navigation("GroupMemberVotes");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.Group", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.Group", b =>
                 {
                     b.Navigation("Invitations");
 
@@ -583,22 +599,22 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupInvitation", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupInvitation", b =>
                 {
                     b.Navigation("AnsweredBy");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.GroupMember", b =>
+            modelBuilder.Entity("Domain.Aggregates.GroupAggregate.Entities.GroupMember", b =>
                 {
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.Role", b =>
+            modelBuilder.Entity("Domain.Aggregates.RoleAggregate.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Aggregates.User", b =>
+            modelBuilder.Entity("Domain.Aggregates.UserAggregate.Entities.User", b =>
                 {
                     b.Navigation("AcceptedInvitations");
 
