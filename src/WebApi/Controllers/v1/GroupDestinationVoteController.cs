@@ -10,8 +10,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1;
 
-// TODO: descricoes para swagger
-
 [ApiController]
 [Authorize]
 [Route("api/v{version:apiVersion}/groups/{groupId:guid}/destination-votes")]
@@ -20,6 +18,13 @@ public class GroupDestinationVoteController(
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Votar em Destino",
+        Description = "Registra ou atualiza o voto do usuário autenticado em um destino do grupo.")]
+    [ProducesResponseType(typeof(VoteAtDestinationForGroupIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VoteAtDestinationForGroupId([FromRoute] Guid groupId,
         [FromBody] VoteAtDestinationForGroupIdCommand command, CancellationToken cancellationToken)
     {
@@ -59,6 +64,13 @@ public class GroupDestinationVoteController(
     }
 
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar Todos os Votos em Destinos do Usuário",
+        Description = "Retorna uma lista paginada de todos os votos em destinos do usuário autenticado no grupo especificado.")]
+    [ProducesResponseType(typeof(GetGroupMemberAllDestinationVotesByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGroupMemberAllDestinationVotesById([FromRoute] Guid groupId,
         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {

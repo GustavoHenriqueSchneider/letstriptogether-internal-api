@@ -37,6 +37,13 @@ public class UserController(
     }
 
     [HttpPut]
+    [SwaggerOperation(
+        Summary = "Atualizar Usuário Atual",
+        Description = "Atualiza as informações do usuário autenticado.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCurrentUser(
         [FromBody] UpdateCurrentUserCommand command, CancellationToken cancellationToken)
     {
@@ -68,6 +75,12 @@ public class UserController(
     }
 
     [HttpPatch("anonymize")]
+    [SwaggerOperation(
+        Summary = "Anonimizar Usuário Atual",
+        Description = "Anonimiza os dados pessoais do usuário autenticado, mantendo a conta ativa mas removendo informações identificáveis.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AnonymizeCurrentUser(CancellationToken cancellationToken)
     {
         var command = new AnonymizeCurrentUserCommand

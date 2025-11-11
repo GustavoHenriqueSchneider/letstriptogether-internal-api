@@ -45,7 +45,6 @@ public class GroupController(
         Description = "Retorna uma lista paginada de todos os grupos do usuário autenticado.")]
     [ProducesResponseType(typeof(GetAllGroupsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllGroups(
         [FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10, 
@@ -63,6 +62,12 @@ public class GroupController(
     }
 
     [HttpGet("{groupId:guid}")]
+    [SwaggerOperation(
+        Summary = "Obter Grupo por ID",
+        Description = "Retorna os detalhes de um grupo específico, incluindo membros, preferências e matches.")]
+    [ProducesResponseType(typeof(GetGroupByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var query = new GetGroupByIdQuery
@@ -99,6 +104,13 @@ public class GroupController(
     }
 
     [HttpDelete("{groupId:guid}")]
+    [SwaggerOperation(
+        Summary = "Excluir Grupo",
+        Description = "Exclui permanentemente um grupo. Apenas o proprietário do grupo pode excluir.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var command = new DeleteGroupByIdCommand
@@ -112,6 +124,13 @@ public class GroupController(
     }
     
     [HttpPatch("{groupId:guid}/leave")]
+    [SwaggerOperation(
+        Summary = "Sair do Grupo",
+        Description = "Remove o usuário autenticado de um grupo. Se o usuário for o proprietário, o grupo será excluído.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> LeaveGroupById([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var command = new LeaveGroupByIdCommand

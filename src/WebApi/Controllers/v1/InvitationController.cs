@@ -8,8 +8,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1;
 
-// TODO: descricoes para swagger
-
 [ApiController]
 [Authorize]
 [Route("api/v{version:apiVersion}/invitations")]
@@ -18,6 +16,13 @@ public class InvitationController(
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpPost("accept")]
+    [SwaggerOperation(
+        Summary = "Aceitar Convite",
+        Description = "Aceita um convite de grupo, adicionando o usuário autenticado como membro do grupo.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command, CancellationToken cancellationToken)
     {
         command = command with

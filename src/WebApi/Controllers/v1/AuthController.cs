@@ -29,7 +29,6 @@ public class AuthController(
         Description = "Envia um código de confirmação por email para validar o endereço de email durante o processo de registro.")]
     [ProducesResponseType(typeof(SendRegisterConfirmationEmailResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SendRegisterConfirmationEmail(
         [FromBody] SendRegisterConfirmationEmailCommand command, CancellationToken cancellationToken)
     {
@@ -39,6 +38,13 @@ public class AuthController(
 
     [HttpPost("email/validate")]
     [Authorize(Policy = Policies.RegisterValidateEmail)]
+    [SwaggerOperation(
+        Summary = "Validar Código de Confirmação de Email",
+        Description = "Valida o código de confirmação enviado por email durante o processo de registro. Requer token de validação de email.")]
+    [ProducesResponseType(typeof(ValidateRegisterConfirmationCodeResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ValidateRegisterConfirmationCode(
         [FromBody] ValidateRegisterConfirmationCodeCommand command, CancellationToken cancellationToken)
     {
@@ -76,6 +82,13 @@ public class AuthController(
 
     [HttpPost("login")]
     [AllowAnonymous]
+    [SwaggerOperation(
+        Summary = "Fazer Login",
+        Description = "Autentica um usuário com email e senha, retornando tokens de acesso e refresh.")]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(command, cancellationToken);
@@ -103,6 +116,13 @@ public class AuthController(
 
     [HttpPost("refresh")]
     [AllowAnonymous]
+    [SwaggerOperation(
+        Summary = "Atualizar Token",
+        Description = "Gera novos tokens de acesso e refresh usando um token de refresh válido.")]
+    [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(command, cancellationToken);
@@ -111,6 +131,12 @@ public class AuthController(
 
     [HttpPost("reset-password/request")]
     [AllowAnonymous]
+    [SwaggerOperation(
+        Summary = "Solicitar Redefinição de Senha",
+        Description = "Envia um email com link para redefinição de senha. O link é válido por um período limitado.")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);

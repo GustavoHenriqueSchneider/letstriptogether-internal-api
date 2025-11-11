@@ -25,7 +25,6 @@ public class AdminUserController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(AdminGetAllUsersResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AdminGetAllUsers(
         [FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 10, 
@@ -42,6 +41,13 @@ public class AdminUserController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{userId:guid}")]
+    [SwaggerOperation(
+        Summary = "Obter Usuário por ID (Admin)",
+        Description = "Retorna os detalhes de um usuário específico, incluindo preferências. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetUserByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminGetUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var query = new AdminGetUserByIdQuery
@@ -70,6 +76,14 @@ public class AdminUserController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("{userId:guid}")]
+    [SwaggerOperation(
+        Summary = "Atualizar Usuário por ID (Admin)",
+        Description = "Atualiza as informações de um usuário específico. Requer permissões de administrador.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminUpdateUserById([FromRoute] Guid userId, 
         [FromBody] AdminUpdateUserByIdCommand command, CancellationToken cancellationToken)
     {
@@ -104,6 +118,13 @@ public class AdminUserController(IMediator mediator) : ControllerBase
     }
 
     [HttpPatch("{userId:guid}/anonymize")]
+    [SwaggerOperation(
+        Summary = "Anonimizar Usuário por ID (Admin)",
+        Description = "Anonimiza os dados pessoais de um usuário específico, mantendo a conta ativa mas removendo informações identificáveis. Requer permissões de administrador.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminAnonymizeUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var command = new AdminAnonymizeUserByIdCommand

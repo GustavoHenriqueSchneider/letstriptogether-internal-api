@@ -30,7 +30,7 @@ public class RequestResetPasswordHandler(
 
         await redisService.SetAsync(key, resetPasswordToken, ttlInSeconds);
 
-        var expiresInMinutes = (int)(expiresIn! - DateTime.UtcNow).Value.TotalMinutes;
+        var expiresInMinutes = (int)(expiresIn! - DateTime.UtcNow).Value.TotalMinutes + 1;
         var templateData = new Dictionary<string, string>
         {
             { "token", resetPasswordToken },

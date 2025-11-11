@@ -8,14 +8,19 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1.Admin;
 
-// TODO: descricoes para swagger
-
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
 [Route("api/v{version:apiVersion}/admin/groups/{groupId:guid}/destination-votes")]
 public class AdminGroupDestinationVoteController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar Todos os Votos em Destinos do Grupo (Admin)",
+        Description = "Retorna uma lista paginada de todos os votos em destinos de um grupo específico. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetAllGroupDestinationVotesByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminGetAllGroupDestinationVotesById(
         [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {

@@ -8,14 +8,19 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1.Admin;
 
-// TODO: descricoes para swagger
-
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
 [Route("api/v{version:apiVersion}/admin/groups/{groupId:guid}/invitations")]
 public class AdminGroupInvitationsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar Todos os Convites do Grupo (Admin)",
+        Description = "Retorna uma lista paginada de todos os convites de um grupo específico. Requer permissões de administrador.")]
+    [ProducesResponseType(typeof(AdminGetAllGroupInvitationsByGroupIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AdminGetAllGroupInvitationsByGroupId(
         [FromRoute] Guid groupId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {

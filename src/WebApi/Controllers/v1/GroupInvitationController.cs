@@ -39,6 +39,13 @@ public class GroupInvitationController(
     }
     
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Obter Convite Ativo do Grupo",
+        Description = "Retorna o convite ativo do grupo, se existir. Apenas o proprietário do grupo pode visualizar.")]
+    [ProducesResponseType(typeof(GetActiveGroupInvitationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetActiveGroupInvitation([FromRoute] Guid groupId, CancellationToken cancellationToken)
     {
         var query = new GetActiveGroupInvitationQuery

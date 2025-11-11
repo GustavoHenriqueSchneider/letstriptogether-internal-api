@@ -9,8 +9,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1;
 
-// TODO: descricoes para swagger
-
 [ApiController]
 [Authorize]
 [Route("api/v{version:apiVersion}/groups/{groupId:guid}/matches")]
@@ -19,6 +17,13 @@ public class GroupMatchController(
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar Todos os Matches do Grupo",
+        Description = "Retorna uma lista paginada de todos os matches (destinos compatíveis) encontrados para o grupo.")]
+    [ProducesResponseType(typeof(GetAllGroupMatchesByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllGroupMatchesById([FromRoute] Guid groupId,
         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
@@ -35,6 +40,13 @@ public class GroupMatchController(
     }
 
     [HttpGet("{matchId:guid}")]
+    [SwaggerOperation(
+        Summary = "Obter Match do Grupo por ID",
+        Description = "Retorna os detalhes de um match específico do grupo, incluindo informações sobre o destino e compatibilidade.")]
+    [ProducesResponseType(typeof(GetGroupMatchByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGroupMatchById([FromRoute] Guid groupId,
         [FromRoute] Guid matchId, CancellationToken cancellationToken)
     {

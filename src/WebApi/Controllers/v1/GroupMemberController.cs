@@ -9,8 +9,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers.v1;
 
-// TODO: descricoes para swagger
-
 [ApiController]
 [Authorize]
 [Route("api/v{version:apiVersion}/groups/{groupId:guid}/members")]
@@ -19,6 +17,13 @@ public class GroupMemberController(
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar Outros Membros do Grupo",
+        Description = "Retorna uma lista paginada de todos os membros do grupo, excluindo o usuário autenticado.")]
+    [ProducesResponseType(typeof(GetOtherGroupMembersByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetOtherGroupMembersById([FromRoute] Guid groupId, 
         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
@@ -35,6 +40,13 @@ public class GroupMemberController(
     }
 
     [HttpGet("{memberId:guid}")]
+    [SwaggerOperation(
+        Summary = "Obter Membro do Grupo por ID",
+        Description = "Retorna os detalhes de um membro específico do grupo.")]
+    [ProducesResponseType(typeof(GetGroupMemberByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGroupMemberById([FromRoute] Guid groupId, 
         [FromRoute] Guid memberId, CancellationToken cancellationToken)
     {

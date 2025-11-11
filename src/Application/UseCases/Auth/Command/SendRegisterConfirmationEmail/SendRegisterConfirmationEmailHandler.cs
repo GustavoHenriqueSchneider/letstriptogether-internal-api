@@ -42,7 +42,7 @@ public class SendRegisterConfirmationEmailHandler(
         var code = randomCodeGeneratorService.Generate();
         await redisService.SetAsync(key, code, ttlInSeconds);
 
-        var expiresInMinutes = (int)(expiresIn! - DateTime.UtcNow).Value.TotalMinutes;
+        var expiresInMinutes = (int)(expiresIn! - DateTime.UtcNow).Value.TotalMinutes + 1;
         var templateData = new Dictionary<string, string>
         {
             { "code", code },
