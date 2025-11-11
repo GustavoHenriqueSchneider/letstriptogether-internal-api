@@ -32,9 +32,8 @@ public class EmailTemplateServiceTests
             }
         };
 
-        var options = Options.Create(_settings);
         var loggerMock = new Mock<ILogger<EmailTemplateService>>();
-        _service = new EmailTemplateService(options, loggerMock.Object);
+        _service = new EmailTemplateService(_settings, loggerMock.Object);
     }
 
     [Test]

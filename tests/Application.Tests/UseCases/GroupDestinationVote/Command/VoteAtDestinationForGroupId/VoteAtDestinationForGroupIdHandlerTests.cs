@@ -12,6 +12,7 @@ using Infrastructure.Repositories.Groups;
 using Infrastructure.Repositories.Roles;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
+using Moq;
 using NUnit.Framework;
 
 namespace Application.Tests.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
@@ -28,6 +29,7 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
     private UserRepository _userRepository = null!;
     private RoleRepository _roleRepository = null!;
     private IPasswordHashService _passwordHashService = null!;
+    private Mock<INotificationService> _notificationServiceMock = null!;
 
     [SetUp]
     public async Task SetUp()
@@ -42,6 +44,7 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
         _groupRepository = new GroupRepository(DbContext);
         _userRepository = new UserRepository(DbContext);
         _roleRepository = new RoleRepository(DbContext);
+        _notificationServiceMock = new Mock<INotificationService>();
         
         _handler = new VoteAtDestinationForGroupIdHandler(
             _destinationRepository,
@@ -49,7 +52,8 @@ public class VoteAtDestinationForGroupIdHandlerTests : TestBase
             _groupMemberDestinationVoteRepository,
             _groupRepository,
             _unitOfWork,
-            _userRepository);
+            _userRepository,
+            _notificationServiceMock.Object);
     }
 
     [Test]

@@ -18,9 +18,9 @@ public class EmailTemplateService : IEmailTemplateService
     private const string TemplatesNamespace = "Infrastructure.Templates.EmailTemplates";
     private const string TemplatesConfigFile = "templates.json";
 
-    public EmailTemplateService(IOptions<EmailTemplateSettings> settings, ILogger<EmailTemplateService> logger)
+    public EmailTemplateService(EmailTemplateSettings settings, ILogger<EmailTemplateService> logger)
     {
-        _settings = settings.Value;
+        _settings = settings;
         _assembly = Assembly.GetExecutingAssembly();
         _logger = logger;
         _templatesConfig = LoadTemplatesConfig();

@@ -1,7 +1,9 @@
 using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.UserAggregate;
 using Domain.Common;
+using Domain.Security;
 using MediatR;
 
 namespace Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
@@ -11,7 +13,8 @@ public class UpdateDestinationVoteByIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IGroupRepository groupRepository,
     IUnitOfWork unitOfWork,
-    IUserRepository userRepository)
+    IUserRepository userRepository,
+    INotificationService notificationService)
     : IRequestHandler<UpdateDestinationVoteByIdCommand>
 {
     public async Task Handle(UpdateDestinationVoteByIdCommand request, CancellationToken cancellationToken)
@@ -70,7 +73,16 @@ public class UpdateDestinationVoteByIdHandler(
             await groupMatchRepository.AddAsync(match, cancellationToken);
             await unitOfWork.SaveAsync(cancellationToken);
             
-            // TODO: criar service de notifica??o
+            var notificationData = new { groupId = group.Id };
+                
+            var notificationTasks = group.Members.Select(member =>
+                notificationService.SendNotificationAsync(
+                    member.UserId,
+                    NotificationEvents.GroupMatchCreated,
+                    notificationData,
+                    cancellationToken));
+                
+            await Task.WhenAll(notificationTasks).ConfigureAwait(false);
         }
         catch
         {

@@ -1,9 +1,11 @@
 using Application.Common.Exceptions;
+using Application.Common.Interfaces.Services;
 using Domain.Aggregates.DestinationAggregate;
 using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.GroupAggregate.Entities;
 using Domain.Aggregates.UserAggregate;
 using Domain.Common;
+using Domain.Security;
 using MediatR;
 
 namespace Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
@@ -14,7 +16,8 @@ public class VoteAtDestinationForGroupIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,
     IGroupRepository groupRepository,
     IUnitOfWork unitOfWork,
-    IUserRepository userRepository)
+    IUserRepository userRepository,
+    INotificationService notificationService)
     : IRequestHandler<VoteAtDestinationForGroupIdCommand, VoteAtDestinationForGroupIdResponse>
 {
     public async Task<VoteAtDestinationForGroupIdResponse> Handle(VoteAtDestinationForGroupIdCommand request, CancellationToken cancellationToken)
@@ -69,8 +72,17 @@ public class VoteAtDestinationForGroupIdHandler(
             var match = group.CreateMatch(request.DestinationId);
             await groupMatchRepository.AddAsync(match, cancellationToken);
             await unitOfWork.SaveAsync(cancellationToken);
+            
+            var notificationData = new { groupId = group.Id };
                 
-            // TODO: criar service de notifica??o
+            var notificationTasks = group.Members.Select(member =>
+                notificationService.SendNotificationAsync(
+                    member.UserId,
+                    NotificationEvents.GroupMatchCreated,
+                    notificationData,
+                    cancellationToken));
+                
+            await Task.WhenAll(notificationTasks).ConfigureAwait(false);
         }
         catch
         {

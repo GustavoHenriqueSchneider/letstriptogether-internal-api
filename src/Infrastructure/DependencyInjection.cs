@@ -49,9 +49,6 @@ public static class DependencyInjection
     {
         var jwtSection = configuration.GetRequiredSection(nameof(JsonWebTokenSettings));
         services.Configure<JsonWebTokenSettings>(jwtSection);
-        
-        var emailTemplateSection = configuration.GetSection(nameof(EmailTemplateSettings));
-        services.Configure<EmailTemplateSettings>(emailTemplateSection);
     }
 
     public static void RegisterApplicationAuthentication(this IServiceCollection services, IConfiguration configuration)
@@ -177,7 +174,16 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHashService, PasswordHashService>();
         services.AddSingleton<IRandomCodeGeneratorService, RandomCodeGeneratorService>();
         services.AddSingleton<ITokenService, TokenService>();
-        services.AddSingleton<IEmailTemplateService, EmailTemplateService>();
+        services.AddSingleton<IEmailTemplateService>(sp =>
+        {
+            var emailTemplateSection = configuration
+                .GetRequiredSection(nameof(EmailTemplateSettings))
+                .Get<EmailTemplateSettings>()!;
+            
+            var logger = sp.GetRequiredService<ILogger<EmailTemplateService>>();
+            
+            return new EmailTemplateService(emailTemplateSection, logger);
+        });
         
         services.AddScoped<IRedisService, RedisService>();
         services.AddScoped<IEmailSenderService>(sp =>
@@ -191,6 +197,15 @@ public static class DependencyInjection
             var logger = sp.GetRequiredService<ILogger<EmailSenderService>>();
             
             return new EmailSenderService(emailSettings.From, smtpClient, templateService, logger);
+        });
+        
+        services.AddHttpClient<INotificationService, NotificationService>((_, client) =>
+        {
+            var notificationSettings = configuration
+                .GetRequiredSection(nameof(NotificationSettings))
+                .Get<NotificationSettings>()!;
+
+            client.BaseAddress = new Uri(notificationSettings.Address);
         });
     }
 }

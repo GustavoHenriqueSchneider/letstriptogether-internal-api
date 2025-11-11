@@ -39,8 +39,8 @@ namespace WebApi.Migrations
                 userIds.Add(Guid.NewGuid());
             }
 
-            var userPassword = passwordHashService.HashPassword("user@123");
-            var adminPassword = passwordHashService.HashPassword("admin@123");
+            var userPassword = passwordHashService.HashPassword("User@123");
+            var adminPassword = passwordHashService.HashPassword("Admin@123");
 
             var userNames = new[]
             {
