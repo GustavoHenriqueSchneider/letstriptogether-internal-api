@@ -208,4 +208,19 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(notificationSettings.Address);
         });
     }
+
+    public static async Task ApplyMigrationsAsync(this IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        try
+        {
+            var dbContext = services.GetRequiredService<AppDbContext>();
+            await dbContext.Database.MigrateAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while migrating the database.", ex);
+        }
+    }
 }

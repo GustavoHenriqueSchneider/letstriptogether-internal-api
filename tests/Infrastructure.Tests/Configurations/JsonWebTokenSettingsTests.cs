@@ -13,7 +13,6 @@ public class JsonWebTokenSettingsTests
         // Arrange & Act
         var settings = new JsonWebTokenSettings
         {
-            Audience = "test-audience",
             Issuer = "test-issuer",
             SecretKey = "test-secret-key-that-is-at-least-32-characters-long",
             AccessTokenValidityInMinutes = 60,
@@ -23,7 +22,6 @@ public class JsonWebTokenSettingsTests
         };
 
         // Assert
-        settings.Audience.Should().Be("test-audience");
         settings.Issuer.Should().Be("test-issuer");
         settings.SecretKey.Should().Be("test-secret-key-that-is-at-least-32-characters-long");
         settings.AccessTokenValidityInMinutes.Should().Be(60);
@@ -38,7 +36,6 @@ public class JsonWebTokenSettingsTests
         // Arrange & Act
         var settings = new JsonWebTokenSettings
         {
-            Audience = "another-audience",
             Issuer = "another-issuer",
             SecretKey = "another-secret-key-that-is-at-least-32-characters-long",
             AccessTokenValidityInMinutes = 120,
@@ -48,7 +45,6 @@ public class JsonWebTokenSettingsTests
         };
 
         // Assert
-        settings.Audience.Should().Be("another-audience");
         settings.Issuer.Should().Be("another-issuer");
         settings.SecretKey.Should().Be("another-secret-key-that-is-at-least-32-characters-long");
         settings.AccessTokenValidityInMinutes.Should().Be(120);

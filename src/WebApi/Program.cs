@@ -1,10 +1,13 @@
+using Infrastructure;
 using WebApi;
 
-await Host
+var host = Host
     .CreateDefaultBuilder(args)
     .ConfigureWebHostDefaults(webBuilder =>
     {
         webBuilder.UseStartup<Startup>();
     })
-    .Build()
-    .RunAsync();
+    .Build();
+
+await host.ApplyMigrationsAsync();
+await host.RunAsync();

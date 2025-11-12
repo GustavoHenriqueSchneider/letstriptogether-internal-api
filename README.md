@@ -1,26 +1,373 @@
-# lets-trip-together-internal-api
+# LetsTripTogether - Internal API
 
-para interromper os containers do dockercompose e apagar volumes respectivos
-``` powershell
-docker compose down -v
+## 📋 Sobre o Projeto
+
+**LetsTripTogether** é uma API interna desenvolvida para facilitar o planejamento colaborativo de viagens em grupo. O sistema permite que usuários criem grupos de viagem, convidem outros usuários, votem em destinos e recebam sugestões de matches baseados nas preferências coletivas do grupo.
+
+### Objetivo
+
+O objetivo principal desta API é fornecer uma plataforma robusta e escalável para gerenciar:
+- **Grupos de Viagem**: Criação e gerenciamento de grupos para planejar viagens colaborativas
+- **Sistema de Votação**: Mecanismo para membros votarem em destinos de interesse
+- **Matching Inteligente**: Algoritmo que identifica destinos compatíveis com as preferências do grupo
+- **Convites e Membros**: Sistema completo de convites e gerenciamento de membros
+- **Preferências de Viagem**: Sistema flexível de preferências (cultura, entretenimento, comida, tipos de lugares)
+
+## 🏗️ Arquitetura
+
+Este projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa) e **Domain-Driven Design (DDD)**, organizando o código em camadas bem definidas com responsabilidades claras:
+
+```
+┌─────────────────────────────────────────┐
+│           WebApi (Presentation)         │  ← Controllers, Middleware, Configuração HTTP
+├─────────────────────────────────────────┤
+│         Application (Use Cases)         │  ← Handlers, Validators, DTOs, Behaviours
+├─────────────────────────────────────────┤
+│            Domain (Core)                │  ← Entidades, Agregados, Value Objects, Regras de Negócio
+├─────────────────────────────────────────┤
+│        Infrastructure (External)        │  ← EF Core, Redis, SMTP, Repositories, Services
+└─────────────────────────────────────────┘
 ```
 
-para subir os containers do dockercompose de forma livre do console
-``` powershell
+### Camadas
+
+#### 1. **Domain** (Camada de Domínio)
+- **Responsabilidade**: Contém a lógica de negócio pura, independente de frameworks
+- **Contém**:
+  - Agregados (User, Group, Destination, Role)
+  - Entidades de domínio
+  - Value Objects (TripPreference, Step)
+  - Interfaces de repositórios
+  - Exceções de domínio
+  - Constantes de segurança (Claims, Roles, TokenTypes, NotificationEvents)
+- **Características**: Zero dependências externas, regras de negócio encapsuladas
+
+#### 2. **Application** (Camada de Aplicação)
+- **Responsabilidade**: Orquestra os casos de uso e coordena o domínio
+- **Contém**:
+  - Handlers (MediatR) para cada caso de uso
+  - Validators (FluentValidation)
+  - DTOs (Commands, Queries, Responses)
+  - Behaviours (Validation, Exception Handling)
+  - Interfaces de serviços
+  - Extensions para HttpContext e UserContext
+- **Padrões**: CQRS (Command Query Responsibility Segregation) com MediatR
+
+#### 3. **Infrastructure** (Camada de Infraestrutura)
+- **Responsabilidade**: Implementa detalhes técnicos e integrações externas
+- **Contém**:
+  - Entity Framework Core (ORM)
+  - Repositórios (implementações concretas)
+  - Serviços (Email, Token, Redis, Notification, Password Hash)
+  - Configurações (Email, JWT, Notification)
+  - Clientes (SMTP, Redis)
+  - Migrations do banco de dados
+- **Tecnologias**: PostgreSQL, Redis, SMTP
+
+#### 4. **WebApi** (Camada de Apresentação)
+- **Responsabilidade**: Expõe a API REST e gerencia requisições HTTP
+- **Contém**:
+  - Controllers (v1, Admin)
+  - Startup/Program configuration
+  - Middleware pipeline
+  - Swagger/OpenAPI
+  - Health checks
+- **Características**: Versionamento de API, documentação automática
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+- **.NET 8.0** - Framework principal
+- **C#** - Linguagem de programação
+- **ASP.NET Core** - Framework web
+
+### Arquitetura e Padrões
+- **MediatR** (v12.4.1) - Implementação do padrão Mediator para CQRS
+- **FluentValidation** (v11.11.0) - Validação de dados
+- **AutoMapper** (v12.0.1) - Mapeamento de objetos
+
+### Banco de Dados
+- **PostgreSQL 16** - Banco de dados relacional principal
+- **Entity Framework Core** (v9.0.9) - ORM
+- **Npgsql.EntityFrameworkCore.PostgreSQL** (v9.0.4) - Provider PostgreSQL
+
+### Cache e Armazenamento
+- **Redis** (v7.2.0) - Cache distribuído e armazenamento de sessões/tokens
+- **StackExchange.Redis** (v2.9.25) - Cliente Redis para .NET
+
+### Autenticação e Segurança
+- **JWT (JSON Web Tokens)** - Autenticação stateless
+- **BCrypt.Net-Next** (v4.0.3) - Hash de senhas
+- **Microsoft.AspNetCore.Authentication.JwtBearer** (v8.0.20)
+
+### Comunicação
+- **SMTP** - Envio de emails (confirmação, reset de senha)
+- **HTTP Client** - Comunicação com serviços externos (notificações)
+
+### Documentação e Testes
+- **Swashbuckle.AspNetCore** (v9.0.6) - Swagger/OpenAPI
+- **NUnit** - Framework de testes
+- **Moq** - Mocking para testes unitários
+- **FluentAssertions** - Assertions expressivas em testes
+
+### DevOps
+- **Docker** - Containerização
+- **Docker Compose** - Orquestração de containers
+
+## 🎯 Conceitos Principais
+
+### Domain-Driven Design (DDD)
+
+#### Agregados
+- **User**: Representa um usuário do sistema com suas preferências e roles
+- **Group**: Agregado raiz que gerencia grupos de viagem, membros, convites e matches
+- **Destination**: Representa destinos turísticos com suas atrações
+- **Role**: Define papéis e permissões no sistema
+
+#### Value Objects
+- **TripPreference**: Preferências de viagem categorizadas (Cultura, Entretenimento, Comida, Tipos de Lugares)
+- **Step**: Representa etapas do processo de registro
+
+#### Repositórios
+Interfaces definidas no domínio, implementadas na infraestrutura:
+- `IUserRepository`, `IGroupRepository`, `IDestinationRepository`, etc.
+
+### CQRS (Command Query Responsibility Segregation)
+
+O projeto utiliza **MediatR** para separar comandos (mudanças de estado) de queries (consultas):
+
+- **Commands**: Operações que modificam estado (CreateGroup, VoteAtDestination, etc.)
+- **Queries**: Operações de leitura (GetGroupById, GetAllGroups, etc.)
+
+Cada caso de uso possui:
+- `Handler`: Lógica de processamento
+- `Validator`: Validação de entrada (FluentValidation)
+- `Command/Query`: DTO de entrada
+- `Response`: DTO de saída
+
+### Clean Architecture
+
+- **Independência de Frameworks**: O domínio não depende de nenhum framework
+- **Testabilidade**: Cada camada pode ser testada independentemente
+- **Inversão de Dependências**: Interfaces no domínio, implementações na infraestrutura
+
+### Padrões Implementados
+
+1. **Repository Pattern**: Abstração de acesso a dados
+2. **Unit of Work**: Gerenciamento transacional
+3. **Mediator Pattern**: Desacoplamento via MediatR
+4. **Strategy Pattern**: Diferentes estratégias de validação e comportamento
+5. **Factory Pattern**: Criação de entidades complexas
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+
+- **.NET SDK 8.0** ou superior
+- **Docker** e **Docker Compose**
+- **PostgreSQL 16** (via Docker)
+- **Redis 7.2** (via Docker)
+
+### Configuração Inicial
+
+1. **Clone o repositório**
+```bash
+git clone <repository-url>
+cd letstriptogether-internal-api
+```
+
+2. **Subir os containers do Docker Compose**
+
+**Para subir apenas PostgreSQL e Redis (útil para rodar a API na IDE):**
+```powershell
 docker compose up -d
 ```
 
-para criar migration do ef
-``` powershell
-dotnet ef migrations add <NomeMigration> --project .\src\Infrastructure --startup-project .\src\WebApi
+**Para subir PostgreSQL, Redis e a API:**
+```powershell
+docker compose --profile api up -d
 ```
 
-para atualizar migrations do ef no container
-``` powershell
+Isso irá iniciar:
+- PostgreSQL na porta `5432`
+- Redis na porta `6379`
+- Internal API na porta `5088` (apenas se usar `--profile api`)
+
+3. **Configurar variáveis de ambiente**
+
+Crie ou edite `src/WebApi/appsettings.Development.json` com as configurações necessárias:
+- Connection strings
+- JWT settings
+- Email settings
+- Notification settings
+
+4. **Aplicar migrations do banco de dados**
+```powershell
 dotnet ef database update --project .\src\Infrastructure --startup-project .\src\WebApi
 ```
 
-para rodar todos testes
+5. **Executar a aplicação**
+```bash
+cd src/WebApi
+dotnet run
 ```
+
+A API estará disponível em:
+- **HTTP**: `http://localhost:5088`
+- **HTTPS**: `https://localhost:7069`
+- **Swagger**: `https://localhost:7069/swagger`
+
+## 📝 Comandos Úteis
+
+### Docker Compose
+
+**Para subir apenas PostgreSQL e Redis (sem a API):**
+```powershell
+docker compose up -d
+```
+
+**Para subir PostgreSQL, Redis e a API:**
+```powershell
+docker compose --profile api up -d
+```
+
+**Para interromper os containers do docker compose e apagar volumes respectivos:**
+```powershell
+docker compose down -v
+```
+
+**Para interromper todos os containers incluindo a API:**
+```powershell
+docker compose --profile api down -v
+```
+
+### Entity Framework Migrations
+
+**Para criar uma nova migration:**
+```powershell
+dotnet ef migrations add <NomeMigration> --project .\src\Infrastructure --startup-project .\src\WebApi
+```
+
+**Para atualizar o banco de dados com as migrations:**
+```powershell
+dotnet ef database update --project .\src\Infrastructure --startup-project .\src\WebApi
+```
+
+### Testes
+
+**Para rodar todos os testes:**
+```bash
 dotnet test tests/Application.Tests/Application.Tests.csproj tests/Domain.Tests/Domain.Tests.csproj tests/Infrastructure.Tests/Infrastructure.Tests.csproj tests/WebApi.Tests/WebApi.Tests.csproj --verbosity normal
 ```
+
+**Para rodar testes de um projeto específico:**
+```bash
+dotnet test tests/Application.Tests/Application.Tests.csproj --verbosity normal
+```
+
+## 🔐 Segurança
+
+### Autenticação e Autorização
+
+- **JWT Tokens**: Autenticação stateless com access e refresh tokens
+- **BCrypt**: Hash de senhas com salt automático
+- **Policies**: Políticas de autorização baseadas em claims
+- **Roles**: Sistema de roles (User, Admin)
+
+### Validação
+
+- **FluentValidation**: Validação robusta em todas as camadas
+- **Domain Validation**: Regras de negócio validadas no domínio
+- **Input Validation**: Validação de entrada nos handlers
+
+## 📊 Funcionalidades Principais
+
+### Autenticação
+- Registro de usuário com confirmação por email
+- Login com JWT
+- Refresh token
+- Reset de senha
+- Logout
+
+### Gestão de Grupos
+- Criar grupos de viagem
+- Adicionar/remover membros
+- Gerenciar preferências do grupo
+- Definir data esperada da viagem
+
+### Sistema de Votação
+- Votar em destinos (aprovar/rejeitar)
+- Atualizar votos
+- Consultar votos de membros
+- Consultar destinos não votados
+
+### Matching
+- Matching automático quando todos aprovam um destino
+- Notificações quando um match é criado
+- Consulta de matches do grupo
+
+### Convites
+- Criar convites para grupos
+- Aceitar/recusar convites
+- Cancelar convites ativos
+- Consultar convites
+
+### Destinos
+- Consultar destinos disponíveis
+- Consultar atrações de destinos
+- Dados pré-carregados de cidades e atrações
+
+### Administração
+- CRUD completo de usuários, grupos, destinos
+- Anonimização de usuários
+- Consultas administrativas detalhadas
+
+## 🧪 Testes
+
+O projeto possui cobertura de testes em todas as camadas:
+
+- **Domain Tests**: Testes de entidades, value objects e regras de negócio
+- **Application Tests**: Testes de handlers, validators e comportamentos
+- **Infrastructure Tests**: Testes de repositórios e serviços
+- **WebApi Tests**: Testes de controllers e endpoints
+
+### Estrutura de Testes
+
+Cada teste segue o padrão **AAA** (Arrange-Act-Assert):
+- **Arrange**: Configuração do cenário
+- **Act**: Execução da ação
+- **Assert**: Verificação do resultado
+
+## 📚 Documentação da API
+
+A documentação interativa da API está disponível via **Swagger/OpenAPI** quando a aplicação está em execução:
+
+- Acesse: `https://localhost:7069/swagger`
+- A API está versionada (v1)
+- Todos os endpoints estão documentados com exemplos
+
+## 🔄 Fluxo de Dados
+
+1. **Request** → Controller recebe requisição HTTP
+2. **Validation** → FluentValidation valida o input
+3. **Handler** → MediatR despacha para o handler apropriado
+4. **Domain** → Handler utiliza repositórios e entidades de domínio
+5. **Infrastructure** → Repositórios executam queries no banco
+6. **Response** → DTO de resposta é retornado ao cliente
+
+## 🤝 Contribuindo
+
+Este é um projeto interno. Para contribuições:
+
+1. Siga os padrões de código estabelecidos
+2. Mantenha a cobertura de testes
+3. Documente mudanças significativas
+4. Siga os princípios de Clean Architecture e DDD
+
+## 📄 Licença
+
+Este projeto é de uso interno.
+
+---
+
+**Desenvolvido com ❤️ usando .NET 8 e Clean Architecture**

@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{FCB21C55-7EAF-4A38-AE6A-29AA76D2BABC}"
     ProjectSection(SolutionItems) = preProject
         .gitignore = .gitignore
+        Dockerfile = Dockerfile
         docker-compose.yml = docker-compose.yml
         global.json = global.json
         README.md = README.md

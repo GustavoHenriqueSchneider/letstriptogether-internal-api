@@ -5,7 +5,7 @@ using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.GroupAggregate.Entities;
 using Domain.Aggregates.UserAggregate;
 using Domain.Common;
-using Domain.Security;
+using Domain.Events;
 using MediatR;
 
 namespace Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;

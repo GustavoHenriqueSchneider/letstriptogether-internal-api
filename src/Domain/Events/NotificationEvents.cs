@@ -1,4 +1,4 @@
-namespace Domain.Security;
+namespace Domain.Events;
 
 public class NotificationEvents
 {

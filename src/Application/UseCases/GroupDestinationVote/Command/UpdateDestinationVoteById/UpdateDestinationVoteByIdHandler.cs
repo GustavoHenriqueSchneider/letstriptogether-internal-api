@@ -3,7 +3,7 @@ using Application.Common.Interfaces.Services;
 using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.UserAggregate;
 using Domain.Common;
-using Domain.Security;
+using Domain.Events;
 using MediatR;
 
 namespace Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
