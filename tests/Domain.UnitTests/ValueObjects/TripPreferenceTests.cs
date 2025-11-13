@@ -50,16 +50,16 @@ public class TripPreferenceTests
         }
 
         [Test]
-        public void ToString_WithFoodPreference_ShouldReturnLowercaseCategory()
+        public void ToString_WithGastronomyPreference_ShouldReturnGastronomy()
         {
             // Arrange
-            var preference = new TripPreference(TripPreference.Food.Restaurant);
+            var preference = new TripPreference(TripPreference.Gastronomy);
 
             // Act
             var result = preference.ToString();
 
             // Assert
-            result.Should().Be(nameof(TripPreference.Food.Restaurant).ToLower());
+            result.Should().Be(nameof(TripPreference.Gastronomy).ToLower());
         }
 
         [Test]
@@ -159,23 +159,6 @@ public class TripPreferenceTests
 
             // Assert
             result.Should().Be("park");
-        }
-    }
-
-    [TestFixture]
-    public class FoodToStringTests
-    {
-        [Test]
-        public void ToString_WithRestaurant_ShouldReturnLowercaseKey()
-        {
-            // Arrange
-            var food = new TripPreference.Food(TripPreference.Food.Restaurant);
-
-            // Act
-            var result = food.ToString();
-
-            // Assert
-            result.Should().Be("restaurant");
         }
     }
 

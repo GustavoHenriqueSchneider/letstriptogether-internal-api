@@ -34,8 +34,8 @@ public class GetGroupByIdHandler(
             TripExpectedDate = group.TripExpectedDate,
             Preferences = new GetGroupByIdPreferenceResponse
             {
-                LikesCommercial = groupPreferences.LikesCommercial,
-                Food = groupPreferences.Food,
+                LikesShopping = groupPreferences.LikesShopping,
+                LikesGastronomy = groupPreferences.LikesGastronomy,
                 Culture = groupPreferences.Culture,
                 Entertainment = groupPreferences.Entertainment,
                 PlaceTypes = groupPreferences.PlaceTypes,

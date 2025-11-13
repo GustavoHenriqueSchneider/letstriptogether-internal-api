@@ -15,8 +15,8 @@ public class AdminGetUserByIdResponseTests
         var updatedAt = DateTime.UtcNow.AddDays(1);
         var preferences = new AdminGetUserByIdPreferenceResponse
         {
-            LikesCommercial = true,
-            Food = ["Italian"],
+            LikesShopping = true,
+            LikesGastronomy = true,
             Culture = ["Museums"],
             Entertainment = ["Theater"],
             PlaceTypes = ["Restaurant"]
@@ -36,7 +36,7 @@ public class AdminGetUserByIdResponseTests
         response.Name.Should().Be("Test User");
         response.Email.Should().Be("test@example.com");
         response.Preferences.Should().NotBeNull();
-        response.Preferences!.LikesCommercial.Should().BeTrue();
+        response.Preferences!.LikesShopping.Should().BeTrue();
         response.CreatedAt.Should().Be(createdAt);
         response.UpdatedAt.Should().Be(updatedAt);
     }
@@ -71,16 +71,16 @@ public class AdminGetUserByIdResponseTests
         // Arrange & Act
         var preferences = new AdminGetUserByIdPreferenceResponse
         {
-            LikesCommercial = false,
-            Food = ["Italian", "French"],
+            LikesShopping = false,
+            LikesGastronomy = false,
             Culture = ["Museums", "Art"],
             Entertainment = ["Theater", "Cinema"],
             PlaceTypes = ["Restaurant", "Cafe"]
         };
 
         // Assert
-        preferences.LikesCommercial.Should().BeFalse();
-        preferences.Food.Should().HaveCount(2);
+        preferences.LikesShopping.Should().BeFalse();
+        preferences.LikesGastronomy.Should().BeFalse();
         preferences.Culture.Should().HaveCount(2);
         preferences.Entertainment.Should().HaveCount(2);
         preferences.PlaceTypes.Should().HaveCount(2);

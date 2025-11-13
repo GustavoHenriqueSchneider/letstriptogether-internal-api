@@ -11,8 +11,8 @@ public class AdminGetGroupByIdResponse
 
 public class AdminGetGroupByIdPreferenceResponse
 {
-    public bool LikesCommercial { get; init; }
-    public IEnumerable<string> Food { get; init; } = [];
+    public bool LikesShopping { get; init; }
+    public bool LikesGastronomy { get; init; }
     public IEnumerable<string> Culture { get; init; } = [];
     public IEnumerable<string> Entertainment { get; init; } = [];
     public IEnumerable<string> PlaceTypes { get; init; } = [];

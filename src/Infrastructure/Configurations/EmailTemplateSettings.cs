@@ -29,4 +29,11 @@ public class UrlData
         get => Website + _termsOfUse; 
         init =>  _termsOfUse = value;
     }
+    
+    private readonly string _resetPassword = null!;
+    public string ResetPassword
+    {
+        get => Website + _resetPassword; 
+        init =>  _resetPassword = value;
+    }
 }

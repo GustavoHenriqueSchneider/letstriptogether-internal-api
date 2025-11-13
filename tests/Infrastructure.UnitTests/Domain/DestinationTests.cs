@@ -10,7 +10,7 @@ namespace Infrastructure.UnitTests.Domain;
 public class DestinationTests : TestBase
 {
     [Test]
-    public void HasCommercialCategory_WithShoppingAttraction_ShouldReturnTrue()
+    public void HasShoppingCategory_WithShoppingAttraction_ShouldReturnTrue()
     {
         // Arrange
         var destination = new Destination
@@ -32,14 +32,14 @@ public class DestinationTests : TestBase
         attractionsList.Add(attraction);
 
         // Act
-        var result = destination.HasCommercialCategory();
+        var result = destination.HasShoppingCategory();
 
         // Assert
         result.Should().BeTrue();
     }
 
     [Test]
-    public void HasCommercialCategory_WithoutShoppingAttraction_ShouldReturnFalse()
+    public void HasShoppingCategory_WithoutShoppingAttraction_ShouldReturnFalse()
     {
         // Arrange
         var destination = new Destination
@@ -49,7 +49,53 @@ public class DestinationTests : TestBase
         };
 
         // Act
-        var result = destination.HasCommercialCategory();
+        var result = destination.HasShoppingCategory();
+
+        // Assert
+        result.Should().BeFalse();
+    }
+    
+    [Test]
+    public void HasGastronomyCategory_WithGastronomyAttraction_ShouldReturnTrue()
+    {
+        // Arrange
+        var destination = new Destination
+        {
+            Address = "Test Address",
+            Description = "Test Description"
+        };
+        
+        var attractionsField = typeof(Destination).GetField("_attractions", 
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var attraction = new DestinationAttraction
+        {
+            DestinationId = destination.Id,
+            Name = "Gastronomy Mall",
+            Description = "A gastronomy mall",
+            Category = TripPreference.Gastronomy
+        };
+        var attractionsList = (System.Collections.Generic.List<DestinationAttraction>)attractionsField!.GetValue(destination)!;
+        attractionsList.Add(attraction);
+
+        // Act
+        var result = destination.HasGastronomyCategory();
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Test]
+    public void HasGastronomyCategory_WithoutGastronomyAttraction_ShouldReturnFalse()
+    {
+        // Arrange
+        var destination = new Destination
+        {
+            Address = "Test Address",
+            Description = "Test Description"
+        };
+
+        // Act
+        var result = destination.HasGastronomyCategory();
 
         // Assert
         result.Should().BeFalse();
@@ -163,44 +209,6 @@ public class DestinationTests : TestBase
 
         // Assert
         result.Should().BeEmpty();
-    }
-
-    [Test]
-    public void GetFoodCategories_WithFoodAttractions_ShouldReturnCategories()
-    {
-        // Arrange
-        var destination = new Destination
-        {
-            Address = "Test Address",
-            Description = "Test Description"
-        };
-        
-        var attractionsField = typeof(Destination).GetField("_attractions", 
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var attractionsList = (System.Collections.Generic.List<DestinationAttraction>)attractionsField!.GetValue(destination)!;
-        
-        attractionsList.Add(new DestinationAttraction
-        {
-            DestinationId = destination.Id,
-            Name = "Restaurant",
-            Description = "A restaurant",
-            Category = "food.restaurant"
-        });
-        attractionsList.Add(new DestinationAttraction
-        {
-            DestinationId = destination.Id,
-            Name = "Cafe",
-            Description = "A cafe",
-            Category = "food.cafe"
-        });
-
-        // Act
-        var result = destination.GetFoodCategories();
-
-        // Assert
-        result.Should().HaveCount(2);
-        result.Should().Contain("food.restaurant");
-        result.Should().Contain("food.cafe");
     }
 
     [Test]

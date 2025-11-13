@@ -25,7 +25,7 @@ public class SetCurrentUserPreferencesHandler(
             throw new NotFoundException("User not found.");
         }
         
-        var preferences = new UserPreference(request.LikesCommercial, request.Food,
+        var preferences = new UserPreference(request.LikesShopping, request.LikesGastronomy,
             request.Culture, request.Entertainment, request.PlaceTypes);
 
         user.SetPreferences(preferences);

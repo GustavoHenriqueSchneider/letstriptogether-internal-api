@@ -26,8 +26,8 @@ public class AdminGetUserByIdHandler(IUserRepository userRepository)
             Preferences = user.Preferences is not null ?
                 new AdminGetUserByIdPreferenceResponse
                 {
-                    LikesCommercial = user.Preferences.LikesCommercial,
-                    Food = user.Preferences.Food,
+                    LikesShopping = user.Preferences.LikesShopping,
+                    LikesGastronomy = user.Preferences.LikesGastronomy,
                     Culture = user.Preferences.Culture,
                     Entertainment = user.Preferences.Entertainment,
                     PlaceTypes = user.Preferences.PlaceTypes,

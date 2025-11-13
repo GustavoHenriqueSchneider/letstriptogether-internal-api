@@ -6,57 +6,6 @@ using NUnit.Framework;
 namespace Application.UnitTests.Common.Validators;
 
 [TestFixture]
-public class FoodPreferencesValidatorTests
-{
-    private FoodPreferencesValidator _validator = null!;
-
-    [SetUp]
-    public void SetUp()
-    {
-        _validator = new FoodPreferencesValidator();
-    }
-
-    [Test]
-    public void Validate_WithValidPreferences_ShouldReturnValid()
-    {
-        // Arrange
-        var preferences = new List<string> { new TripPreference(TripPreference.Food.Restaurant) };
-
-        // Act
-        var result = _validator.Validate(preferences);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Test]
-    public void Validate_WithEmptyCollection_ShouldReturnInvalid()
-    {
-        // Arrange
-        var preferences = Array.Empty<string>();
-
-        // Act
-        var result = _validator.Validate(preferences);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-    }
-
-    [Test]
-    public void Validate_WithInvalidPreference_ShouldReturnInvalid()
-    {
-        // Arrange
-        var preferences = new[] { "InvalidPreference" };
-
-        // Act
-        var result = _validator.Validate(preferences);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-    }
-}
-
-[TestFixture]
 public class CulturePreferencesValidatorTests
 {
     private CulturePreferencesValidator _validator = null!;

@@ -76,7 +76,7 @@ public class AdminRemoveGroupMemberByIdHandlerTests : TestBase
         await _userRepository.AddAsync(member, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var ownerPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var ownerPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         owner.SetPreferences(ownerPrefs);
         await _userPreferenceRepository.AddAsync(owner.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();

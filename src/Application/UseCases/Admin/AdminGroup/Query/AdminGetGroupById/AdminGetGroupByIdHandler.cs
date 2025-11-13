@@ -25,8 +25,8 @@ public class AdminGetGroupByIdHandler(IGroupRepository groupRepository)
             TripExpectedDate = group.TripExpectedDate,
             Preferences = new AdminGetGroupByIdPreferenceResponse
             {
-                LikesCommercial = groupPreferences.LikesCommercial,
-                Food = groupPreferences.Food,
+                LikesShopping = groupPreferences.LikesShopping,
+                LikesGastronomy = groupPreferences.LikesGastronomy,
                 Culture = groupPreferences.Culture,
                 Entertainment = groupPreferences.Entertainment,
                 PlaceTypes = groupPreferences.PlaceTypes,

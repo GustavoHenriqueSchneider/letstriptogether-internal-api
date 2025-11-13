@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251111003605_AddExampleData")]
+    [Migration("20251113182045_AddExampleData")]
     partial class AddExampleData
     {
         /// <inheritdoc />
@@ -242,7 +242,10 @@ namespace WebApi.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("LikesCommercial")
+                    b.Property<bool>("LikesGastronomy")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LikesShopping")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -257,11 +260,6 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("text[]")
                         .HasColumnName("Entertainment");
-
-                    b.PrimitiveCollection<List<string>>("_food")
-                        .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Food");
 
                     b.PrimitiveCollection<List<string>>("_placeTypes")
                         .IsRequired()
@@ -378,7 +376,10 @@ namespace WebApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("LikesCommercial")
+                    b.Property<bool>("LikesGastronomy")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LikesShopping")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -396,11 +397,6 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("text[]")
                         .HasColumnName("Entertainment");
-
-                    b.PrimitiveCollection<List<string>>("_food")
-                        .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Food");
 
                     b.PrimitiveCollection<List<string>>("_placeTypes")
                         .IsRequired()

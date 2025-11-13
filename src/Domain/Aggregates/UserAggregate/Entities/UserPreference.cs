@@ -8,10 +8,8 @@ public class UserPreference : TrackableEntity
 {
     public Guid UserId { get; set; }
     public User User { get; init; } = null!;
-    public bool LikesCommercial { get; private set; }
-
-    private readonly List<string> _food = [];
-    public IReadOnlyCollection<string> Food => _food.AsReadOnly();
+    public bool LikesShopping { get; private set; }
+    public bool LikesGastronomy { get; private set; }
 
     private readonly List<string> _culture = [];
     public IReadOnlyCollection<string> Culture => _culture.AsReadOnly();
@@ -31,18 +29,18 @@ public class UserPreference : TrackableEntity
             return;
         }
 
-        LikesCommercial = userPreference.LikesCommercial;
-        userPreference.Food.ToList().ForEach(x => _food.Add(new TripPreference.Food(x)));
+        LikesShopping = userPreference.LikesShopping;
+        LikesGastronomy = userPreference.LikesGastronomy;
         userPreference.Culture.ToList().ForEach(x => _culture.Add(new TripPreference.Culture(x)));
         userPreference.Entertainment.ToList().ForEach(x => _entertainment.Add(new TripPreference.Entertainment(x)));
         userPreference.PlaceTypes.ToList().ForEach(x => _placeTypes.Add(new TripPreference.PlaceType(x)));
     }
 
-    public UserPreference(bool likesCommercial, List<string> food,
+    public UserPreference(bool likesShopping, bool likesGastronomy,
         List<string> culture, List<string> entertainment, List<string> placeTypes)
     {
-        LikesCommercial = likesCommercial;
-        food.ForEach(x => _food.Add(new TripPreference.Food(x)));
+        LikesShopping = likesShopping;
+        LikesGastronomy = likesGastronomy;
         culture.ForEach(x => _culture.Add(new TripPreference.Culture(x)));
         entertainment.ForEach(x => _entertainment.Add(new TripPreference.Entertainment(x)));
         placeTypes.ForEach(x => _placeTypes.Add(new TripPreference.PlaceType(x)));
@@ -50,10 +48,8 @@ public class UserPreference : TrackableEntity
 
     public void Update(UserPreference userPreference)
     {
-        LikesCommercial = userPreference.LikesCommercial;
-
-        _food.Clear();
-        _food.AddRange(userPreference.Food);
+        LikesShopping = userPreference.LikesShopping;
+        LikesGastronomy = userPreference.LikesGastronomy;
 
         _culture.Clear();
         _culture.AddRange(userPreference.Culture);
@@ -67,7 +63,7 @@ public class UserPreference : TrackableEntity
 
     public static implicit operator GroupPreference(UserPreference userPreference)
     {
-        return new GroupPreference(userPreference.LikesCommercial, userPreference.Food,
+        return new GroupPreference(userPreference.LikesShopping, userPreference.LikesGastronomy,
             userPreference.Culture, userPreference.Entertainment, userPreference.PlaceTypes);
     }
 }

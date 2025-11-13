@@ -23,8 +23,8 @@ public class SetCurrentUserPreferencesValidatorTests
         var command = new SetCurrentUserPreferencesCommand
         {
             UserId = Guid.NewGuid(),
-            LikesCommercial = true,
-            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            LikesShopping = true,
+            LikesGastronomy = true,
             Culture = new List<string> { new TripPreference(TripPreference.Culture.Museum) },
             Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
             PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Beach) }
@@ -44,8 +44,8 @@ public class SetCurrentUserPreferencesValidatorTests
         var command = new SetCurrentUserPreferencesCommand
         {
             UserId = Guid.Empty,
-            LikesCommercial = true,
-            Food = new List<string>(),
+            LikesShopping = true,
+            LikesGastronomy = true,
             Culture = new List<string>(),
             Entertainment = new List<string>(),
             PlaceTypes = new List<string>()

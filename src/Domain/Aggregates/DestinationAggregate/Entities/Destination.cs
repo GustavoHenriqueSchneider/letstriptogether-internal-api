@@ -21,11 +21,11 @@ public class Destination : TrackableEntity
     
     public Destination() { }
 
-    public bool HasCommercialCategory() => _attractions.Any(a => 
+    public bool HasShoppingCategory() => _attractions.Any(a => 
         a.Category.Equals(TripPreference.Shopping, StringComparison.OrdinalIgnoreCase));
     
-    public IReadOnlyCollection<string> GetFoodCategories() => 
-        GetReadonlyCategoryList(_attractions, TripPreference.FoodPrefix);
+    public bool HasGastronomyCategory() => _attractions.Any(a => 
+        a.Category.Equals(TripPreference.Gastronomy, StringComparison.OrdinalIgnoreCase));
     
     public IReadOnlyCollection<string> GetCultureCategories() => 
         GetReadonlyCategoryList(_attractions, TripPreference.CulturePrefix);

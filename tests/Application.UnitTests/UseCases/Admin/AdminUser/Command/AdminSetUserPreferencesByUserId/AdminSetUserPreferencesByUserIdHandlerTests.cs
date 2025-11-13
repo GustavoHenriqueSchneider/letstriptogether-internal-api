@@ -76,8 +76,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var command = new AdminSetUserPreferencesByUserIdCommand
         {
             UserId = user.Id,
-            LikesCommercial = true,
-            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            LikesShopping = true,
+            LikesGastronomy = true,
             Culture = new List<string> { new TripPreference(TripPreference.Culture.Museum) },
             Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
             PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Beach), "mountain" }
@@ -90,8 +90,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.LikesCommercial.Should().Be(command.LikesCommercial);
-        updatedUser.Preferences!.Food.Should().BeEquivalentTo(command.Food);
+        updatedUser.Preferences!.LikesShopping.Should().Be(command.LikesShopping);
+        updatedUser.Preferences!.LikesGastronomy.Should().Be(command.LikesGastronomy);
         updatedUser.Preferences!.Culture.Should().BeEquivalentTo(command.Culture);
         updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(command.Entertainment);
         updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(command.PlaceTypes);
@@ -104,8 +104,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var command = new AdminSetUserPreferencesByUserIdCommand
         {
             UserId = Guid.NewGuid(),
-            LikesCommercial = true,
-            Food = new List<string>(),
+            LikesShopping = true,
+            LikesGastronomy = true,
             Culture = new List<string>(),
             Entertainment = new List<string>(),
             PlaceTypes = new List<string>()
@@ -142,8 +142,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
 
         // Create initial preferences
         var initialPreferences = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
             entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
             placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });
@@ -166,8 +166,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var command = new AdminSetUserPreferencesByUserIdCommand
         {
             UserId = user.Id,
-            LikesCommercial = false,
-            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            LikesShopping = false,
+            LikesGastronomy = true,
             Culture = new List<string> { new TripPreference(TripPreference.Culture.Education) },
             Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Tour) },
             PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Trail) }
@@ -180,7 +180,7 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.LikesCommercial.Should().Be(command.LikesCommercial);
+        updatedUser.Preferences!.LikesShopping.Should().Be(command.LikesShopping);
 
         var updatedGroup = await _groupRepository.GetGroupWithPreferencesAsync(group.Id, CancellationToken.None);
         updatedGroup.Should().NotBeNull();
@@ -210,8 +210,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
 
         // Create initial preferences
         var initialPreferences = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
             entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
             placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });
@@ -241,8 +241,8 @@ public class AdminSetUserPreferencesByUserIdHandlerTests : TestBase
         var command = new AdminSetUserPreferencesByUserIdCommand
         {
             UserId = user.Id,
-            LikesCommercial = false,
-            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            LikesShopping = false,
+            LikesGastronomy = true,
             Culture = new List<string> { new TripPreference(TripPreference.Culture.Education) },
             Entertainment = new List<string> { new TripPreference(TripPreference.Entertainment.Tour) },
             PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Trail) }

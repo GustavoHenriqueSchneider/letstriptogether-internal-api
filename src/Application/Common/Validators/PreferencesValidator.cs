@@ -3,32 +3,6 @@ using FluentValidation;
 
 namespace Application.Common.Validators;
 
-public class FoodPreferencesValidator : AbstractValidator<IEnumerable<string>>
-{
-    public FoodPreferencesValidator()
-    {
-        RuleFor(x => x)
-            .NotEmpty();
-            
-        RuleForEach(x => x)
-            .NotEmpty()
-            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
-    }
-    
-    private static bool IsValidPreference(string value)
-    {
-        try
-        {
-            _ = new TripPreference.Food(value);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-}
-
 public class CulturePreferencesValidator : AbstractValidator<IEnumerable<string>>
 {
     public CulturePreferencesValidator()
@@ -38,7 +12,7 @@ public class CulturePreferencesValidator : AbstractValidator<IEnumerable<string>
             
         RuleForEach(x => x)
             .NotEmpty()
-            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
+            .Must(IsValidPreference).WithMessage(y => $"Invalid culture preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)
@@ -64,7 +38,7 @@ public class EntertainmentPreferencesValidator : AbstractValidator<IEnumerable<s
             
         RuleForEach(x => x)
             .NotEmpty()
-            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
+            .Must(IsValidPreference).WithMessage(y => $"Invalid entertainment preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)
@@ -90,7 +64,7 @@ public class PlaceTypePreferencesValidator : AbstractValidator<IEnumerable<strin
             
         RuleForEach(x => x)
             .NotEmpty()
-            .Must(IsValidPreference).WithMessage(y => $"Invalid food preference '{y}' provided.");
+            .Must(IsValidPreference).WithMessage(y => $"Invalid place type preference '{y}' provided.");
     }
     
     private static bool IsValidPreference(string value)

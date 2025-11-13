@@ -2,8 +2,8 @@ namespace Application.UseCases.User.Query.GetCurrentUser;
 
 public class GetCurrentUserPreferenceResponse
 {
-    public bool LikesCommercial { get; init; }
-    public IEnumerable<string> Food { get; init; } = null!;
+    public bool LikesShopping { get; init; }
+    public bool LikesGastronomy { get; init; }
     public IEnumerable<string> Culture { get; init; } = null!;
     public IEnumerable<string> Entertainment { get; init; } = null!;
     public IEnumerable<string> PlaceTypes { get; init; } = null!;

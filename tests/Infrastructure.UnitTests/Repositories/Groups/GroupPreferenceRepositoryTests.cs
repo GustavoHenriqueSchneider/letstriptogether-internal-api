@@ -62,8 +62,8 @@ public class GroupPreferenceRepositoryTests : TestBase
         group.AddMember(user, isOwner: true);
         
         var preferences = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Museum).ToString() },
             entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Attraction).ToString() },
             placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Beach).ToString() });
@@ -82,7 +82,7 @@ public class GroupPreferenceRepositoryTests : TestBase
 
         // Assert
         result.Should().NotBeNull();
-        result!.LikesCommercial.Should().BeTrue();
+        result!.LikesGastronomy.Should().BeTrue();
     }
 
     [Test]

@@ -16,8 +16,8 @@ public class AdminSetUserPreferencesByUserIdValidatorTests
         var command = new AdminSetUserPreferencesByUserIdCommand
         {
             UserId = Guid.NewGuid(), 
-            LikesCommercial = true, 
-            Food = new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, 
+            LikesShopping = true, 
+            LikesGastronomy = true, 
             Culture = new List<string> { TripPreference.Culture.Architecture }, 
             Entertainment = new List<string> { TripPreference.Entertainment.Adventure }, 
             PlaceTypes = new List<string> { new TripPreference(TripPreference.PlaceType.Beach) }

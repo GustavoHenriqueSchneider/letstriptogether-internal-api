@@ -16,7 +16,7 @@ public class GroupPreferenceRepository
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.GroupId == groupId, cancellationToken);
 
-        return groupPreference is not null ? new GroupPreference(groupPreference.LikesCommercial, groupPreference.Food,
+        return groupPreference is not null ? new GroupPreference(groupPreference.LikesShopping, groupPreference.LikesGastronomy,
             groupPreference.Culture, groupPreference.Entertainment, groupPreference.PlaceTypes) : null;
     }
 }

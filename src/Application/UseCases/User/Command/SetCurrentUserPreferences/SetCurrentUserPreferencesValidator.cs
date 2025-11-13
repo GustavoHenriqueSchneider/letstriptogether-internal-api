@@ -10,12 +10,11 @@ public class SetCurrentUserPreferencesValidator : AbstractValidator<SetCurrentUs
         RuleFor(x => x.UserId)
             .NotEmpty();
 
-        RuleFor(x => x.LikesCommercial)
+        RuleFor(x => x.LikesShopping)
             .NotNull();
 
-        RuleFor(x => x.Food)
-            .NotEmpty()
-            .SetValidator(new FoodPreferencesValidator());
+        RuleFor(x => x.LikesGastronomy)
+            .NotNull();
 
         RuleFor(x => x.Culture)
             .NotEmpty()

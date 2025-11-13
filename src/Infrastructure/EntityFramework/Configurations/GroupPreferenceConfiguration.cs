@@ -18,17 +18,16 @@ public class GroupPreferenceConfiguration : IEntityTypeConfiguration<GroupPrefer
         builder.Property(gp => gp.GroupId)
             .IsRequired();
 
-        builder.Property(gp => gp.LikesCommercial)
+        builder.Property(gp => gp.LikesShopping)
+            .IsRequired();
+        
+        builder.Property(gp => gp.LikesGastronomy)
             .IsRequired();
 
         builder.Property(gp => gp.CreatedAt)
             .IsRequired();
 
         builder.Property(gp => gp.UpdatedAt);
-        
-        builder.Property<List<string>>("_food")
-            .HasColumnName(nameof(GroupPreference.Food))
-            .IsRequired();
 
         builder.Property<List<string>>("_culture")
             .HasColumnName(nameof(GroupPreference.Culture))

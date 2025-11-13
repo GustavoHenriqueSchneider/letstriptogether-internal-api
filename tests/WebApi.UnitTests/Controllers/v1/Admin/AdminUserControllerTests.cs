@@ -147,7 +147,7 @@ public class AdminUserControllerTests
         var userId = Guid.NewGuid();
         var command = new AdminSetUserPreferencesByUserIdCommand
         {
-            Food = new List<string> { "food.restaurant" },
+            LikesGastronomy = true,
             Culture = new List<string> { "culture.museum" }
         };
 

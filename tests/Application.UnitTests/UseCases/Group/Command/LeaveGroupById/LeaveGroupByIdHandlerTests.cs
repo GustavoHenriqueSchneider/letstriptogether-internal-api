@@ -87,8 +87,8 @@ public class LeaveGroupByIdHandlerTests : TestBase
         group.AddMember(member, isOwner: false);
         
         var preferences = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
             entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
             placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });

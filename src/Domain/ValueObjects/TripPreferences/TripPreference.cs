@@ -5,12 +5,13 @@ namespace Domain.ValueObjects.TripPreferences;
 public partial class TripPreference
 {
     public const string Shopping = "shopping";
+    public const string Gastronomy = "gastronomy";
 
     private readonly string _category;
     
     public TripPreference(string preference)
     {
-        if (preference == Shopping)
+        if (preference == Shopping || preference == Gastronomy)
         {
             _category = preference;
             return;
@@ -27,7 +28,6 @@ public partial class TripPreference
         {
             CulturePrefix => new Culture(preference),
             EntertainmentPrefix => new Entertainment(preference),
-            FoodPrefix => new Food(preference),
             PlaceTypePrefix => new PlaceType(preference),
             _ => throw new DomainBusinessRuleException($"Invalid prefix {prefix} for preference")
         };

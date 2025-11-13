@@ -18,17 +18,16 @@ public class UserPreferenceConfiguration : IEntityTypeConfiguration<UserPreferen
         builder.Property(up => up.UserId)
             .IsRequired();
 
-        builder.Property(up => up.LikesCommercial)
+        builder.Property(up => up.LikesShopping)
+            .IsRequired();
+        
+        builder.Property(gp => gp.LikesGastronomy)
             .IsRequired();
 
         builder.Property(up => up.CreatedAt)
             .IsRequired();
 
         builder.Property(up => up.UpdatedAt);
-        
-        builder.Property<List<string>>("_food")
-            .HasColumnName(nameof(UserPreference.Food))
-            .IsRequired();
 
         builder.Property<List<string>>("_culture")
             .HasColumnName(nameof(UserPreference.Culture))

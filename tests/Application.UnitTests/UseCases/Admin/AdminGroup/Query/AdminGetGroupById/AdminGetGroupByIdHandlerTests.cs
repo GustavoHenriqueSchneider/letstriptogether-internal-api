@@ -63,8 +63,8 @@ public class AdminGetGroupByIdHandlerTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var preferences = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference(TripPreference.Food.Restaurant) },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference(TripPreference.Culture.Museum) },
             entertainment: new List<string> { new TripPreference(TripPreference.Entertainment.Attraction) },
             placeTypes: new List<string> { new TripPreference(TripPreference.PlaceType.Beach) });

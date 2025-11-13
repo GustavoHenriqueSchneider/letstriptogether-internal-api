@@ -52,8 +52,8 @@ public class UserPreferenceRepositoryTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var preferences = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Museum).ToString() },
             entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Attraction).ToString() },
             placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Beach).ToString() });
@@ -68,8 +68,8 @@ public class UserPreferenceRepositoryTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.LikesCommercial.Should().Be(preferences.LikesCommercial);
-        updatedUser.Preferences!.Food.Should().BeEquivalentTo(preferences.Food);
+        updatedUser.Preferences!.LikesShopping.Should().Be(preferences.LikesShopping);
+        updatedUser.Preferences!.LikesGastronomy.Should().Be(preferences.LikesGastronomy);
         updatedUser.Preferences!.Culture.Should().BeEquivalentTo(preferences.Culture);
         updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(preferences.Entertainment);
         updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(preferences.PlaceTypes);
@@ -97,8 +97,8 @@ public class UserPreferenceRepositoryTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var preferences1 = new UserPreference(
-            likesCommercial: true,
-            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            likesShopping: true,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Museum).ToString() },
             entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Adventure).ToString() },
             placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Beach).ToString() });
@@ -109,8 +109,8 @@ public class UserPreferenceRepositoryTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var preferences2 = new UserPreference(
-            likesCommercial: false,
-            food: new List<string> { new TripPreference.Food(TripPreference.Food.Restaurant).ToString() },
+            likesShopping: false,
+            likesGastronomy: true,
             culture: new List<string> { new TripPreference.Culture(TripPreference.Culture.Historical).ToString() },
             entertainment: new List<string> { new TripPreference.Entertainment(TripPreference.Entertainment.Park).ToString() },
             placeTypes: new List<string> { new TripPreference.PlaceType(TripPreference.PlaceType.Rural).ToString() });
@@ -127,8 +127,8 @@ public class UserPreferenceRepositoryTests : TestBase
         var updatedUser = await _userRepository.GetByIdWithPreferencesAsync(user.Id, CancellationToken.None);
         updatedUser.Should().NotBeNull();
         updatedUser!.Preferences.Should().NotBeNull();
-        updatedUser.Preferences!.LikesCommercial.Should().Be(preferences2.LikesCommercial);
-        updatedUser.Preferences!.Food.Should().BeEquivalentTo(preferences2.Food);
+        updatedUser.Preferences!.LikesShopping.Should().Be(preferences2.LikesShopping);
+        updatedUser.Preferences!.LikesGastronomy.Should().Be(preferences2.LikesGastronomy);
         updatedUser.Preferences!.Culture.Should().BeEquivalentTo(preferences2.Culture);
         updatedUser.Preferences!.Entertainment.Should().BeEquivalentTo(preferences2.Entertainment);
         updatedUser.Preferences!.PlaceTypes.Should().BeEquivalentTo(preferences2.PlaceTypes);

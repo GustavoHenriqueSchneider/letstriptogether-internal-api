@@ -117,7 +117,7 @@ public class UserControllerTests
         
         var command = new SetCurrentUserPreferencesCommand
         {
-            Food = new List<string> { "food.restaurant" },
+            LikesGastronomy = true,
             Culture = new List<string> { "culture.museum" }
         };
 

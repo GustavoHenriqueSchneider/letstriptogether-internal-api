@@ -124,22 +124,21 @@ public class Group : TrackableEntity
     {
         Preferences.GroupId = Id;
 
-        var foodPreferences = new List<string>();
         var culturePreferences = new List<string>();
         var entertainmentPreferences = new List<string>();
         var placeTypes = new List<string>();
 
-        var anyMemberLikesCommercial = _members.Any(x => x.User.Preferences!.LikesCommercial);
+        var anyMemberLikesShopping = _members.Any(x => x.User.Preferences!.LikesShopping);
+        var anyMemberLikesGastronomy = _members.Any(x => x.User.Preferences!.LikesGastronomy);
 
         foreach (var userPreference in _members.Select(member => member.User.Preferences))
         {
-            foodPreferences.AddRange(userPreference!.Food);
-            culturePreferences.AddRange(userPreference.Culture);
+            culturePreferences.AddRange(userPreference!.Culture);
             entertainmentPreferences.AddRange(userPreference.Entertainment);
             placeTypes.AddRange(userPreference.PlaceTypes);
         }
 
-        var newPreferences = new GroupPreference(anyMemberLikesCommercial, foodPreferences.ToHashSet(),
+        var newPreferences = new GroupPreference(anyMemberLikesShopping, anyMemberLikesGastronomy,
             culturePreferences.ToHashSet(), entertainmentPreferences.ToHashSet(), placeTypes.ToHashSet());
 
         Preferences.Update(newPreferences);

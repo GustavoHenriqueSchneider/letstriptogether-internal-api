@@ -94,8 +94,8 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var ownerPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
-        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var ownerPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
+        var userPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         owner.SetPreferences(ownerPrefs);
         user.SetPreferences(userPrefs);
         await _userPreferenceRepository.AddOrUpdateAsync(owner.Preferences!, CancellationToken.None);
@@ -168,7 +168,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var prefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var prefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(prefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -220,7 +220,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var prefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var prefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(prefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -329,7 +329,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var userPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(userPrefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -398,7 +398,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var prefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var prefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(prefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -459,7 +459,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var userPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(userPrefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -530,7 +530,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var userPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(userPrefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();
@@ -601,7 +601,7 @@ public class AcceptInvitationHandlerTests : TestBase
         await _userRepository.AddAsync(user, CancellationToken.None);
         await DbContext.SaveChangesAsync();
 
-        var userPrefs = new UserPreference(true, new List<string> { new TripPreference(TripPreference.Food.Restaurant) }, new List<string>(), new List<string>(), new List<string>());
+        var userPrefs = new UserPreference(true, true, new List<string>(), new List<string>(), new List<string>());
         user.SetPreferences(userPrefs);
         await _userPreferenceRepository.AddOrUpdateAsync(user.Preferences!, CancellationToken.None);
         await DbContext.SaveChangesAsync();

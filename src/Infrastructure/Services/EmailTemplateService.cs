@@ -44,6 +44,7 @@ public class EmailTemplateService : IEmailTemplateService
             { "companyEmail", _settings.Company.Contact },
             { "privacyPolicyUrl", _settings.Url.PrivacyPolicy },
             { "termsOfUseUrl", _settings.Url.TermsOfUse },
+            { "resetPasswordUrl", _settings.Url.ResetPassword },
             { "websiteUrl", _settings.Url.Website },
             { "currentYear", DateTime.UtcNow.Year.ToString() }
         };
