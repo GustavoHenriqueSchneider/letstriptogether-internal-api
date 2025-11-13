@@ -13,9 +13,11 @@ public class AdminCreateUserValidator : AbstractValidator<AdminCreateUserCommand
             .MaximumLength(UserModel.NameMaxLength);
 
         RuleFor(x => x.Email)
+            .NotEmpty()
             .SetValidator(new EmailValidator());
         
         RuleFor(x => x.Password)
+            .NotEmpty()
             .SetValidator(new PasswordValidator());
     }
 }

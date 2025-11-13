@@ -1,15 +1,13 @@
 ﻿using System.Security.Cryptography;
 using Application.Common.Interfaces.Services;
+using Domain.Security;
 
 namespace Infrastructure.Services;
 
 public class RandomCodeGeneratorService : IRandomCodeGeneratorService
 {
-    private const int Min = 100000;
-    private const int Max = 999999;
-
     public string Generate()
     {
-        return RandomNumberGenerator.GetInt32(Min, Max + 1).ToString();
+        return RandomNumberGenerator.GetInt32(Code.MinValue, Code.MaxValue + 1).ToString();
     }
 }

@@ -18,7 +18,7 @@ public class ValidateRegisterConfirmationCodeHandler(
         var key = KeyHelper.RegisterEmailConfirmation(request.Email);
         var code = await redisService.GetAsync(key);
 
-        if (code is null || code != request.Code)
+        if (code is null || code != request.Code.ToString())
         {
             throw new BadRequestException("Invalid code.");
         }

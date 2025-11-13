@@ -5,7 +5,7 @@ namespace Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
 
 public record ValidateRegisterConfirmationCodeCommand : IRequest<ValidateRegisterConfirmationCodeResponse>
 {
-    public string Code { get; init; } = null!;
+    public int Code { get; init; }
     [JsonIgnore] public string Email { get; init; } = null!;
     [JsonIgnore] public string Name { get; init; } = null!;
 }

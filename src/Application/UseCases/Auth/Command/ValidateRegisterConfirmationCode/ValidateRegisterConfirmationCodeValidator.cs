@@ -1,4 +1,5 @@
 using Application.Common.Validators;
+using Domain.Security;
 using FluentValidation;
 using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
@@ -10,10 +11,11 @@ public class ValidateRegisterConfirmationCodeValidator : AbstractValidator<Valid
     {
         RuleFor(x => x.Code)
             .NotEmpty()
-            .Must(x => int.Parse(x) > 99999).WithMessage("Code must be greater than to 99999")
-            .Must(x => int.Parse(x) < 1000000).WithMessage("Code must be less than to 1000000");
+            .GreaterThanOrEqualTo(Code.MinValue)
+            .LessThanOrEqualTo(Code.MaxValue);
 
         RuleFor(x => x.Email)
+            .NotEmpty()
             .SetValidator(new EmailValidator());
 
         RuleFor(x => x.Name)

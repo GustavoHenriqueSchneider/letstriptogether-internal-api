@@ -9,9 +9,7 @@
 **/*.sln.docstates
 **/bin
 **/obj
-**/node_modules
 **/tests
-**/TestResults
 **/.dockerignore
 **/Dockerfile
 **/docker-compose.yml
