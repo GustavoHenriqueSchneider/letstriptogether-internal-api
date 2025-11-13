@@ -30,6 +30,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         if (!environment.IsDevelopment())
         {
             app.UseHsts();
+            app.UseHttpsRedirection();
         }
         
         var swaggerEnabled = configuration.GetValue("Swagger:Enabled", true);
@@ -50,7 +51,6 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
             });
         }
         
-        app.UseHttpsRedirection();
         app.UseRouting();
         
         app.UseAuthentication();
