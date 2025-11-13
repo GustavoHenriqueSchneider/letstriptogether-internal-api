@@ -173,7 +173,7 @@ namespace WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "UserPreferences",
-                columns: new[] { "Id", "UserId", "LikesCommercial", "Food", "Culture", "Entertainment", "PlaceTypes", "CreatedAt", "UpdatedAt" },
+                columns: new[] { "Id", "UserId", "LikesShopping", "LikesGastronomy", "Culture", "Entertainment", "PlaceTypes", "CreatedAt", "UpdatedAt" },
                 values: userPreferenceArray);
 
             // ========== DESTINATIONS (from JSON) ==========
@@ -659,7 +659,7 @@ namespace WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "GroupPreferences",
-                columns: new[] { "Id", "GroupId", "LikesCommercial", "Food", "Culture", "Entertainment", "PlaceTypes", "CreatedAt", "UpdatedAt" },
+                columns: new[] { "Id", "GroupId", "LikesShopping", "LikesGastronomy", "Culture", "Entertainment", "PlaceTypes", "CreatedAt", "UpdatedAt" },
                 values: groupPreferenceArray);
 
             // ========== GROUP INVITATIONS (with different statuses) ==========
