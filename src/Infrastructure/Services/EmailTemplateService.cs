@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using Application.Common.Interfaces.Services;
 using Infrastructure.Configurations;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services;
 
