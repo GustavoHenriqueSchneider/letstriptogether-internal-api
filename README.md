@@ -103,6 +103,7 @@ Este projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa) 
 ### Comunicação
 - **SMTP** - Envio de emails (confirmação, reset de senha)
 - **HTTP Client** - Comunicação com serviços externos (notificações)
+- **Notification Service** - Serviço de notificações para eventos do sistema (matches, convites, etc.)
 
 ### Documentação e Testes
 - **Swashbuckle.AspNetCore** (v9.0.6) - Swagger/OpenAPI
@@ -196,10 +197,10 @@ Isso irá iniciar:
 3. **Configurar variáveis de ambiente**
 
 Crie ou edite `src/WebApi/appsettings.Development.json` com as configurações necessárias:
-- Connection strings
-- JWT settings
-- Email settings
-- Notification settings
+- **Connection Strings**: PostgreSQL e Redis
+- **JWT Settings**: Chave secreta, issuer, tempo de expiração
+- **Email Settings**: SMTP server, porta, credenciais, remetente
+- **Notification Settings**: URL do serviço de notificações, configurações de HTTP client
 
 4. **Aplicar migrations do banco de dados**
 ```powershell
@@ -257,12 +258,27 @@ dotnet ef database update --project .\src\Infrastructure --startup-project .\src
 
 **Para rodar todos os testes:**
 ```bash
-dotnet test tests/Application.Tests/Application.Tests.csproj tests/Domain.Tests/Domain.Tests.csproj tests/Infrastructure.Tests/Infrastructure.Tests.csproj tests/WebApi.Tests/WebApi.Tests.csproj --verbosity normal
+dotnet test tests/Application.UnitTests/Application.UnitTests.csproj tests/Domain.UnitTests/Domain.UnitTests.csproj tests/Infrastructure.UnitTests/Infrastructure.UnitTests.csproj tests/WebApi.UnitTests/WebApi.UnitTests.csproj --verbosity normal
 ```
 
 **Para rodar testes de um projeto específico:**
 ```bash
-dotnet test tests/Application.Tests/Application.Tests.csproj --verbosity normal
+dotnet test tests/Application.UnitTests/Application.UnitTests.csproj --verbosity normal
+```
+
+**Para rodar testes de um projeto específico (exemplos):**
+```bash
+# Testes de Application
+dotnet test tests/Application.UnitTests/Application.UnitTests.csproj --verbosity normal
+
+# Testes de Domain
+dotnet test tests/Domain.UnitTests/Domain.UnitTests.csproj --verbosity normal
+
+# Testes de Infrastructure
+dotnet test tests/Infrastructure.UnitTests/Infrastructure.UnitTests.csproj --verbosity normal
+
+# Testes de WebApi
+dotnet test tests/WebApi.UnitTests/WebApi.UnitTests.csproj --verbosity normal
 ```
 
 ## 🔐 Segurança
@@ -282,18 +298,35 @@ dotnet test tests/Application.Tests/Application.Tests.csproj --verbosity normal
 
 ## 📊 Funcionalidades Principais
 
+### Notificações
+- Sistema de notificações para eventos importantes:
+  - Criação de matches quando todos os membros aprovam um destino
+- Integração com serviço externo de notificações via HTTP Client
+- Notificações enviadas automaticamente aos usuários
+
 ### Autenticação
 - Registro de usuário com confirmação por email
 - Login com JWT
 - Refresh token
 - Reset de senha
+- Alteração de senha (requer senha atual)
 - Logout
+
+### Gestão de Usuários
+- Consultar informações do usuário atual
+- Atualizar informações do usuário atual
+- Alterar senha do usuário atual
+- Definir preferências de viagem
+- Excluir conta
+- Anonimizar dados pessoais
 
 ### Gestão de Grupos
 - Criar grupos de viagem
+- Consultar grupos
 - Adicionar/remover membros
 - Gerenciar preferências do grupo
 - Definir data esperada da viagem
+- Consultar membros do grupo
 
 ### Sistema de Votação
 - Votar em destinos (aprovar/rejeitar)
@@ -305,12 +338,14 @@ dotnet test tests/Application.Tests/Application.Tests.csproj --verbosity normal
 - Matching automático quando todos aprovam um destino
 - Notificações quando um match é criado
 - Consulta de matches do grupo
+- Remover matches do grupo
 
 ### Convites
 - Criar convites para grupos
 - Aceitar/recusar convites
 - Cancelar convites ativos
 - Consultar convites
+- Consultar detalhes de convite por token (informações do grupo e criador)
 
 ### Destinos
 - Consultar destinos disponíveis
@@ -320,16 +355,23 @@ dotnet test tests/Application.Tests/Application.Tests.csproj --verbosity normal
 ### Administração
 - CRUD completo de usuários, grupos, destinos
 - Anonimização de usuários
-- Consultas administrativas detalhadas
+- Consultas administrativas detalhadas de:
+  - Usuários (listagem, detalhes, preferências, votos)
+  - Grupos (listagem, detalhes, membros, convites, matches, votos)
+  - Destinos (listagem, detalhes)
+  - Votos de destinos por grupo
+  - Membros de grupos
+  - Convites de grupos
+  - Matches de grupos
 
 ## 🧪 Testes
 
 O projeto possui cobertura de testes em todas as camadas:
 
-- **Domain Tests**: Testes de entidades, value objects e regras de negócio
-- **Application Tests**: Testes de handlers, validators e comportamentos
-- **Infrastructure Tests**: Testes de repositórios e serviços
-- **WebApi Tests**: Testes de controllers e endpoints
+- **Domain.UnitTests**: Testes de entidades, value objects e regras de negócio
+- **Application.UnitTests**: Testes de handlers, validators e comportamentos
+- **Infrastructure.UnitTests**: Testes de repositórios e serviços
+- **WebApi.UnitTests**: Testes de controllers e endpoints
 
 ### Estrutura de Testes
 
@@ -337,6 +379,14 @@ Cada teste segue o padrão **AAA** (Arrange-Act-Assert):
 - **Arrange**: Configuração do cenário
 - **Act**: Execução da ação
 - **Assert**: Verificação do resultado
+
+### Tecnologias de Teste
+
+- **NUnit** (v4.2.2) - Framework de testes
+- **Moq** (v4.20.72) - Mocking para testes unitários
+- **FluentAssertions** (v6.12.1) - Assertions expressivas em testes
+- **Microsoft.EntityFrameworkCore.InMemory** (v9.0.9) - Banco em memória para testes
+- **Npgsql.EntityFrameworkCore.PostgreSQL** (v9.0.4) - Provider PostgreSQL para testes de integração
 
 ## 📚 Documentação da API
 
