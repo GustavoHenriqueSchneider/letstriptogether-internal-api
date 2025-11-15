@@ -1,8 +1,6 @@
-using System.Text.Json;
 using Infrastructure.Configurations;
 using Infrastructure.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 

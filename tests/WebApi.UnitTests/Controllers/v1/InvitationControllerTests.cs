@@ -48,7 +48,7 @@ public class InvitationControllerTests
         var result = await _controller.AcceptInvitation(command, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<OkResult>();
+        result.Should().BeOfType<NoContentResult>();
     }
 
     [Test]
@@ -70,6 +70,6 @@ public class InvitationControllerTests
         var result = await _controller.RefuseInvitation(command, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<OkResult>();
+        result.Should().BeOfType<NoContentResult>();
     }
 }

@@ -74,7 +74,7 @@ public class GetDestinationByIdHandlerTests : TestBase
             Destination = destination,
             Name = "Attraction 1",
             Description = "Description 1",
-            Category = "Food.Restaurant"
+            Category = "Gastronomy"
         };
         var attraction2 = new DestinationAttraction
         {
@@ -98,7 +98,7 @@ public class GetDestinationByIdHandlerTests : TestBase
         result.Should().NotBeNull();
         result.Attractions.Should().NotBeNull();
         result.Attractions.Should().HaveCount(2);
-        result.Attractions.Should().Contain(a => a.Name == "Attraction 1" && a.Description == "Description 1" && a.Category == "Food.Restaurant");
+        result.Attractions.Should().Contain(a => a.Name == "Attraction 1" && a.Description == "Description 1" && a.Category == "Gastronomy");
         result.Attractions.Should().Contain(a => a.Name == "Attraction 2" && a.Description == "Description 2" && a.Category == "Culture.Museum");
     }
 }

@@ -6,7 +6,6 @@ using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;
 using Domain.Security;
-using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
 using Infrastructure.Repositories.Groups;
 using Infrastructure.Repositories.Roles;
