@@ -1,7 +1,7 @@
 using Application.Common.Validators;
 using FluentValidation;
 
-namespace Application.UseCases.Auth.Command.ResetPassword;
+namespace Application.UseCases.v1.Auth.Command.ResetPassword;
 
 public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
 {

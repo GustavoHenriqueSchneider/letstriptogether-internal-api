@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationValidator : AbstractValidator<CreateGroupInvitationCommand>
 {

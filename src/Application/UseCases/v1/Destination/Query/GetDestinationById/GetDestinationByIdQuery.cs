@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Destination.Query.GetDestinationById;
+namespace Application.UseCases.v1.Destination.Query.GetDestinationById;
 
 public class GetDestinationByIdQuery : IRequest<GetDestinationByIdResponse>
 {

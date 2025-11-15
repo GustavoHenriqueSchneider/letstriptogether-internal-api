@@ -4,7 +4,7 @@ using Application.Helpers;
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.Login;
+namespace Application.UseCases.v1.Auth.Command.Login;
 
 public class LoginHandler(
     IPasswordHashService passwordHashService,

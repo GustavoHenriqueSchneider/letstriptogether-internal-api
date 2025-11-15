@@ -4,7 +4,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Security;
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.RequestResetPassword;
+namespace Application.UseCases.v1.Auth.Command.RequestResetPassword;
 
 public class RequestResetPasswordHandler(
     IEmailSenderService emailSenderService,

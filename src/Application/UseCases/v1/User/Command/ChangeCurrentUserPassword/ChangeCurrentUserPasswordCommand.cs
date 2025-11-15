@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.User.Command.ChangeCurrentUserPassword;
+namespace Application.UseCases.v1.User.Command.ChangeCurrentUserPassword;
 
 public record ChangeCurrentUserPasswordCommand : IRequest
 {

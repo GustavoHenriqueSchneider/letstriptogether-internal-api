@@ -3,7 +3,7 @@ using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.GroupAggregate.Entities;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
+namespace Application.UseCases.v1.Admin.AdminGroup.Query.AdminGetGroupById;
 
 public class AdminGetGroupByIdHandler(IGroupRepository groupRepository)
     : IRequestHandler<AdminGetGroupByIdQuery, AdminGetGroupByIdResponse>

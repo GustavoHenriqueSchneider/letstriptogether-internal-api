@@ -7,7 +7,7 @@ using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Invitation.Command.AcceptInvitation;
+namespace Application.UseCases.v1.Invitation.Command.AcceptInvitation;
 
 public class AcceptInvitationHandler(
     IGroupMemberRepository groupMemberRepository,

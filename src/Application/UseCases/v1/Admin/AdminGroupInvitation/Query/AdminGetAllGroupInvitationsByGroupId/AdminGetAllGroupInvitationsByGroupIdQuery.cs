@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
+namespace Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
 
 public class AdminGetAllGroupInvitationsByGroupIdQuery : IRequest<AdminGetAllGroupInvitationsByGroupIdResponse>
 {

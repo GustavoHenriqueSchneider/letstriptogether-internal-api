@@ -5,7 +5,7 @@ using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.User.Command.SetCurrentUserPreferences;
+namespace Application.UseCases.v1.User.Command.SetCurrentUserPreferences;
 
 public class SetCurrentUserPreferencesHandler(
     IGroupMemberRepository groupMemberRepository,

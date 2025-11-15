@@ -4,7 +4,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
+namespace Application.UseCases.v1.GroupMatch.Command.RemoveGroupMatchById;
 
 public class RemoveGroupMatchByIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,

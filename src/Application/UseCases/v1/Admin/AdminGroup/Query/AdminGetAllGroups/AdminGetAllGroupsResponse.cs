@@ -1,4 +1,4 @@
-namespace Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
+namespace Application.UseCases.v1.Admin.AdminGroup.Query.AdminGetAllGroups;
 
 public class AdminGetAllGroupsResponse
 {

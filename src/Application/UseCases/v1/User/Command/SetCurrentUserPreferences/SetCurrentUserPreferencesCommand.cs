@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.User.Command.SetCurrentUserPreferences;
+namespace Application.UseCases.v1.User.Command.SetCurrentUserPreferences;
 
 public record SetCurrentUserPreferencesCommand : IRequest
 {

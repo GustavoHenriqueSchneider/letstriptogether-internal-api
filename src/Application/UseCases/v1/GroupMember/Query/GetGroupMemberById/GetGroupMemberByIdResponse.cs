@@ -1,4 +1,4 @@
-namespace Application.UseCases.GroupMember.Query.GetGroupMemberById;
+namespace Application.UseCases.v1.GroupMember.Query.GetGroupMemberById;
 
 public class GetGroupMemberByIdResponse
 {

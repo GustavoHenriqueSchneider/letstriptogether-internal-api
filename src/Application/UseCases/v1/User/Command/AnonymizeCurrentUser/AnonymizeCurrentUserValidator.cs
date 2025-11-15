@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.User.Command.AnonymizeCurrentUser;
+namespace Application.UseCases.v1.User.Command.AnonymizeCurrentUser;
 
 public class AnonymizeCurrentUserValidator : AbstractValidator<AnonymizeCurrentUserCommand>
 {

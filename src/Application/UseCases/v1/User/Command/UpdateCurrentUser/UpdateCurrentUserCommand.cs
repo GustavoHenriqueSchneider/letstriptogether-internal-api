@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.User.Command.UpdateCurrentUser;
+namespace Application.UseCases.v1.User.Command.UpdateCurrentUser;
 
 public record UpdateCurrentUserCommand : IRequest
 {

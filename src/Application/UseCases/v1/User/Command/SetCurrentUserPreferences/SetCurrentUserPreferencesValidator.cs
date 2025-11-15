@@ -1,7 +1,7 @@
 using Application.Common.Validators;
 using FluentValidation;
 
-namespace Application.UseCases.User.Command.SetCurrentUserPreferences;
+namespace Application.UseCases.v1.User.Command.SetCurrentUserPreferences;
 
 public class SetCurrentUserPreferencesValidator : AbstractValidator<SetCurrentUserPreferencesCommand>
 {

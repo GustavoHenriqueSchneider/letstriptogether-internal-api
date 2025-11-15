@@ -1,7 +1,7 @@
 using FluentValidation;
 using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminUpdateUserById;
 
 public class AdminUpdateUserByIdValidator : AbstractValidator<AdminUpdateUserByIdCommand>
 {

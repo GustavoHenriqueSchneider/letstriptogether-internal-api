@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Query.GetActiveGroupInvitation;
 
 public class GetActiveGroupInvitationValidator : AbstractValidator<GetActiveGroupInvitationQuery>
 {

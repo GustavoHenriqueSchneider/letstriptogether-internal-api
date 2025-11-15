@@ -5,7 +5,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.ResetPassword;
+namespace Application.UseCases.v1.Auth.Command.ResetPassword;
 
 public class ResetPasswordHandler(
     IPasswordHashService passwordHashService,

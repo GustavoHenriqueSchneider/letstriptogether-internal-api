@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
+namespace Application.UseCases.v1.Admin.AdminGroupDestinationVote.Query.AdminGetAllGroupDestinationVotesById;
 
 public class AdminGetAllGroupDestinationVotesByIdValidator : AbstractValidator<AdminGetAllGroupDestinationVotesByIdQuery>
 {

@@ -6,7 +6,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
 public class AdminAnonymizeUserByIdHandler(
     IGroupMemberRepository groupMemberRepository,

@@ -3,7 +3,7 @@ using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.GroupMatch.Query.GetGroupMatchById;
+namespace Application.UseCases.v1.GroupMatch.Query.GetGroupMatchById;
 
 public class GetGroupMatchByIdHandler(
     IGroupRepository groupRepository,

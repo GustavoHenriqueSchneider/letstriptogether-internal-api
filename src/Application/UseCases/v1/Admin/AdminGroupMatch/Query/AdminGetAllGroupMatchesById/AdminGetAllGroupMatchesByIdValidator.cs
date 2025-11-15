@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+namespace Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
 
 public class AdminGetAllGroupMatchesByIdValidator : AbstractValidator<AdminGetAllGroupMatchesByIdQuery>
 {

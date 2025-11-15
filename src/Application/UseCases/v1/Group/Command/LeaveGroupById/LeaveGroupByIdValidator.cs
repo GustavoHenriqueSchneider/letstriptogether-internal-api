@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Group.Command.LeaveGroupById;
+namespace Application.UseCases.v1.Group.Command.LeaveGroupById;
 
 public class LeaveGroupByIdValidator : AbstractValidator<LeaveGroupByIdCommand>
 {

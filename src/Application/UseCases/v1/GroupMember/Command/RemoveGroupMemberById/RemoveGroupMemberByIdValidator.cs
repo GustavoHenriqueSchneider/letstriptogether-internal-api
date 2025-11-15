@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
+namespace Application.UseCases.v1.GroupMember.Command.RemoveGroupMemberById;
 
 public class RemoveGroupMemberByIdValidator : AbstractValidator<RemoveGroupMemberByIdCommand>
 {

@@ -5,7 +5,7 @@ using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public class AdminSetUserPreferencesByUserIdHandler(
     IGroupMemberRepository groupMemberRepository,

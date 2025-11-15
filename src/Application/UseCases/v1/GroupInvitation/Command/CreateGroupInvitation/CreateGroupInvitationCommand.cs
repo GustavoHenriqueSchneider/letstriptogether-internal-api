@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationCommand : IRequest<CreateGroupInvitationResponse>
 {

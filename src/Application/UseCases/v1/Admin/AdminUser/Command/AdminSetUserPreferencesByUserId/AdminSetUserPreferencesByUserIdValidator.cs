@@ -1,7 +1,7 @@
 using Application.Common.Validators;
 using FluentValidation;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public class AdminSetUserPreferencesByUserIdValidator : AbstractValidator<AdminSetUserPreferencesByUserIdCommand>
 {

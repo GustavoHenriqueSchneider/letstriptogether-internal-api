@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Auth.Command.Logout;
+namespace Application.UseCases.v1.Auth.Command.Logout;
 
 public class LogoutValidator : AbstractValidator<LogoutCommand>
 {

@@ -2,7 +2,7 @@ using Application.Common.Exceptions;
 using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
 
 public class AdminGetAllGroupMembersByIdHandler(
     IGroupMemberRepository groupMemberRepository,

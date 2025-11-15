@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 
 public class AdminRemoveGroupMemberByIdValidator : AbstractValidator<AdminRemoveGroupMemberByIdCommand>
 {

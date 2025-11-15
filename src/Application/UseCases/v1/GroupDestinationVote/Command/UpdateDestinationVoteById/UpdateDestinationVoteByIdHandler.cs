@@ -6,7 +6,7 @@ using Domain.Common;
 using Domain.Events;
 using MediatR;
 
-namespace Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
+namespace Application.UseCases.v1.GroupDestinationVote.Command.UpdateDestinationVoteById;
 
 public class UpdateDestinationVoteByIdHandler(
     IGroupMatchRepository groupMatchRepository,

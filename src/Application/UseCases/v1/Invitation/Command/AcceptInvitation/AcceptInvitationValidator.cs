@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Invitation.Command.AcceptInvitation;
+namespace Application.UseCases.v1.Invitation.Command.AcceptInvitation;
 
 public class AcceptInvitationValidator : AbstractValidator<AcceptInvitationCommand>
 {

@@ -1,7 +1,7 @@
 using Application.Common.Validators;
 using FluentValidation;
 
-namespace Application.UseCases.User.Command.ChangeCurrentUserPassword;
+namespace Application.UseCases.v1.User.Command.ChangeCurrentUserPassword;
 
 public class ChangeCurrentUserPasswordValidator : AbstractValidator<ChangeCurrentUserPasswordCommand>
 {

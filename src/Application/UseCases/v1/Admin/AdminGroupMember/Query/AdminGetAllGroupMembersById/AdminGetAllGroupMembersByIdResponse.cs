@@ -1,4 +1,4 @@
-namespace Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
 
 public class AdminGetAllGroupMembersByIdResponse
 {

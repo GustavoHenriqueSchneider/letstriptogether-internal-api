@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.User.Query.GetCurrentUser;
+namespace Application.UseCases.v1.User.Query.GetCurrentUser;
 
 public class GetCurrentUserQuery : IRequest<GetCurrentUserResponse>
 {

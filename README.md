@@ -67,7 +67,7 @@ Este projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa) 
 #### 4. **WebApi** (Camada de Apresentação)
 - **Responsabilidade**: Expõe a API REST e gerencia requisições HTTP
 - **Contém**:
-  - Controllers (v1, Admin)
+  - Controllers (v1, Error, Health)
   - Startup/Program configuration
   - Middleware pipeline
   - Swagger/OpenAPI
@@ -120,18 +120,25 @@ Este projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa) 
 ### Domain-Driven Design (DDD)
 
 #### Agregados
-- **User**: Representa um usuário do sistema com suas preferências e roles
-- **Group**: Agregado raiz que gerencia grupos de viagem, membros, convites e matches
-- **Destination**: Representa destinos turísticos com suas atrações
+- **User**: Representa um usuário do sistema com suas preferências (UserPreference), roles (UserRole) e convites (UserGroupInvitation)
+- **Group**: Agregado raiz que gerencia grupos de viagem, membros (GroupMember), convites (GroupInvitation), matches (GroupMatch), preferências (GroupPreference) e votos (GroupMemberDestinationVote)
+- **Destination**: Representa destinos turísticos com suas atrações (DestinationAttraction)
 - **Role**: Define papéis e permissões no sistema
 
 #### Value Objects
-- **TripPreference**: Preferências de viagem categorizadas (Cultura, Entretenimento, Comida, Tipos de Lugares)
-- **Step**: Representa etapas do processo de registro
+- **TripPreference**: Preferências de viagem categorizadas em:
+  - Cultura (TripCulturePreferences)
+  - Entretenimento (TripEntertainmentPreferences)
+  - Tipos de Lugares (TripPlaceTypes)
+  - Shopping e Gastronomia (categorias diretas)
+- **Step**: Representa etapas do processo de registro (validate-email, set-password)
 
 #### Repositórios
 Interfaces definidas no domínio, implementadas na infraestrutura:
-- `IUserRepository`, `IGroupRepository`, `IDestinationRepository`, etc.
+- `IUserRepository`, `IGroupRepository`, `IDestinationRepository`, `IRoleRepository`
+- `IGroupMemberRepository`, `IGroupInvitationRepository`, `IGroupMatchRepository`
+- `IGroupMemberDestinationVoteRepository`, `IGroupPreferenceRepository`
+- `IUserPreferenceRepository`, `IUserRoleRepository`, `IUserGroupInvitationRepository`
 
 ### CQRS (Command Query Responsibility Segregation)
 
@@ -217,6 +224,7 @@ A API estará disponível em:
 - **HTTP**: `http://localhost:5088`
 - **HTTPS**: `https://localhost:7069`
 - **Swagger**: `https://localhost:7069/swagger`
+- **Health Check**: `https://localhost:7069/api/health`
 
 ## 📝 Comandos Úteis
 
@@ -395,6 +403,7 @@ A documentação interativa da API está disponível via **Swagger/OpenAPI** qua
 - Acesse: `https://localhost:7069/swagger`
 - A API está versionada (v1)
 - Todos os endpoints estão documentados com exemplos
+- Endpoints de sistema (Error, Health) também estão disponíveis
 
 ## 🔄 Fluxo de Dados
 

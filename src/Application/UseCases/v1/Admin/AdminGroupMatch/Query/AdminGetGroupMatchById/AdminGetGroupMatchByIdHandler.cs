@@ -2,7 +2,7 @@ using Application.Common.Exceptions;
 using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
+namespace Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 
 public class AdminGetGroupMatchByIdHandler(IGroupRepository groupRepository)
     : IRequestHandler<AdminGetGroupMatchByIdQuery, AdminGetGroupMatchByIdResponse>

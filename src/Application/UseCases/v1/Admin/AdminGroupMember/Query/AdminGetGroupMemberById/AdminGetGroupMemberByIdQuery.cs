@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 
 public class AdminGetGroupMemberByIdQuery : IRequest<AdminGetGroupMemberByIdResponse>
 {

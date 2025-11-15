@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.Invitation.Command.AcceptInvitation;
+namespace Application.UseCases.v1.Invitation.Command.AcceptInvitation;
 
 public record AcceptInvitationCommand : IRequest
 {

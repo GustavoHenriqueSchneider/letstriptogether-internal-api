@@ -1,4 +1,4 @@
-namespace Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
+namespace Application.UseCases.v1.GroupMatch.Query.GetAllGroupMatchesById;
 
 public class GetAllGroupMatchesByIdResponse
 {

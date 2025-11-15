@@ -1,4 +1,4 @@
-namespace Application.UseCases.Destination.Query.GetDestinationById;
+namespace Application.UseCases.v1.Destination.Query.GetDestinationById;
 
 public class DestinationAttractionModel
 {

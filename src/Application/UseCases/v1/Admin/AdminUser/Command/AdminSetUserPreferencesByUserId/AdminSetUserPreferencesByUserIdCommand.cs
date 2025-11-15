@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 
 public record AdminSetUserPreferencesByUserIdCommand : IRequest
 {

@@ -5,7 +5,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Command.CancelActiveGroupInvitation;
 
 public class CancelActiveGroupInvitationHandler(
     IGroupInvitationRepository groupInvitationRepository,

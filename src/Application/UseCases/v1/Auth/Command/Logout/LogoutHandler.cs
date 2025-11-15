@@ -4,7 +4,7 @@ using Application.Helpers;
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.Logout;
+namespace Application.UseCases.v1.Auth.Command.Logout;
 
 public class LogoutHandler(
     IRedisService redisService,

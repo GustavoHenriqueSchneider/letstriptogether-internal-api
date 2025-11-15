@@ -1,4 +1,4 @@
-namespace Application.UseCases.User.Query.GetCurrentUser;
+namespace Application.UseCases.v1.User.Query.GetCurrentUser;
 
 public class GetCurrentUserPreferenceResponse
 {

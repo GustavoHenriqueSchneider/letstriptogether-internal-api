@@ -5,7 +5,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminDeleteUserById;
 
 public class AdminDeleteUserByIdHandler(
     IRedisService redisService,

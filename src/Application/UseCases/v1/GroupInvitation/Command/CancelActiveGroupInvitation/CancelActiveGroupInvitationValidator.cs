@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Command.CancelActiveGroupInvitation;
 
 public class CancelActiveGroupInvitationValidator : AbstractValidator<CancelActiveGroupInvitationCommand>
 {

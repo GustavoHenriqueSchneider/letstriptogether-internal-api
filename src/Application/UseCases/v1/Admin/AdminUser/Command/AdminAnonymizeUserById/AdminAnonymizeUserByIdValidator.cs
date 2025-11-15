@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
 
 public class AdminAnonymizeUserByIdValidator : AbstractValidator<AdminAnonymizeUserByIdCommand>
 {

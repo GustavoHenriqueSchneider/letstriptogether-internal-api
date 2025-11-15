@@ -1,4 +1,4 @@
-namespace Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
 
 public class AdminGetGroupMemberAllDestinationVotesByIdResponse
 {

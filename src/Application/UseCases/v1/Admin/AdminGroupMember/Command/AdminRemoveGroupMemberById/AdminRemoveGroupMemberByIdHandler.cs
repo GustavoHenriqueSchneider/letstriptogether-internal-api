@@ -3,7 +3,7 @@ using Domain.Aggregates.GroupAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 
 public class AdminRemoveGroupMemberByIdHandler(
     IGroupMemberRepository groupMemberRepository,

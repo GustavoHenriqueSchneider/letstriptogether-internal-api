@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+namespace Application.UseCases.v1.Admin.AdminDestination.Query.AdminGetAllDestinations;
 
 public class AdminGetAllDestinationsQuery : IRequest<AdminGetAllDestinationsResponse>
 {

@@ -4,7 +4,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Group.Command.DeleteGroupById;
+namespace Application.UseCases.v1.Group.Command.DeleteGroupById;
 
 public class DeleteGroupByIdHandler(
     IGroupRepository groupRepository,

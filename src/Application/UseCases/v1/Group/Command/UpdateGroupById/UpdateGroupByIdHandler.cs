@@ -4,7 +4,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Group.Command.UpdateGroupById;
+namespace Application.UseCases.v1.Group.Command.UpdateGroupById;
 
 public class UpdateGroupByIdHandler(
     IGroupRepository groupRepository,

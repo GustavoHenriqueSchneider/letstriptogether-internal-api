@@ -1,4 +1,4 @@
-namespace Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
+namespace Application.UseCases.v1.Auth.Command.ValidateRegisterConfirmationCode;
 
 public class ValidateRegisterConfirmationCodeResponse
 {

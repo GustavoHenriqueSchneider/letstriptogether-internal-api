@@ -1,10 +1,10 @@
 using Application.Common.Interfaces.Extensions;
-using Application.UseCases.User.Command.AnonymizeCurrentUser;
-using Application.UseCases.User.Command.ChangeCurrentUserPassword;
-using Application.UseCases.User.Command.DeleteCurrentUser;
-using Application.UseCases.User.Command.SetCurrentUserPreferences;
-using Application.UseCases.User.Command.UpdateCurrentUser;
-using Application.UseCases.User.Query.GetCurrentUser;
+using Application.UseCases.v1.User.Command.AnonymizeCurrentUser;
+using Application.UseCases.v1.User.Command.ChangeCurrentUserPassword;
+using Application.UseCases.v1.User.Command.DeleteCurrentUser;
+using Application.UseCases.v1.User.Command.SetCurrentUserPreferences;
+using Application.UseCases.v1.User.Command.UpdateCurrentUser;
+using Application.UseCases.v1.User.Query.GetCurrentUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

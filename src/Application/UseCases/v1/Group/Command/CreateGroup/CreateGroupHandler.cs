@@ -6,7 +6,7 @@ using Domain.Common;
 using MediatR;
 using GroupModel = Domain.Aggregates.GroupAggregate.Entities.Group;
 
-namespace Application.UseCases.Group.Command.CreateGroup;
+namespace Application.UseCases.v1.Group.Command.CreateGroup;
 
 public class CreateGroupHandler(
     IGroupMemberRepository groupMemberRepository,

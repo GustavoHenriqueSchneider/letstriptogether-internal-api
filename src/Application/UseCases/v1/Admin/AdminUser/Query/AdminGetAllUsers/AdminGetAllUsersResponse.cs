@@ -1,4 +1,4 @@
-namespace Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
+namespace Application.UseCases.v1.Admin.AdminUser.Query.AdminGetAllUsers;
 
 public class AdminGetAllUsersResponse
 {

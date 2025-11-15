@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminUpdateUserById;
 
 public record AdminUpdateUserByIdCommand : IRequest
 {

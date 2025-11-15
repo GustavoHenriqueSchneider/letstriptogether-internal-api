@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
+namespace Application.UseCases.v1.GroupDestinationVote.Command.UpdateDestinationVoteById;
 
 public class UpdateDestinationVoteByIdValidator : AbstractValidator<UpdateDestinationVoteByIdCommand>
 {

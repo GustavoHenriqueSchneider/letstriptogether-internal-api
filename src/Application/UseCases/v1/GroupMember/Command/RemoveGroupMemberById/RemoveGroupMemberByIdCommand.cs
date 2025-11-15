@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
+namespace Application.UseCases.v1.GroupMember.Command.RemoveGroupMemberById;
 
 public class RemoveGroupMemberByIdCommand : IRequest
 {

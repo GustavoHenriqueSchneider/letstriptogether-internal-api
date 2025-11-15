@@ -7,7 +7,7 @@ using Domain.Common;
 using MediatR;
 using GroupInvitationModel = Domain.Aggregates.GroupAggregate.Entities.GroupInvitation;
 
-namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationHandler(
     IGroupInvitationRepository groupInvitationRepository,

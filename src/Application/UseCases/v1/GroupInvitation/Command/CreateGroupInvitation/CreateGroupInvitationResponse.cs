@@ -1,4 +1,4 @@
-namespace Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Command.CreateGroupInvitation;
 
 public class CreateGroupInvitationResponse
 {

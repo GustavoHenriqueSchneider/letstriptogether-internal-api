@@ -4,7 +4,7 @@ using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+namespace Application.UseCases.v1.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 
 public class GetNotVotedDestinationsByMemberOnGroupHandler(
     IDestinationRepository destinationRepository,

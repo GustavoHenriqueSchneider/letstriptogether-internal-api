@@ -2,7 +2,7 @@ using Application.Common.Exceptions;
 using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
+namespace Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
 
 public class AdminGetGroupInvitationByIdHandler(
     IGroupInvitationRepository groupInvitationRepository,

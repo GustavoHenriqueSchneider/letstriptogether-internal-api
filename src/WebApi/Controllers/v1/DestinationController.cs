@@ -1,4 +1,4 @@
-using Application.UseCases.Destination.Query.GetDestinationById;
+using Application.UseCases.v1.Destination.Query.GetDestinationById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

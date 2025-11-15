@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.Group.Query.GetGroupById;
+namespace Application.UseCases.v1.Group.Query.GetGroupById;
 
 public class GetGroupByIdQuery : IRequest<GetGroupByIdResponse>
 {

@@ -1,4 +1,4 @@
-namespace Application.UseCases.Auth.Command.RefreshToken;
+namespace Application.UseCases.v1.Auth.Command.RefreshToken;
 
 public class RefreshTokenResponse
 {

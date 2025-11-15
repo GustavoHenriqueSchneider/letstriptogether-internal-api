@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+namespace Application.UseCases.v1.Auth.Command.SendRegisterConfirmationEmail;
 
 public class SendRegisterConfirmationEmailCommand : IRequest<SendRegisterConfirmationEmailResponse>
 {

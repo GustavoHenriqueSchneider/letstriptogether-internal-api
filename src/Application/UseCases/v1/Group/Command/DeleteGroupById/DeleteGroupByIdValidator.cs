@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Group.Command.DeleteGroupById;
+namespace Application.UseCases.v1.Group.Command.DeleteGroupById;
 
 public class DeleteGroupByIdValidator : AbstractValidator<DeleteGroupByIdCommand>
 {

@@ -1,7 +1,7 @@
 using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace Application.UseCases.Group.Query.GetAllGroups;
+namespace Application.UseCases.v1.Group.Query.GetAllGroups;
 
 public class GetAllGroupsHandler(IGroupRepository groupRepository)
     : IRequestHandler<GetAllGroupsQuery, GetAllGroupsResponse>

@@ -6,7 +6,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Invitation.Command.RefuseInvitation;
+namespace Application.UseCases.v1.Invitation.Command.RefuseInvitation;
 
 public class RefuseInvitationHandler(
     IGroupInvitationRepository groupInvitationRepository,

@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.Group.Command.CreateGroup;
+namespace Application.UseCases.v1.Group.Command.CreateGroup;
 
 public record CreateGroupCommand : IRequest<CreateGroupResponse>
 {

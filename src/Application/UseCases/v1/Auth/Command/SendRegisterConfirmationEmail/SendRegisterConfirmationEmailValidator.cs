@@ -2,7 +2,7 @@ using Application.Common.Validators;
 using FluentValidation;
 using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+namespace Application.UseCases.v1.Auth.Command.SendRegisterConfirmationEmail;
 
 public class SendRegisterConfirmationEmailValidator : AbstractValidator<SendRegisterConfirmationEmailCommand>
 {

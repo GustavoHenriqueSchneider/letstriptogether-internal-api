@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+namespace Application.UseCases.v1.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 
 public class GetNotVotedDestinationsByMemberOnGroupValidator : AbstractValidator<GetNotVotedDestinationsByMemberOnGroupQuery>
 {

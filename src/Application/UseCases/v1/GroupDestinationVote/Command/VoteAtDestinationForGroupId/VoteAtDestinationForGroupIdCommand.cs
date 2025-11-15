@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+namespace Application.UseCases.v1.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
 
 public record VoteAtDestinationForGroupIdCommand : IRequest<VoteAtDestinationForGroupIdResponse>
 {

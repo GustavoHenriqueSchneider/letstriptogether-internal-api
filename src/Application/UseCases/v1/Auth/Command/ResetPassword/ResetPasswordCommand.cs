@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.ResetPassword;
+namespace Application.UseCases.v1.Auth.Command.ResetPassword;
 
 public record ResetPasswordCommand : IRequest
 {

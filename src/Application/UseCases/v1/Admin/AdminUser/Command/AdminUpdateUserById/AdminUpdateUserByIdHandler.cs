@@ -3,7 +3,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminUpdateUserById;
 
 public class AdminUpdateUserByIdHandler(
     IUnitOfWork unitOfWork,

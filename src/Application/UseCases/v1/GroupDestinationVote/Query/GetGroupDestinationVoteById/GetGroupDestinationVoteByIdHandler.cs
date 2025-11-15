@@ -3,7 +3,7 @@ using Domain.Aggregates.GroupAggregate;
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.GroupDestinationVote.Query.GetGroupDestinationVoteById;
+namespace Application.UseCases.v1.GroupDestinationVote.Query.GetGroupDestinationVoteById;
 
 public class GetGroupDestinationVoteByIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,

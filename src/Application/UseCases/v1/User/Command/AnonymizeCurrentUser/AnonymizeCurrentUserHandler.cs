@@ -6,7 +6,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.User.Command.AnonymizeCurrentUser;
+namespace Application.UseCases.v1.User.Command.AnonymizeCurrentUser;
 
 public class AnonymizeCurrentUserHandler(
     IGroupMemberRepository groupMemberRepository,

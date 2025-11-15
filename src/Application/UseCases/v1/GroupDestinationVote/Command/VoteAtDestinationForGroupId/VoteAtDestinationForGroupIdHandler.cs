@@ -8,7 +8,7 @@ using Domain.Common;
 using Domain.Events;
 using MediatR;
 
-namespace Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+namespace Application.UseCases.v1.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
 
 public class VoteAtDestinationForGroupIdHandler(
     IDestinationRepository destinationRepository,

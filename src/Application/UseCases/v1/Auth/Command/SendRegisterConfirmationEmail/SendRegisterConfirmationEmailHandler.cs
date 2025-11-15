@@ -7,7 +7,7 @@ using Domain.Security;
 using Domain.ValueObjects;
 using MediatR;
 
-namespace Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+namespace Application.UseCases.v1.Auth.Command.SendRegisterConfirmationEmail;
 
 public class SendRegisterConfirmationEmailHandler(
     IEmailSenderService emailSenderService,

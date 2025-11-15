@@ -5,7 +5,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.User.Command.DeleteCurrentUser;
+namespace Application.UseCases.v1.User.Command.DeleteCurrentUser;
 
 public class DeleteCurrentUserHandler(
     IRedisService redisService,

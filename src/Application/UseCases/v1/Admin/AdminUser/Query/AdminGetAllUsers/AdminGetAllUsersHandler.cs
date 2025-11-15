@@ -1,7 +1,7 @@
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
+namespace Application.UseCases.v1.Admin.AdminUser.Query.AdminGetAllUsers;
 
 public class AdminGetAllUsersHandler(IUserRepository userRepository)
     : IRequestHandler<AdminGetAllUsersQuery, AdminGetAllUsersResponse>

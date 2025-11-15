@@ -1,7 +1,7 @@
 using FluentValidation;
 using GroupModel = Domain.Aggregates.GroupAggregate.Entities.Group;
 
-namespace Application.UseCases.Group.Command.UpdateGroupById;
+namespace Application.UseCases.v1.Group.Command.UpdateGroupById;
 
 public class UpdateGroupByIdValidator : AbstractValidator<UpdateGroupByIdCommand>
 {

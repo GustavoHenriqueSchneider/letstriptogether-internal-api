@@ -2,7 +2,7 @@ using Application.Common.Exceptions;
 using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
+namespace Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
 
 public class AdminGetGroupMemberAllDestinationVotesByIdHandler(
     IGroupMemberDestinationVoteRepository groupMemberDestinationVoteRepository,

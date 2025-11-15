@@ -5,7 +5,7 @@ using Domain.Aggregates.GroupAggregate.Enums;
 using Domain.Aggregates.UserAggregate;
 using MediatR;
 
-namespace Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
+namespace Application.UseCases.v1.GroupInvitation.Query.GetActiveGroupInvitation;
 
 public class GetActiveGroupInvitationHandler(
     IGroupInvitationRepository groupInvitationRepository,

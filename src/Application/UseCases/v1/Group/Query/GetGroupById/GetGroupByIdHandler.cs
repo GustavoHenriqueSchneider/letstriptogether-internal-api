@@ -2,7 +2,7 @@ using Application.Common.Exceptions;
 using Domain.Aggregates.GroupAggregate;
 using MediatR;
 
-namespace Application.UseCases.Group.Query.GetGroupById;
+namespace Application.UseCases.v1.Group.Query.GetGroupById;
 
 public class GetGroupByIdHandler(
     IGroupPreferenceRepository groupPreferenceRepository,

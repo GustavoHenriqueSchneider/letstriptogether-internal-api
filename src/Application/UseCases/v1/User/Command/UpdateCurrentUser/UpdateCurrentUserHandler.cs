@@ -3,7 +3,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.User.Command.UpdateCurrentUser;
+namespace Application.UseCases.v1.User.Command.UpdateCurrentUser;
 
 public class UpdateCurrentUserHandler(
     IUnitOfWork unitOfWork,

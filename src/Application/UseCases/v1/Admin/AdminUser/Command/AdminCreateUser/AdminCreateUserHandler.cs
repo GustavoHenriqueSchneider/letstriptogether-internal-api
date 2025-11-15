@@ -6,7 +6,7 @@ using Domain.Common;
 using MediatR;
 using UserModel = Domain.Aggregates.UserAggregate.Entities.User;
 
-namespace Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+namespace Application.UseCases.v1.Admin.AdminUser.Command.AdminCreateUser;
 
 public class AdminCreateUserHandler(
     IPasswordHashService passwordHashService,

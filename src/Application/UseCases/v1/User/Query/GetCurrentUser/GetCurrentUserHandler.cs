@@ -3,7 +3,7 @@ using Domain.Aggregates.UserAggregate;
 using Domain.Aggregates.UserAggregate.Entities;
 using MediatR;
 
-namespace Application.UseCases.User.Query.GetCurrentUser;
+namespace Application.UseCases.v1.User.Query.GetCurrentUser;
 
 public class GetCurrentUserHandler(IUserRepository userRepository)
     : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>

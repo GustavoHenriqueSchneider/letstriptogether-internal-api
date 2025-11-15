@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+namespace Application.UseCases.v1.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 
 public class GetNotVotedDestinationsByMemberOnGroupQuery : IRequest<GetNotVotedDestinationsByMemberOnGroupResponse>
 {
