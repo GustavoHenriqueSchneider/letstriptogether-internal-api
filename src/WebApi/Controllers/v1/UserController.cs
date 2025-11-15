@@ -121,7 +121,7 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ChangePassword(
+    public async Task<IActionResult> ChangeCurrentUserPassword(
         [FromBody] ChangeCurrentUserPasswordCommand command, CancellationToken cancellationToken)
     {
         command = command with

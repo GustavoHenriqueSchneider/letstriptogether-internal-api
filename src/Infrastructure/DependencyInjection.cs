@@ -28,6 +28,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Infrastructure;
 
@@ -41,8 +42,22 @@ public static class DependencyInjection
         
         services.AddClients(configuration);
         services.AddServices(configuration);
-        
+
+        services.RegisterHealthChecks(configuration);
         return services;
+    }
+
+    private static void RegisterHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services
+            .AddHealthChecks()
+            .AddDbContextCheck<AppDbContext>("database", tags: new[] { "db", "sql", "postgresql" })
+            .AddRedis(
+                redisConnectionString: configuration.GetConnectionString("Redis") 
+                                       ?? throw new InvalidOperationException("Connection string 'Redis' is missing."),
+                name: "redis",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "redis", "cache" });
     }
     
     public static void RegisterApplicationConfigurations(this IServiceCollection services, IConfiguration configuration)
