@@ -1,0 +1,25 @@
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminDeleteUserById;
+using FluentAssertions;
+using NUnit.Framework;
+
+namespace Application.UnitTests.UseCases.v1.Admin.AdminUser.Command.AdminDeleteUserById;
+
+[TestFixture]
+public class AdminDeleteUserByIdCommandTests
+{
+    [Test]
+    public void AdminDeleteUserByIdCommand_ShouldSetProperties()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        // Act
+        var command = new AdminDeleteUserByIdCommand
+        {
+            UserId = userId
+        };
+
+        // Assert
+        command.UserId.Should().Be(userId);
+    }
+}

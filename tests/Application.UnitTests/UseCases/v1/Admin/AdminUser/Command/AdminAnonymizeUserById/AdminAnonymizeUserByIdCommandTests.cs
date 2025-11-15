@@ -1,0 +1,25 @@
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
+using FluentAssertions;
+using NUnit.Framework;
+
+namespace Application.UnitTests.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
+
+[TestFixture]
+public class AdminAnonymizeUserByIdCommandTests
+{
+    [Test]
+    public void AdminAnonymizeUserByIdCommand_ShouldSetProperties()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        // Act
+        var command = new AdminAnonymizeUserByIdCommand
+        {
+            UserId = userId
+        };
+
+        // Assert
+        command.UserId.Should().Be(userId);
+    }
+}
