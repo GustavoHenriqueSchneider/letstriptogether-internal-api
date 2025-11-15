@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
 using FluentAssertions;
 using NUnit.Framework;
 

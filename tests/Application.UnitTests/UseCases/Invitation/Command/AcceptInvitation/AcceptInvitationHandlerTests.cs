@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Invitation.Command.AcceptInvitation;
+using Application.UseCases.v1.Invitation.Command.AcceptInvitation;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;

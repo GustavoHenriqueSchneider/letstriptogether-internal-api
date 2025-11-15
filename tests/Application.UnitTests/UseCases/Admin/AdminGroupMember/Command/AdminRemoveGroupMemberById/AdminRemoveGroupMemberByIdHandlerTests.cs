@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;

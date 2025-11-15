@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Group.Command.LeaveGroupById;
+using Application.UseCases.v1.Group.Command.LeaveGroupById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;

@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminDeleteUserById;
 using FluentAssertions;
 using NUnit.Framework;
 

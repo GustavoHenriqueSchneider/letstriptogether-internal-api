@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.GroupDestinationVote.Command.UpdateDestinationVoteById;
+using Application.UseCases.v1.GroupDestinationVote.Command.UpdateDestinationVoteById;
 using Domain.Aggregates.GroupAggregate.Entities;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;

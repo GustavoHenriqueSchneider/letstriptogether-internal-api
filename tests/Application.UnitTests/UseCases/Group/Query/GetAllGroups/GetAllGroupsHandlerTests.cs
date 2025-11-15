@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Group.Query.GetAllGroups;
+using Application.UseCases.v1.Group.Query.GetAllGroups;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using FluentAssertions;

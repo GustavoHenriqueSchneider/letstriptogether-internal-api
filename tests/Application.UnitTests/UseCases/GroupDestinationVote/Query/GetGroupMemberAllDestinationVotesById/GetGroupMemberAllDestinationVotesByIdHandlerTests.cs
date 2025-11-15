@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
+using Application.UseCases.v1.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 using Domain.Aggregates.GroupAggregate.Entities;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;

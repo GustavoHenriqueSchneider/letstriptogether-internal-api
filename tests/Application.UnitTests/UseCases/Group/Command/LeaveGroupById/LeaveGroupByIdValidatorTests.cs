@@ -1,4 +1,4 @@
-using Application.UseCases.Group.Command.LeaveGroupById;
+using Application.UseCases.v1.Group.Command.LeaveGroupById;
 using FluentAssertions;
 using NUnit.Framework;
 

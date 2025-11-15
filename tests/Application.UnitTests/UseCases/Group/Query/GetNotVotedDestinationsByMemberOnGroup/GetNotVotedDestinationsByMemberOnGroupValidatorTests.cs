@@ -1,4 +1,4 @@
-using Application.UseCases.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
+using Application.UseCases.v1.Group.Query.GetNotVotedDestinationsByMemberOnGroup;
 using FluentAssertions;
 using NUnit.Framework;
 

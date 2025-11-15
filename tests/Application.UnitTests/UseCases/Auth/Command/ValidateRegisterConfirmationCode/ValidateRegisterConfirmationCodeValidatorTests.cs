@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
+using Application.UseCases.v1.Auth.Command.ValidateRegisterConfirmationCode;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,4 +1,4 @@
-using Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
+using Application.UseCases.v1.GroupInvitation.Query.GetActiveGroupInvitation;
 using FluentAssertions;
 using NUnit.Framework;
 

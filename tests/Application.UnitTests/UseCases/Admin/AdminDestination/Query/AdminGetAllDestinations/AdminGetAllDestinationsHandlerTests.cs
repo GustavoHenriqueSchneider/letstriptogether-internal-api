@@ -1,5 +1,5 @@
 using Application.UnitTests.Common;
-using Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+using Application.UseCases.v1.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using FluentAssertions;
 using Infrastructure.Repositories.Destinations;
 using NUnit.Framework;

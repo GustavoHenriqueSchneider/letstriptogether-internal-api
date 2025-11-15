@@ -1,4 +1,4 @@
-using Application.UseCases.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
+using Application.UseCases.v1.GroupDestinationVote.Query.GetGroupMemberAllDestinationVotesById;
 using FluentAssertions;
 using NUnit.Framework;
 

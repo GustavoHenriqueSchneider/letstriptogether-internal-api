@@ -1,4 +1,4 @@
-using Application.UseCases.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
+using Application.UseCases.v1.GroupDestinationVote.Command.VoteAtDestinationForGroupId;
 using FluentAssertions;
 using NUnit.Framework;
 

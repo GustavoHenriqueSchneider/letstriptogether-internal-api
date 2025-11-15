@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.GroupMatch.Query.GetAllGroupMatchesById;
+using Application.UseCases.v1.GroupMatch.Query.GetAllGroupMatchesById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using FluentAssertions;

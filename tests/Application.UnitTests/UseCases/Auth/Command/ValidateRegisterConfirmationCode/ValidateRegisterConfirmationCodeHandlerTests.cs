@@ -2,7 +2,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.Helpers;
 using Application.UnitTests.Common;
-using Application.UseCases.Auth.Command.ValidateRegisterConfirmationCode;
+using Application.UseCases.v1.Auth.Command.ValidateRegisterConfirmationCode;
 using FluentAssertions;
 using Infrastructure.Configurations;
 using Infrastructure.Services;

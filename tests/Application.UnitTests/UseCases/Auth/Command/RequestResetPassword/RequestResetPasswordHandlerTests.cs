@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Auth.Command.RequestResetPassword;
+using Application.UseCases.v1.Auth.Command.RequestResetPassword;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using Infrastructure.Configurations;

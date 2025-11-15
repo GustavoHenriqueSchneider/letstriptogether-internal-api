@@ -1,6 +1,6 @@
 using Application.Common.Exceptions;
 using Application.UnitTests.Common;
-using Application.UseCases.Destination.Query.GetDestinationById;
+using Application.UseCases.v1.Destination.Query.GetDestinationById;
 using Domain.Aggregates.DestinationAggregate.Entities;
 using FluentAssertions;
 using Infrastructure.Repositories.Destinations;

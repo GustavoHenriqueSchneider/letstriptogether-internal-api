@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
+using Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
 using FluentAssertions;
 using NUnit.Framework;
 

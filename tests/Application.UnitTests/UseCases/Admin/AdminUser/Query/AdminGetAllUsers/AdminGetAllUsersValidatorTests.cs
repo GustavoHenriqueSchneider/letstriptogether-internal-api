@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
+using Application.UseCases.v1.Admin.AdminUser.Query.AdminGetAllUsers;
 using FluentAssertions;
 using NUnit.Framework;
 

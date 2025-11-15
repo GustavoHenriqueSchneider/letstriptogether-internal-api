@@ -1,4 +1,4 @@
-using Application.UseCases.GroupMatch.Query.GetGroupMatchById;
+using Application.UseCases.v1.GroupMatch.Query.GetGroupMatchById;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.RefreshToken;
+using Application.UseCases.v1.Auth.Command.RefreshToken;
 using FluentAssertions;
 using NUnit.Framework;
 

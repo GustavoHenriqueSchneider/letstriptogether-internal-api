@@ -1,4 +1,4 @@
-using Application.UseCases.GroupMember.Query.GetGroupMemberById;
+using Application.UseCases.v1.GroupMember.Query.GetGroupMemberById;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.Logout;
+using Application.UseCases.v1.Auth.Command.Logout;
 using FluentAssertions;
 using NUnit.Framework;
 

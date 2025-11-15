@@ -160,8 +160,7 @@ public class BaseRepositoryTests : TestBase
         var role = new Role { Name = $"trac{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
-
-        // Create a new instance with same ID (simulating detached entity)
+        
         var detachedRole = new Role();
         typeof(Role).GetProperty("Id")!.SetValue(detachedRole, role.Id);
         typeof(Role).GetProperty("Name")!.SetValue(detachedRole, $"newName{Guid.NewGuid().ToString()[..8]}");
@@ -182,8 +181,7 @@ public class BaseRepositoryTests : TestBase
         var role = new Role { Name = $"tracked{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
-
-        // Entity is already tracked
+        
         var newName = $"mod{Guid.NewGuid().ToString()[..8]}";
         role.GetType().GetProperty("Name")!.SetValue(role, newName);
 
@@ -264,13 +262,10 @@ public class BaseRepositoryTests : TestBase
         var role = new Role { Name = $"test{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
-
-        // Create completely new instance (detached)
+        
         var detachedRole = new Role();
         typeof(Role).GetProperty("Id")!.SetValue(detachedRole, role.Id);
         typeof(Role).GetProperty("Name")!.SetValue(detachedRole, $"updated{Guid.NewGuid().ToString()[..8]}");
-
-        // Clear tracking to simulate detached state
         DbContext.ChangeTracker.Clear();
 
         // Act
@@ -289,12 +284,10 @@ public class BaseRepositoryTests : TestBase
         var role = new Role { Name = $"local{Guid.NewGuid().ToString()[..8]}" };
         await _repository.AddAsync(role, CancellationToken.None);
         await DbContext.SaveChangesAsync();
-
-        // Keep entity in local cache but detach it
+        
         var trackedRole = await _repository.GetByIdAsync(role.Id, CancellationToken.None);
         DbContext.Entry(trackedRole!).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-
-        // Create new instance with same ID
+        
         var newRole = new Role();
         typeof(Role).GetProperty("Id")!.SetValue(newRole, role.Id);
         var newName = $"lUpd{Guid.NewGuid().ToString()[..8]}";
@@ -318,8 +311,7 @@ public class BaseRepositoryTests : TestBase
         await DbContext.SaveChangesAsync();
 
         var initialUpdatedAt = role.UpdatedAt;
-
-        // Wait a bit to ensure time difference
+        
         await Task.Delay(100);
 
         // Act

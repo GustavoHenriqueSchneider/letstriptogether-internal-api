@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.Login;
+using Application.UseCases.v1.Auth.Command.Login;
 using FluentAssertions;
 using NUnit.Framework;
 

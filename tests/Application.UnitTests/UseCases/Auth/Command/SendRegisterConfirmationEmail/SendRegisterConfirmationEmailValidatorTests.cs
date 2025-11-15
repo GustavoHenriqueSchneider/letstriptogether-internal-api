@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+using Application.UseCases.v1.Auth.Command.SendRegisterConfirmationEmail;
 using FluentAssertions;
 using NUnit.Framework;
 

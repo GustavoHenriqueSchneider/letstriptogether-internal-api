@@ -1,4 +1,4 @@
-using Application.UseCases.Invitation.Query.GetInvitationDetails;
+using Application.UseCases.v1.Invitation.Query.GetInvitationDetails;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using NUnit.Framework;

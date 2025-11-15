@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
 using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
 using NUnit.Framework;

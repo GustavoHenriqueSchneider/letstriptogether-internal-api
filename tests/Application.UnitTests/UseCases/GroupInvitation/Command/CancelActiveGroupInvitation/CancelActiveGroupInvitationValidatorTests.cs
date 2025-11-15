@@ -1,4 +1,4 @@
-using Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+using Application.UseCases.v1.GroupInvitation.Command.CancelActiveGroupInvitation;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+using Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
 using FluentAssertions;
 using NUnit.Framework;
 

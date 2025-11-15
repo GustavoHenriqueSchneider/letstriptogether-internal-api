@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.User.Command.ChangeCurrentUserPassword;
+using Application.UseCases.v1.User.Command.ChangeCurrentUserPassword;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;
 using Domain.Security;

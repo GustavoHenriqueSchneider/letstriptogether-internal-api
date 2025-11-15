@@ -1,5 +1,5 @@
-using Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
-using Application.UseCases.Admin.AdminGroup.Query.AdminGetGroupById;
+using Application.UseCases.v1.Admin.AdminGroup.Query.AdminGetAllGroups;
+using Application.UseCases.v1.Admin.AdminGroup.Query.AdminGetGroupById;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

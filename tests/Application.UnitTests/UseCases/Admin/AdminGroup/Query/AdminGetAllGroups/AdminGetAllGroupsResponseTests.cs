@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminGroup.Query.AdminGetAllGroups;
+using Application.UseCases.v1.Admin.AdminGroup.Query.AdminGetAllGroups;
 using FluentAssertions;
 using NUnit.Framework;
 

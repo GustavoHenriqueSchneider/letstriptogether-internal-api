@@ -1,4 +1,4 @@
-using Application.UseCases.Group.Command.CreateGroup;
+using Application.UseCases.v1.Group.Command.CreateGroup;
 using FluentAssertions;
 using NUnit.Framework;
 

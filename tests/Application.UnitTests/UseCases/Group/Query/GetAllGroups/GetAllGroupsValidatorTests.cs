@@ -1,4 +1,4 @@
-using Application.UseCases.Group.Query.GetAllGroups;
+using Application.UseCases.v1.Group.Query.GetAllGroups;
 using FluentAssertions;
 using NUnit.Framework;
 

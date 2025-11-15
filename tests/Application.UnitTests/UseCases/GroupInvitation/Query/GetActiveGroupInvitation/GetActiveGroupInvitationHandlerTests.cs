@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.GroupInvitation.Query.GetActiveGroupInvitation;
+using Application.UseCases.v1.GroupInvitation.Query.GetActiveGroupInvitation;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using FluentAssertions;

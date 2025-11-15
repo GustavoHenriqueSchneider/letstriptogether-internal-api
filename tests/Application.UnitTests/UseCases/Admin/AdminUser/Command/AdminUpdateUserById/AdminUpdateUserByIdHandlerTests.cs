@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminUpdateUserById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;
 using Domain.Security;

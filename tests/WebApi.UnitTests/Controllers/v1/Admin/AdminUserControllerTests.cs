@@ -1,10 +1,10 @@
-using Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
-using Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
-using Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
-using Application.UseCases.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
-using Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
-using Application.UseCases.Admin.AdminUser.Query.AdminGetAllUsers;
-using Application.UseCases.Admin.AdminUser.Query.AdminGetUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminCreateUser;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminDeleteUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminSetUserPreferencesByUserId;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminUpdateUserById;
+using Application.UseCases.v1.Admin.AdminUser.Query.AdminGetAllUsers;
+using Application.UseCases.v1.Admin.AdminUser.Query.AdminGetUserById;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
