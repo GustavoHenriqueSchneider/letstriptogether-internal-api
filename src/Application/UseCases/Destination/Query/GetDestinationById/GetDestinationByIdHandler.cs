@@ -20,6 +20,7 @@ public class GetDestinationByIdHandler(IDestinationRepository destinationReposit
         {
             Place = destination.Address,
             Description = destination.Description,
+            Image = destination.Image,
             Attractions = destination.Attractions.Select(a => new DestinationAttractionModel
             {
                 Name = a.Name,

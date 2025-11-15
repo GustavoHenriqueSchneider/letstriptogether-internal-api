@@ -9,6 +9,7 @@ public class Destination : TrackableEntity
 {
     public string Address { get; init; } = null!;
     public string Description { get; init; } = null!;
+    public string Image { get; init; } = string.Empty;
 
     private readonly List<GroupMatch> _groupMatches = [];
     public IReadOnlyCollection<GroupMatch> GroupMatches => _groupMatches.AsReadOnly();

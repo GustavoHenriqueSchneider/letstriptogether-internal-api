@@ -1,6 +1,7 @@
 using Application.Common.Interfaces.Extensions;
 using Application.UseCases.Invitation.Command.AcceptInvitation;
 using Application.UseCases.Invitation.Command.RefuseInvitation;
+using Application.UseCases.Invitation.Query.GetInvitationDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,25 @@ public class InvitationController(
     IMediator mediator,
     IApplicationUserContextExtensions currentUser) : ControllerBase
 {
+    [HttpGet]
+    [SwaggerOperation(
+        Summary = "Consultar Convite",
+        Description = "Retorna informações básicas de um convite de grupo a partir do token informado.")]
+    [ProducesResponseType(typeof(GetInvitationDetailsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetInvitationDetails([FromQuery] string token, CancellationToken cancellationToken)
+    {
+        var query = new GetInvitationDetailsQuery
+        {
+            Token = token
+        };
+
+        var response = await mediator.Send(query, cancellationToken);
+        return Ok(response);
+    }
+
     [HttpPost("accept")]
     [SwaggerOperation(
         Summary = "Aceitar Convite",
@@ -31,7 +51,7 @@ public class InvitationController(
         };
 
         await mediator.Send(command, cancellationToken);
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("refuse")]
@@ -50,6 +70,6 @@ public class InvitationController(
         };
 
         await mediator.Send(command, cancellationToken);
-        return Ok();
+        return NoContent();
     }
 }

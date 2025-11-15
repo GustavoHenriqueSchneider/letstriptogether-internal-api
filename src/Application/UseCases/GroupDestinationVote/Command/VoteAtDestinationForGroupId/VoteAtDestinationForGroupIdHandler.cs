@@ -73,14 +73,11 @@ public class VoteAtDestinationForGroupIdHandler(
             await groupMatchRepository.AddAsync(match, cancellationToken);
             await unitOfWork.SaveAsync(cancellationToken);
             
-            var notificationData = new { groupId = group.Id };
+            var notificationData = new { groupId = group.Id, destinationId = request.DestinationId };
                 
             var notificationTasks = group.Members.Select(member =>
-                notificationService.SendNotificationAsync(
-                    member.UserId,
-                    NotificationEvents.GroupMatchCreated,
-                    notificationData,
-                    cancellationToken));
+                notificationService.SendNotificationAsync(member.UserId, 
+                    NotificationEvents.GroupMatchCreated, notificationData, cancellationToken));
                 
             await Task.WhenAll(notificationTasks).ConfigureAwait(false);
         }

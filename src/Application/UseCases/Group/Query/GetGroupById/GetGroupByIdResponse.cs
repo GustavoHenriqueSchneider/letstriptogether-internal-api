@@ -4,6 +4,7 @@ public class GetGroupByIdResponse
 {
     public string Name { get; init; } = null!;
     public DateTime TripExpectedDate { get; init; }
+    public bool IsCurrentMemberOwner { get; init; }
     public GetGroupByIdPreferenceResponse Preferences { get; init; } = new();
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }

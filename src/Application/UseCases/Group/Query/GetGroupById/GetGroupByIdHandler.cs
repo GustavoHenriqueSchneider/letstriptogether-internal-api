@@ -12,26 +12,25 @@ public class GetGroupByIdHandler(
     public async Task<GetGroupByIdResponse> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
     {
         var group = await groupRepository.GetGroupWithMembersAsync(request.GroupId, cancellationToken);
-
         if (group is null)
         {
             throw new NotFoundException("Group not found.");
         }
 
-        var isMember = group.Members.Any(x => x.UserId == request.UserId);
-
-        if (!isMember)
+        var member = group.Members.SingleOrDefault(x => x.UserId == request.UserId);
+        if (member is null)
         {
             throw new BadRequestException("You are not a member of this group.");
         }
 
         var groupPreferences = await groupPreferenceRepository.GetByGroupIdAsync(request.GroupId, cancellationToken)
-            ?? throw new InvalidOperationException("Invalid preferences");
+            ?? throw new BadRequestException("Invalid preferences");
 
         return new GetGroupByIdResponse
         {
             Name = group.Name,
             TripExpectedDate = group.TripExpectedDate,
+            IsCurrentMemberOwner = member.IsOwner,
             Preferences = new GetGroupByIdPreferenceResponse
             {
                 LikesShopping = groupPreferences.LikesShopping,
