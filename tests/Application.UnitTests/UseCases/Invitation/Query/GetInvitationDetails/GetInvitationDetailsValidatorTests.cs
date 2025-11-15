@@ -47,5 +47,21 @@ public class GetInvitationDetailsValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Token);
     }
+
+    [Test]
+    public void Validate_WithNullToken_ShouldHaveValidationError()
+    {
+        // Arrange
+        var query = new GetInvitationDetailsQuery
+        {
+            Token = null!
+        };
+
+        // Act
+        var result = _validator.TestValidate(query);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Token);
+    }
 }
 

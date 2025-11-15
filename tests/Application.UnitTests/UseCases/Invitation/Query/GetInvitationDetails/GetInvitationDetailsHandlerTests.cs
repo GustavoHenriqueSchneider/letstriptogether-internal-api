@@ -175,6 +175,97 @@ public class GetInvitationDetailsHandlerTests : TestBase
             .WithMessage("Invalid invitation token.");
     }
 
+    [Test]
+    public void Handle_WithExpiredToken_ShouldThrowUnauthorizedException()
+    {
+        // Arrange
+        var tokenServiceMock = new Mock<ITokenService>();
+        tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
+            .Returns((true, Guid.NewGuid().ToString()));
+        tokenServiceMock.Setup(x => x.IsTokenExpired(It.IsAny<string>()))
+            .Returns((true, DateTime.UtcNow.AddDays(-1)));
+        _tokenService = tokenServiceMock.Object;
+
+        _handler = new GetInvitationDetailsHandler(
+            _groupInvitationRepository,
+            _groupRepository,
+            _tokenService,
+            _unitOfWork);
+
+        var query = new GetInvitationDetailsQuery
+        {
+            Token = "expired-token"
+        };
+
+        // Act
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        act.Should().ThrowAsync<UnauthorizedException>()
+            .WithMessage("Invitation token has expired.");
+    }
+
+    [Test]
+    public void Handle_WithInvalidGuidInToken_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var tokenServiceMock = new Mock<ITokenService>();
+        tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
+            .Returns((true, "invalid-guid"));
+        tokenServiceMock.Setup(x => x.IsTokenExpired(It.IsAny<string>()))
+            .Returns((false, DateTime.UtcNow.AddDays(1)));
+        _tokenService = tokenServiceMock.Object;
+
+        _handler = new GetInvitationDetailsHandler(
+            _groupInvitationRepository,
+            _groupRepository,
+            _tokenService,
+            _unitOfWork);
+
+        var query = new GetInvitationDetailsQuery
+        {
+            Token = "token-with-invalid-guid"
+        };
+
+        // Act
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        act.Should().ThrowAsync<NotFoundException>()
+            .WithMessage("Invitation not found.");
+    }
+
+    [Test]
+    public async Task Handle_WithNonExistentInvitation_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var nonExistentInvitationId = Guid.NewGuid();
+        var tokenServiceMock = new Mock<ITokenService>();
+        tokenServiceMock.Setup(x => x.ValidateInvitationToken(It.IsAny<string>()))
+            .Returns((true, nonExistentInvitationId.ToString()));
+        tokenServiceMock.Setup(x => x.IsTokenExpired(It.IsAny<string>()))
+            .Returns((false, DateTime.UtcNow.AddDays(1)));
+        _tokenService = tokenServiceMock.Object;
+
+        _handler = new GetInvitationDetailsHandler(
+            _groupInvitationRepository,
+            _groupRepository,
+            _tokenService,
+            _unitOfWork);
+
+        var query = new GetInvitationDetailsQuery
+        {
+            Token = "token-for-non-existent-invitation"
+        };
+
+        // Act
+        Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<NotFoundException>()
+            .WithMessage("Invitation not found.");
+    }
+
     private async Task<Role> EnsureUserRoleAsync()
     {
         var role = await _roleRepository.GetByNameAsync(Domain.Security.Roles.User, CancellationToken.None);

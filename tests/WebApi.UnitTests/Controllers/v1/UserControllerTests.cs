@@ -1,5 +1,6 @@
 using Application.Common.Interfaces.Extensions;
 using Application.UseCases.User.Command.AnonymizeCurrentUser;
+using Application.UseCases.User.Command.ChangeCurrentUserPassword;
 using Application.UseCases.User.Command.DeleteCurrentUser;
 using Application.UseCases.User.Command.SetCurrentUserPreferences;
 using Application.UseCases.User.Command.UpdateCurrentUser;
@@ -130,5 +131,29 @@ public class UserControllerTests
         // Assert
         result.Should().BeOfType<NoContentResult>();
         _mediatorMock.Verify(x => x.Send(It.Is<SetCurrentUserPreferencesCommand>(c => c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task ChangePassword_WithValidCommand_ShouldReturnNoContent()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        _currentUserMock.Setup(x => x.GetId()).Returns(userId);
+        
+        var command = new ChangeCurrentUserPasswordCommand
+        {
+            CurrentPassword = "CurrentPassword123!",
+            NewPassword = "NewPassword123!"
+        };
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<ChangeCurrentUserPasswordCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.ChangePassword(command, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+        _mediatorMock.Verify(x => x.Send(It.Is<ChangeCurrentUserPasswordCommand>(c => c.UserId == userId), It.IsAny<CancellationToken>()), Times.Once);
     }
 }
