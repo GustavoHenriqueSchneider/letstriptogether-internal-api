@@ -1,4 +1,4 @@
-using Application.UseCases.GroupMatch.Command.RemoveGroupMatchById;
+using Application.UseCases.v1.GroupMatch.Command.RemoveGroupMatchById;
 using FluentAssertions;
 using NUnit.Framework;
 

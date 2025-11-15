@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
+using Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using FluentAssertions;

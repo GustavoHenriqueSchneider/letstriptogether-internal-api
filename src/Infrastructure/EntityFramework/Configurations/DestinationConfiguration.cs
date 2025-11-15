@@ -26,6 +26,10 @@ public class DestinationConfiguration : IEntityTypeConfiguration<Destination>
             .HasMaxLength(DescriptionMaxLength)
             .IsRequired();
 
+        builder.Property(d => d.Image)
+            .HasDefaultValue(string.Empty)
+            .IsRequired();
+
         builder.Property(d => d.CreatedAt)
             .IsRequired();
 

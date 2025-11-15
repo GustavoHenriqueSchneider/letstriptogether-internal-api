@@ -1,4 +1,4 @@
-using Application.UseCases.User.Command.UpdateCurrentUser;
+using Application.UseCases.v1.User.Command.UpdateCurrentUser;
 using FluentAssertions;
 using NUnit.Framework;
 

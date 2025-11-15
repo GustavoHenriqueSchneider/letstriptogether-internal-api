@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.Register;
+using Application.UseCases.v1.Auth.Command.Register;
 using FluentAssertions;
 using NUnit.Framework;
 

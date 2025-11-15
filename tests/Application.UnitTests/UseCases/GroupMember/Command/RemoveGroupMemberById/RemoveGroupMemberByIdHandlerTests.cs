@@ -1,12 +1,11 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.GroupMember.Command.RemoveGroupMemberById;
+using Application.UseCases.v1.GroupMember.Command.RemoveGroupMemberById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;
 using Domain.Security;
-using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
 using Infrastructure.Repositories.Groups;
 using Infrastructure.Repositories.Roles;

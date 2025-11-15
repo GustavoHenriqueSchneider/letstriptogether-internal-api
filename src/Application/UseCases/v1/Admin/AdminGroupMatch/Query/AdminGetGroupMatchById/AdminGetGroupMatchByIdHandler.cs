@@ -1,0 +1,33 @@
+using Application.Common.Exceptions;
+using Domain.Aggregates.GroupAggregate;
+using MediatR;
+
+namespace Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
+
+public class AdminGetGroupMatchByIdHandler(IGroupRepository groupRepository)
+    : IRequestHandler<AdminGetGroupMatchByIdQuery, AdminGetGroupMatchByIdResponse>
+{
+    public async Task<AdminGetGroupMatchByIdResponse> Handle(AdminGetGroupMatchByIdQuery request, CancellationToken cancellationToken)
+    {
+        var group = await groupRepository.GetGroupWithMatchesAsync(request.GroupId, cancellationToken);
+
+        if (group is null)
+        {
+            throw new NotFoundException("Group not found.");
+        }
+
+        var groupMatch = group.Matches.SingleOrDefault(x => x.Id == request.MatchId);
+
+        if (groupMatch is null)
+        {
+            throw new NotFoundException("Group match not found.");
+        }
+
+        return new AdminGetGroupMatchByIdResponse
+        {
+            DestinationId = groupMatch.DestinationId,
+            CreatedAt = groupMatch.CreatedAt,
+            UpdatedAt = groupMatch.UpdatedAt
+        };
+    }
+}

@@ -22,10 +22,12 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="StackExchange.Redis" Version="2.9.25" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.11" />
+        <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Dataset\cities_with_attractions.json" />
+      <EmbeddedResource Include="Datasets\**\*.json" />
       <EmbeddedResource Include="Templates\**\*" />
     </ItemGroup>
 

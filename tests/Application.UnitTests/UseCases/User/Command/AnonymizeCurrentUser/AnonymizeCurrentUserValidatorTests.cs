@@ -1,4 +1,4 @@
-using Application.UseCases.User.Command.AnonymizeCurrentUser;
+using Application.UseCases.v1.User.Command.AnonymizeCurrentUser;
 using FluentAssertions;
 using NUnit.Framework;
 

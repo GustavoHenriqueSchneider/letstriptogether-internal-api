@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Admin.AdminUser.Command.AdminDeleteUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminDeleteUserById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;
 using Domain.Security;

@@ -1,4 +1,4 @@
-using Application.UseCases.User.Command.DeleteCurrentUser;
+using Application.UseCases.v1.User.Command.DeleteCurrentUser;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Auth.Command.Register;
+using Application.UseCases.v1.Auth.Command.Register;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;
 using Domain.Security;

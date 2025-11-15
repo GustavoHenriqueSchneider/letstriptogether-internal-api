@@ -1,6 +1,6 @@
 using Application.Common.Policies;
-using Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
-using Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
+using Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
+using Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
-using Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
-using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
-using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
-using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetGroupMemberAllDestinationVotesById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetGroupMemberById;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

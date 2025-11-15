@@ -1,9 +1,10 @@
 using Application.Common.Interfaces.Extensions;
-using Application.UseCases.User.Command.AnonymizeCurrentUser;
-using Application.UseCases.User.Command.DeleteCurrentUser;
-using Application.UseCases.User.Command.SetCurrentUserPreferences;
-using Application.UseCases.User.Command.UpdateCurrentUser;
-using Application.UseCases.User.Query.GetCurrentUser;
+using Application.UseCases.v1.User.Command.AnonymizeCurrentUser;
+using Application.UseCases.v1.User.Command.ChangeCurrentUserPassword;
+using Application.UseCases.v1.User.Command.DeleteCurrentUser;
+using Application.UseCases.v1.User.Command.SetCurrentUserPreferences;
+using Application.UseCases.v1.User.Command.UpdateCurrentUser;
+using Application.UseCases.v1.User.Query.GetCurrentUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -102,6 +103,26 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SetCurrentUserPreferences(
         [FromBody] SetCurrentUserPreferencesCommand command, CancellationToken cancellationToken)
+    {
+        command = command with
+        {
+            UserId = currentUser.GetId()
+        };
+
+        await mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("change-password")]
+    [SwaggerOperation(
+        Summary = "Alterar Senha do Usuário Atual",
+        Description = "Altera a senha do usuário autenticado. Requer a senha atual e a nova senha.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ChangeCurrentUserPassword(
+        [FromBody] ChangeCurrentUserPasswordCommand command, CancellationToken cancellationToken)
     {
         command = command with
         {

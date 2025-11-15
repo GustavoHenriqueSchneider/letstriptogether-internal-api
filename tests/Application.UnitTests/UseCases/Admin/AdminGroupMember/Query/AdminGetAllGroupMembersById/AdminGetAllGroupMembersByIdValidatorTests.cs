@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Query.AdminGetAllGroupMembersById;
 using FluentAssertions;
 using NUnit.Framework;
 

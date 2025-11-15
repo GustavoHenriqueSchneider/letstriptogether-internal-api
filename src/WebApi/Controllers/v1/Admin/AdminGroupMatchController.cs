@@ -1,6 +1,6 @@
 using Application.Common.Policies;
-using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
-using Application.UseCases.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
+using Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetAllGroupMatchesById;
+using Application.UseCases.v1.Admin.AdminGroupMatch.Query.AdminGetGroupMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,5 @@
 using Application.Common.Policies;
-using Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+using Application.UseCases.v1.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

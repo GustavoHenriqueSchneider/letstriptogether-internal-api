@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminDestination.Query.AdminGetAllDestinations;
+using Application.UseCases.v1.Admin.AdminDestination.Query.AdminGetAllDestinations;
 using FluentAssertions;
 using NUnit.Framework;
 

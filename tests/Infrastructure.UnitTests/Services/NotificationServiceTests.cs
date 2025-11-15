@@ -1,8 +1,8 @@
 using System.Net;
 using System.Text.Json;
-using Application.Common.Interfaces.Services;
 using FluentAssertions;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -17,6 +17,7 @@ public class NotificationServiceTests
     private Mock<HttpMessageHandler> _httpMessageHandlerMock = null!;
     private HttpClient _httpClient = null!;
     private Mock<ILogger<NotificationService>> _loggerMock = null!;
+    private Mock<IHttpContextAccessor> _httpContextAccessorMock = null!;
 
     [SetUp]
     public void SetUp()
@@ -26,8 +27,9 @@ public class NotificationServiceTests
         {
             BaseAddress = new Uri("https://api.example.com")
         };
+        _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _loggerMock = new Mock<ILogger<NotificationService>>();
-        _service = new NotificationService(_httpClient, _loggerMock.Object);
+        _service = new NotificationService(_httpClient, _httpContextAccessorMock.Object, _loggerMock.Object);
     }
 
     [TearDown]

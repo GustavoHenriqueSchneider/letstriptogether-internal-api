@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminUser.Command.AdminUpdateUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminUpdateUserById;
 using FluentAssertions;
 using NUnit.Framework;
 

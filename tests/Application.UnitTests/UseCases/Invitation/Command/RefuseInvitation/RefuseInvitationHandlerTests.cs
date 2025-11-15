@@ -1,20 +1,16 @@
-using System.IdentityModel.Tokens.Jwt;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Invitation.Command.RefuseInvitation;
+using Application.UseCases.v1.Invitation.Command.RefuseInvitation;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Aggregates.UserAggregate.Entities;
 using Domain.Common;
 using Domain.Security;
-using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
 using Infrastructure.Repositories.Groups;
 using Infrastructure.Repositories.Roles;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 

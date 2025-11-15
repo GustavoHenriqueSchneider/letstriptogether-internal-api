@@ -3,7 +3,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.Helpers;
 using Application.UnitTests.Common;
-using Application.UseCases.Auth.Command.RefreshToken;
+using Application.UseCases.v1.Auth.Command.RefreshToken;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using FluentAssertions;

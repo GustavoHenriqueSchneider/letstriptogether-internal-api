@@ -1,4 +1,4 @@
-using Application.UseCases.Group.Command.UpdateGroupById;
+using Application.UseCases.v1.Group.Command.UpdateGroupById;
 using FluentAssertions;
 using NUnit.Framework;
 

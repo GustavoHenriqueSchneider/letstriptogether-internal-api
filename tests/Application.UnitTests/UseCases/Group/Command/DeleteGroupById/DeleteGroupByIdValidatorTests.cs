@@ -1,4 +1,4 @@
-using Application.UseCases.Group.Command.DeleteGroupById;
+using Application.UseCases.v1.Group.Command.DeleteGroupById;
 using FluentAssertions;
 using NUnit.Framework;
 

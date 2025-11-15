@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
+using Application.UseCases.v1.Admin.AdminGroupMember.Command.AdminRemoveGroupMemberById;
 using FluentAssertions;
 using NUnit.Framework;
 

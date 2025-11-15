@@ -1,6 +1,6 @@
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Admin.AdminUser.Command.AdminAnonymizeUserById;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminAnonymizeUserById;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;
 using Domain.Security;

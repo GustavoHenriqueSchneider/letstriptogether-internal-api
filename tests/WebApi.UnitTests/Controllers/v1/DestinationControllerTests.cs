@@ -1,4 +1,4 @@
-using Application.UseCases.Destination.Query.GetDestinationById;
+using Application.UseCases.v1.Destination.Query.GetDestinationById;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

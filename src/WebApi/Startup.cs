@@ -16,8 +16,6 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         services.RegisterApplicationExternalDependencies(configuration, environment);
         
         services.RegisterApplicationApiServices();
-        
-        services.AddHealthChecks();
     }
 
     public void Configure(

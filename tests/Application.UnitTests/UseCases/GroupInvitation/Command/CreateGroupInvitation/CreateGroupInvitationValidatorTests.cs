@@ -1,4 +1,4 @@
-using Application.UseCases.GroupInvitation.Command.CreateGroupInvitation;
+using Application.UseCases.v1.GroupInvitation.Command.CreateGroupInvitation;
 using FluentAssertions;
 using NUnit.Framework;
 

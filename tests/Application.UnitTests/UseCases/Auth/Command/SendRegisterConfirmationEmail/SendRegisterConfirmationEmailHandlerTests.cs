@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.Auth.Command.SendRegisterConfirmationEmail;
+using Application.UseCases.v1.Auth.Command.SendRegisterConfirmationEmail;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Security;
 using FluentAssertions;

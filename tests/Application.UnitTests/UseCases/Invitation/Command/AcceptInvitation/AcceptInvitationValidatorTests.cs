@@ -1,4 +1,4 @@
-using Application.UseCases.Invitation.Command.AcceptInvitation;
+using Application.UseCases.v1.Invitation.Command.AcceptInvitation;
 using FluentAssertions;
 using NUnit.Framework;
 

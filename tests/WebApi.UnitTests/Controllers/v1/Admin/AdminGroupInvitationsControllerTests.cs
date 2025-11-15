@@ -1,5 +1,5 @@
-using Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
-using Application.UseCases.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
+using Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetAllGroupInvitationsByGroupId;
+using Application.UseCases.v1.Admin.AdminGroupInvitation.Query.AdminGetGroupInvitationById;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

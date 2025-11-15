@@ -1,4 +1,4 @@
-using Application.UseCases.Admin.AdminUser.Command.AdminCreateUser;
+using Application.UseCases.v1.Admin.AdminUser.Command.AdminCreateUser;
 using FluentAssertions;
 using NUnit.Framework;
 

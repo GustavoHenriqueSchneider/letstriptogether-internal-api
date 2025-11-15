@@ -1,7 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Services;
 using Application.UnitTests.Common;
-using Application.UseCases.GroupInvitation.Command.CancelActiveGroupInvitation;
+using Application.UseCases.v1.GroupInvitation.Command.CancelActiveGroupInvitation;
 using Domain.Aggregates.GroupAggregate.Enums;
 using Domain.Aggregates.RoleAggregate.Entities;
 using Domain.Common;

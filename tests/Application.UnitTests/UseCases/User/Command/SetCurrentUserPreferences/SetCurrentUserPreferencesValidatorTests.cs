@@ -1,4 +1,4 @@
-using Application.UseCases.User.Command.SetCurrentUserPreferences;
+using Application.UseCases.v1.User.Command.SetCurrentUserPreferences;
 using Domain.ValueObjects.TripPreferences;
 using FluentAssertions;
 using NUnit.Framework;

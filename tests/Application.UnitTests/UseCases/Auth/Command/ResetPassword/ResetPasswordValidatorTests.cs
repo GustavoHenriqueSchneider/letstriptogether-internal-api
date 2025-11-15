@@ -1,4 +1,4 @@
-using Application.UseCases.Auth.Command.ResetPassword;
+using Application.UseCases.v1.Auth.Command.ResetPassword;
 using FluentAssertions;
 using NUnit.Framework;
 

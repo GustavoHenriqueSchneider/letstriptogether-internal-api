@@ -1,4 +1,4 @@
-using Application.UseCases.User.Query.GetCurrentUser;
+using Application.UseCases.v1.User.Query.GetCurrentUser;
 using FluentAssertions;
 using NUnit.Framework;
 
