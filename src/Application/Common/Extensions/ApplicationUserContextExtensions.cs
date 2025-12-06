@@ -20,7 +20,7 @@ public class ApplicationUserContextExtensions(ClaimsPrincipal principal)
 
     public string GetEmail()
     {
-        return principal.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+        return principal.FindFirst(ClaimTypes.Email)?.Value?.ToLowerInvariant() ?? string.Empty;
     }
 
     public string GetRegisterStep()

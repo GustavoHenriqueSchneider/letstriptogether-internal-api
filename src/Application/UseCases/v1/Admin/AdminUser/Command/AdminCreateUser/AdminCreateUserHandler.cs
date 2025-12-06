@@ -17,7 +17,7 @@ public class AdminCreateUserHandler(
 {
     public async Task<AdminCreateUserResponse> Handle(AdminCreateUserCommand request, CancellationToken cancellationToken)
     {
-        var email = request.Email;
+        var email = request.Email.ToLowerInvariant();
         var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email, cancellationToken);
 
         if (existsUserWithEmail)

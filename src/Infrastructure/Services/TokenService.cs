@@ -103,7 +103,7 @@ public class TokenService : ITokenService
         {
             new (Claims.Id, user.Id.ToString()),
             new (Claims.Name, user.Name),
-            new (ClaimTypes.Email, user.Email),
+            new (ClaimTypes.Email, user.Email.ToLowerInvariant()),
             new (Claims.TokenType, TokenTypes.Access)
         };
 

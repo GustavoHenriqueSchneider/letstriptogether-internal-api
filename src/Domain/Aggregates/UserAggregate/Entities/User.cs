@@ -32,7 +32,7 @@ public class User : TrackableEntity
     public User(string name, string email, string passwordHash, Role role)
     {
         Name = name;
-        Email = email;
+        Email = email.ToLowerInvariant();
         PasswordHash = passwordHash;
         AddRole(role);
     }

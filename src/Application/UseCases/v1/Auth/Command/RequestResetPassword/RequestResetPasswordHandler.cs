@@ -15,7 +15,8 @@ public class RequestResetPasswordHandler(
 {
     public async Task Handle(RequestResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
+        var normalizedEmail = request.Email.ToLowerInvariant();
+        var user = await userRepository.GetByEmailAsync(normalizedEmail, cancellationToken);
 
         if (user is null)
         {
@@ -35,10 +36,10 @@ public class RequestResetPasswordHandler(
         {
             { "token", resetPasswordToken },
             { "expiresIn", expiresInMinutes.ToString() },
-            { "email", request.Email }
+            { "email", normalizedEmail }
         };
 
-        await emailSenderService.SendAsync(request.Email, EmailTemplates.ResetPassword, 
+        await emailSenderService.SendAsync(normalizedEmail, EmailTemplates.ResetPassword, 
             templateData, cancellationToken);
     }
 }

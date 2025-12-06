@@ -15,7 +15,8 @@ public class ValidateRegisterConfirmationCodeHandler(
 {
     public async Task<ValidateRegisterConfirmationCodeResponse> Handle(ValidateRegisterConfirmationCodeCommand request, CancellationToken cancellationToken)
     {
-        var key = KeyHelper.RegisterEmailConfirmation(request.Email);
+        var normalizedEmail = request.Email.ToLowerInvariant();
+        var key = KeyHelper.RegisterEmailConfirmation(normalizedEmail);
         var code = await redisService.GetAsync(key);
 
         if (code is null || code != request.Code.ToString())
@@ -26,7 +27,7 @@ public class ValidateRegisterConfirmationCodeHandler(
         var claims = new List<Claim>
         {
             new (Claims.Name, request.Name),
-            new (ClaimTypes.Email, request.Email)
+            new (ClaimTypes.Email, normalizedEmail)
         };
 
         var token = tokenService.GenerateRegisterTokenForStep(Step.SetPassword, claims);

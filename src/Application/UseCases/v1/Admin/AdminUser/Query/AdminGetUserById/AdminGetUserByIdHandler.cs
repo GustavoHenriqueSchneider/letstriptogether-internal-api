@@ -22,7 +22,7 @@ public class AdminGetUserByIdHandler(IUserRepository userRepository)
         return new AdminGetUserByIdResponse
         {
             Name = user.Name,
-            Email = user.Email,
+            Email = user.Email.ToLowerInvariant(),
             Preferences = user.Preferences is not null ?
                 new AdminGetUserByIdPreferenceResponse
                 {

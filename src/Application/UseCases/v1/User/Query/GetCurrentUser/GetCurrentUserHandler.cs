@@ -22,7 +22,7 @@ public class GetCurrentUserHandler(IUserRepository userRepository)
         return new GetCurrentUserResponse
         {
             Name = user.Name,
-            Email = user.Email,
+            Email = user.Email.ToLowerInvariant(),
             Preferences = user.Preferences is not null ? 
                 new GetCurrentUserPreferenceResponse
                 {

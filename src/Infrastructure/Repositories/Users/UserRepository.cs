@@ -11,7 +11,8 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken)
     {
-        return await _dbSet.AnyAsync(u => u.Email == email, cancellationToken);
+        var normalizedEmail = email.ToLowerInvariant();
+        return await _dbSet.AnyAsync(u => u.Email == normalizedEmail, cancellationToken);
     }
 
     public async Task<User?> GetByIdWithPreferencesAsync(Guid id, CancellationToken cancellationToken)
@@ -24,9 +25,10 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
+        var normalizedEmail = email.ToLowerInvariant();
         return await _dbSet
             .AsNoTracking()
-            .SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
+            .SingleOrDefaultAsync(u => u.Email == normalizedEmail, cancellationToken);
     }
 
     public async Task<User?> GetUserWithRelationshipsByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -59,10 +61,11 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<User?> GetUserWithRolesByEmailAsync(string email, CancellationToken cancellationToken)
     {
+        var normalizedEmail = email.ToLowerInvariant();
         return await _dbSet
             .AsNoTracking()
             .Include(x => x.UserRoles)
                 .ThenInclude(x => x.Role)
-            .SingleOrDefaultAsync(x => x.Email == email, cancellationToken);
+            .SingleOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
     }
 }

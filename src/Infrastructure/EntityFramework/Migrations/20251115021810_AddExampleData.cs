@@ -296,9 +296,9 @@ namespace WebApi.Migrations
 
             var groupNames = new[]
             {
-                "Viagem para o Nordeste", "Aventura nas Montanhas", "Praias do Sul",
-                "Tour Cultural SP", "Férias em Família", "Amigos do Trabalho",
-                "Exploradores Urbanos", "Natureza e Aventura", "Roteiro Histórico",
+                "Desbravando estados", "Adrenalina pura", "Praia 2026",
+                "Tour Cultural", "Férias em Família", "Work Happy Hour",
+                "Exploradores Urbanos", "Aventureiros natos", "Historiadores",
                 "Relax e Descanso"
             };
 

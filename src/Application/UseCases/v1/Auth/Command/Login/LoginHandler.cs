@@ -15,7 +15,8 @@ public class LoginHandler(
 {
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetUserWithRolesByEmailAsync(request.Email, cancellationToken);
+        var normalizedEmail = request.Email.ToLowerInvariant();
+        var user = await userRepository.GetUserWithRolesByEmailAsync(normalizedEmail, cancellationToken);
 
         if (user is null)
         {

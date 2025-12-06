@@ -22,7 +22,7 @@ public class RegisterHandler(
             throw new BadRequestException("Terms of use must be accepted for user registration.");
         }
 
-        var email = request.Email;
+        var email = request.Email.ToLowerInvariant();
         var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email, cancellationToken);
 
         if (existsUserWithEmail)

@@ -19,8 +19,8 @@ public class SendRegisterConfirmationEmailHandler(
 {
     public async Task<SendRegisterConfirmationEmailResponse> Handle(SendRegisterConfirmationEmailCommand request, CancellationToken cancellationToken)
     {
-        var email = request.Email;
-        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(email, cancellationToken);
+        var normalizedEmail = request.Email.ToLowerInvariant();
+        var existsUserWithEmail = await userRepository.ExistsByEmailAsync(normalizedEmail, cancellationToken);
 
         if (existsUserWithEmail)
         {
@@ -30,13 +30,13 @@ public class SendRegisterConfirmationEmailHandler(
         var claims = new List<Claim>
         {
             new (Claims.Name, request.Name),
-            new (ClaimTypes.Email, email)
+            new (ClaimTypes.Email, normalizedEmail)
         };
 
         var token = tokenService.GenerateRegisterTokenForStep(Step.ValidateEmail, claims);
         var (_, expiresIn) = tokenService.IsTokenExpired(token);
 
-        var key = KeyHelper.RegisterEmailConfirmation(email);
+        var key = KeyHelper.RegisterEmailConfirmation(normalizedEmail);
         var ttlInSeconds = (int)(expiresIn! - DateTime.UtcNow).Value.TotalSeconds;
 
         var code = randomCodeGeneratorService.Generate();
@@ -48,10 +48,10 @@ public class SendRegisterConfirmationEmailHandler(
             { "code", code },
             { "name", request.Name },
             { "expiresIn", expiresInMinutes.ToString() },
-            { "email", email }
+            { "email", normalizedEmail }
         };
 
-        await emailSenderService.SendAsync(email, EmailTemplates.EmailConfirmation, templateData, cancellationToken);
+        await emailSenderService.SendAsync(normalizedEmail, EmailTemplates.EmailConfirmation, templateData, cancellationToken);
 
         return new SendRegisterConfirmationEmailResponse { Token = token };
     }
