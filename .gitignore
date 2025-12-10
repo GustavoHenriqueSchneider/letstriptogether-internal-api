@@ -39,3 +39,5 @@ TemplateEngineHost
 .history/
 
 LetsTripTogether.InternalApi.sln.DotSettings.user
+
+src/WebApi/appsettings.Development.json
