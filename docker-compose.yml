@@ -35,7 +35,7 @@ services:
       timeout: 5s
       retries: 5
 
-  internal-api:
+  letstriptogether-internal-api:
     profiles:
       - api
     build:
@@ -46,8 +46,12 @@ services:
       - "5088:5088"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=lets-trip-together;Username=admin;Password=root
-      - ConnectionStrings__Redis=redis:6379,password=admin
+      - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=lets-trip-together;Username=admin;Password=${POSTGRES_PASSWORD:-root}
+      - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD:-admin}
+      - JsonWebTokenSettings__SecretKey=${JWT_SECRET_KEY:-your_jwt_secret_key}
+      - EmailSettings__SmtpServer=${SMTP_SERVER:-sandbox.smtp.mailtrap.io}
+      - EmailSettings__Username=${SMTP_USERNAME:-your_smtp_username}
+      - EmailSettings__Password=${SMTP_PASSWORD:-your_smtp_password}
     networks:
       - postgres_network
       - redis_network

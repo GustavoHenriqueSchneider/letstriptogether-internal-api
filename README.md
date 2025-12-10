@@ -203,11 +203,34 @@ Isso irá iniciar:
 
 3. **Configurar variáveis de ambiente**
 
-Crie ou edite `src/WebApi/appsettings.Development.json` com as configurações necessárias:
-- **Connection Strings**: PostgreSQL e Redis
-- **JWT Settings**: Chave secreta, issuer, tempo de expiração
-- **Email Settings**: SMTP server, porta, credenciais, remetente
-- **Notification Settings**: URL do serviço de notificações, configurações de HTTP client
+⚠️ **IMPORTANTE**: O arquivo `appsettings.Development.json` contém secrets e não deve ser commitado no repositório.
+
+**Para desenvolvimento local:**
+1. Copie o arquivo de exemplo:
+   ```powershell
+   cp src/WebApi/appsettings.Development.example.json src/WebApi/appsettings.Development.json
+   ```
+2. Edite `src/WebApi/appsettings.Development.json` e substitua os placeholders pelos valores reais:
+   - `{POSTGRES_USER}` e `{POSTGRES_PASSWORD}`: Credenciais do PostgreSQL
+   - `{REDIS_PASSWORD}`: Senha do Redis
+   - `{JWT_SECRET_KEY}`: Chave secreta para geração de tokens JWT (deve ser uma string segura)
+   - `{SMTP_SERVER}`, `{SMTP_USERNAME}`, `{SMTP_PASSWORD}`: Credenciais do servidor SMTP
+
+**Para Docker:**
+Passe as variáveis diretamente no comando `docker run`:
+```bash
+docker run -p 5088:5088 \
+  -e ConnectionStrings__Postgres="Host=postgres;Port=5432;Database=lets-trip-together;
+  Username=your_postgres_user;Password=your_postgres_password" \
+  -e ConnectionStrings__Redis="redis:6379,password=your_redis_password" \
+  -e JsonWebTokenSettings__SecretKey="your_jwt_secret_key" \
+  -e EmailSettings__SmtpServer="your_smtp_server" \
+  -e EmailSettings__Username="your_smtp_username" \
+  -e EmailSettings__Password="your_smtp_password" \
+  letstriptogether-internal-api
+```
+
+Ou configure as variáveis de ambiente no `docker-compose.yml`.
 
 4. **Aplicar migrations do banco de dados**
 ```powershell
